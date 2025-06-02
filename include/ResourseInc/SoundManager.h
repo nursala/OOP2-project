@@ -3,14 +3,14 @@
 #include <SFML/Audio.hpp>
 #include <unordered_map>
 
-enum SoundID {
+enum class SoundID {
    /* Explosion,
     Shoot,*/
     BackgroundMusic,
 };
 
 const std::unordered_map<SoundID, std::string> SoundFileMap = {
-    {BackgroundMusic, "background_music.ogg"}
+    {SoundID::BackgroundMusic, "background_music.ogg"}
 };
 
 class SoundManager : public BaseResourceManager<sf::SoundBuffer, SoundID> {

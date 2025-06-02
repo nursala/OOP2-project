@@ -3,7 +3,8 @@
 #include "SFML/Graphics.hpp"
 #include "PlayGround.h"
 #include "ScreensInc/Screen.h"
-#include "AnimationInc/Animation.h"
+#include <box2d/box2d.h>
+#include "GameObject/Player.h"
 
 class  Controller
 {
@@ -17,11 +18,10 @@ private:
 	void update();
 	void render();
 
-
+	sf::Clock m_clock;
 	sf::RenderWindow m_window;
-	sf::Texture m_texture;
-	sf::Sprite m_spriteSheet;
-	Animation m_animation;
+	b2World m_world;
+	Player m_player;
 };
 
 
