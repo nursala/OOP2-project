@@ -5,7 +5,6 @@
 #include <string>
 #include <memory>
 
-    
 template <typename ResourceType, typename IdentifierType>
 class BaseResourceManager {
 public:

@@ -3,15 +3,13 @@
 #include <SFML/Graphics.hpp>
 
 enum TextureID {
-	Player = 0,
-	Enemy,
-	Background,
-	Kill
+	Kill = 0,
+	Player,
 };
 
 const std::unordered_map<TextureID, std::string> TextureFileMap = {
-	/*{Player, "player.png"},
-	{Enemy, "enemy.png"},*/
+	{Player, "heavy_player_face.png"},
+	/*{Enemy, "enemy.png"},* /
 	/* {Background, "background.png"}*/
 	  { Kill, "kill.png" }}; 
 
