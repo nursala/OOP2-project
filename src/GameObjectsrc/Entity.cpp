@@ -26,3 +26,24 @@ Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position
 void Entity::render(sf::RenderWindow& window) {
     window.draw(m_sprite);
 }
+
+void Entity::setPostion(const b2Vec2& position)
+{
+	if (m_body) {
+		m_body->SetTransform(position, m_body->GetAngle());
+	}
+}
+
+b2Vec2 Entity::getPosition() const {
+	return m_body ? m_body->GetPosition() : b2Vec2(0, 0);
+}
+
+void Entity::setVelocity(const b2Vec2& velocity) {
+	if (m_body) {
+		m_body->SetLinearVelocity(velocity);
+	}
+}
+
+b2Vec2 Entity::getVelocity() const {
+	return m_body ? m_body->GetLinearVelocity() : b2Vec2(0, 0);
+}

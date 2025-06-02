@@ -11,12 +11,17 @@ public:
 
     virtual void update(float deltaTime) = 0;  // دالة مجردة
     virtual void render(sf::RenderWindow& window);
+    b2Vec2 getPosition() const;
+    void setPostion(const b2Vec2& position);
     virtual ~Entity() = default;
+	void setVelocity(const b2Vec2& velocity);
+	b2Vec2 getVelocity() const;
 
 protected:
     b2Body* m_body;
     sf::Sprite m_sprite;
     Animation m_animation;
+	b2Vec2 m_velocity;  // سرعة الكائن
 
     static constexpr float SCALE = 30.f;
 };
