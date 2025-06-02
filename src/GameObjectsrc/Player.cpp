@@ -13,12 +13,12 @@ void Player::update(float deltaTime)
     bool faceRight = true;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        m_body->SetLinearVelocity(b2Vec2(10.f, m_body->GetLinearVelocity().y));
+        m_body->SetLinearVelocity(b2Vec2(25.f, m_body->GetLinearVelocity().y));
         row = 2;
         faceRight = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        m_body->SetLinearVelocity(b2Vec2(-10.f, m_body->GetLinearVelocity().y));
+        m_body->SetLinearVelocity(b2Vec2(-25.f, m_body->GetLinearVelocity().y));
         row = 2;
         faceRight = false;
     }

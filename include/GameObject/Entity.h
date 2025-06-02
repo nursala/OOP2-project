@@ -9,7 +9,7 @@ public:
     Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,
         sf::Vector2u imageCount, float switchTime);
 
-    virtual void update(float deltaTime) = 0;  // دالة مجردة
+    virtual void update(float deltaTime) = 0;  
     virtual void render(sf::RenderWindow& window);
     virtual ~Entity() = default;
 
