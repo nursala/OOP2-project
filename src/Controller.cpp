@@ -1,14 +1,11 @@
 #include "Controller.h"
 #include <SFML/Graphics.hpp>
-#include "TextureManager.h"
-#include "SoundManager.h"
+#include "ResourseInc/SoundManager.h"
+#include "ResourseInc/TextureManager.h"
 
 Controller::Controller() : m_window(sf::VideoMode(800, 600), "SFML Application") 
 {
 	SoundManager::instance().play(SoundID::BackgroundMusic);
-	m_shape.setSize(sf::Vector2f(100, 100));
-	m_shape.setPosition(350, 250); // Center the shape in the window
-	m_shape.setTexture(&TextureManager::instance().get(TextureID::Kill));
 }
 
 void Controller::run()

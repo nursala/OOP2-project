@@ -1,10 +1,10 @@
-#include "SoundManager.h"
+#include "ResourseInc/SoundManager.h"
 
 SoundManager::SoundManager() {
     for (const auto& [id, path] : SoundFileMap)
     {
         load(id, path);
-		m_sounds[id].setBuffer(get(id));
+		m_sounds[id].setBuffer(*get(id));
     }
 }
 

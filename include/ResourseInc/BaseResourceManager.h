@@ -1,13 +1,16 @@
 #pragma once
+
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <memory>
 
+    
 template <typename ResourceType, typename IdentifierType>
 class BaseResourceManager {
 public:
     bool load(const IdentifierType& id, const std::string& filename);
-    ResourceType& get(const IdentifierType& id);
+    const ResourceType* get(const IdentifierType& id) const;
 
 protected:
     std::unordered_map<IdentifierType, std::unique_ptr<ResourceType>> m_resources;
@@ -23,6 +26,9 @@ bool BaseResourceManager<ResourceType, IdentifierType>::load(const IdentifierTyp
 }
 
 template <typename ResourceType, typename IdentifierType>
-ResourceType& BaseResourceManager<ResourceType, IdentifierType>::get(const IdentifierType& id) {
-    return *m_resources.at(id);
+const ResourceType* BaseResourceManager<ResourceType, IdentifierType>::get(const IdentifierType& id) const {
+    auto it = m_resources.find(id);
+    if (it != m_resources.end())
+        return it->second.get();
+    return nullptr;
 }
