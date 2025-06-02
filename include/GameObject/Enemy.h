@@ -18,5 +18,5 @@ protected:
 	virtual void createSensor(float radius) = 0;
 
 private:
-	void moveTowardsPlayer(const sf::Vector2f& playerPosition, const float& dt)
+	void moveTowardsPlayer(const sf::Vector2f& playerPosition, const float& dt);
 };
