@@ -10,9 +10,8 @@ public:
     ~Player() override;
 
     void update(float deltaTime) override;
-    void move(float speed);
+    void move(b2Vec2 speed);
     // Add player-specific methods here
 private:
 	sf::RectangleShape m_shape; // For rendering the player
-	float m_speed; // Speed of the player
 };

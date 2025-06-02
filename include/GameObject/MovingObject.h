@@ -10,4 +10,7 @@ public:
     void setVelocity(const b2Vec2& velocity);
 
     void update(float deltaTime) override;
+
+protected:
+	b2Vec2 m_velocity; // Current velocity of the moving object
 };
