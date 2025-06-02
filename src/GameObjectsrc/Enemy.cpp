@@ -1,11 +1,11 @@
 #include "GameObject/Enemy.h"
 #include <SFML/Graphics/RenderTarget.hpp>
+#include "ResourseInc/TextureManager.h"
 
-Enemy::Enemy(b2World* world, const b2Vec2& position)
-	: MovingObject(world, position) {
-	m_velocity = b2Vec2(5.0f, 5.0f);	
+Enemy::Enemy(b2World* world)
+	: Entity(*world, TextureManager::instance().get(TextureID::Enemy), { 0,0 }, { 1, 1 }, 0.4f)
+{
 }
-
 
 Enemy::~Enemy() {
 	if (m_body)
@@ -15,9 +15,11 @@ Enemy::~Enemy() {
 }
 
 void Enemy::update(float deltaTime) {
-	// Update the enemy's position based on its velocity
-	b2Vec2 newPosition = getPosition() + m_velocity * deltaTime;
-	setPosition(newPosition);
+	auto newposx = getPosition().x + m_velocity.x * deltaTime;
+	auto newposy = getPosition().y + m_velocity.y * deltaTime;
+	b2Vec2 newPosition = b2Vec2(newposx,newposy);
+	// Set the new position in Box2D
+	setPostion(newPosition);
 	// Update the sprite's position
 	m_sprite.setPosition(newPosition.x, newPosition.y);
 
@@ -50,7 +52,7 @@ void Enemy::moveTowardsPlayer(const sf::Vector2f& playerPosition, const float& d
 
             // Set Box2D velocity toward the player
             b2Vec2 velocity(direction.x * m_velocity.x, direction.y * m_velocity.y);
-            setVelocity(velocity);
+			setVelocity(velocity);
 
             // Optionally, rotate the enemy to face the player
             float angle = std::atan2(direction.y, direction.x);

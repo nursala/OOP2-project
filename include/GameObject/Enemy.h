@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GameObject/MovingObject.h"
+#include "GameObject/Entity.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-class Enemy : public MovingObject {
+class Enemy : public Entity {
 public:
-	Enemy(b2World* world, const b2Vec2& position);
+	Enemy(b2World* world);
 	~Enemy() override;
 	void update(float deltaTime) override;
 	void render(sf::RenderTarget& target);
