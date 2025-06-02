@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "PlayGround.h"
 #include "ScreensInc/Screen.h"
+#include "AnimationInc/Animation.h"
 
 class  Controller
 {
@@ -18,7 +19,9 @@ private:
 
 
 	sf::RenderWindow m_window;
-	sf::RectangleShape m_shape;
+	sf::Texture m_texture;
+	sf::Sprite m_spriteSheet;
+	Animation m_animation;
 };
 
 
