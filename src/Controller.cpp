@@ -4,14 +4,12 @@
 #include "ResourseInc/TextureManager.h"
 
 Controller::Controller()
-	: m_window(sf::VideoMode(1900, 1200), "SFML Application"),
-	m_animation(TextureManager::instance().get(TextureID::Player), { 5, 5 }, 0.5f)
+	: m_window(sf::VideoMode(1300, 1000), "SFML Application")
+	, m_player(m_world),
+	m_world(b2Vec2(0.f, 0.f)) 
 {
 	SoundManager::instance().play(SoundID::BackgroundMusic);
-	m_spriteSheet.setTexture(*TextureManager::instance().get(TextureID::Player));
-	m_spriteSheet.setTextureRect(m_animation.getUvRect());
 }
-
 
 void Controller::run()
 {
@@ -31,35 +29,18 @@ void Controller::processEvents()
 		if (event.type == sf::Event::Closed)
 			m_window.close();
 	}
-}		
+}
 
 void Controller::update()
 {
-	float deltaTime = 0.016f; // محاكاة 60 FPS
-	int row = 1;
-	bool facingRight = true;
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		facingRight = true;
-		row = 2; // صف المشي يمينًا
-		m_spriteSheet.move(100 * deltaTime, 0);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		facingRight = false;
-		row = 2; // نفس صف المشي
-		m_spriteSheet.move(-100 * deltaTime, 0);
-	}
-	else {
-		row = 1; // صف الثبات
-	}
-
-	m_animation.update(row, 5, deltaTime, facingRight);
-	m_spriteSheet.setTextureRect(m_animation.getUvRect());
+	float deltaTime = m_clock.restart().asSeconds();
+	m_world.Step(deltaTime, 8, 3);
+	m_player.update(deltaTime);
 }
 
 void Controller::render()
 {
 	m_window.clear();
-	m_window.draw(m_spriteSheet);
+	m_player.render(m_window);
 	m_window.display();
 }
