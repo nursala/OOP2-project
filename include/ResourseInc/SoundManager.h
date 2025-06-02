@@ -1,16 +1,15 @@
 #pragma once
-#include "BaseResourceManager.h"
+#include "ResourseInc/BaseResourceManager.h"
 #include <SFML/Audio.hpp>
+#include <unordered_map>
 
 enum SoundID {
    /* Explosion,
     Shoot,*/
-    BackgroundMusic
+    BackgroundMusic,
 };
 
 const std::unordered_map<SoundID, std::string> SoundFileMap = {
-   /* {Explosion, "explosion.wav"},
-    {Shoot, "shoot.wav"},*/
     {BackgroundMusic, "background_music.ogg"}
 };
 
