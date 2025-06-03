@@ -17,6 +17,7 @@ public:
     virtual ~Entity() = default;
 	void setVelocity(const b2Vec2& velocity);
 	b2Vec2 getVelocity() const;
+    b2Body* getBody() const;
 
 protected:
     b2Body* m_body;

@@ -1,14 +1,15 @@
 #pragma once
 
 #include "GameObject/Entity.h"
-//player.h
+#include "MoveStrategyAndInfoInc/MoveStrategy.h"
 class Player : public Entity {
 public:
     Player(b2World& world);
     void update(float deltaTime) override;
 
-    // Add player-specific methods here
+    void setMoveStrategy(std::unique_ptr<MoveStrategy> strategy);
 private:
 
+    std::unique_ptr<MoveStrategy> m_moveStrategy;
 	sf::RectangleShape m_shape; // For rendering the player
 };

@@ -56,3 +56,8 @@ void Entity::setVelocity(const b2Vec2& velocity) {
 b2Vec2 Entity::getVelocity() const {
 	return m_body ? m_body->GetLinearVelocity() : b2Vec2(0, 0);
 }
+
+b2Body* Entity::getBody() const
+{
+	return m_body;
+}
