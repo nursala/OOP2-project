@@ -1,13 +1,12 @@
 #pragma once
 
 #include "GameObject/Entity.h"
-
+//player.h
 class Player : public Entity {
 public:
     Player(b2World& world);
     void update(float deltaTime) override;
 
-    void move(b2Vec2 speed);
     // Add player-specific methods here
 private:
 

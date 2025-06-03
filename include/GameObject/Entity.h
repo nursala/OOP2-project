@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 #include "AnimationInc/Animation.h"
-
+//Entity.h
 class Entity {
 public:
     Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,

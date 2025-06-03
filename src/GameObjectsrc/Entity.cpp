@@ -1,5 +1,5 @@
 ﻿#include "GameObject/Entity.h"
-
+//Entity.cpp
 Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,
 	sf::Vector2u imageCount, float switchTime)
 	: m_animation(texture, imageCount, switchTime)

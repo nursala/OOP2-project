@@ -1,7 +1,7 @@
 ﻿#include "LightSystem.h"
 #include "RayCastClosest.h"
 #include <cmath>
-#include <Enemy.h>
+#include <GameObject/Enemy.h>
 
 constexpr float SCALE = 30.f; // 1 متر = 30 بكسل
 
@@ -35,10 +35,10 @@ void LightSystem::update(const sf::Vector2f& origin, float directionAngle, float
         if (callback.hit()) {
             b2Fixture* fixture = callback.getFixture();
             if (fixture) {
-                Enemy* enemy = reinterpret_cast<Enemy*>(fixture->GetUserData().pointer);
+                /*Enemy* enemy = reinterpret_cast<Enemy*>(fixture->GetUserData().pointer);
                 if (enemy) {
                     enemy->onLightCollision();
-                }
+                }*/
             }
             hitPoint.x = callback.getPoint().x * SCALE;
             hitPoint.y = callback.getPoint().y * SCALE;
