@@ -14,13 +14,14 @@ Controller::Controller()
 	m_light(100.f, 720),
 	m_enemy(m_world, { 200.f, 150.f })
 {
+
 	SoundManager::instance().play(SoundID::BackgroundMusic);
 	m_window.setFramerateLimit(60);
 	if (!m_mapTexture.loadFromFile("map.png")) {
 		std::cerr << "Failed to load map.png!\n";
 		std::exit(-1);
 	}
-	m_view.setCenter({ m_player.getPosition().x / 2 ,m_player.getPosition().y / 2 });
+	m_view.setCenter({ m_player.getPixels().x / 2 ,m_player.getPixels().y / 2 });
 	m_view.setSize(m_window.getSize().x / 3.f, m_window.getSize().y / 3.f);
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -52,7 +53,7 @@ void Controller::processEvents()
 void Controller::update()
 {
 	float deltaTime = m_clock.restart().asSeconds();
-	sf::Vector2f center = { m_player.getPosition().x  ,m_player.getPosition().y };
+	sf::Vector2f center = m_player.getPixels();
 
 	sf::Vector2f viewSize = m_view.getSize();
 	center.x = std::clamp(center.x, viewSize.x / 2.f, (float)m_mapTexture.getSize().x - viewSize.x / 2.f);
@@ -62,10 +63,10 @@ void Controller::update()
 	m_world.Step(deltaTime, 8, 3);
 	m_player.update(deltaTime);
 	sf::Vector2f mouseWorld = m_window.mapPixelToCoords(sf::Mouse::getPosition(m_window));
-	float angleToMouse = std::atan2(mouseWorld.y - m_player.getPosition().y, mouseWorld.x - m_player.getPosition().x);
+	float angleToMouse = std::atan2(mouseWorld.y - m_player.getPixels().y, mouseWorld.x - m_player.getPixels().x);
 	float fov = 3.14f / 3.f; 
 
-	m_light.update({ m_player.getPosition().x  ,m_player.getPosition().y }, angleToMouse, fov, m_world);
+	m_light.update(m_player.getPixels(), angleToMouse, fov, m_world);
 	m_enemy.update(deltaTime);
 }
 
