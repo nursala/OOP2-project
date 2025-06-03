@@ -9,6 +9,7 @@ Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float 
 
     m_uvRect.width = texture->getSize().x / static_cast<int>(imageCount.x);
     m_uvRect.height = texture->getSize().y / static_cast<int>(imageCount.y);
+	update(1, 1, 0.0f, true); // Initialize with row 1 and total images 1
 }
 
 void Animation::update(int row, int totalImages, float deltaTime, bool isFaceRight)

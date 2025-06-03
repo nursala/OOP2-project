@@ -22,6 +22,7 @@ protected:
     sf::Sprite m_sprite;
     Animation m_animation;
 	b2Vec2 m_velocity;  // سرعة الكائن
+	sf::RectangleShape m_hitbox; // صندوق الاصطدام
 
     static constexpr float SCALE = 30.f;
 };

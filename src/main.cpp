@@ -1,7 +1,9 @@
-#include "Game.h"
+﻿#include "Controller.h"
+#include <Game.h>
 
 int main() {
-    Game game;
-    game.run();
-    return 0;
+	//Game game;
+	Controller controller;
+	controller.run();
+	//game.run();
 }
