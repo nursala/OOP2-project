@@ -42,9 +42,11 @@ b2Vec2 Entity::getPosition() const {
 	if (!m_body) {
 		return b2Vec2(0, 0);
 	}
-	return { m_body->GetPosition().x * SCALE  ,m_body->GetPosition().y* SCALE };
+	return { m_body->GetPosition().x ,m_body->GetPosition().y };
 }
-
+sf::Vector2f  Entity::getPixels() const {
+	return { getPosition().x * SCALE, getPosition().y * SCALE };
+}
 void Entity::setVelocity(const b2Vec2& velocity) {
 	if (m_body) {
 		m_body->SetLinearVelocity(velocity);

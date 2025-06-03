@@ -12,6 +12,7 @@ public:
     virtual void update(float deltaTime) = 0;  
     virtual void render(sf::RenderWindow& window);
     b2Vec2 getPosition() const;
+    sf::Vector2f getPixels() const;
     void setPostion(const b2Vec2& position);
     virtual ~Entity() = default;
 	void setVelocity(const b2Vec2& velocity);
