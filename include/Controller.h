@@ -9,6 +9,7 @@
 #include "DebugDraw.h"
 #include "LightSystem.h"
 #include "GameObject/Enemy.h"
+#include <stack>
 
 class  Controller
 {
@@ -21,7 +22,9 @@ private:
 	void processEvents();
 	void update();
 	void render();
-
+	////////////////////////////////
+	std::stack <std::unique_ptr<Screen>> m_screens;
+	////////////////////////////////
 	sf::Clock m_clock;
 	sf::View m_view;
 	sf::RenderWindow m_window;
