@@ -1,7 +1,6 @@
 #pragma once
 // Controller.h
 #include "SFML/Graphics.hpp"
-#include "PlayGround.h"
 #include "ScreensInc/Screen.h"
 #include <box2d/box2d.h>
 #include "GameObject/Player.h"
@@ -11,12 +10,16 @@
 #include "GameObject/Enemy.h"
 #include <stack>
 
+
+
 class  Controller
 {
 public:
 	 Controller();
 	 void run();
-	
+	 void setScreen(ScreenID screen);
+	 void removeScreen();
+
 private:
 
 	void processEvents();
@@ -36,8 +39,9 @@ private:
 	LightSystem m_light; 
 	std::unique_ptr<Enemy> m_enemy; 
 	sf::Sprite m_mapSprite;
+	std::function<void(ScreenID)> m_changeScreen;
 	static constexpr float SCALE = 30.f;
-
+	std::optional<ScreenID> m_nextScreen;
 };
 
 

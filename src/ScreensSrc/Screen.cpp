@@ -3,13 +3,8 @@
 
 Screen::Screen()
 {
-	m_backGround.setSize(sf::Vector2f(800.0f, 600.0f));
+	m_backGround.setSize(sf::Vector2f(1300, 1000));
 	m_backGround.setPosition(0.0f, 0.0f);
-}
-
-void Screen::draw(sf::RenderWindow& window)
-{
-	window.draw(m_backGround);
 }
 
 void Screen::setBackGroundTexture(const TextureID texture)
@@ -18,4 +13,14 @@ void Screen::setBackGroundTexture(const TextureID texture)
 	m_backGround.setTextureRect(sf::IntRect(0, 0,
 		TextureManager::instance().get(texture)->getSize().x,
 		TextureManager::instance().get(texture)->getSize().y));
+}
+
+//ScreenID Screen::getScreenID() const
+//{
+//	/*return m_screenID;*/
+//}
+
+void Screen::setScreenAction(std::function<void(ScreenID)> action)
+{
+	m_changeScreen = std::move(action); 
 }
