@@ -1,13 +1,13 @@
 ﻿#pragma once
 
 #include "SFML/Graphics.hpp"
-#include "PlayGround.h"
 #include "ScreensInc/Screen.h"
 #include <box2d/box2d.h>
 #include "GameObject/Player.h"
 #include "LoadMap.h"
 #include "DebugDraw.h"
 #include "GameObject/Enemy.h"
+#include <stack>
 
 #include "Candle/LightingArea.hpp"
 // حذف RadialLight لأنه استُبدل

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
+#include "ScreensInc/HomeScreen.h"
+#include "ScreensInc/PlayGround.h"
 
 Controller::Controller()
 	: m_window(sf::VideoMode(1920, 1080), "SFML Application"),
@@ -76,12 +78,44 @@ void Controller::run()
 	}
 }
 
+void Controller::setScreen(ScreenID screen)
+{
+	std::unique_ptr<Screen> screenPtr;
+
+	switch (screen)
+	{
+	case ScreenID::Home:
+		screenPtr = std::make_unique<HomeScreen>();
+		break;
+	case ScreenID::Game:
+		screenPtr = std::make_unique<PlayGround>();
+		break;
+	}
+
+	if (screenPtr)
+	{
+		screenPtr->setScreenAction(m_changeScreen);
+		m_screens.push(std::move(screenPtr));
+	}
+}
+
+void Controller::removeScreen()
+{
+	if (!m_screens.empty())
+	{
+		m_screens.pop();
+	}
+}
+
 void Controller::processEvents()
 {
 	sf::Event event;
 	while (m_window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			m_window.close();
+
+		if (!m_screens.empty())
+			m_screens.top()->processEvent(event, m_window);
 	}
 }
 
