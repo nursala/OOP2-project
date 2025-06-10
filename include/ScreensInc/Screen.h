@@ -27,4 +27,5 @@ protected:
 	sf::RectangleShape m_backGround;
 	std::unordered_map<ButtonID, Button> m_buttons;
 	std::function<void(ScreenID)> m_changeScreen;
+	virtual void init() {};
 };
