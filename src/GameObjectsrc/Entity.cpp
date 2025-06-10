@@ -6,29 +6,39 @@ Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(position.x / 30, position.y / 30);
+	bodyDef.position.Set(position.x / SCALE, position.y / SCALE);
 	m_body = world.CreateBody(&bodyDef);
 
+	// شكل الجسم (دائرة)
 	b2CircleShape shape;
-	shape.m_radius = 10 / SCALE;
+	shape.m_radius = 10.f / SCALE;
 
-	//shape.SetAsBox(25.f / SCALE, 25.f / SCALE);
-
+	// إعداد الخصائص الفيزيائية
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.3f;
 	fixtureDef.restitution = 0.0f;
-	m_hitbox.setSize(sf::Vector2f(20.f, 20.f));
 
-	m_body->CreateFixture(&fixtureDef);
-	m_sprite.setPosition(position );
+	// إنشاء الفيكستشر وتخزين المؤشر عليه
+	b2Fixture* fixture = m_body->CreateFixture(&fixtureDef);
+	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this); // ✅ وضع المؤشر على الكائن نفسه
+
+	// (اختياري) وضع المؤشر على الجسم نفسه
+	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
+
+	// إعداد الرسوميات
+	m_sprite.setPosition(position);
 	m_sprite.setTexture(*texture);
 	m_sprite.setTextureRect(m_animation.getUvRect());
+
+	m_hitbox.setSize(sf::Vector2f(20.f, 20.f));
+	m_visable = false;
 }
 
 void Entity::render(sf::RenderWindow& window) {
-	window.draw(m_hitbox);
+	if (m_visable)
+		window.draw(m_hitbox);
 }
 
 void Entity::setPostion(const b2Vec2& position)

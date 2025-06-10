@@ -17,6 +17,7 @@ Player::Player(b2World& world)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 100,100 }, { 5,5 }, 0.4),
 	m_moveStrategy(std::make_unique<KeyboardMoveStrategy>())
 {
+	m_visable = true;
 }
 
 void Player::setMoveStrategy(std::unique_ptr<MoveStrategy> strategy) {
