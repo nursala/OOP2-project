@@ -17,6 +17,7 @@ Player::Player(b2World& world)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 100,100 }, { 5,5 }, 0.4),
 	m_moveStrategy(std::make_unique<KeyboardMoveStrategy>())
 {
+	m_weapon = std::make_unique<Weapon>(world, getPixels());
 	m_visable = true;
 }
 
@@ -37,6 +38,7 @@ void Player::update(float deltaTime)
     m_animation.update(info.row, 5, deltaTime, info.faceRight);
     m_sprite.setTextureRect(m_animation.getUvRect());
 
+	m_weapon->update(deltaTime, pos);
     // hitbox updates
     m_hitbox.setPosition(pos.x, pos.y);
     m_hitbox.setRotation(m_sprite.getRotation());
@@ -45,4 +47,14 @@ void Player::update(float deltaTime)
     m_hitbox.setTexture(m_sprite.getTexture());
     m_hitbox.setTextureRect(m_sprite.getTextureRect());
 }
+
+void Player::render(sf::RenderWindow& window)
+{
+	if (m_visable) {
+		window.draw(m_hitbox);
+		m_weapon->draw(window);
+
+	}
+}
+
 

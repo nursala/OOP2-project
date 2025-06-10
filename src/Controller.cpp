@@ -16,13 +16,12 @@ Controller::Controller()
 	m_visionLight(150, 60),
 	m_lightingArea(candle::LightingArea::FOG, sf::Vector2f(0.f, 0.f), sf::Vector2f(1920, 1080))
 {
-	m_visionLight.setIntensity(0.5);
 	m_radialLight.setRange(25);
 	m_radialLight.setFade(true);
 	m_radialLight.setColor(sf::Color::Blue);
-	m_radialLight.setIntensity(1);
+	m_lightingArea.setAreaColor(sf::Color::Black);
+	m_lightingArea.setAreaOpacity(0.8);
 
-	m_lightingArea.setAreaColor({ 0,0,0,200 });
 	SoundManager::instance().play(SoundID::BackgroundMusic);
 	m_window.setFramerateLimit(60);
 
@@ -78,34 +77,6 @@ void Controller::run()
 	}
 }
 
-void Controller::setScreen(ScreenID screen)
-{
-	std::unique_ptr<Screen> screenPtr;
-
-	switch (screen)
-	{
-	case ScreenID::Home:
-		screenPtr = std::make_unique<HomeScreen>();
-		break;
-	case ScreenID::Game:
-		screenPtr = std::make_unique<PlayGround>();
-		break;
-	}
-
-	if (screenPtr)
-	{
-		screenPtr->setScreenAction(m_changeScreen);
-		m_screens.push(std::move(screenPtr));
-	}
-}
-
-void Controller::removeScreen()
-{
-	if (!m_screens.empty())
-	{
-		m_screens.pop();
-	}
-}
 
 void Controller::processEvents()
 {
@@ -114,8 +85,6 @@ void Controller::processEvents()
 		if (event.type == sf::Event::Closed)
 			m_window.close();
 
-		if (!m_screens.empty())
-			m_screens.top()->processEvent(event, m_window);
 	}
 }
 
@@ -183,23 +152,48 @@ void Controller::update()
 	m_lightingArea.setPosition({ m_view.getCenter().x - m_view.getSize().x / 2, m_view.getCenter().y - m_view.getSize().y / 2 });
 
 }
-
 void Controller::render()
 {
 
-	m_lightingArea.clear();                  // ← مسح الضوء السابق
-	m_lightingArea.draw(m_visionLight);      // ← رسم الضوء الحالي
-	m_lightingArea.draw(m_radialLight);      // ← رسم الضوء الشعاعي الحالي
+	// مسح الإضاءة السابقة
+	m_lightingArea.clear();
+
+	// رسم جميع الأضواء داخل LightingArea
+	// ضوء شعاعي عام
+	// يمكن لاحقًا إضافة: سلاح، أعداء، هدايا ... إلخ
+
+	m_lightingArea.draw(m_visionLight);
+
+	m_lightingArea.draw(m_radialLight);
+
+	// تجهيز النتيجة النهائية
 	m_lightingArea.display();
 
+	// مسح الشاشة
 	m_window.clear();
+
+	// رسم العالم (الخريطة والكائنات)
 	m_window.draw(m_mapSprite);
+	m_window.draw(m_lightingArea);
+
 	m_player->render(m_window);
 	m_enemy->render(m_window);
-	// ← تحديث المنطقة
-	m_window.draw(m_lightingArea, sf::BlendAlpha);           // ← رسم الإضاءة النهائية على الشاشة
-	m_window.draw(m_radialLight);           // ← رسم الإضاءة النهائية على الشاشة
+
+	// رسم الإضاءة النهائية فوق العالم (BlendMin يعطي تأثير "ضوء وسط ظلام")
+	// رسم الإضاءة الشعاعية
+	m_visionLight.setIntensity(0.4);
+
+	m_window.draw(m_radialLight);
 	m_window.draw(m_visionLight);
+	m_window.draw(m_player->getVisionLight());
+
+
+
+
+
+	// رسم الكولجن (debug)
 	m_world.DebugDraw();
+
+	// عرض كل شيء
 	m_window.display();
 }
