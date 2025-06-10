@@ -2,7 +2,6 @@
 #include "ResourseInc/SoundManager.h"
 HomeScreen::HomeScreen()
 {
-	//m_screenID = ScreenID::Home;
 	setBackGroundTexture(TextureID::Enemy);
 	initButtons();
 }
@@ -32,23 +31,4 @@ void HomeScreen::initButtons()
     stopMusicIt->second.setCallback([this]() {
         SoundManager::instance().pause(SoundID::BackgroundMusic);
         });
-}
-
-
-void HomeScreen::processEvent(sf::Event& event, sf::RenderWindow& window)
-{
-    for (auto& [id, button] : m_buttons)
-        button.handleEvent(event, window);
-}
-
-void HomeScreen::update(sf::RenderWindow& window) {
-    for (auto& [id, button] : m_buttons)
-        button.updateHover(window);
-}
-
-void HomeScreen::render(sf::RenderWindow& window)
-{
-	window.draw(m_backGround);
-    for (auto& [id, button] : m_buttons)
-        button.render(window);
 }

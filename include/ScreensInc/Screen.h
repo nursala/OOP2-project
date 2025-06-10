@@ -16,9 +16,9 @@ class Screen
 public:
 	Screen();
 	virtual ~Screen() = default;
-	virtual void render(sf::RenderWindow& window) = 0;
-	virtual void update(sf::RenderWindow& window) = 0;
-	virtual void processEvent(sf::Event& event, sf::RenderWindow& window) = 0;
+	virtual void render(sf::RenderWindow& window);
+	virtual void update(sf::RenderWindow& window, float dt);
+	virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
 	//ScreenID getScreenID() const;
 	void setScreenAction(std::function<void(ScreenID)> action);
 protected:
