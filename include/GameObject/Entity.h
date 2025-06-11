@@ -18,6 +18,8 @@ public:
 	void setVelocity(const b2Vec2& velocity);
 	b2Vec2 getVelocity() const;
     b2Body* getBody() const;
+    bool isVisible() const { return m_visable; }
+    void setVisible(bool visible) { m_visable = visible; }
 
 protected:
     b2Body* m_body;
@@ -25,6 +27,7 @@ protected:
     Animation m_animation;
 	b2Vec2 m_velocity;  // سرعة الكائن
 	sf::RectangleShape m_hitbox; // صندوق الاصطدام
+    bool m_visable;
 
     static constexpr float SCALE = 30.f;
 };

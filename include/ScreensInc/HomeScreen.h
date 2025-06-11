@@ -7,6 +7,7 @@ class HomeScreen : public Screen {
 public:
 	HomeScreen();
 	virtual ~HomeScreen() = default;
+	void init() override;
 private:
 	void initButtons();
 	sf::Font m_font;

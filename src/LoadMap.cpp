@@ -4,7 +4,7 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
-constexpr float SCALE = 30.f; // 1 متر = 30 بكسل
+constexpr float SCALE = 30; // 1 متر = 30 بكسل
 
 // Constructor initializes map dimensions and tile sizes
 LoadMap::LoadMap(const std::string& jsonPath) {
@@ -33,19 +33,61 @@ LoadMap::LoadMap(const std::string& jsonPath) {
 // Creates collision objects for a specified layer
 void LoadMap::createCollisionObjects(b2World& world, const std::string& layerName) {
     for (const auto& layer : m_layers) {
-        if (layer.name == layerName) {
-            for (int y = 0; y < m_height; ++y) {
-                for (int x = 0; x < m_width; ++x) {
-                    int tile = layer.tiles[y * m_width + x];
-                    if (tile > 0) {
-                        createBox(world, x, y, 1, 1);
+        if (layer.name != layerName)
+            continue;
+
+        std::vector<std::vector<bool>> visited(m_height, std::vector<bool>(m_width, false));
+
+        for (int y = 0; y < m_height; ++y) {
+            for (int x = 0; x < m_width; ++x) {
+                if (visited[y][x])
+                    continue;
+
+                int tile = layer.tiles[y * m_width + x];
+                if (tile <= 0)
+                    continue;
+
+                // نحاول تمديد المستطيل بأكبر عدد ممكن من الخانات المتجاورة
+                int maxWidth = 1;
+                int maxHeight = 1;
+
+                // احسب العرض الأفقي الممكن
+                while (x + maxWidth < m_width &&
+                    layer.tiles[y * m_width + (x + maxWidth)] > 0 &&
+                    !visited[y][x + maxWidth]) {
+                    ++maxWidth;
+                }
+
+                // احسب الارتفاع العمودي الممكن (طالما كل الأعمدة في الصف التالي ممتلئة)
+                bool canExtend = true;
+                while (y + maxHeight < m_height && canExtend) {
+                    for (int i = 0; i < maxWidth; ++i) {
+                        if (layer.tiles[(y + maxHeight) * m_width + (x + i)] <= 0 ||
+                            visited[y + maxHeight][x + i]) {
+                            canExtend = false;
+                            break;
+                        }
+                    }
+                    if (canExtend)
+                        ++maxHeight;
+                }
+
+                // علّم جميع المربعات المغطاة كمستعملة
+                for (int dy = 0; dy < maxHeight; ++dy) {
+                    for (int dx = 0; dx < maxWidth; ++dx) {
+                        visited[y + dy][x + dx] = true;
                     }
                 }
+
+                // أنشئ مربع التصادم الموحد
+                createBox(world, x, y, maxWidth, maxHeight);
             }
-            break;
         }
+
+        break;
     }
 }
+
 
 
 

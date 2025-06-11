@@ -13,6 +13,7 @@ protected:
 	sf::Vector2f m_playerPos;
 	void setPlayerPosition(const sf::Vector2f& position) { m_playerPos = position; }
 
+
 private:
 	sf::RectangleShape m_shape;
 };

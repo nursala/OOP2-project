@@ -16,6 +16,7 @@ add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(resources)
 add_subdirectory(external/box2d/src)
+add_subdirectory(external/candle)
 
 # إعدادات SFML
 set(SFML_LOCATION "C:/SFML/SFML-2.6.1")
@@ -35,6 +36,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     sfml-main
     box2d
     OpenGL::GL # <-- مكتبة OpenGL
+    Candle-s
 )
 
 include(cmake/SFML.cmake)

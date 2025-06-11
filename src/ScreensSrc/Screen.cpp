@@ -17,7 +17,8 @@ void Screen::setBackGroundTexture(const TextureID texture)
 
 void Screen::setScreenAction(std::function<void(ScreenID)> action)
 {
-	m_changeScreen = std::move(action); 
+	m_changeScreen = std::move(action);
+	init();
 }
 
 void Screen::render(sf::RenderWindow& window)

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <string>
+#include "CommandInc/Command.h"
 
 enum class ButtonID {
     Play,
@@ -25,12 +26,8 @@ class Button {
 public:
     Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text);
 
-    void setFont(const sf::Font& font);
-    void setCallback(std::function<void()> callback);
-    void setTextSize(unsigned int size);
-    void setIdleColor(const sf::Color& color);
-    void setHoverColor(const sf::Color& color);
-
+    std::function<void()> m_callback;
+    void setCommand(std::unique_ptr<Command> command);
     void updateHover(const sf::RenderWindow& window);
     void render(sf::RenderWindow& window);
     void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
@@ -38,9 +35,8 @@ public:
 private:
     sf::RectangleShape m_shape;
     sf::Text m_text;
-    std::function<void()> m_callback;
-
-	sf::Color m_defaultColor = sf::Color::White; // Default color for the button
+    std::unique_ptr<Command> m_command;
+	sf::Color m_defaultColor = sf::Color::White; 
     sf::Color m_idleColor = sf::Color::Red;
     sf::Color m_hoverColor = sf::Color(200, 200, 200);
     bool m_isHovered = false;

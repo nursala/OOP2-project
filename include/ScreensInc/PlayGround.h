@@ -11,6 +11,8 @@ public:
 	virtual void update(sf::RenderWindow& window, float dt);
 	void render(sf::RenderWindow& window) override;
 	//virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
+protected:
+	void init() override;
 private:
 	void initButtons();
 	sf::View m_view;

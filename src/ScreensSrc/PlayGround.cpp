@@ -1,12 +1,18 @@
 #include "ScreensInc/PlayGround.h"
 #include <iostream>
 #include "cmath"
+#include "CommandInc/SwitchScreenCommand.h"
+#include "CommandInc/ExitCommand.h"
 //playground.cpp
 PlayGround::PlayGround()
 {   
-	initButtons();
     m_view.setCenter({m_world.getPlayerPixels().x / 2 ,m_world.getPlayerPixels().y / 2});
     m_view.setSize(1300/ 3.f, 1000 / 3.f);
+}
+
+void PlayGround::init()
+{
+	initButtons();
 }
 
 void PlayGround::initButtons()
@@ -15,17 +21,17 @@ void PlayGround::initButtons()
         ButtonID::Play,
         Button(sf::Vector2f(20, 20), sf::Vector2f(200, 50), "Play")
     );
-    playIt->second.setCallback([this]() {
-        m_changeScreen(ScreenID::Home);
-        });
+   
+    playIt->second.setCommand(std::make_unique<SwitchScreenCommand>(
+        m_changeScreen, ScreenID::Home
+    ));
 
     auto [exitIt, insertedExit] = m_buttons.emplace(
         ButtonID::Exit,
         Button(sf::Vector2f(20, 20), sf::Vector2f(250, 50), "Exit")
     );
-    exitIt->second.setCallback([this]() {
-		std::cout << "Exit button clicked, exiting game." << std::endl;
-        });
+    exitIt->second.setCommand(std::make_unique<ExitCommand>(
+    ));
 }
 
 void PlayGround::update(sf::RenderWindow& window, float dt)
