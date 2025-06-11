@@ -67,5 +67,3 @@ void Player::render(sf::RenderWindow& window)
 
 	}
 }
-
-

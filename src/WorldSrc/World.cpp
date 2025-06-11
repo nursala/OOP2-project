@@ -20,6 +20,7 @@ World::World() :
 		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
 	);
 
+
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
 
