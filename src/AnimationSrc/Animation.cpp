@@ -1,6 +1,6 @@
 #include "AnimationInc/Animation.h"
 #include <cmath>
-
+#include <iostream>
 Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float switchTime)
     : m_imageCount(imageCount), m_switchTime(switchTime), m_displayed(0), m_totalImages(0) {
 
@@ -14,6 +14,8 @@ Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float 
 
 void Animation::update(int row, int totalImages, float deltaTime, bool isFaceRight)
 {
+    std::cout << "Updating animation with row = " << row << " deltaTime = " << deltaTime << "\n";
+
     m_totalImages = totalImages - 1;
     m_currentImage.y = (row - 1) + static_cast<int>(std::floor(m_displayed / m_imageCount.x));
     m_totalTime += deltaTime;

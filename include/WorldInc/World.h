@@ -14,12 +14,12 @@
 class World
 {
 public:
-    World();
-    void update(sf::RenderWindow& window, float deltaTime);
-    void render(sf::RenderWindow& window);
-    const sf::Vector2f getPlayerPixels() const;
-    const sf::Vector2f getMapTextureSize() const;
-
+	World();
+	void update(sf::RenderWindow& window, float deltaTime);
+	void render(sf::RenderWindow& window);
+	const sf::Vector2f getPlayerPixels() const;
+	const sf::Vector2f getMapTextureSize() const;
+	const Player& getPlayer() const;
 private:
     b2World m_world;
     std::unique_ptr<Player> m_player;

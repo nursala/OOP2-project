@@ -116,3 +116,8 @@ void World::buildAllEdges() {
 		}
 	}
 }
+
+const Player& World::getPlayer() const
+{
+	return *m_player;
+}
