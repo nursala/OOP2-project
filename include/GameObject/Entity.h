@@ -22,7 +22,6 @@ public:
 	Animation& getAnimation();
     void setMoveStrategy(std::unique_ptr<MoveStrategy> strategy);
     const MoveInfo& getLastMoveInfo() const;
-    const sf::Vector2f getPosition() const;
     const sf::Vector2f getDirection() const;
     bool isVisible() const { return m_visable; }
     void setVisible(bool visible) { m_visable = visible; }

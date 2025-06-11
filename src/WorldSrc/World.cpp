@@ -6,7 +6,7 @@
 World::World() :
 	m_world(b2Vec2(0.f, 0.f)),
 	m_tileMap("map.json"),
-	m_light({ 2400, 2400})
+	m_light({ 2400, 2400 })
 {
 	if (!m_mapTexture.loadFromFile("map.png")) {
 		throw std::runtime_error("Failed to load map.png!");
@@ -15,7 +15,8 @@ World::World() :
 	m_player = std::unique_ptr<Player>(
 		dynamic_cast<Player*>(Factory::instance().create(TextureID::Player, m_world).release())
 	);
-
+	m_player->setPostion({ 10, 10});
+	std::cout << m_player->getPixels().x << m_player->getPixels().y << std::endl;
 	m_enemy = std::unique_ptr<Enemy>(
 		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
 	);
@@ -26,8 +27,6 @@ World::World() :
 
 	buildAllEdges();
 
-	//m_debugDraw.SetFlags(b2Draw::e_shapeBit);
-	//m_world.SetDebugDraw(&m_debugDraw);
 	m_player->setLight(m_light.getPlayerVision());
 	m_player->setWeaponLight(m_light.getWeaponLight());
 }
@@ -43,38 +42,27 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
 	// نحسب الحواف القريبة فقط (closeEdges)
-	m_closeEdges.clear();
-	sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
-	float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
+	calcNearlyEdge();
 
-	for (const auto& edge : m_allEdges) {
-		sf::Vector2f p1 = edge.m_origin;
-		sf::Vector2f p2 = edge.point(1.f);
-
-		float dx1 = p1.x - lightPos.x, dy1 = p1.y - lightPos.y;
-		float dx2 = p2.x - lightPos.x, dy2 = p2.y - lightPos.y;
-
-		if (dx1 * dx1 + dy1 * dy1 <= rangeSq || dx2 * dx2 + dy2 * dy2 <= rangeSq) {
-			m_closeEdges.push_back(edge);
-		}
-	}
 	m_light.update(playerPos, mouseWorld);
 	// تحديث نظام الإضاءة مع الحواف القريبة
-	m_light.updateCastLight( m_closeEdges, m_world);
+	m_light.updateCastLight(m_closeEdges, m_world);
 	sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
 
 	m_light.setPosition(topLeft); // تحديث موقع منطقة الإضاءة
 }
 
-void World::render(sf::RenderWindow& window) 
+void World::render(sf::RenderWindow& window)
 {
 
-	
+
 	window.draw(m_mapSprite);
+	// رسم جميع الحواف m_allEdges بلون أحمر
+	DebugEdge(window);
 	m_light.drawFinalLights(window);
-	
+
 	m_player->render(window);
-	
+
 	m_enemy->render(window);
 
 	m_light.drawLights(window);
@@ -120,4 +108,65 @@ void World::buildAllEdges() {
 const Player& World::getPlayer() const
 {
 	return *m_player;
+}
+void World::calcNearlyEdge()
+{
+	sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
+	float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
+
+	m_closeEdges.clear();
+	for (const auto& edge : m_allEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f ab = p2 - p1;
+		sf::Vector2f ap = lightPos - p1;
+
+		float abDotAb = ab.x * ab.x + ab.y * ab.y;
+		if (abDotAb == 0) continue; // تجنب القسمة على صفر
+
+		float t = std::max(0.f, std::min(1.f, (ap.x * ab.x + ap.y * ab.y) / abDotAb));
+		sf::Vector2f closestPoint = p1 + ab * t;
+
+		float dx = closestPoint.x - lightPos.x;
+		float dy = closestPoint.y - lightPos.y;
+		float distSq = dx * dx + dy * dy;
+
+		if (distSq <= rangeSq) {
+			m_closeEdges.push_back(edge);
+		}
+	}
+}
+
+void World::DebugEdge(sf::RenderWindow& window)
+{
+	for (const auto& edge : m_allEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f direction = p2 - p1;
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+		sf::RectangleShape rect;
+		rect.setSize({ length, 2.f });  // 2.f هو عرض الخط
+		rect.setFillColor(sf::Color::Red);
+		rect.setPosition(p1);
+		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
+
+		window.draw(rect);
+	}
+
+	// --- رسم الحواف القريبة m_closeEdges كمستطيلات خضراء ---
+	for (const auto& edge : m_closeEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f direction = p2 - p1;
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+		sf::RectangleShape rect;
+		rect.setSize({ length, 3.f });  // أعرض قليلاً لتمييزها
+		rect.setFillColor(sf::Color::Green);
+		rect.setPosition(p1);
+		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
+
+		window.draw(rect);
+	}
 }

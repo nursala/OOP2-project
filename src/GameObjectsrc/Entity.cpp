@@ -44,19 +44,22 @@ void Entity::render(sf::RenderWindow& window) {
 void Entity::setPostion(const b2Vec2& position)
 {
 	if (m_body) {
-		m_body->SetTransform(position, m_body->GetAngle());
+		m_body->SetTransform({ position.x / SCALE,position.y / SCALE
+			}, m_body->GetAngle());
 	}
+	m_hitbox.setPosition({ position.x ,position.y });
+
 }
 
 b2Vec2 Entity::getPositionB2() const {
 	if (!m_body) {
 		return b2Vec2(0, 0);
 	}
-	return { m_body->GetPosition().x ,m_body->GetPosition().y };
+	return { getPixels().x / SCALE ,getPixels().y / SCALE };
 }
 
 sf::Vector2f  Entity::getPixels() const {
-	return { getPosition().x * SCALE, getPosition().y * SCALE };
+	return { m_hitbox.getPosition().x , m_hitbox.getPosition().y  };
 }
 void Entity::setVelocity(const b2Vec2& velocity) {
 	if (m_body) {
@@ -88,10 +91,7 @@ const MoveInfo& Entity::getLastMoveInfo() const
 	return m_lastMoveInfo;
 }
 
-const sf::Vector2f Entity::getPosition() const
-{
-	return m_hitbox.getPosition();
-}
+
 
 
 const sf::Vector2f Entity::getDirection() const

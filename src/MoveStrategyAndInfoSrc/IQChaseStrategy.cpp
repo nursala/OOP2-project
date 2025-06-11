@@ -40,7 +40,7 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime) {
 }
 
 sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float deltaTime) {
-    sf::Vector2f toPlayer = m_player.getPosition() - enemy.getPosition();
+    sf::Vector2f toPlayer = m_player.getPixels() - enemy.getPixels();
     std::vector<sf::Vector2f> directions = { {25,0}, {-25,0}, {0,25}, {0,-25} };
 
     float minDist = FLT_MAX;
@@ -50,8 +50,8 @@ sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float
         if (dir == -enemy.getLastMoveInfo().direction)
             continue;
 
-        sf::Vector2f testPos = enemy.getPosition() + dir * deltaTime;
-        float dist = std::hypot(m_player.getPosition().x - testPos.x, m_player.getPosition().y - testPos.y);
+        sf::Vector2f testPos = enemy.getPixels() + dir * deltaTime;
+        float dist = std::hypot(m_player.getPixels().x - testPos.x, m_player.getPixels().y - testPos.y);
 
         if (dist < minDist) {
             minDist = dist;
