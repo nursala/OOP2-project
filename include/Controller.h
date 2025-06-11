@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // Controller.h
 #include "SFML/Graphics.hpp"
 #include "ScreensInc/Screen.h"
@@ -13,10 +13,10 @@
 class  Controller
 {
 public:
-	 Controller();
-	 void run();
-	 void setScreen(ScreenID screen);
-	 void removeScreen();
+	Controller();
+	void run();
+	void setScreen(ScreenID screen);
+	void removeScreen();
 
 private:
 
@@ -31,5 +31,3 @@ private:
 	std::function<void(ScreenID)> m_changeScreen;
 	std::optional<ScreenID> m_nextScreen;
 };
-
-

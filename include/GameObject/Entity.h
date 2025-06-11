@@ -24,6 +24,9 @@ public:
     const MoveInfo& getLastMoveInfo() const;
     const sf::Vector2f getPosition() const;
     const sf::Vector2f getDirection() const;
+    bool isVisible() const { return m_visable; }
+    void setVisible(bool visible) { m_visable = visible; }
+
 protected:
     b2Body* m_body;
     sf::Sprite m_sprite;
@@ -33,5 +36,8 @@ protected:
 	sf::RectangleShape m_hitbox; // For collision detection
 	MoveInfo m_lastMoveInfo; // Last move info for the entity
 	sf::Vector2f m_direction{ 0.f, 0.f }; // Current direction of the entity
+	b2Vec2 m_velocity;  // سرعة الكائن
+    bool m_visable;
+
     static constexpr float SCALE = 30.f;
 };

@@ -15,7 +15,7 @@ Controller::Controller()
 	m_changeScreen = [this](ScreenID id) {
 		m_nextScreen = id;
 		};
-	setScreen(ScreenID::Home); 
+	setScreen(ScreenID::Home);
 	SoundManager::instance().play(SoundID::BackgroundMusic);
 	m_window.setFramerateLimit(60);
 }
@@ -82,7 +82,7 @@ void Controller::update()
 {
 	float deltaTime = m_clock.restart().asSeconds();
 	if (!m_screens.empty())
-		m_screens.top()->update(m_window, deltaTime);	
+		m_screens.top()->update(m_window, deltaTime);
 }
 
 void Controller::render()

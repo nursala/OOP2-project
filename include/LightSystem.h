@@ -1,22 +1,34 @@
 ﻿#pragma once
+
 #include <SFML/Graphics.hpp>
+#include "VisionLight.h"
+#include "WeaponLight.h"
+#include "Candle/LightingArea.hpp"
 #include <Box2D/Box2D.h>
 
 class LightSystem {
 public:
-    LightSystem(float lightRadius = 100.f, int rayCount = 100);
+	LightSystem(sf::Vector2f areaSize);
 
-    void update(const sf::Vector2f& origin, float directionAngle, float fov, b2World& world);
+	void update(const sf::Vector2f& playerPos, const sf::Vector2f& mouseWorld);
 
-    void draw(sf::RenderTarget& target) const;
 
-    const sf::Sprite& getShadowSprite() const { return shadowSprite; }
+	void drawFinalLights(sf::RenderTarget& target);
+
+	void drawLights(sf::RenderTarget& target);
+
+	std::shared_ptr<VisionLight>& getPlayerVision();
+	std::shared_ptr<WeaponLight>& getWeaponLight();
+
+
+	void setPosition(const sf::Vector2f& topLeft);
+
+	void updateCastLight( candle::EdgeVector& closeEdges, b2World& world);
+
 
 private:
-    float LIGHT_RADIUS;
-    int RAY_COUNT;
-
-    sf::VertexArray lightCone;
-    sf::RenderTexture shadowTexture;
-    sf::Sprite shadowSprite;
+	std::shared_ptr<VisionLight> m_playerVision;
+	std::shared_ptr<WeaponLight> m_weaponLight;
+	candle::RadialLight m_radialLight;
+	candle::LightingArea m_lightingArea;
 };

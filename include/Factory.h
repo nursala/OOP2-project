@@ -12,6 +12,7 @@ public:
     static Factory& instance();
 
     void registerType(TextureID id, Creator creator);
+
     std::unique_ptr<Entity> create(TextureID id, b2World& world);
 
 private:
