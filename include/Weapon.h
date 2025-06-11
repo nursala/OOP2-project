@@ -2,22 +2,22 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include "VisionLight.h"
+#include "WeaponLight.h"
+
+
 
 class Weapon {
 public:
-    Weapon(b2World& world, const sf::Vector2f& origin);
+    Weapon(b2World& world);
 
     void fire(const sf::Vector2f& position, const sf::Vector2f& direction);
-    void update(float dt, sf::Vector2f playerPos);
+    void update(sf::Vector2f playerPos, float angle);
     void draw(sf::RenderWindow& window);
-	VisionLight& getVisionLight() {
-		return m_visionLight;
-	}
+    void setLight(std::shared_ptr<WeaponLight>& weaponLight);
+
 
 private:
     b2World& m_world;
-	sf::RectangleShape m_shape; // For rendering the weapon
     std::vector<b2Body*> m_bullets;
-    VisionLight m_visionLight;
-
+    std::shared_ptr<WeaponLight> m_weaponLight;
 };

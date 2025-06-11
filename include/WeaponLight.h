@@ -7,13 +7,12 @@
 #include "RayCastClosest.h"
 #include "candle/RadialLight.hpp"
 
-class VisionLight : public candle::RadialLight {
+class WeaponLight : public candle::RadialLight {
 public:
-    VisionLight(float range, float beamAngle);
+    WeaponLight(float range, float beamAngle);
 
     void update(const sf::Vector2f& position, float rotation);
 
     void castLightCustom(const candle::EdgeVector::iterator& begin, const candle::EdgeVector::iterator& end, b2World& world, std::unordered_set<b2Fixture*>& hitFixtures);
-    
 
 };

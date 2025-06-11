@@ -9,13 +9,14 @@ public:
     void update(float deltaTime) override;
 	void render(sf::RenderWindow& window) override;
     void setMoveStrategy(std::unique_ptr<MoveStrategy> strategy);
-	VisionLight& getVisionLight() {
-		return m_weapon->getVisionLight();
-	}
+    void setLight(std::shared_ptr<VisionLight>& visionLight);
+    void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
 private:
 
     std::unique_ptr<MoveStrategy> m_moveStrategy;
 	sf::RectangleShape m_shape; // For rendering the player
     std::unique_ptr<Weapon> m_weapon;
+    std::shared_ptr<VisionLight> m_visionLight;
+
 
 };

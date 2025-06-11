@@ -44,6 +44,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
     center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
     center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
 	m_view.setCenter(center);
+
     m_world.update(window, dt);
 }
 
@@ -51,7 +52,6 @@ void PlayGround::render(sf::RenderWindow& window)
 {
     window.setView(m_view);
 	m_world.render(window);
-    window.setView(window.getDefaultView());
 	for (auto& [id, button] : m_buttons) {
 		button.render(window);
 	}
