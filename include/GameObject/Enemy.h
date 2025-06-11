@@ -12,7 +12,8 @@ public:
 protected:
 	sf::Vector2f m_playerPos;
 	void setPlayerPosition(const sf::Vector2f& position) { m_playerPos = position; }
-
+	const sf::Vector2f getDirection() const;
 private:
+	sf::Vector2f m_direction;
 	sf::RectangleShape m_shape;
 };

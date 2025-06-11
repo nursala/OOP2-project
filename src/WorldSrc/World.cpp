@@ -67,3 +67,8 @@ const sf::Vector2f World::getMapTextureSize() const
 	}
 	return sf::Vector2f(static_cast<float>(m_mapTexture.getSize().x), static_cast<float>(m_mapTexture.getSize().y));
 }
+
+const Player& World::getPlayer() const
+{
+	return *m_player;
+}

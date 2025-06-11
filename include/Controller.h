@@ -10,8 +10,6 @@
 #include "GameObject/Enemy.h"
 #include <stack>
 
-
-
 class  Controller
 {
 public:
