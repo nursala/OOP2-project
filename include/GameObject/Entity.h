@@ -36,7 +36,6 @@ protected:
 	sf::RectangleShape m_hitbox; // For collision detection
 	MoveInfo m_lastMoveInfo; // Last move info for the entity
 	sf::Vector2f m_direction{ 0.f, 0.f }; // Current direction of the entity
-	b2Vec2 m_velocity;  // سرعة الكائن
     bool m_visable;
 
     static constexpr float SCALE = 30.f;

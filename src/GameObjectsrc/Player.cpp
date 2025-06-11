@@ -19,7 +19,6 @@ namespace {
 Player::Player(b2World& world)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 100, 100 }, { 5, 5 }, 0.4),
 	m_state(std::make_unique<IdleStatePlayer>()),
-	m_moveStrategy(std::make_unique<KeyboardMoveStrategy>()),
 	m_weapon(nullptr)
 {
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
@@ -29,18 +28,19 @@ Player::Player(b2World& world)
 	m_visable = true;
 }
 
-void Player::update(float deltaTime) {
-	if (m_moveStrategy)
-		m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
-
-	if (m_state) {
-		auto newState = m_state->handleInput(*this);
-		if (newState) {
-			m_state = std::move(newState);
-			m_state->enter(*this);
-		}
-		m_state->update(*this, deltaTime);
-	}
+//void Player::update(float deltaTime) {
+//	if (m_moveStrategy)
+//		m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
+//
+//	if (m_state) {
+//		auto newState = m_state->handleInput(*this);
+//		if (newState) {
+//			m_state = std::move(newState);
+//			m_state->enter(*this);
+//		}
+//		m_state->update(*this, deltaTime);
+//	}
+//}
 
 void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
 {
@@ -54,24 +54,24 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 
 void Player::update(float deltaTime)
 {
-    MoveInfo info = { 1, true };
-    if (m_moveStrategy)
-        info = m_moveStrategy->move(*this, deltaTime);
+	MoveInfo info = { 1, true };
+	if (m_moveStrategy)
+		info = m_moveStrategy->move(*this, deltaTime);
 
-    sf::Vector2f pos = { m_body->GetPosition().x ,m_body->GetPosition().y };
-    pos *= SCALE;
-    m_sprite.setPosition(pos.x, pos.y);
+	sf::Vector2f pos = { m_body->GetPosition().x ,m_body->GetPosition().y };
+	pos *= SCALE;
+	m_sprite.setPosition(pos.x, pos.y);
 
 	m_sprite.setTextureRect(m_animation.getUvRect());
 
-	m_weapon->update( pos , this->m_shape.getRotation());
-    // hitbox updates
-    m_hitbox.setPosition(pos.x, pos.y);
-    m_hitbox.setRotation(m_sprite.getRotation());
-    m_hitbox.setOrigin(m_hitbox.getSize().x / 2, m_hitbox.getSize().y / 2);
-    m_hitbox.setPosition(m_sprite.getPosition());
-    m_hitbox.setTexture(m_sprite.getTexture());
-    m_hitbox.setTextureRect(m_sprite.getTextureRect());
+	m_weapon->update(pos, this->m_shape.getRotation());
+	// hitbox updates
+	m_hitbox.setPosition(pos.x, pos.y);
+	m_hitbox.setRotation(m_sprite.getRotation());
+	m_hitbox.setOrigin(m_hitbox.getSize().x / 2, m_hitbox.getSize().y / 2);
+	m_hitbox.setPosition(m_sprite.getPosition());
+	m_hitbox.setTexture(m_sprite.getTexture());
+	m_hitbox.setTextureRect(m_sprite.getTextureRect());
 }
 
 void Player::render(sf::RenderWindow& window)
