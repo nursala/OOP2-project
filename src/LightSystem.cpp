@@ -1,65 +1,71 @@
 ﻿#include "LightSystem.h"
-#include "RayCastClosest.h"
 #include <cmath>
-#include <GameObject/Enemy.h>
+#include <iostream>
 
-constexpr float SCALE = 30.f; // 1 متر = 30 بكسل
-
-
-LightSystem::LightSystem(float lightRadius, int rayCount )
-    : LIGHT_RADIUS(lightRadius), RAY_COUNT(rayCount), lightCone(sf::TriangleFan)
+LightSystem::LightSystem(sf::Vector2f areaSize)
+    : m_playerVision(std::make_shared<VisionLight>(150,45)),
+    m_lightingArea(candle::LightingArea::FOG, { 0.f, 0.f }, areaSize),
+	m_weaponLight(std::make_shared<WeaponLight>(150, 45)) // Initialize WeaponLight with range and beam angle
 {
-    shadowTexture.create(1280, 720);
-    shadowSprite.setTexture(shadowTexture.getTexture());
+    m_playerVision->setIntensity(0.5f);
+    
+    m_radialLight.setRange(25); 
+    m_radialLight.setFade(true);
+    m_radialLight.setColor(sf::Color::Blue);
+    
+    m_weaponLight->setRange(100.f);
+    m_weaponLight->setFade(true);
+    m_weaponLight->setIntensity(1.f);
+    m_weaponLight->setColor(sf::Color::Red);
+
+    m_lightingArea.setAreaColor(sf::Color::Black);
+    m_lightingArea.setAreaOpacity(0.8);
 }
 
-void LightSystem::update(const sf::Vector2f& origin, float directionAngle, float fov, b2World& world) {
-    lightCone.clear();
-    lightCone.append(sf::Vertex(origin, sf::Color(255, 255, 100, 180)));
-
-    float px = origin.x / SCALE;
-    float py = origin.y / SCALE;
-
-    for (int i = 0; i <= RAY_COUNT; ++i) {
-        float angle = directionAngle - fov / 2.f + fov * i / RAY_COUNT;
-        float dx = std::cos(angle) / SCALE;
-        float dy = std::sin(angle) / SCALE;
-
-        b2Vec2 start(px, py);
-        b2Vec2 end(px + dx * LIGHT_RADIUS, py + dy * LIGHT_RADIUS);
-
-        RayCastClosest callback;
-        world.RayCast(&callback, start, end);
-
-        sf::Vector2f hitPoint;
-        if (callback.hit()) {
-            b2Fixture* fixture = callback.getFixture();
-            if (fixture) {
-                /*Enemy* enemy = reinterpret_cast<Enemy*>(fixture->GetUserData().pointer);
-                if (enemy) {
-                    enemy->onLightCollision();
-                }*/
-            }
-            hitPoint.x = callback.getPoint().x * SCALE;
-            hitPoint.y = callback.getPoint().y * SCALE;
-        }
-
-        else {
-            hitPoint.x = end.x * SCALE;
-            hitPoint.y = end.y * SCALE;
-        }
-
-        lightCone.append(sf::Vertex(hitPoint, sf::Color(255, 255, 100, 10)));
-    }
-
-    shadowTexture.clear(sf::Color(0, 0, 0, 200));
-    sf::RenderStates noBlend;
-    noBlend.blendMode = sf::BlendNone;
-    shadowTexture.draw(lightCone, noBlend);
-    shadowTexture.display();
-    shadowSprite.setTexture(shadowTexture.getTexture());
+void LightSystem::update(const sf::Vector2f& playerPos, const sf::Vector2f& mouseWorld)
+{
+    float angle = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x) * 180.f / 3.14159265f;
+    std::cout << angle << std::endl;
+    m_playerVision->update(playerPos, angle);
+    m_weaponLight->update(playerPos, angle);
+    m_radialLight.setPosition(playerPos);
 }
 
-void LightSystem::draw(sf::RenderTarget& target) const {
-    target.draw(shadowSprite);
+
+
+void LightSystem::drawFinalLights(sf::RenderTarget& target) {
+    m_lightingArea.clear();
+    m_lightingArea.draw(*m_playerVision);
+    m_lightingArea.display();
+    target.draw(m_lightingArea); // أو Alpha حسب التأثير المراد
 }
+
+void LightSystem::drawLights(sf::RenderTarget& target) {
+    target.draw(m_radialLight);
+    target.draw(*m_weaponLight);
+    target.draw(*m_playerVision);
+}
+
+std::shared_ptr<VisionLight>& LightSystem::getPlayerVision() {
+    return m_playerVision;
+}
+
+std::shared_ptr<WeaponLight>& LightSystem::getWeaponLight() {
+    return m_weaponLight;
+}
+
+
+void LightSystem::setPosition(const sf::Vector2f& topLeft) {
+    m_lightingArea.setPosition(topLeft);
+}
+void LightSystem::updateCastLight(
+    candle::EdgeVector& closeEdges,
+    b2World& world)
+{
+
+    std::unordered_set<b2Fixture*> m_hitFixtures;
+
+    m_playerVision->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
+	m_weaponLight->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
+}
+

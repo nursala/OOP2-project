@@ -1,52 +1,61 @@
 ﻿#include "Weapon.h"
 
-Weapon::Weapon(b2World& world, const sf::Vector2f& origin)
-    : m_world(world),
-	m_visionLight(100, 30) // Initialize VisionLight with range and beam angle
+Weapon::Weapon(b2World& world):
+    m_world(world)
 {
-	m_shape.setSize(sf::Vector2f(100.f, 50.f));
-	m_shape.setOrigin(m_shape.getSize() / 2.f);
-	m_shape.setPosition(origin);
-	m_shape.setFillColor(sf::Color::Green);
-	m_visionLight.setColor(sf::Color::Red);
-	m_visionLight.setIntensity(1.f); // Set the intensity of the vision light
+
 }
 
-void Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& direction) {
-    b2BodyDef bulletDef;
-    bulletDef.type = b2_dynamicBody;
-    bulletDef.position.Set(position.x / 30.f, position.y / 30.f);
+void Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& direction)
+{
+    //// هذه مجرد فكرة لإنشاء جسم Box2D كرصاصة (بدون رسمة حالياً)
+    //b2BodyDef bulletDef;
+    //bulletDef.type = b2_dynamicBody;
+    //bulletDef.position.Set(position.x / 30.f, position.y / 30.f); // تحويل إلى وحدة Box2D
 
-    b2Body* bullet = m_world.CreateBody(&bulletDef);
+    //b2Body* bulletBody = m_world.CreateBody(&bulletDef);
 
-    b2CircleShape shape;
-    shape.m_radius = 5.f / 30.f;
+    //b2CircleShape bulletShape;
+    //bulletShape.m_radius = 5.f / 30.f; // 5 بكسل
 
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &shape;
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.3f;
-    fixtureDef.restitution = 0.2f;
+    //b2FixtureDef fixtureDef;
+    //fixtureDef.shape = &bulletShape;
+    //fixtureDef.density = 1.f;
+    //fixtureDef.friction = 0.f;
+    //fixtureDef.restitution = 0.f;
+    //fixtureDef.isSensor = true;
 
-    bullet->CreateFixture(&fixtureDef);
+    //bulletBody->CreateFixture(&fixtureDef);
 
-    // Apply velocity
-    bullet->SetLinearVelocity(b2Vec2(direction.x * 10.f, direction.y * 10.f));
-    m_bullets.push_back(bullet);
+    //// تحديد السرعة
+    //b2Vec2 velocity(direction.x, direction.y);
+    //velocity.Normalize();
+    //velocity *= 20.f;
+    //bulletBody->SetLinearVelocity(velocity);
+
+    //m_bullets.push_back(bulletBody);
 }
 
-void Weapon::update(float dt  , sf::Vector2f playerPos) {
-	m_shape.setPosition(playerPos);
-	m_visionLight.update(playerPos, 0.f); // Assuming no rotation for simplicity
-	// Update the vision light based on the bullets
-	candle::EdgeVector edges;
-	m_visionLight.castLight(edges.begin(), edges.end()); // Cast light using the edges
-	
+void Weapon::update(sf::Vector2f playerPos, float angle)
+{
+
+
+    if (m_weaponLight)
+    {
+        m_weaponLight->setPosition(playerPos);
+        m_weaponLight->update(playerPos, angle);
+    }
+
 }
 
-void Weapon::draw(sf::RenderWindow& window) {
+void Weapon::draw(sf::RenderWindow& window)
+{
 
-    //window.draw(m_shape);
-    window.draw(m_visionLight);
+    if (m_weaponLight)
+        window.draw(*m_weaponLight);
+}
 
+void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
+{
+    m_weaponLight = weaponLight;
 }

@@ -15,14 +15,25 @@ namespace {
 
 Player::Player(b2World& world)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 100,100 }, { 5,5 }, 0.4),
-	m_moveStrategy(std::make_unique<KeyboardMoveStrategy>())
+	m_moveStrategy(std::make_unique<KeyboardMoveStrategy>()),
+	m_weapon(nullptr)
 {
-	m_weapon = std::make_unique<Weapon>(world, getPixels());
+	m_weapon = std::make_unique<Weapon>(world);
 	m_visable = true;
 }
 
 void Player::setMoveStrategy(std::unique_ptr<MoveStrategy> strategy) {
 	m_moveStrategy = std::move(strategy);
+}
+
+void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
+{
+	m_visionLight = visionLight;
+}
+
+void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
+{
+	m_weapon->setLight(weaponLight);
 }
 
 void Player::update(float deltaTime)
@@ -38,7 +49,7 @@ void Player::update(float deltaTime)
     m_animation.update(info.row, 5, deltaTime, info.faceRight);
     m_sprite.setTextureRect(m_animation.getUvRect());
 
-	m_weapon->update(deltaTime, pos);
+	m_weapon->update( pos , this->m_shape.getRotation());
     // hitbox updates
     m_hitbox.setPosition(pos.x, pos.y);
     m_hitbox.setRotation(m_sprite.getRotation());
