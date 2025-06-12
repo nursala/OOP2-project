@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
+#include "GameObject/Gift.h"
 #include "LoadMap.h"
 #include "DebugDraw.h"
 #include "LightSystem.h"
@@ -24,6 +25,7 @@ private:
     b2World m_world;
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
+	std::unique_ptr<Gift> m_gift; 
 
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;

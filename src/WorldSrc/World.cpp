@@ -20,6 +20,9 @@ World::World() :
 		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
 	);
 
+	m_gift = std::unique_ptr<Gift>(
+		dynamic_cast<Gift*>(Factory::instance().create(TextureID::Gift, m_world).release())
+	);
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
 
@@ -77,6 +80,8 @@ void World::render(sf::RenderWindow& window)
 	m_enemy->render(window);
 
 	m_light.drawLights(window);
+
+	m_gift->render(window);
 
 	m_world.DebugDraw();
 
