@@ -16,5 +16,8 @@ public:
     std::unique_ptr<Entity> create(TextureID id, b2World& world);
 
 private:
+	Factory() = default;
+	Factory(const Factory&) = delete;
+	Factory& operator=(const Factory&) = delete;
     std::unordered_map<TextureID, Creator> m_creators;
 };

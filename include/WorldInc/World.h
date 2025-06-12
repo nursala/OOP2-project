@@ -15,14 +15,15 @@
 class World
 {
 public:
-    World();
-    void update(sf::RenderWindow& window, float deltaTime);
-    void render(sf::RenderWindow& window);
-    const sf::Vector2f getPlayerPixels() const;
-    const sf::Vector2f getMapTextureSize() const;
+	World();
+	void update(sf::RenderWindow& window, float deltaTime);
+	void render(sf::RenderWindow& window);
+	const sf::Vector2f getPlayerPixels() const;
+	const sf::Vector2f getMapTextureSize() const;
+	const Player& getPlayer() const;
+    b2World m_world;
 
 private:
-    b2World m_world;
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
 	std::unique_ptr<Gift> m_gift; 
@@ -37,6 +38,8 @@ private:
     std::vector<candle::Edge> m_closeEdges; // الحواف القريبة من مصدر الضوء (تتغير كل فريم)
 
     static constexpr float SCALE = 30.f;
-
+    
+    void calcNearlyEdge();
+    void DebugEdge(sf::RenderWindow& window);
     void buildAllEdges();  // دالة تبني الحواف من العالم عند البداية
 };

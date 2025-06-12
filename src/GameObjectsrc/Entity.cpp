@@ -27,7 +27,7 @@ Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position
 	// (اختياري) وضع المؤشر على الجسم نفسه
 	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
-	// إعداد الرسوميات
+	m_body->CreateFixture(&fixtureDef);
 	m_sprite.setPosition(position);
 	m_sprite.setTexture(*texture);
 	m_sprite.setTextureRect(m_animation.getUvRect());
@@ -44,19 +44,22 @@ void Entity::render(sf::RenderWindow& window) {
 void Entity::setPostion(const b2Vec2& position)
 {
 	if (m_body) {
-		m_body->SetTransform(position, m_body->GetAngle());
+		m_body->SetTransform({ position.x / SCALE,position.y / SCALE
+			}, m_body->GetAngle());
 	}
+	m_hitbox.setPosition({ position.x ,position.y });
+
 }
 
-b2Vec2 Entity::getPosition() const {
+b2Vec2 Entity::getPositionB2() const {
 	if (!m_body) {
 		return b2Vec2(0, 0);
 	}
-	return { m_body->GetPosition().x ,m_body->GetPosition().y };
+	return { getPixels().x / SCALE ,getPixels().y / SCALE };
 }
 
 sf::Vector2f  Entity::getPixels() const {
-	return { getPosition().x * SCALE, getPosition().y * SCALE };
+	return { m_hitbox.getPosition().x , m_hitbox.getPosition().y  };
 }
 
 void Entity::setVelocity(const b2Vec2& velocity) {
@@ -72,4 +75,27 @@ b2Vec2 Entity::getVelocity() const {
 b2Body* Entity::getBody() const
 {
 	return m_body;
+}
+
+Animation& Entity::getAnimation()
+{
+	return m_animation;
+}
+
+void Entity::setMoveStrategy(std::unique_ptr<MoveStrategy> strategy)
+{
+	m_moveStrategy = std::move(strategy);
+}
+
+const MoveInfo& Entity::getLastMoveInfo() const
+{
+	return m_lastMoveInfo;
+}
+
+
+
+
+const sf::Vector2f Entity::getDirection() const
+{
+	return m_direction;
 }
