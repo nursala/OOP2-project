@@ -25,7 +25,7 @@ LightSystem::LightSystem(sf::Vector2f areaSize)
 void LightSystem::update(const sf::Vector2f& playerPos, const sf::Vector2f& mouseWorld)
 {
     float angle = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x) * 180.f / 3.14159265f;
-    std::cout << angle << std::endl;
+    //std::cout << angle << std::endl;
     m_playerVision->update(playerPos, angle);
     m_weaponLight->update(playerPos, angle);
     m_radialLight.setPosition(playerPos);
@@ -66,6 +66,7 @@ void LightSystem::updateCastLight(
     std::unordered_set<b2Fixture*> m_hitFixtures;
 
     m_playerVision->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
+
 	m_weaponLight->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
 }
 

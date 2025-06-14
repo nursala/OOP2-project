@@ -41,7 +41,7 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime) {
 
 sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float deltaTime) {
     sf::Vector2f toPlayer = m_player.getPixels() - enemy.getPixels();
-    std::vector<sf::Vector2f> directions = { {25,0}, {-25,0}, {0,25}, {0,-25} };
+    std::vector<sf::Vector2f> directions = { {5,0}, {-5,0}, {0,5}, {0,-5} };
 
     float minDist = FLT_MAX;
     sf::Vector2f bestDir = { 0, 0 };
@@ -62,7 +62,7 @@ sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float
 }
 
 sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float deltaTime) {
-    std::vector<sf::Vector2f> dirs = { {25,0}, {-25,0}, {0,25}, {0,-25} };
+    std::vector<sf::Vector2f> dirs = { {2,0}, {-2,0}, {0,2}, {0,-2} };
     sf::Vector2f lastDir = enemy.getLastMoveInfo().direction;
 
     dirs.erase(std::remove(dirs.begin(), dirs.end(), -lastDir), dirs.end());

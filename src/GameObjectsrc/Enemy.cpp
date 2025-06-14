@@ -14,9 +14,14 @@ namespace {
 }
 
 Enemy::Enemy(b2World& world)  
-   : Entity(world, TextureManager::instance().get(TextureID::Player), { 350,350 }, { 5, 5 }, 0.4f)  
+   : Entity(world, TextureManager::instance().get(TextureID::Player), { 350,350 }, { 5, 5 }, 0.4f) ,
+	m_healthBar(40.f, 5.f), // width and height
+	m_maxHealth(100.f),
+	m_health(100.f)
 {  
-   m_moveStrategy = std::make_unique<IQChaseStrategy>(Player(world), 1);  
+   //m_moveStrategy = std::make_unique<IQChaseStrategy>(Player(world), 1); 
+   m_sprite.setColor(sf::Color::Red);
+   m_visable = true;
 }
 
 Enemy::~Enemy() {
@@ -44,10 +49,12 @@ void Enemy::update(float deltaTime) {
 	m_sprite.setPosition(pos.x, pos.y);
 
 	m_sprite.setTextureRect(m_animation.getUvRect());
+	m_sprite.setColor(sf::Color::Red);
 
 	m_hitbox.setPosition(pos);
 	m_hitbox.setRotation(m_sprite.getRotation());
 	m_hitbox.setOrigin(m_hitbox.getSize().x / 2, m_hitbox.getSize().y / 2);
+	m_hitbox.setPosition(m_sprite.getPosition());
 	m_hitbox.setTexture(m_sprite.getTexture());
 	m_hitbox.setTextureRect(m_sprite.getTextureRect());
 }

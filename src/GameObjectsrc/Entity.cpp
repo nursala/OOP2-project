@@ -92,9 +92,6 @@ const MoveInfo& Entity::getLastMoveInfo() const
 	return m_lastMoveInfo;
 }
 
-
-
-
 const sf::Vector2f Entity::getDirection() const
 {
 	return m_direction;

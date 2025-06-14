@@ -3,6 +3,7 @@
 #include "GameObject/Entity.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include "GameObject/HealthBar.h"
 
 class Enemy : public Entity {
 public:
@@ -16,4 +17,7 @@ protected:
 private:
 	sf::Vector2f m_direction;
 	sf::RectangleShape m_shape;
+	HealthBar m_healthBar;
+	float m_health; // enmey's current health
+	float m_maxHealth; // enmey's max health
 };
