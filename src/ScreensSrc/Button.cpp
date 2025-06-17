@@ -4,6 +4,7 @@ Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const std
 {
 	m_shape.setSize(size);
 	m_shape.setPosition(position);
+	std::cout << "Button position: " << position.x << ", " << position.y << std::endl;
 	m_shape.setFillColor(m_idleColor);
 
 	m_text.setString(text);

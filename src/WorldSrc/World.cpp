@@ -1,4 +1,4 @@
-﻿#include "WorldInc/World.h"
+#include "WorldInc/World.h"
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
@@ -66,6 +66,8 @@ void World::render(sf::RenderWindow& window)
 
 	m_enemy->render(window);
 
+	m_gift->render(window);
+
 	m_light.drawLights(window);
 
 	m_world.DebugDraw();
@@ -119,7 +121,7 @@ void World::calcNearlyEdge()
 		sf::Vector2f ap = lightPos - p1;
 
 		float abDotAb = ab.x * ab.x + ab.y * ab.y;
-		if (abDotAb == 0) continue; // تجنب القسمة على صفر
+		if (abDotAb == 0) continue; 
 
 		float t = std::max(0.f, std::min(1.f, (ap.x * ab.x + ap.y * ab.y) / abDotAb));
 		sf::Vector2f closestPoint = p1 + ab * t;
@@ -143,7 +145,7 @@ void World::DebugEdge(sf::RenderWindow& window)
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 		sf::RectangleShape rect;
-		rect.setSize({ length, 2.f });  // 2.f هو عرض الخط
+		rect.setSize({ length, 2.f });  
 		rect.setFillColor(sf::Color::Red);
 		rect.setPosition(p1);
 		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
@@ -151,7 +153,6 @@ void World::DebugEdge(sf::RenderWindow& window)
 		window.draw(rect);
 	}
 
-	// --- رسم الحواف القريبة m_closeEdges كمستطيلات خضراء ---
 	for (const auto& edge : m_closeEdges) {
 		sf::Vector2f p1 = edge.m_origin;
 		sf::Vector2f p2 = edge.point(1.f);
@@ -159,7 +160,7 @@ void World::DebugEdge(sf::RenderWindow& window)
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 		sf::RectangleShape rect;
-		rect.setSize({ length, 3.f });  // أعرض قليلاً لتمييزها
+		rect.setSize({ length, 3.f });  
 		rect.setFillColor(sf::Color::Green);
 		rect.setPosition(p1);
 		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);

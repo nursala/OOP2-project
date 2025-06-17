@@ -6,14 +6,14 @@
 #include <iostream>
 
 
-void ContactListener::BeginContact(b2Contact* contact)  {
+void ContactListener::BeginContact(b2Contact* contact) {
     b2Body* bodyA = contact->GetFixtureA()->GetBody();
     b2Body* bodyB = contact->GetFixtureB()->GetBody();
 
     Entity* entityA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
     Entity* entityB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
-    
-    
+
+
     //if (entityA) std::cout << "entityA: " << typeid(*entityA).name() << std::endl;
     //if (entityB) std::cout << "entityB: " << typeid(*entityB).name() << std::endl;
 
@@ -21,7 +21,7 @@ void ContactListener::BeginContact(b2Contact* contact)  {
     if (entityA && entityB) {
         if (!entityA->isVisible() || !entityB->isVisible())
             return;
-        
+
         if (auto player = dynamic_cast<Player*>(entityA)) {
             if (auto gift = dynamic_cast<Gift*>(entityB)) {
                 if (gift && gift->isVisible())
@@ -31,21 +31,20 @@ void ContactListener::BeginContact(b2Contact* contact)  {
                 }
                 // gift->apply(*player);
             }
-			else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
-				if (enemy && enemy->isVisible()) {
-					std::cout << "Player collided with an enemy!" << std::endl;
-					player->takeDamage(10); // Example damage
-				}
-			}
+            else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
+                if (enemy && enemy->isVisible()) {
+                    std::cout << "Player collided with an enemy!" << std::endl;
+                }
+            }
         }
-		//else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
-		//	if (auto player = dynamic_cast<Player*>(entityB)) {
-		//		if (player && player->isVisible()) {
-		//			std::cout << "Enemy collided with a player!" << std::endl;
-		//			//enemy->attack(*player); // Example attack
-		//		}
-		//	}
-		//}
+        //else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
+        //	if (auto player = dynamic_cast<Player*>(entityB)) {
+        //		if (player && player->isVisible()) {
+        //			std::cout << "Enemy collided with a player!" << std::endl;
+        //			//enemy->attack(*player); // Example attack
+        //		}
+        //	}
+        //}
     }
 }
 

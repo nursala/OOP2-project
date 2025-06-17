@@ -47,15 +47,18 @@ void LoadMap::createCollisionObjects(b2World& world, const std::string& layerNam
                 if (tile <= 0)
                     continue;
 
+                // نحاول تمديد المستطيل بأكبر عدد ممكن من الخانات المتجاورة
                 int maxWidth = 1;
                 int maxHeight = 1;
 
+                // احسب العرض الأفقي الممكن
                 while (x + maxWidth < m_width &&
                     layer.tiles[y * m_width + (x + maxWidth)] > 0 &&
                     !visited[y][x + maxWidth]) {
                     ++maxWidth;
                 }
 
+                // احسب الارتفاع العمودي الممكن (طالما كل الأعمدة في الصف التالي ممتلئة)
                 bool canExtend = true;
                 while (y + maxHeight < m_height && canExtend) {
                     for (int i = 0; i < maxWidth; ++i) {
@@ -84,6 +87,9 @@ void LoadMap::createCollisionObjects(b2World& world, const std::string& layerNam
         break;
     }
 }
+
+
+
 
 // Creates a single static collision box in the world
 void LoadMap::createBox(b2World& world, int startX, int startY, int countX, int countY) const {
@@ -145,16 +151,3 @@ const std::vector<sf::Vector2f>& LoadMap::getGiftSpawns() const {
 void LoadMap::addLayer(const std::string& name, const std::vector<int>& data) {
     m_layers.push_back({ name, data });
 }
-
-bool LoadMap::isWalkable(int x, int y) const {
-    for (const auto& layer : m_layers) {
-        if (layer.name == "walls") {
-            int index = y * m_width + x;
-            if (index >= 0 && index < layer.tiles.size()) {
-                return layer.tiles[index] == 0; 
-            }
-        }
-    }
-    return false; 
-}
-

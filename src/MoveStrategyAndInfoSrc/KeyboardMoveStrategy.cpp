@@ -12,22 +12,22 @@ MoveInfo KeyboardMoveStrategy::move(Entity& entity, float deltaTime) {
     info.faceRight = true;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        body->SetLinearVelocity(b2Vec2(25.f, 0));
+        body->SetLinearVelocity(b2Vec2(5.f, 0));
         info.row = 2;
         info.faceRight = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        body->SetLinearVelocity(b2Vec2(-25.f, 0));
+        body->SetLinearVelocity(b2Vec2(-5.f, 0));
         info.row = 2;
         info.faceRight = false;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        body->SetLinearVelocity(b2Vec2(0, -25.f));
+        body->SetLinearVelocity(b2Vec2(0, -5.f));
         info.row = 2;
         info.faceRight = false;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        body->SetLinearVelocity(b2Vec2(0, 25.f));
+        body->SetLinearVelocity(b2Vec2(0, 5.f));
         info.row = 2;
         info.faceRight = false;
     }

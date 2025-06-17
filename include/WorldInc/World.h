@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
+#include "GameObject/Gift.h"
 #include "LoadMap.h"
 #include "DebugDraw.h"
 #include "LightSystem.h"
@@ -19,14 +20,20 @@ public:
 	void render(sf::RenderWindow& window);
 	const sf::Vector2f getPlayerPixels() const;
 	const sf::Vector2f getMapTextureSize() const;
+	const Player& getPlayer() const;
     b2World m_world;
 
 private:
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
+    std::unique_ptr<Gift> m_gift;
+
 
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;
+    sf::Clock m_clock;
+    sf::Clock m_movementClock;
+    float m_elapsedTime;
     LoadMap m_tileMap;
 
     LightSystem m_light;

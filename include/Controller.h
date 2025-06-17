@@ -8,6 +8,7 @@
 #include "DebugDraw.h"
 #include "LightSystem.h"
 #include "GameObject/Enemy.h"
+#include "GameObject/Gift.h"
 #include <stack>
 
 class  Controller
@@ -17,6 +18,7 @@ public:
 	void run();
 	void setScreen(ScreenID screen);
 	void removeScreen();
+
 
 private:
 
@@ -30,4 +32,5 @@ private:
 	sf::RenderWindow m_window;
 	std::function<void(ScreenID)> m_changeScreen;
 	std::optional<ScreenID> m_nextScreen;
+	std::vector<std::unique_ptr<Gift>> m_gifts;
 };
