@@ -53,12 +53,13 @@ void PlayGround::render(sf::RenderWindow& window)
 {
     DebugDraw d(&window);
     d.SetFlags(b2Draw::e_shapeBit);
-
     m_world.m_world.SetDebugDraw(&d);
     m_world.render(window);
 	for (auto& [id, button] : m_buttons) {
 		button.render(window);
 	}
+    m_statusBar.render(window, 10, 100, m_view.getCenter() - m_view.getSize()/2.f);
+
     //m_world.m_world.DebugDraw();
 }
 

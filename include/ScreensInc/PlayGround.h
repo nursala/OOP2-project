@@ -3,6 +3,7 @@
 #include "ScreensInc/Button.h"
 #include "ResourseInc/TextureManager.h"
 #include "WorldInc/World.h"
+#include <Statusbar.h>
 //PlayGround.h
 class PlayGround : public Screen {
 public:
@@ -17,6 +18,6 @@ private:
 	void initButtons();
 	sf::View m_view;
 	World m_world;
-	sf::Font m_font;
-	sf::Text m_title;
+	Statusbar m_statusBar;
+
 };
