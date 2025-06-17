@@ -16,11 +16,9 @@ World::World() :
 		dynamic_cast<Player*>(Factory::instance().create(TextureID::Player, m_world).release())
 	);
 	m_player->setPostion({ 10, 10});
-	std::cout << m_player->getPixels().x << m_player->getPixels().y << std::endl;
 	m_enemy = std::unique_ptr<Enemy>(
-		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
+		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world, m_tileMap, *m_player).release())
 	);
-
 
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -36,7 +34,6 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	m_player->update(deltaTime);
 	m_enemy->update(deltaTime);
 
-	// زاوية الضوء حسب اتجاه الماوس
 	sf::Vector2f playerPos = m_player->getPixels();
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
@@ -55,7 +52,6 @@ void World::render(sf::RenderWindow& window)
 
 
 	window.draw(m_mapSprite);
-	// رسم جميع الحواف m_allEdges بلون أحمر
 	DebugEdge(window);
 	m_light.drawFinalLights(window);
 
@@ -103,10 +99,6 @@ void World::buildAllEdges() {
 	}
 }
 
-const Player& World::getPlayer() const
-{
-	return *m_player;
-}
 void World::calcNearlyEdge()
 {
 	sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();

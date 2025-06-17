@@ -19,7 +19,6 @@ public:
 	void render(sf::RenderWindow& window);
 	const sf::Vector2f getPlayerPixels() const;
 	const sf::Vector2f getMapTextureSize() const;
-	const Player& getPlayer() const;
     b2World m_world;
 
 private:
