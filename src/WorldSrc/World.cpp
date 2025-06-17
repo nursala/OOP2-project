@@ -12,13 +12,24 @@ World::World() :
 		throw std::runtime_error("Failed to load map.png!");
 	}
 
-	m_player = std::unique_ptr<Player>(
-		dynamic_cast<Player*>(Factory::instance().create(TextureID::Player, m_world).release())
-	);
-	m_player->setPostion({ 10, 10});
-	m_enemy = std::unique_ptr<Enemy>(
-		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world, m_tileMap, *m_player).release())
-	);
+	// 1. سجل الـ Player
+	std::cout << "Registering Player\n";
+	Factory::instance().registerType<Player>(TextureID::Player, std::ref(m_world));
+
+	// 2. أنشئ الـ Player
+	std::cout << "Creating Player\n";
+	m_player = Factory::instance().createAs<Player>(TextureID::Player);
+	m_player->setPostion({ 10, 10 });
+
+	// 3. الآن يمكنك استخدامه لتسجيل Enemy
+	int randomIQ = rand() % 10 + 1;
+	Factory::instance().registerType<Enemy>(TextureID::Enemy,
+		std::ref(m_world),
+		std::cref(m_tileMap),
+		std::cref(*m_player),
+		randomIQ);
+
+	m_enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
 
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -28,6 +39,7 @@ World::World() :
 	m_player->setLight(m_light.getPlayerVision());
 	m_player->setWeaponLight(m_light.getWeaponLight());
 }
+
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
 	m_world.Step(deltaTime, 8, 3);

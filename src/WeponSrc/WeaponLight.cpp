@@ -1,4 +1,4 @@
-﻿#include "WeaponLight.h"
+﻿#include "WeponInc/WeaponLight.h"
 #include <cmath>
 
 // البناء
@@ -10,8 +10,6 @@ WeaponLight::WeaponLight(float range, float beamAngle)
     setBeamAngle(beamAngle);
     setColor(sf::Color(255, 255, 255, 200)); // لون شفاف للرؤية
 }
-
-
 
 // تحديث موقع وزاوية الضوء
 void WeaponLight::update(const sf::Vector2f& position, float rotation) {

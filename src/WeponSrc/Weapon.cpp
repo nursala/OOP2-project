@@ -1,4 +1,4 @@
-﻿#include "Weapon.h"
+﻿#include "WeponInc/Weapon.h"
 
 Weapon::Weapon(b2World& world):
     m_world(world)
@@ -38,8 +38,6 @@ void Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& direction)
 
 void Weapon::update(sf::Vector2f playerPos, float angle)
 {
-
-
     if (m_weaponLight)
     {
         m_weaponLight->setPosition(playerPos);
@@ -50,7 +48,6 @@ void Weapon::update(sf::Vector2f playerPos, float angle)
 
 void Weapon::draw(sf::RenderWindow& window)
 {
-
     if (m_weaponLight)
         window.draw(*m_weaponLight);
 }

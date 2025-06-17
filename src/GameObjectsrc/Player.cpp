@@ -7,15 +7,6 @@
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
 
-namespace {
-	const bool reg = [] {
-		Factory::instance().registerType(TextureID::Player, [](b2World& world) {
-			return std::make_unique<Player>(world);
-			});
-		return true;
-		}();
-}
-
 Player::Player(b2World& world)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 100, 100 }, { 5, 5 }, 0.4),
 	m_state(std::make_unique<IdleStatePlayer>()),

@@ -4,7 +4,7 @@
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "StatesInc/State.h"
 
-#include <Weapon.h>
+#include <WeponInc/Weapon.h>
 class Player : public Entity {
 public:
     Player(b2World& world);

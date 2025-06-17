@@ -4,8 +4,6 @@
 #include "VisionLight.h"
 #include "WeaponLight.h"
 
-
-
 class Weapon {
 public:
     Weapon(b2World& world);
@@ -14,8 +12,6 @@ public:
     void update(sf::Vector2f playerPos, float angle);
     void draw(sf::RenderWindow& window);
     void setLight(std::shared_ptr<WeaponLight>& weaponLight);
-
-
 private:
     b2World& m_world;
     std::vector<b2Body*> m_bullets;

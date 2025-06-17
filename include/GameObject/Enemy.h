@@ -7,6 +7,7 @@
 #include "StatesInc/State.h"
 #include "AttackingStrategyInc/AttakStrategy.h"
 #include "GameObject/Player.h"
+#include "LoadMap.h"
 
 class Enemy : public Entity {
 public:

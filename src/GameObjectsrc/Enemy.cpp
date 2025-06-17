@@ -9,18 +9,6 @@
 #include "StatesInc/ChasingState.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
-namespace {
-	const bool reg = [] {
-		Factory::instance().registerWithNavigation(TextureID::Enemy,
-			[](b2World& world, const LoadMap& map, const Player& player) {
-				int randomIQ = rand() % 10 + 1;
-				std::cout << "Enemy IQ: " << randomIQ << std::endl;
-				return std::make_unique<Enemy>(world, map, player, randomIQ);
-			});
-		return true;
-		}();
-}
-
 Enemy::Enemy(b2World& world, const LoadMap& map, const Player& player, int iq)
 	:Entity(world, TextureManager::instance().get(TextureID::Player), { 350,350 }, { 5, 5 }, 0.4f),
 	m_playerRef(player)
