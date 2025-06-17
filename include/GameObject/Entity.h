@@ -23,6 +23,7 @@ public:
     void setMoveStrategy(std::unique_ptr<MoveStrategy> strategy);
     const MoveInfo& getLastMoveInfo() const;
     const sf::Vector2f getDirection() const;
+    float getSpeed() const;
     bool isVisible() const { return m_visable; }
     void setVisible(bool visible) { m_visable = visible; }
 
@@ -37,5 +38,6 @@ protected:
 	sf::Vector2f m_direction{ 0.f, 0.f }; // Current direction of the entity
     bool m_visable;
 
+    float m_speed = 0;
     static constexpr float SCALE = 30.f;
 };
