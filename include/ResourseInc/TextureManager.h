@@ -6,7 +6,7 @@ enum class TextureID {
 	Kill = 0,
 	Player,
 	Enemy,
-	Gift
+	Gift,
 };
 
 const std::unordered_map<TextureID, std::string> TextureFileMap = {

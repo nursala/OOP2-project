@@ -26,8 +26,6 @@ public:
 
     void addLayer(const std::string& name, const std::vector<int>& data);
 
-    bool isWalkable(int x, int y) const;
-
 
     // Getters for map properties
     int getWidth() const { return m_width; }

@@ -1,4 +1,4 @@
-﻿#include "GameObject/Enemy.h"
+#include "GameObject/Enemy.h"
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
 #include "MoveStrategyAndInfoInc/IQChaseStrategy.h"

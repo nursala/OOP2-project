@@ -53,4 +53,5 @@ protected:
 	float m_speed = 0.f;
 
 	static constexpr float SCALE = 30.f;
+
 };

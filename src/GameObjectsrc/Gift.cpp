@@ -46,9 +46,11 @@ void Gift::update(float deltaTime) {
     m_sprite.setPosition(pos.x, pos.y);
 
     m_sprite.setTextureRect(m_animation.getUvRect());
+
 }
 
 void Gift::render(sf::RenderWindow& window) {
     if (isVisible())
         window.draw(m_sprite);
 }
+

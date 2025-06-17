@@ -1,4 +1,4 @@
-﻿#include "GameObject/Entity.h"
+#include "GameObject/Entity.h"
 #include <iostream>
 
 Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,
@@ -26,7 +26,7 @@ Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position
 
 	
 	m_sprite.setTexture(*texture);
-	m_sprite.setTextureRect(m_animation.getUvRect()); // قبل الحساب!
+	m_sprite.setTextureRect(m_animation.getUvRect()); 
 	this->adjustSpriteToFixtureSize();
 	m_sprite.setPosition(position);
 
@@ -101,7 +101,6 @@ void Entity::adjustSpriteToFixtureSize()
 	sf::Vector2f desiredSize;
 
 	if (fixture->GetShape()->GetType() == b2Shape::e_circle) {
-		// حساب القطر (2 × نصف القطر) وتحويله إلى بكسل
 		float radius = static_cast<b2CircleShape*>(fixture->GetShape())->m_radius;
 		float diameter = radius * 2.f * SCALE;
 		desiredSize = { diameter, diameter };
@@ -131,5 +130,5 @@ void Entity::adjustSpriteToFixtureSize()
 	};
 
 	m_sprite.setScale(scale);
-	m_sprite.setOrigin(frameSize.x / 2.f, frameSize.y / 2.f); // توسيط السبرايت
+	m_sprite.setOrigin(frameSize.x / 2.f, frameSize.y / 2.f); 
 }

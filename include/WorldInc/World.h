@@ -20,6 +20,7 @@ public:
 	void render(sf::RenderWindow& window);
 	const sf::Vector2f getPlayerPixels() const;
 	const sf::Vector2f getMapTextureSize() const;
+	const Player& getPlayer() const;
     b2World m_world;
 
 private:
@@ -27,8 +28,12 @@ private:
     std::unique_ptr<Enemy> m_enemy;
     std::unique_ptr<Gift> m_gift;
 
+
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;
+    sf::Clock m_clock;
+    sf::Clock m_movementClock;
+    float m_elapsedTime;
     LoadMap m_tileMap;
 
     LightSystem m_light;

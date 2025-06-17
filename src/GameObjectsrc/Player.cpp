@@ -1,4 +1,4 @@
-﻿#include "GameObject/Player.h"
+#include "GameObject/Player.h"
 #include <SFML/Window/Keyboard.hpp>
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"

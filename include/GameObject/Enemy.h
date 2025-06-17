@@ -1,16 +1,18 @@
 ﻿#pragma once
 
-#include "GameObject/Entity.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Keyboard.hpp>
+
+#include "GameObject/Entity.h"
 #include "Factory.h"
 #include "StatesInc/State.h"
 #include "AttackingStrategyInc/AttakStrategy.h"
 #include "GameObject/Player.h"
-#include <HealthBar.h>
+#include "HealthBar.h"
 
 class Enemy : public Entity {
 public:
-	Enemy(b2World& world, const LoadMap& map, const Player& player, int iq);
+	Enemy(b2World& world);
 	~Enemy() override;
 
 	void update(float deltaTime) override;
@@ -40,4 +42,5 @@ private:
 	bool m_bulletFired = false;
 	float m_bulletSpeed = 400.f;
 	float m_shootingRange = 250.f;
+
 };
