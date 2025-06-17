@@ -41,15 +41,13 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
-	// نحسب الحواف القريبة فقط (closeEdges)
 	calcNearlyEdge();
 
 	m_light.update(playerPos, mouseWorld);
-	// تحديث نظام الإضاءة مع الحواف القريبة
 	m_light.updateCastLight(m_closeEdges, m_world);
 	sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
 
-	m_light.setPosition(topLeft); // تحديث موقع منطقة الإضاءة
+	m_light.setPosition(topLeft); 
 }
 
 void World::render(sf::RenderWindow& window)
