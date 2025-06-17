@@ -12,16 +12,11 @@ World::World() :
 		throw std::runtime_error("Failed to load map.png!");
 	}
 
-	// 1. سجل الـ Player
-	std::cout << "Registering Player\n";
 	Factory::instance().registerType<Player>(TextureID::Player, std::ref(m_world));
 
-	// 2. أنشئ الـ Player
-	std::cout << "Creating Player\n";
 	m_player = Factory::instance().createAs<Player>(TextureID::Player);
 	m_player->setPostion({ 10, 10 });
 
-	// 3. الآن يمكنك استخدامه لتسجيل Enemy
 	int randomIQ = rand() % 10 + 1;
 	Factory::instance().registerType<Enemy>(TextureID::Enemy,
 		std::ref(m_world),
