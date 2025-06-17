@@ -1,5 +1,6 @@
 ﻿#include "GameObject/Entity.h"
 //Entity.cpp
+#include <iostream>
 Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,
 	sf::Vector2u imageCount, float switchTime)
 	: m_animation(texture, imageCount, switchTime)
@@ -7,24 +8,21 @@ Entity::Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(position.x / SCALE, position.y / SCALE);
+	bodyDef.gravityScale = 0.f;
 	m_body = world.CreateBody(&bodyDef);
 
-	// شكل الجسم (دائرة)
 	b2CircleShape shape;
 	shape.m_radius = 10.f / SCALE;
 
-	// إعداد الخصائص الفيزيائية
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.3f;
 	fixtureDef.restitution = 0.0f;
 
-	// إنشاء الفيكستشر وتخزين المؤشر عليه
 	b2Fixture* fixture = m_body->CreateFixture(&fixtureDef);
-	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this); // ✅ وضع المؤشر على الكائن نفسه
+	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this); 
 
-	// (اختياري) وضع المؤشر على الجسم نفسه
 	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
 	m_body->CreateFixture(&fixtureDef);
@@ -95,4 +93,8 @@ const MoveInfo& Entity::getLastMoveInfo() const
 const sf::Vector2f Entity::getDirection() const
 {
 	return m_direction;
+}
+
+float Entity::getSpeed() const {
+	return m_speed;
 }

@@ -21,16 +21,14 @@ World::World() :
 		dynamic_cast<Player*>(Factory::instance().create(TextureID::Player, m_world).release())
 	);
 	m_player->setPostion({ 10, 10});
-	std::cout << m_player->getPixels().x << m_player->getPixels().y << std::endl;
 	m_enemy = std::unique_ptr<Enemy>(
-		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
+		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world, m_tileMap, *m_player).release())
 	);
 	m_enemy->setMoveStrategy(std::make_unique<IQChaseStrategy>(*m_player, 1));
 
 	m_gift = std::unique_ptr<Gift>(
 		dynamic_cast<Gift*>(Factory::instance().create(TextureID::Gift, m_world).release())
 	);
-
 
 
 	m_mapSprite.setTexture(m_mapTexture);
@@ -65,16 +63,13 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 		
 
 
-	// زاوية الضوء حسب اتجاه الماوس
 	sf::Vector2f playerPos = m_player->getPixels();
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
-	// نحسب الحواف القريبة فقط (closeEdges)
 	calcNearlyEdge();
 
 	m_light.update(playerPos, mouseWorld);
-	// تحديث نظام الإضاءة مع الحواف القريبة
 	m_light.updateCastLight(m_closeEdges, m_world);
 
 	//for (b2Fixture* fixture : hitFixtures) {
@@ -90,14 +85,13 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 
 	sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
 
-	m_light.setPosition(topLeft); // تحديث موقع منطقة الإضاءة
+	m_light.setPosition(topLeft); 
 }
 
 void World::render(sf::RenderWindow& window)
 {
 	window.draw(m_mapSprite);
-	// رسم جميع الحواف m_allEdges بلون أحمر
-	//DebugEdge(window);
+	DebugEdge(window);
 	m_light.drawFinalLights(window);
 
 	m_player->render(window);
