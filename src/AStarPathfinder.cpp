@@ -62,8 +62,8 @@ std::vector<sf::Vector2i> AStarPathfinder::findPath(
 
             if (!inBounds(next)) continue;
 
-            if (!map.isWalkable(next.x, next.y) && next != goal)
-                continue;
+            /*if (!map.isWalkable(next.x, next.y) && next != goal)
+                continue;*/
 
             float newCost = costSoFar[toIndex(current.position)] + 1.f;
 

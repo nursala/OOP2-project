@@ -2,72 +2,117 @@
 #include <cmath>
 #include <algorithm>
 #include "GameObject/Entity.h"
-
-IQChaseStrategy::IQChaseStrategy(const Player& player, int iqLevel)
-    : m_player(player), m_iqLevel(iqLevel) {
+#include <random>
+#include <iostream>
+IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int iqLevel)
+    : m_player(player), m_map(map), m_iqLevel(iqLevel), m_pathUpdateTimer(0.f), m_randomDirTimer(0.f),
+    m_lastPosition(0.f, 0.f), m_stuckTimer(0.f)
+{
 }
 
-MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime) {
-    auto* body = entity.getBody();
-    if (!body) return {};
+MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
+{
 
-    sf::Vector2f dir = m_lastDirection;
+    sf::Vector2f enemyPos = entity.getPixels();
+    sf::Vector2f playerPos = m_player.getPixels();
 
-    m_timeSinceLastDirectionChange += deltaTime;
+    float distToPlayer = distance(enemyPos, playerPos);
+    if (distToPlayer < 150.f && m_iqLevel < 10) ++m_iqLevel;
+    if (distToPlayer > 400.f && m_iqLevel > 1) --m_iqLevel;
 
-    if (m_timeSinceLastDirectionChange >= m_directionChangeInterval) {
-        if (m_goodSteps < m_iqLevel && entity.getDirection() == m_lastDirection) {
-            dir = calculateSmartDirection(entity, deltaTime);
-        }
-        else {
-            dir = generateRandomDirection(entity, deltaTime);
-        }
+    float chanceToUseAStar = m_iqLevel / 10.f;
+    sf::Vector2f dir;
 
-        m_goodSteps = (m_goodSteps + 1) % 10;
-        m_lastDirection = dir;
-        m_timeSinceLastDirectionChange = 0.f; 
-    }
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_real_distribution<float> dist(0.f, 1.f);
 
-    b2Vec2 velocity(dir.x, dir.y);
-    body->SetLinearVelocity(velocity);
+    m_pathUpdateTimer += deltaTime;
+    m_behaviorLockTimer += deltaTime;
 
-    MoveInfo info;
-    info.row = (velocity.Length() > 0.1f) ? 2 : 1;
-    info.faceRight = velocity.x >= 0;
-    info.direction = dir;
+    if (m_behaviorLockTimer >= m_behaviorLockDuration) {
+        m_behaviorLockTimer = 0.f;
+        m_usingAStar = dist(rng) < chanceToUseAStar;
 
-    return info;
-}
+        if (m_usingAStar) {
+            sf::Vector2i start(enemyPos.x / m_map.getTileWidth(), enemyPos.y / m_map.getTileHeight());
+            sf::Vector2i goal(playerPos.x / m_map.getTileWidth(), playerPos.y / m_map.getTileHeight());
 
-sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float deltaTime) {
-    sf::Vector2f toPlayer = m_player.getPixels() - enemy.getPixels();
-    std::vector<sf::Vector2f> directions = { {25,0}, {-25,0}, {0,25}, {0,-25} };
-
-    float minDist = FLT_MAX;
-    sf::Vector2f bestDir = { 0, 0 };
-
-    for (const auto& dir : directions) {
-        if (dir == -enemy.getLastMoveInfo().direction)
-            continue;
-
-        sf::Vector2f testPos = enemy.getPixels() + dir * deltaTime;
-        float dist = std::hypot(m_player.getPixels().x - testPos.x, m_player.getPixels().y - testPos.y);
-
-        if (dist < minDist) {
-            minDist = dist;
-            bestDir = dir;
+            auto path = AStarPathfinder::findPath(m_map, start, goal);
+            if (!path.empty()) {
+                m_currentPath = path;
+            }
+            else {
+                m_usingAStar = false;
+            }
         }
     }
-    return bestDir;
+
+    if (m_usingAStar && !m_currentPath.empty()) {
+        sf::Vector2f nextTileCenter = {
+            (m_currentPath[0].x + 0.5f) * m_map.getTileWidth(),
+            (m_currentPath[0].y + 0.5f) * m_map.getTileHeight()
+        };
+
+        dir = normalize(nextTileCenter - enemyPos);
+
+        if (distance(enemyPos, nextTileCenter) < 5.f)
+            m_currentPath.erase(m_currentPath.begin());
+    }
+    else {
+        m_randomDirTimer += deltaTime;
+        if (m_randomDirTimer >= m_randomDirDuration) {
+            m_randomDirection = generateRandomDirection(entity, deltaTime);
+            m_randomDirTimer = 0.f;
+        }
+        dir = m_randomDirection;
+    }
+
+    float moved = distance(enemyPos, m_lastPosition);
+    if (moved < m_stuckThreshold)
+        m_stuckTimer += deltaTime;
+    else
+        m_stuckTimer = 0.f;
+
+    if (m_stuckTimer > m_stuckTimeLimit) {
+        m_randomDirection = generateRandomDirection(entity, deltaTime);
+        m_randomDirTimer = 0.f;
+        m_stuckTimer = 0.f;
+        dir = m_randomDirection;
+    }
+
+    m_lastPosition = enemyPos;
+
+    if (auto* body = entity.getBody()) {
+        float speed = entity.getSpeed();
+        body->SetLinearVelocity(b2Vec2(dir.x * speed, dir.y * speed));
+    }
+
+    return {
+        2,
+        dir.x >= 0,
+        dir
+    };
 }
 
-sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float deltaTime) {
-    std::vector<sf::Vector2f> dirs = { {25,0}, {-25,0}, {0,25}, {0,-25} };
+sf::Vector2f IQChaseStrategy::getPlayerPostion() const
+{
+    return m_player.getPixels();
+}
+
+
+sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float) {
+    std::vector<sf::Vector2f> dirs = { {4,0}, {-4,0}, {0,4}, {0,-4} };
     sf::Vector2f lastDir = enemy.getLastMoveInfo().direction;
-
-    dirs.erase(std::remove(dirs.begin(), dirs.end(), -lastDir), dirs.end());
-
+    dirs.erase(std::remove(dirs.begin(), dirs.end(), lastDir), dirs.end());
     std::shuffle(dirs.begin(), dirs.end(), std::mt19937(std::random_device{}()));
+    return normalize(dirs.front());
+}
 
-    return dirs.front(); 
+sf::Vector2f IQChaseStrategy::normalize(const sf::Vector2f& v) {
+    float length = std::hypot(v.x, v.y);
+    return (length == 0.f) ? sf::Vector2f(0.f, 0.f) : sf::Vector2f(v.x / length, v.y / length);
+}
+
+float IQChaseStrategy::distance(const sf::Vector2f& a, const sf::Vector2f& b) {
+    return std::hypot(b.x - a.x, b.y - a.y);
 }

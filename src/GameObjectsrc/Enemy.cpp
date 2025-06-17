@@ -11,7 +11,7 @@
 Enemy::Enemy(b2World& world, const LoadMap& map, const Player& player, int iq)
 	: Entity(world, TextureManager::instance().get(TextureID::Player), { 350, 350 }, { 5, 5 }, 0.4f),
 	m_playerRef(player),
-	m_healthBar(40.f, 5.f, 100)
+	m_healthBar(40.f, 5.f)
 {
 	m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, iq);
 	m_state = std::make_unique<ChasingState>();
@@ -53,6 +53,7 @@ void Enemy::update(float deltaTime) {
 	}
 
 	m_sprite.setPosition(getPixels());
+
 	m_sprite.setTextureRect(m_animation.getUvRect());
 }
 

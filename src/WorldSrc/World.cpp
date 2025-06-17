@@ -66,7 +66,7 @@ void World::render(sf::RenderWindow& window)
 
 	m_enemy->render(window);
 
-	m_gift->render(window);
+	//m_gift->render(window);
 
 	m_light.drawLights(window);
 

@@ -3,14 +3,7 @@
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
 
-namespace {
-    const bool reg = [] {
-        Factory::instance().registerType(TextureID::Gift, [](b2World& world) {
-            return std::make_unique<Gift>(world);
-            });
-        return true;
-        }();
-}
+
 Gift::Gift(b2World& world)
     : Entity(world, TextureManager::instance().get(TextureID::Gift), { 200,200 }, { 1,1 }, 0.4f)
 {

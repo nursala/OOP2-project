@@ -13,7 +13,8 @@
 
 class Enemy : public Entity {
 public:
-	Enemy(b2World& world);
+	//Enemy(b2World& world);
+	Enemy(b2World& world, const LoadMap& map, const Player& player, int iq);
 	~Enemy() override;
 
 	void update(float deltaTime) override;
