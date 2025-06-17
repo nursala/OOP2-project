@@ -151,3 +151,14 @@ const std::vector<sf::Vector2f>& LoadMap::getGiftSpawns() const {
 void LoadMap::addLayer(const std::string& name, const std::vector<int>& data) {
     m_layers.push_back({ name, data });
 }
+bool LoadMap::isWalkable(int x, int y) const {
+    for (const auto& layer : m_layers) {
+        if (layer.name == "walls") {
+            int index = y * m_width + x;
+            if (index >= 0 && index < layer.tiles.size()) {
+                return layer.tiles[index] == 0;
+            }
+        }
+    }
+    return false;
+}

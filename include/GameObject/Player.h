@@ -11,7 +11,7 @@ public:
     Player(b2World& world);
     void update(float deltaTime) override;
     void setFacingRight(bool isFaceRight);
-	  void render(sf::RenderWindow& window) override;
+	void render(sf::RenderWindow& window) override;
     void setLight(std::shared_ptr<VisionLight>& visionLight);
     void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
 private:

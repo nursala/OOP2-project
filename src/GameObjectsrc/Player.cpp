@@ -47,11 +47,15 @@ void Player::update(float deltaTime)
 
     if (m_weapon)
         m_weapon->update(pos, m_shape.getRotation());
+
+    sf::Vector2f healthBarPos = { getPixels().x , getPixels().y - 15};
+    m_healthBar.setPosition(healthBarPos);
 }
 
 void Player::render(sf::RenderWindow& window)
 {
     if (m_visable) {
+        m_healthBar.draw(window);
         window.draw(m_sprite);
         if (m_weapon)
             m_weapon->draw(window);
