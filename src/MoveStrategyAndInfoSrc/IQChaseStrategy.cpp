@@ -33,6 +33,10 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
         m_behaviorLockTimer = 0.f;
         m_usingAStar = dist(rng) < chanceToUseAStar;
 
+sf::Vector2f IQChaseStrategy::calculateSmartDirection(const Entity& enemy, float deltaTime) {
+    sf::Vector2f toPlayer = m_player.getPixels() - enemy.getPixels();
+    std::vector<sf::Vector2f> directions = { {5,0}, {-5,0}, {0,5}, {0,-5} };
+
         if (m_usingAStar) {
             sf::Vector2i start(enemyPos.x / m_map.getTileWidth(), enemyPos.y / m_map.getTileHeight());
             sf::Vector2i goal(playerPos.x / m_map.getTileWidth(), playerPos.y / m_map.getTileHeight());
@@ -94,6 +98,9 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
     };
 }
 
+sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float deltaTime) {
+    std::vector<sf::Vector2f> dirs = { {2,0}, {-2,0}, {0,2}, {0,-2} };
+    sf::Vector2f lastDir = enemy.getLastMoveInfo().direction;
 sf::Vector2f IQChaseStrategy::getPlayerPostion() const
 {
 	return m_player.getPixels();

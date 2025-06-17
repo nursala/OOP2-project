@@ -2,12 +2,17 @@
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
+#include "GameObject/ContactListener.h"
+#include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 
 World::World() :
 	m_world(b2Vec2(0.f, 0.f)),
 	m_tileMap("map.json"),
-	m_light({ 2400, 2400 })
+	m_light({ 2400, 2400 }),
+	m_statusBar()
 {
+	m_world.SetContactListener(new ContactListener());
+
 	if (!m_mapTexture.loadFromFile("map.png")) {
 		throw std::runtime_error("Failed to load map.png!");
 	}
@@ -19,6 +24,12 @@ World::World() :
 	m_enemy = std::unique_ptr<Enemy>(
 		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world, m_tileMap, *m_player).release())
 	);
+	m_enemy->setMoveStrategy(std::make_unique<IQChaseStrategy>(*m_player, 1));
+
+	m_gift = std::unique_ptr<Gift>(
+		dynamic_cast<Gift*>(Factory::instance().create(TextureID::Gift, m_world).release())
+	);
+
 
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -27,12 +38,30 @@ World::World() :
 
 	m_player->setLight(m_light.getPlayerVision());
 	m_player->setWeaponLight(m_light.getWeaponLight());
+
 }
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
+	
 	m_world.Step(deltaTime, 8, 3);
 	m_player->update(deltaTime);
 	m_enemy->update(deltaTime);
+
+	if (m_gift)
+	{
+		m_gift->update(deltaTime);
+		if (!m_gift->isVisible())
+		{
+			if (m_gift->getBody()) {
+				m_world.DestroyBody(m_gift->getBody()); // Remove from Box2D world
+				//m_gift->m_body = nullptr;
+			}
+			m_gift.reset();
+			m_gift = nullptr;
+		}
+	}
+		
+
 
 	sf::Vector2f playerPos = m_player->getPixels();
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -42,6 +71,18 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 
 	m_light.update(playerPos, mouseWorld);
 	m_light.updateCastLight(m_closeEdges, m_world);
+
+	//for (b2Fixture* fixture : hitFixtures) {
+	//	b2Body* body = fixture->GetBody();
+	//	if (body->GetUserData().pointer) {
+	//		Entity* entity = reinterpret_cast<Entity*>(body->GetUserData().pointer);
+	//		// If you have a way to check if it's an Enemy, e.g. via dynamic_cast or a type field:
+	//		if (auto enemy = dynamic_cast<Enemy*>(entity)) {
+	//			enemy->setVisible(true);
+	//		}
+	//	}
+	//}
+
 	sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
 
 	m_light.setPosition(topLeft); 
@@ -49,8 +90,6 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 
 void World::render(sf::RenderWindow& window)
 {
-
-
 	window.draw(m_mapSprite);
 	DebugEdge(window);
 	m_light.drawFinalLights(window);
@@ -61,8 +100,19 @@ void World::render(sf::RenderWindow& window)
 
 	m_light.drawLights(window);
 
-	m_world.DebugDraw();
+	if (m_gift)
+		m_gift->render(window);
 
+	m_world.DebugDraw();
+	sf::Vector2f playerPixelPos = m_player->getPixels();
+
+	sf::View view = window.getView();
+	sf::Vector2f viewTopLeft = view.getCenter() - view.getSize() / 2.f;
+
+	m_statusBar.drawLevels(3, window, viewTopLeft);
+	//m_statusBar.drawLives(5, window,playerPixelPos);
+	//m_statusBar.drawPercentage(50, window,playerPixelPos);
+	m_statusBar.drawTimer(m_clock.getElapsedTime(), 30, window, viewTopLeft);
 }
 
 const sf::Vector2f World::getPlayerPixels() const
@@ -99,12 +149,18 @@ void World::buildAllEdges() {
 	}
 }
 
+const Player& World::getPlayer() const
+{
+	return *m_player;
+}
+
 void World::calcNearlyEdge()
 {
 	sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
 	float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
 
 	m_closeEdges.clear();
+
 	for (const auto& edge : m_allEdges) {
 		sf::Vector2f p1 = edge.m_origin;
 		sf::Vector2f p2 = edge.point(1.f);

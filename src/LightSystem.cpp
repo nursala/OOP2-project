@@ -65,6 +65,7 @@ void LightSystem::updateCastLight(
     std::unordered_set<b2Fixture*> m_hitFixtures;
 
     m_playerVision->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
+
 	m_weaponLight->castLightCustom(closeEdges.begin(), closeEdges.end(), world, m_hitFixtures);
 }
 
