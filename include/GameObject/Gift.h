@@ -13,5 +13,5 @@ public:
 
 private:
     GiftType m_type;
-    
 };
+

@@ -5,7 +5,6 @@
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 #include "GameObject/Gift.h"
-#include "ScreensInc/Statusbar.h"
 #include "LoadMap.h"
 #include "DebugDraw.h"
 #include "LightSystem.h"
@@ -27,8 +26,8 @@ public:
 private:
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
-	std::unique_ptr<Gift> m_gift; 
-	Statusbar m_statusBar;
+    std::unique_ptr<Gift> m_gift;
+
 
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;

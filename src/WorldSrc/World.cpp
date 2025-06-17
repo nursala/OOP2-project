@@ -1,18 +1,13 @@
-﻿#include "WorldInc/World.h"
+#include "WorldInc/World.h"
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
-#include "GameObject/ContactListener.h"
-#include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 
 World::World() :
 	m_world(b2Vec2(0.f, 0.f)),
 	m_tileMap("map.json"),
-	m_light({ 2400, 2400 }),
-	m_statusBar()
+	m_light({ 2400, 2400 })
 {
-	m_world.SetContactListener(new ContactListener());
-
 	if (!m_mapTexture.loadFromFile("map.png")) {
 		throw std::runtime_error("Failed to load map.png!");
 	}
@@ -21,12 +16,12 @@ World::World() :
 		dynamic_cast<Player*>(Factory::instance().create(TextureID::Player, m_world).release())
 	);
 	m_player->setPostion({ 10, 10});
-	std::cout << m_player->getPixels().x << m_player->getPixels().y << std::endl;
 	m_enemy = std::unique_ptr<Enemy>(
-		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world).release())
+		dynamic_cast<Enemy*>(Factory::instance().create(TextureID::Enemy, m_world, m_tileMap, *m_player).release())
 	);
-	m_enemy->setMoveStrategy(std::make_unique<IQChaseStrategy>(*m_player, 1));
-
+	m_gift = std::unique_ptr<Gift>(
+		dynamic_cast<Gift*>(Factory::instance().create(TextureID::Gift, m_world).release())
+	);
 
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -35,47 +30,31 @@ World::World() :
 
 	m_player->setLight(m_light.getPlayerVision());
 	m_player->setWeaponLight(m_light.getWeaponLight());
-
 }
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
-	
 	m_world.Step(deltaTime, 8, 3);
 	m_player->update(deltaTime);
 	m_enemy->update(deltaTime);
 
-	// زاوية الضوء حسب اتجاه الماوس
 	sf::Vector2f playerPos = m_player->getPixels();
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
-	// نحسب الحواف القريبة فقط (closeEdges)
 	calcNearlyEdge();
 
 	m_light.update(playerPos, mouseWorld);
-	// تحديث نظام الإضاءة مع الحواف القريبة
 	m_light.updateCastLight(m_closeEdges, m_world);
-
-	//for (b2Fixture* fixture : hitFixtures) {
-	//	b2Body* body = fixture->GetBody();
-	//	if (body->GetUserData().pointer) {
-	//		Entity* entity = reinterpret_cast<Entity*>(body->GetUserData().pointer);
-	//		// If you have a way to check if it's an Enemy, e.g. via dynamic_cast or a type field:
-	//		if (auto enemy = dynamic_cast<Enemy*>(entity)) {
-	//			enemy->setVisible(true);
-	//		}
-	//	}
-	//}
-
 	sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
 
-	m_light.setPosition(topLeft); // تحديث موقع منطقة الإضاءة
+	m_light.setPosition(topLeft); 
 }
 
 void World::render(sf::RenderWindow& window)
 {
+
+
 	window.draw(m_mapSprite);
-	// رسم جميع الحواف m_allEdges بلون أحمر
 	DebugEdge(window);
 	m_light.drawFinalLights(window);
 
@@ -83,21 +62,12 @@ void World::render(sf::RenderWindow& window)
 
 	m_enemy->render(window);
 
+	m_gift->render(window);
+
 	m_light.drawLights(window);
 
-	if (m_gift)
-		m_gift->render(window);
-
 	m_world.DebugDraw();
-	sf::Vector2f playerPixelPos = m_player->getPixels();
 
-	sf::View view = window.getView();
-	sf::Vector2f viewTopLeft = view.getCenter() - view.getSize() / 2.f;
-
-	m_statusBar.drawLevels(3, window, viewTopLeft);
-	//m_statusBar.drawLives(5, window,playerPixelPos);
-	//m_statusBar.drawPercentage(50, window,playerPixelPos);
-	m_statusBar.drawTimer(m_clock.getElapsedTime(), 30, window, viewTopLeft);
 }
 
 const sf::Vector2f World::getPlayerPixels() const
@@ -134,22 +104,12 @@ void World::buildAllEdges() {
 	}
 }
 
-const Player& World::getPlayer() const
-{
-	return *m_player;
-}
-
-const Player& World::getPlayer() const
-{
-	return *m_player;
-}
 void World::calcNearlyEdge()
 {
 	sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
 	float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
 
 	m_closeEdges.clear();
-
 	for (const auto& edge : m_allEdges) {
 		sf::Vector2f p1 = edge.m_origin;
 		sf::Vector2f p2 = edge.point(1.f);
@@ -157,7 +117,7 @@ void World::calcNearlyEdge()
 		sf::Vector2f ap = lightPos - p1;
 
 		float abDotAb = ab.x * ab.x + ab.y * ab.y;
-		if (abDotAb == 0) continue; // تجنب القسمة على صفر
+		if (abDotAb == 0) continue; 
 
 		float t = std::max(0.f, std::min(1.f, (ap.x * ab.x + ap.y * ab.y) / abDotAb));
 		sf::Vector2f closestPoint = p1 + ab * t;
@@ -181,7 +141,7 @@ void World::DebugEdge(sf::RenderWindow& window)
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 		sf::RectangleShape rect;
-		rect.setSize({ length, 2.f });  // 2.f هو عرض الخط
+		rect.setSize({ length, 2.f });  
 		rect.setFillColor(sf::Color::Red);
 		rect.setPosition(p1);
 		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
@@ -189,7 +149,6 @@ void World::DebugEdge(sf::RenderWindow& window)
 		window.draw(rect);
 	}
 
-	// --- رسم الحواف القريبة m_closeEdges كمستطيلات خضراء ---
 	for (const auto& edge : m_closeEdges) {
 		sf::Vector2f p1 = edge.m_origin;
 		sf::Vector2f p2 = edge.point(1.f);
@@ -197,7 +156,7 @@ void World::DebugEdge(sf::RenderWindow& window)
 		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 		sf::RectangleShape rect;
-		rect.setSize({ length, 3.f });  // أعرض قليلاً لتمييزها
+		rect.setSize({ length, 3.f });  
 		rect.setFillColor(sf::Color::Green);
 		rect.setPosition(p1);
 		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);

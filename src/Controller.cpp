@@ -10,12 +10,12 @@
 #include "ScreensInc/PlayGround.h"
 
 Controller::Controller()
-	: m_window(sf::VideoMode(1300, 1000), "SFML Application")
+	: m_window(sf::VideoMode(1280, 720), "SFML Application")
 {
 	m_changeScreen = [this](ScreenID id) {
 		m_nextScreen = id;
 		};
-	setScreen(ScreenID::Home);
+	setScreen(ScreenID::Game);
 	SoundManager::instance().play(SoundID::BackgroundMusic);
 	m_window.setFramerateLimit(60);
 }
