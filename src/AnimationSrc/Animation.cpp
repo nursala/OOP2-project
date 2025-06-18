@@ -14,7 +14,7 @@ Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float 
 
 void Animation::update(int row, int totalImages, float deltaTime, bool isFaceRight)
 {
-    std::cout << "Updating animation with row = " << row << " deltaTime = " << deltaTime << "\n";
+    //std::cout << "Updating animation with row = " << row << " deltaTime = " << deltaTime << "\n";
 
     m_totalImages = totalImages - 1;
     m_currentImage.y = (row - 1) + static_cast<int>(std::floor(m_displayed / m_imageCount.x));

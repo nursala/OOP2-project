@@ -27,7 +27,7 @@ public:
 	void fireBullet(const sf::Vector2f& dir);
 
 	float getShootingRange() const;
-	sf::Vector2f getPlayerPos() const { return m_playerRef.getPixels(); }
+    void moveToPlayer(float deltaTime);
 
 private:
 	std::unique_ptr<State<Enemy>> m_state;

@@ -57,10 +57,6 @@ void Enemy::update(float deltaTime) {
 	m_sprite.setTextureRect(m_animation.getUvRect());
 }
 
-void Enemy::moveToPlayer(float deltaTime) {
-	if (m_moveStrategy)
-		m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
-}
 
 bool Enemy::isPlayerVisible() const {
 	RayCastClosest raycast;

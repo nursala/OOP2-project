@@ -32,5 +32,4 @@ private:
 	sf::RenderWindow m_window;
 	std::function<void(ScreenID)> m_changeScreen;
 	std::optional<ScreenID> m_nextScreen;
-	std::vector<std::unique_ptr<Gift>> m_gifts;
 };
