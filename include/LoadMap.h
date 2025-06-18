@@ -26,6 +26,8 @@ public:
 
     void addLayer(const std::string& name, const std::vector<int>& data);
 
+    bool isWalkable(int x, int y) const;
+
 
     // Getters for map properties
     int getWidth() const { return m_width; }
@@ -50,3 +52,4 @@ private:
 
     void createBox(b2World& world, int startX, int startY, int countX, int countY) const;
 };
+
