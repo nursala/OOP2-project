@@ -59,7 +59,6 @@ void World::render(sf::RenderWindow& window)
 
 
 	window.draw(m_mapSprite);
-	DebugEdge(window);
 	m_light.drawFinalLights(window);
 
 	m_player->render(window);
@@ -70,8 +69,7 @@ void World::render(sf::RenderWindow& window)
 
 	m_light.drawLights(window);
 
-	m_world.DebugDraw();
-	DebugEdge(window);
+	//DebugEdge(window);
 
 }
 
