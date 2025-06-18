@@ -23,20 +23,23 @@ void ContactListener::BeginContact(b2Contact* contact) {
             return;
 
         if (auto player = dynamic_cast<Player*>(entityA)) {
-            if (auto gift = dynamic_cast<Gift*>(entityB)) {
-                if (gift && gift->isVisible())
-                {
-                    std::cout << "Player collected a gift!" << std::endl;
-                    gift->setVisible(false);
-                }
-                // gift->apply(*player);
-            }
-            else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
-                if (enemy && enemy->isVisible()) {
-                    std::cout << "Player collided with an enemy!" << std::endl;
-                }
-            }
+            //if (auto gift = dynamic_cast<Gift*>(entityB)) {
+            //    if (gift && gift->isVisible())
+            //    {
+            //        std::cout << "Player collected a gift!" << std::endl;
+            //        gift->setVisible(false);
+            //    }
+            //    // gift->apply(*player);
+            //}
+            //else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
+            //    if (enemy && enemy->isVisible()) {
+            //        std::cout << "Player collided with an enemy!" << std::endl;
+            //    }
+            //}
         }
+
+
+
         //else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
         //	if (auto player = dynamic_cast<Player*>(entityB)) {
         //		if (player && player->isVisible()) {
