@@ -1,66 +1,68 @@
 #include "HealthBar.h"
+#include <SFML/Graphics.hpp>
+#include <stdexcept>
+#include <string>
 
-HealthBar::HealthBar(float width, float height, int maxHealth)
-    : m_maxHealth(maxHealth), m_currentHealth(maxHealth)
+HealthBar::HealthBar(float width, float height, int maxHealth, int maxArmor)
+    : m_healthBar(width, height, sf::Color::Green),
+    m_armorBar(width, height, sf::Color::Blue)
 {
-    m_border.setSize({ width, height });
-    m_border.setFillColor(sf::Color(50, 50, 50, 200));
-    m_border.setOutlineColor(sf::Color::Black);
-    m_border.setOutlineThickness(1.f);
-    m_border.setOrigin(width / 2, height / 2);
+    m_healthBar.setMaxValue(maxHealth);
+    m_healthBar.setValue(maxHealth);
 
-    m_inner.setSize({ width, height });
-    m_inner.setFillColor(sf::Color::Green);
-    m_inner.setOrigin(width / 2, height / 2);
+    m_armorBar.setMaxValue(maxArmor);
+    m_armorBar.setValue(maxArmor);
 }
 
-
 void HealthBar::setMaxHealth(float maxHealth) {
-    m_maxHealth = maxHealth;
-    updateBar();
+    m_healthBar.setMaxValue(maxHealth);
 }
 
 void HealthBar::setHealth(float health) {
-    m_currentHealth = std::max(0.f, std::min(health, m_maxHealth));
-    updateBar();
+    m_healthBar.setValue(health);
+}
+
+void HealthBar::setMaxArmor(float maxArmor) {
+    m_armorBar.setMaxValue(maxArmor);
+}
+
+void HealthBar::setArmor(float armor) {
+    m_armorBar.setValue(armor);
 }
 
 void HealthBar::setPosition(const sf::Vector2f& pos) {
-    m_border.setPosition(pos);
-    m_inner.setPosition(pos);
+    m_healthBar.setPosition(pos);
+    sf::Vector2f armorPos = pos;
+    armorPos.y += m_healthBar.getBorder().getSize().y + 5.f;
+    m_armorBar.setPosition(armorPos);
 }
 
 void HealthBar::draw(sf::RenderWindow& window) const {
+    m_healthBar.draw(window);
+
     sf::Text text;
     sf::Font font;
     if (!font.loadFromFile("ARIAL.TTF")) {
         throw std::runtime_error("Failed to load font!");
     }
     text.setFont(font);
-
-    // Draw the health bar inner rectangle
-    window.draw(m_inner);
-    text.setString(std::to_string(static_cast<int>(m_currentHealth)) + " / " + std::to_string(static_cast<int>(m_maxHealth)));
+    text.setString(
+        std::to_string(static_cast<int>(m_healthBar.getValue())) + " / " +
+        std::to_string(static_cast<int>(m_healthBar.getMaxValue()))
+    );
     text.setCharacterSize(5);
     text.setFillColor(sf::Color::Black);
-    text.setPosition(m_border.getPosition().x - 10.f, m_border.getPosition().y - 3.f);
-
-
-    window.draw(m_inner);
-    window.draw(m_border);
+    text.setPosition(m_healthBar.getBorder().getPosition().x - 10.f,
+        m_healthBar.getBorder().getPosition().y - 3.f);
     window.draw(text);
-}
 
-void HealthBar::updateBar() {
-    float ratio = (m_maxHealth > 0) ? (m_currentHealth / m_maxHealth) : 0.f;
-    float width = m_border.getSize().x;
-    m_inner.setSize({ width * ratio, m_border.getSize().y });
+    m_armorBar.draw(window);
 
-    // Color changes: green (healthy), yellow (mid), red (low)
-    if (ratio > 0.6f)
-        m_inner.setFillColor(sf::Color::Green);
-    else if (ratio > 0.3f)
-        m_inner.setFillColor(sf::Color::Yellow);
-    else
-        m_inner.setFillColor(sf::Color::Red);
+    text.setString(
+        std::to_string(static_cast<int>(m_armorBar.getValue())) + " / " +
+        std::to_string(static_cast<int>(m_armorBar.getMaxValue()))
+    );
+    text.setPosition(m_armorBar.getBorder().getPosition().x - 10.f,
+        m_armorBar.getBorder().getPosition().y - 3.f);
+    window.draw(text);
 }

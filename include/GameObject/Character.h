@@ -33,6 +33,7 @@ protected:
     std::shared_ptr<VisionLight> m_visionLight;
     MoveInfo m_lastMoveInfo;
     HealthBar m_healthBar;
+
 };
 
 template<typename T>
@@ -40,7 +41,7 @@ Character<T>::Character(World& world, const sf::Texture* texture, sf::Vector2f p
     sf::Vector2u imageCount, float switchTime)
     : Entity(world, texture, position, imageCount, switchTime),
     m_world(world),
-    m_healthBar(100.f, 10.f)
+    m_healthBar(50.f, 5.f,100,50)
 {
 
 }
@@ -65,15 +66,15 @@ void Character<T>::update(float deltaTime) {
     m_sprite.setPosition(getPosition());
     m_sprite.setTextureRect(m_animation.getUvRect());
 
-    sf::Vector2f healthBarPos = { getPosition().x , getPosition().y - 15 };
+    sf::Vector2f healthBarPos = { getPosition().x , getPosition().y - 20 };
     m_healthBar.setPosition(healthBarPos);
 }
 
 template<typename T>
 void Character<T>::render(sf::RenderWindow& window) {
     window.draw(m_sprite);
-  /*  m_healthBar.draw(window);
-    if (m_weapon)
+    m_healthBar.draw(window);
+  /*  if (m_weapon)
         m_weapon->draw(window);*/
 }
 

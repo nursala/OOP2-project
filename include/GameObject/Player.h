@@ -14,7 +14,12 @@ public:
     void setLight(std::shared_ptr<VisionLight>& visionLight);
     void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
     void setFacingRight(bool right);
+    void setHealthBar(HealthBar* healthBar); // Add this
+    void takeDamage(int damage);
     
 private:
     bool m_visable = true;
+    float m_health = 100.f;
+    float m_armor = 50.f;
+    HealthBar* m_healthBar = nullptr;
 };

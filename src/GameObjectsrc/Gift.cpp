@@ -4,17 +4,29 @@
 #include "Factory.h"
 
 
-Gift::Gift(b2World& world)
+Gift::Gift(World& world)
     : Entity(world, TextureManager::instance().get(TextureID::Gift), { 200,200 }, { 1,1 }, 0.4f)
 {
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
 
-
-
 }
 
 GiftType Gift::getType() const { return m_type; }
+
+void Gift::update(float deltaTime)
+{
+	if (m_body) {
+		b2Vec2 pos = m_body->GetPosition();
+		m_sprite.setPosition(pos.x * SCALE, pos.y * SCALE);
+	}
+}
+
+void Gift::render(sf::RenderWindow& window)
+{
+	if (isVisible())
+	window.draw(m_sprite);
+}
 
 //void Gift::apply(Player& player) {
 //    //switch (m_type) {

@@ -27,8 +27,7 @@ private:
 
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
-    //std::unique_ptr<Gift> m_gift;
-
+    std::unique_ptr<Gift> m_gift;
 
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;

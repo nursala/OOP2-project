@@ -32,8 +32,6 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
         m_weapon->setLight(weaponLight);*/
 }
 
-
-
 void Player::setFacingRight(bool right)
 {
     if (m_lastMoveInfo.faceRight != right) {
@@ -41,5 +39,33 @@ void Player::setFacingRight(bool right)
 
         sf::Vector2f currentScale = m_sprite.getScale();
         m_sprite.setScale(right ? std::abs(currentScale.x) : -std::abs(currentScale.x), currentScale.y);
+    }
+}
+
+void Player::setHealthBar(HealthBar* healthBar)
+{
+    m_healthBar = healthBar;
+    if (m_healthBar) {
+        m_healthBar->setHealth(m_health);
+        m_healthBar->setArmor(m_armor);
+    }
+
+}
+
+void Player::takeDamage(int damage)
+{
+    if (m_armor > 0) {
+        float armorDamage = std::min(m_armor, (float)damage);
+        m_armor -= armorDamage;
+        damage -= static_cast<int>(armorDamage);
+    }
+    if (damage > 0) {
+        m_health -= damage;
+        if (m_health < 0.f) m_health = 0.f;
+    }
+    // Update the health bar if it's set
+    if (m_healthBar) {
+        m_healthBar->setHealth(m_health);
+        m_healthBar->setArmor(m_armor);
     }
 }

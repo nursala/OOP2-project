@@ -87,6 +87,6 @@ std::vector<sf::Vector2i> AStarPathfinder::findPath(
     }
 
     std::reverse(path.begin(), path.end());
-	std::cout << "Path found with " << path.size() << " steps." << std::endl;
+	//std::cout << "Path found with " << path.size() << " steps." << std::endl;
     return path;
 }

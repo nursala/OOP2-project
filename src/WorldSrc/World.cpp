@@ -1,4 +1,5 @@
 #include "WorldInc/World.h"
+#include "GameObject/ContactListener.h" // Ensure this header is included
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
@@ -11,6 +12,10 @@ World::World() :
 	if (!m_mapTexture.loadFromFile("map.png")) {
 		throw std::runtime_error("Failed to load map.png!");
 	}
+
+
+
+    m_world.SetContactListener(new ContactListener());
 
 	Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 
@@ -25,6 +30,10 @@ World::World() :
 		randomIQ);
 
 	m_enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
+
+	Factory::instance().registerType<Gift>(TextureID::Gift, std::ref(*this));
+	m_gift = Factory::instance().createAs<Gift>(TextureID::Gift);
+	m_gift->setPostion({ 20, 20 });
 
 	m_mapSprite.setTexture(m_mapTexture);
 	m_tileMap.createCollisionObjects(m_world, "walls");
@@ -65,11 +74,11 @@ void World::render(sf::RenderWindow& window)
 
 	m_enemy->render(window);
 
-	//m_gift->render(window);
+	m_gift->render(window);
 
 	m_light.drawLights(window);
 
-	//DebugEdge(window);
+	DebugEdge(window);
 
 }
 
