@@ -4,7 +4,8 @@
 #include "GameObject/Player.h"
 #include <iostream>
 
-void IdleStatePlayer::enter(Player& player) {
+void IdleStatePlayer::enter(Player& player) 
+{
     player.getAnimation().update(1, 5, 0.0f, true); 
 }
 

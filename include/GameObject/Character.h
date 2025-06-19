@@ -96,7 +96,7 @@ void Character<T>::move(float dt)
 
 template<typename T>
 void Character<T>::shoot(float dt) {
-    m_body->SetLinearVelocity(b2Vec2_zero);
+    //m_body->SetLinearVelocity(b2Vec2_zero);
 
   //  if (m_weapon) {
   //      auto bullet = m_weapon->fire(m_world, getPosition(), { 1,1 });
