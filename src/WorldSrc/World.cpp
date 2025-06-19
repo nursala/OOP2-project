@@ -8,8 +8,13 @@ World::World()
     m_tileMap("map.json"),
     m_light({ 2400, 2400 })
 {
-    loadMapTexture();
     initWorld();
+}
+
+
+void World::initWorld()
+{
+    loadMapTexture();
     createPlayer();
     createEnemy();
     setupMap();
