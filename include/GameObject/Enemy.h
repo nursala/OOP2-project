@@ -7,7 +7,7 @@
 class LoadMap;
 class World;
 
-class Enemy : public Character<Enemy> {
+class Enemy : public Character {
 public:
     Enemy(World& world, const LoadMap& map, const Player& player, int iq);
     ~Enemy() override;

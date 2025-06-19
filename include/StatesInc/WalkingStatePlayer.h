@@ -5,5 +5,5 @@
 
 class WalkingStatePlayer : public WalkingState<Player> {
 public:
-    std::unique_ptr<State<Player>> handleInput(Player& player) override;
+    std::unique_ptr<State> handleInput(Character& character) override;
 };

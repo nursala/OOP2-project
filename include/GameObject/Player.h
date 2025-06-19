@@ -7,7 +7,7 @@
 #include <WeponInc/Weapon.h>
 
 class World;
-class Player : public Character<Player> {
+class Player : public Character {
 public:
     Player(World& world);
 
