@@ -24,8 +24,15 @@ public:
     void render(sf::RenderWindow& window) override;
     const MoveInfo& getLastMoveInfo();
 
+    void move(float dt);
+
+    void shoot(float dt);
+
+    Weapon* getWeapon() const;
+
 protected:
     World& m_world;
+
     std::unique_ptr<State<T>> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
@@ -41,9 +48,7 @@ Character<T>::Character(World& world, const sf::Texture* texture, sf::Vector2f p
     : Entity(world, texture, position, imageCount, switchTime),
     m_world(world),
     m_healthBar(100.f, 10.f)
-{
-
-}
+{}
 
 template<typename T>
 void Character<T>::update(float deltaTime) {
@@ -83,4 +88,31 @@ template<typename T>
 const MoveInfo& Character<T>::getLastMoveInfo()
 {
     return m_lastMoveInfo;
+}
+
+template<typename T>
+void Character<T>::move(float dt) 
+{
+	if (m_moveStrategy)
+	{
+		m_lastMoveInfo = m_moveStrategy->move(*this, dt);
+	}
+}
+
+template<typename T>
+void Character<T>::shoot(float dt) {
+    //m_body->SetLinearVelocity(b2Vec2_zero);
+
+  //  if (m_weapon) {
+  //      auto bullet = m_weapon->fire(m_world, getPosition(), { 1,1 });
+		//if (bullet) {
+		//	m_world.addBullet(std::move(bullet));
+		//}
+  //  }
+}
+
+template<typename T>
+Weapon* Character<T>::getWeapon() const
+{
+    return m_weapon.get();
 }
