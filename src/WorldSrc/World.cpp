@@ -15,7 +15,7 @@ World::World() :
 	Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 
 	m_player = Factory::instance().createAs<Player>(TextureID::Player);
-	m_player->setPostion({ 10, 10 });
+	m_player->setPostion({ 100, 100 });
 
 	int randomIQ = rand() % 10 + 1;
 	Factory::instance().registerType<Enemy>(TextureID::Enemy,

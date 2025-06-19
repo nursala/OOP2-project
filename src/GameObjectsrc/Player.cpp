@@ -8,7 +8,7 @@
 #include <iostream>
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 100, 100 }, { 5, 5 }, 0.4)
+    : Character(world, TextureManager::instance().get(TextureID::Player), { 150, 150 }, { 5, 5 }, 0.4)
 {
     m_state = std::make_unique<IdleStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();

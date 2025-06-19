@@ -62,6 +62,8 @@ void Character<T>::update(float deltaTime) {
     }
     if (m_moveStrategy)
         m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
+
+
     m_sprite.setPosition(getPosition());
     m_sprite.setTextureRect(m_animation.getUvRect());
 
@@ -72,9 +74,9 @@ void Character<T>::update(float deltaTime) {
 template<typename T>
 void Character<T>::render(sf::RenderWindow& window) {
     window.draw(m_sprite);
-  /*  m_healthBar.draw(window);
+    m_healthBar.draw(window);
     if (m_weapon)
-        m_weapon->draw(window);*/
+        m_weapon->draw(window);
 }
 
 template<typename T>
