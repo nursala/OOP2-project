@@ -1,24 +1,20 @@
 #pragma once
 
-#include "GameObject/Entity.h"
+#include "GameObject/Character.h"
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "StatesInc/State.h"
 #include "HealthBar.h"
 #include <WeponInc/Weapon.h>
 
-class Player : public Entity {
+class World;
+class Player : public Character<Player> {
 public:
-    Player(b2World& world);
-    void update(float deltaTime) override;
-    void setFacingRight(bool isFaceRight);
-	void render(sf::RenderWindow& window) override;
+    Player(World& world);
+
     void setLight(std::shared_ptr<VisionLight>& visionLight);
     void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
+    void setFacingRight(bool right);
+    
 private:
-	std::unique_ptr<State<Player>> m_state; // Current state of the player
-	sf::RectangleShape m_shape; // For rendering the player
-	MoveInfo m_lastMoveInfo; // Last move info for the player
-    std::unique_ptr<Weapon> m_weapon;
-    std::shared_ptr<VisionLight> m_visionLight;
-    HealthBar m_healthBar;
+    bool m_visable = true;
 };

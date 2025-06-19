@@ -12,14 +12,14 @@ World::World() :
 		throw std::runtime_error("Failed to load map.png!");
 	}
 
-	Factory::instance().registerType<Player>(TextureID::Player, std::ref(m_world));
+	Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 
 	m_player = Factory::instance().createAs<Player>(TextureID::Player);
 	m_player->setPostion({ 10, 10 });
 
 	int randomIQ = rand() % 10 + 1;
 	Factory::instance().registerType<Enemy>(TextureID::Enemy,
-		std::ref(m_world),
+		std::ref(*this),
 		std::cref(m_tileMap),
 		std::cref(*m_player),
 		randomIQ);
@@ -41,7 +41,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	m_player->update(deltaTime);
 	m_enemy->update(deltaTime);
 
-	sf::Vector2f playerPos = m_player->getPixels();
+	sf::Vector2f playerPos = m_player->getPosition();
 	sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
@@ -59,7 +59,6 @@ void World::render(sf::RenderWindow& window)
 
 
 	window.draw(m_mapSprite);
-	DebugEdge(window);
 	m_light.drawFinalLights(window);
 
 	m_player->render(window);
@@ -70,17 +69,16 @@ void World::render(sf::RenderWindow& window)
 
 	m_light.drawLights(window);
 
-	m_world.DebugDraw();
+	//DebugEdge(window);
 
 }
 
-const sf::Vector2f World::getPlayerPixels() const
+b2World& World::getWorld() 
 {
-	if (m_player) {
-		return m_player->getPixels();
-	}
-	return sf::Vector2f(0.f, 0.f);
+	return m_world;
 }
+
+
 
 const sf::Vector2f World::getMapTextureSize() const
 {
@@ -88,6 +86,11 @@ const sf::Vector2f World::getMapTextureSize() const
 		return sf::Vector2f(0.f, 0.f);
 	}
 	return sf::Vector2f(static_cast<float>(m_mapTexture.getSize().x), static_cast<float>(m_mapTexture.getSize().y));
+}
+
+const Player& World::getPlayer() const
+{
+	return *m_player;
 }
 
 void World::buildAllEdges() {

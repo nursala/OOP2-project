@@ -6,9 +6,10 @@
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "MoveStrategyAndInfoInc/MoveInfo.h"
 
+class World;
 class Entity {
 public:
-	Entity(b2World& world, const sf::Texture* texture, sf::Vector2f position,
+	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		sf::Vector2u imageCount, float switchTime);
 
 	virtual void update(float deltaTime) = 0;
@@ -16,7 +17,8 @@ public:
 
 	b2Vec2 getPositionB2() const;
 
-	sf::Vector2f getPixels() const;
+	sf::Vector2f getPosition() const;
+
 
 	void setPostion(const b2Vec2& position);
 
@@ -28,9 +30,6 @@ public:
 
 	Animation& getAnimation();
 
-	void setMoveStrategy(std::unique_ptr<MoveStrategy> strategy);
-	const MoveInfo& getLastMoveInfo() const;
-	const sf::Vector2f getDirection() const;
 	float getSpeed() const;
 
 	void adjustSpriteToFixtureSize();
@@ -40,11 +39,6 @@ public:
 
 protected:
 	b2Body* m_body = nullptr;
-	b2Vec2 m_velocity;
-
-	std::unique_ptr<MoveStrategy> m_moveStrategy;
-	MoveInfo m_lastMoveInfo;
-	sf::Vector2f m_direction{ 0.f, 0.f };
 
 	sf::Sprite m_sprite;
 	Animation m_animation;

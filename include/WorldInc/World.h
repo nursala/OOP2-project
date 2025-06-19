@@ -18,15 +18,16 @@ public:
 	World();
 	void update(sf::RenderWindow& window, float deltaTime);
 	void render(sf::RenderWindow& window);
-	const sf::Vector2f getPlayerPixels() const;
 	const sf::Vector2f getMapTextureSize() const;
 	const Player& getPlayer() const;
-    b2World m_world;
+    b2World& getWorld() ;
 
 private:
+    b2World m_world;
+
     std::unique_ptr<Player> m_player;
     std::unique_ptr<Enemy> m_enemy;
-    std::unique_ptr<Gift> m_gift;
+    //std::unique_ptr<Gift> m_gift;
 
 
     sf::Texture m_mapTexture;

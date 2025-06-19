@@ -7,17 +7,16 @@
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
 
-Player::Player(b2World& world)
-    : Entity(world, TextureManager::instance().get(TextureID::Player), { 100, 100 }, { 5, 5 }, 0.4),
-    m_state(std::make_unique<IdleStatePlayer>()),
-    m_weapon(nullptr)
+Player::Player(World& world)
+    : Character(world, TextureManager::instance().get(TextureID::Player), { 100, 100 }, { 5, 5 }, 0.4)
 {
+    m_state = std::make_unique<IdleStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
    
     if (m_state)
         m_state->enter(*this);
 
-    m_weapon = std::make_unique<Weapon>(world);
+    //m_weapon = std::make_unique<Weapon>(world);
 
     m_visable = true;
 }
@@ -29,38 +28,11 @@ void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
 
 void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
-    if (m_weapon)
-        m_weapon->setLight(weaponLight);
+    /*if (m_weapon)
+        m_weapon->setLight(weaponLight);*/
 }
 
-void Player::update(float deltaTime)
-{
 
-
-    if (m_moveStrategy)
-        m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
-
-    sf::Vector2f pos = getPixels();
-    
-    m_sprite.setPosition(pos);
-    m_sprite.setTextureRect(m_animation.getUvRect());
-
-    if (m_weapon)
-        m_weapon->update(pos, m_shape.getRotation());
-
-    sf::Vector2f healthBarPos = { getPixels().x , getPixels().y - 15};
-    m_healthBar.setPosition(healthBarPos);
-}
-
-void Player::render(sf::RenderWindow& window)
-{
-    if (m_visable) {
-        m_healthBar.draw(window);
-        window.draw(m_sprite);
-        if (m_weapon)
-            m_weapon->draw(window);
-    }
-}
 
 void Player::setFacingRight(bool right)
 {

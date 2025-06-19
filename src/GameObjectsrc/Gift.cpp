@@ -10,6 +10,8 @@ Gift::Gift(b2World& world)
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
 
+
+
 }
 
 GiftType Gift::getType() const { return m_type; }
@@ -27,21 +29,4 @@ GiftType Gift::getType() const { return m_type; }
 //    //    break;
 //    //}
 //}
-
-void Gift::update(float deltaTime) {
-    // Optional: animate or rotate the gift
-
-    //m_animation.update(0, 5, deltaTime, true); // Assuming a single frame animation
-    sf::Vector2f pos = { m_body->GetPosition().x ,m_body->GetPosition().y };
-    pos *= SCALE;
-    m_sprite.setPosition(pos.x, pos.y);
-
-    m_sprite.setTextureRect(m_animation.getUvRect());
-
-}
-
-void Gift::render(sf::RenderWindow& window) {
-    if (isVisible())
-        window.draw(m_sprite);
-}
-
+//

@@ -13,8 +13,8 @@ IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int i
 MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
 {
 
-    sf::Vector2f enemyPos = entity.getPixels();
-    sf::Vector2f playerPos = m_player.getPixels();
+    sf::Vector2f enemyPos = entity.getPosition();
+    sf::Vector2f playerPos = m_player.getPosition();
 
     float distToPlayer = distance(enemyPos, playerPos);
     if (distToPlayer < 150.f && m_iqLevel < 10) ++m_iqLevel;
@@ -96,13 +96,13 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
 
 sf::Vector2f IQChaseStrategy::getPlayerPostion() const
 {
-    return m_player.getPixels();
+    return m_player.getPosition();
 }
 
 
 sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float) {
     std::vector<sf::Vector2f> dirs = { {4,0}, {-4,0}, {0,4}, {0,-4} };
-    sf::Vector2f lastDir = enemy.getLastMoveInfo().direction;
+    sf::Vector2f lastDir = { 0.f, 0.f };
     dirs.erase(std::remove(dirs.begin(), dirs.end(), lastDir), dirs.end());
     std::shuffle(dirs.begin(), dirs.end(), std::mt19937(std::random_device{}()));
     return normalize(dirs.front());
