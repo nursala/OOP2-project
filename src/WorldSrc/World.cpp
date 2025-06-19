@@ -17,16 +17,13 @@ World::World()
     setupPlayerLight();
 }
 
-void World::initWorld()
-{
-    m_mapSprite.setTexture(m_mapTexture);
-}
-
 void World::loadMapTexture()
 {
     if (!m_mapTexture.loadFromFile("map.png")) {
         throw std::runtime_error("Failed to load map.png!");
     }
+    m_mapSprite.setTexture(m_mapTexture);
+
 }
 
 void World::createPlayer()
@@ -86,9 +83,17 @@ void World::updateLightSystem(sf::RenderWindow& window)
 
 void World::render(sf::RenderWindow& window)
 {
-    drawMap(window);
-    drawLighting(window);
-    drawGameObjects(window);
+    window.draw(m_mapSprite);
+    m_light.drawFinalLights(window);
+
+    m_player->render(window);
+
+    m_enemy->render(window);
+
+    //m_gift->render(window);
+
+    m_light.drawLights(window);
+    //DebugEdge(window);
 }
 
 void World::drawMap(sf::RenderWindow& window)
