@@ -32,8 +32,6 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
         m_weapon->setLight(weaponLight);*/
 }
 
-
-
 void Player::setFacingRight(bool right)
 {
     if (m_lastMoveInfo.faceRight != right) {

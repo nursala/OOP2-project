@@ -44,22 +44,14 @@ float Enemy::distanceToPlayer() const {
     return std::hypot(diff.x, diff.y);
 }
 
-void Enemy::shootAtPlayer(float deltaTime) {
-    m_body->SetLinearVelocity(b2Vec2_zero);
-    if (m_attackStrategy)
-        m_attackStrategy->attack(*this, deltaTime);
-}
-
 void Enemy::fireBullet(const sf::Vector2f& direction) {
     //if (m_weapon)
     //    m_weapon->shoot(getPosition(), direction);
 }
 
-float Enemy::getShootingRange() const {
-    //return m_shootingRange;
-    return 0;
-}
-void Enemy::moveToPlayer(float deltaTime) {
-	if (m_moveStrategy)
-		m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
+float Enemy::getShootingRange() const
+{
+	if (m_weapon) {
+		return m_weapon->getShootingRange();
+	}
 }

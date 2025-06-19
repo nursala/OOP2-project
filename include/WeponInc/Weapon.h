@@ -3,17 +3,19 @@
 #include <SFML/Graphics.hpp>
 #include "VisionLight.h"
 #include "WeaponLight.h"
+#include "GameObject/Bullet.h"
 
 class Weapon {
 public:
-    Weapon(b2World& world);
+    Weapon() = default;
 
-    void fire(const sf::Vector2f& position, const sf::Vector2f& direction);
+    std::unique_ptr<Bullet> fire(World& world, const sf::Vector2f& position,
+                                const sf::Vector2f& direction);
     void update(sf::Vector2f playerPos, float angle);
     void draw(sf::RenderWindow& window);
     void setLight(std::shared_ptr<WeaponLight>& weaponLight);
+	float getShootingRange() const;
 private:
-    b2World& m_world;
-    std::vector<b2Body*> m_bullets;
     std::shared_ptr<WeaponLight> m_weaponLight;
+    float m_shootingRange = 0;
 };

@@ -11,6 +11,9 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position, 
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(position.x / SCALE, position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
+
+	customizeBodyDef(bodyDef);
+
 	m_body = world.getWorld().CreateBody(&bodyDef);
 
 
