@@ -10,8 +10,6 @@ Gift::Gift(b2World& world)
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
 
-
-
 }
 
 GiftType Gift::getType() const { return m_type; }
