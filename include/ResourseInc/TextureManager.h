@@ -6,14 +6,12 @@ enum class TextureID {
 	Kill = 0,
 	Player,
 	Enemy,
-	HEALTH,
 	ARMOR,
-	AMMO,
-	DAMAGEDOWN,
+	HEALTH,
 	ENEMYSPEEDDOWN,
 	SPEEDUP,
 	SPY,
-
+	SIZE
 };
 
 const std::unordered_map<TextureID, std::string> TextureFileMap = {
@@ -21,8 +19,8 @@ const std::unordered_map<TextureID, std::string> TextureFileMap = {
 	{TextureID::Enemy, "heavy_player_face.png"},
 	{TextureID::HEALTH , "Health.png"},
 	{TextureID::ARMOR, "shield.png"},
-	{TextureID::AMMO, "ammo.png"},
-	{TextureID::DAMAGEDOWN, "DamageDownGift.png"},
+	//{TextureID::AMMO, "ammo.png"},
+	//{TextureID::DAMAGEDOWN, "DamageDownGift.png"},
 	{TextureID::ENEMYSPEEDDOWN, "EnemySpeedDownGift.png"},
 	{TextureID::SPEEDUP, "SpeedUpGift.png"},
 	{ TextureID::SPY, "spy.png" },

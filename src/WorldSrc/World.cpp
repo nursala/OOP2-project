@@ -1,11 +1,6 @@
 ﻿#include "WorldInc/World.h"
 #include "GameObject/ContactListener.h" // Ensure this header is included
 #include "GameObject/Gift.h" // Ensure this include is present
-#include "GameObject/ExtraHealthGift.h"
-#include "GameObject/ExtraArmorGift.h"
-#include "GameObject/EnemySpDwGift.h"
-#include "GameObject/SpeedUpGift.h"
-#include "GameObject/SpyGift.h"
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
@@ -23,6 +18,12 @@ void World::initWorld()
     loadMapTexture();
     createPlayer();
     createEnemy();
+	// register all gift types with the factory
+	int begin = static_cast<int>(TextureID::ARMOR);
+    for (int i = begin; i < static_cast<int>(TextureID::SIZE); i++)
+    {
+        Factory::instance().registerType<Gift>(TextureID(i), std::ref(*this), TextureManager::instance().get(TextureID(i)));
+    }
 	for (int i = 0; i < 5; ++i) {
 		// Randomly create gifts at different positions
 		b2Vec2 pos(rand() % 100 + 50 * (i + 1), rand() % 100 + 50 * (i + 1));
@@ -47,7 +48,7 @@ void World::createPlayer()
 {
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
-    m_player->setPostion({ 10, 10 });
+    m_player->setPosition({ 10, 10 });
     m_player->init();
 }
 
@@ -58,30 +59,36 @@ void World::createGift(GiftType type,b2Vec2 pos)
 	switch (type)
 	{
 	case GiftType::ARMOR:
-		Factory::instance().registerType<ExtraArmorGift>(TextureID::ARMOR, std::ref(*this),tempPos);
-		m_gifts.push_back(Factory::instance().createAs<ExtraArmorGift>(TextureID::ARMOR));
+		//Factory::instance().registerType<ExtraArmorGift>(TextureID::ARMOR, std::ref(*this),tempPos);
+        
+		m_gifts.push_back(Factory::instance().createAs<Gift>(TextureID::ARMOR));
+        m_gifts.back()->setType(GiftType::ARMOR);
 		break;
 	case GiftType::HEALTH:
-		Factory::instance().registerType<ExtraHealthGift>(TextureID::HEALTH, std::ref(*this),tempPos);
-		m_gifts.push_back(Factory::instance().createAs<ExtraHealthGift>(TextureID::HEALTH));
+		//Factory::instance().registerType<ExtraHealthGift>(TextureID::HEALTH, std::ref(*this),tempPos);
+		m_gifts.push_back(Factory::instance().createAs<Gift>(TextureID::HEALTH));
+		m_gifts.back()->setType(GiftType::HEALTH);
 		break;
 	case GiftType::ENEMYSPEEDDOWN:
-		Factory::instance().registerType<EnemySpDwGift>(TextureID::ENEMYSPEEDDOWN, std::ref(*this),tempPos);
-		m_gifts.push_back(Factory::instance().createAs<EnemySpDwGift>(TextureID::ENEMYSPEEDDOWN));
+		//Factory::instance().registerType<EnemySpDwGift>(TextureID::ENEMYSPEEDDOWN, std::ref(*this),tempPos);
+		m_gifts.push_back(Factory::instance().createAs<Gift>(TextureID::ENEMYSPEEDDOWN));
+		m_gifts.back()->setType(GiftType::ENEMYSPEEDDOWN);
 		break;
 	case GiftType::SPEEDUP:
-		Factory::instance().registerType<SpeedUpGift>(TextureID::SPEEDUP, std::ref(*this), tempPos);
-		m_gifts.push_back(Factory::instance().createAs<SpeedUpGift>(TextureID::SPEEDUP));
+		//Factory::instance().registerType<SpeedUpGift>(TextureID::SPEEDUP, std::ref(*this), tempPos);
+		m_gifts.push_back(Factory::instance().createAs<Gift>(TextureID::SPEEDUP));
+		m_gifts.back()->setType(GiftType::SPEEDUP);
 		break;
 	case GiftType::SPY:
-		Factory::instance().registerType<SpyGift>(TextureID::SPY, std::ref(*this), tempPos);
-		m_gifts.push_back(Factory::instance().createAs<SpyGift>(TextureID::SPY));
+		//Factory::instance().registerType<SpyGift>(TextureID::SPY, std::ref(*this), tempPos);
+		m_gifts.push_back(Factory::instance().createAs<Gift>(TextureID::SPY));
+		m_gifts.back()->setType(GiftType::SPY);
 		break;
 	default:
 		throw std::runtime_error("Unknown GiftType");
 	}
 	m_gifts.back()->init();
-	m_gifts.back()->setPostion(pos);
+	m_gifts.back()->setPosition(pos);
 //}
    /* Factory::instance().registerType<Gift>(
         TextureID::Life,
@@ -123,24 +130,25 @@ void World::update(sf::RenderWindow& window, float deltaTime)
 {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
-    //m_enemy->update(deltaTime);
+    m_enemy->update(deltaTime);
 
     for (auto& bullet : m_bullets)
     {
         bullet->update(deltaTime);
     }
-	for (auto& gift : m_gifts)
-	{
-        //std::cout << gift->getPositionB2().x << ", " << gift->getPositionB2().y << std::endl;
-        if (gift->isDestroyed())
-        {
-            m_gifts.erase(std::remove_if(m_gifts.begin(), m_gifts.end(),
-                [](const std::unique_ptr<Gift>& g) { return g->isDestroyed(); }), m_gifts.end());
+	
+    for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
+        if ((*it)->isDestroyed()) {
+            m_world.DestroyBody((*it)->getBody());
+            it = m_gifts.erase(it); // Remove destroyed entity
         }
-	}
+        else {
+            ++it;
+        }
+    }
+	
     updateLightSystem(window);
     updateBullets(deltaTime);
-    //updateLightSystem(window);
 }
 
 void World::updateBullets(float deltaTime)
@@ -174,7 +182,7 @@ void World::updateLightSystem(sf::RenderWindow& window)
 void World::render(sf::RenderWindow& window)
 {
     window.draw(m_mapSprite);
-    m_light.drawFinalLights(window);
+    //m_light.drawFinalLights(window);
 
     m_player->render(window);
 
@@ -193,7 +201,7 @@ void World::render(sf::RenderWindow& window)
     //m_gift->render(window);
 
     m_light.drawLights(window);
-    DebugEdge(window);
+    //DebugEdge(window);
 }
 
 void World::drawMap(sf::RenderWindow& window)

@@ -5,8 +5,8 @@
 #include "WorldInc/World.h"
 #include <iostream> 
 
-Gift::Gift(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount)
-	: Entity(world, texture, position, imageCount, 0.4f),
+Gift::Gift(World& world, const sf::Texture* texture)
+	: Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
 	m_world(world)
 {
     // Set up Box2D body as static or kinematic, and set up sprite
@@ -29,14 +29,19 @@ void Gift::render(sf::RenderWindow& window)
 		window.draw(m_sprite);
 }
 
+void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
+{
+	fixtureDef.isSensor = true; 
+}
+
 void Gift::des()
 {
-	if (m_body) {
-		//m_body->SetUserData(nullptr); // Clear user data before destruction
-		// Destroy the Box2D body associated with this gift
-		m_world.getWorld().DestroyBody(m_body);
-		m_body = nullptr;
-	}
+	//if (m_body) {
+	//	//m_body->SetUserData(nullptr); // Clear user data before destruction
+	//	// Destroy the Box2D body associated with this gift
+	//	//m_world.getWorld().DestroyBody(m_body);
+	//	m_body = nullptr;
+	//}
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
 }

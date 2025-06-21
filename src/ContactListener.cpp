@@ -3,11 +3,6 @@
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 #include "GameObject/Gift.h"
-#include "GameObject/ExtraHealthGift.h"
-#include "GameObject/ExtraArmorGift.h"
-#include "GameObject/SpeedUpGift.h"
-#include "GameObject/EnemySpDwGift.h"
-#include "GameObject/SpyGift.h"
 #include <iostream>
 
 void ContactListener::BeginContact(b2Contact* contact) {
@@ -22,56 +17,83 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
     // Example: Check if one is Player and one is Gift
     if (entityA && entityB) {
-		/*std::cout << "EntityA: " << entityA->getPosition().x << ", " << entityA->getPosition().y << std::endl;
-		std::cout << "EntityB: " << entityB->getPosition().x << ", " << entityB->getPosition().y << std::endl;*/
-		//std::cout << "Contact between " << typeid(*entityA).name() << " and " << typeid(*entityB).name() << std::endl;
+		//std::cout << typeid(*entityA).name() << " && " << typeid(*entityB).name() << std::endl;
         if (!entityA->isVisible() || !entityB->isVisible())
             return;
-
+		//std::cout << "Visible" << std::endl;
         if (auto player = dynamic_cast<Player*>(entityA)) {
-			//std::cout << "Player" << std::endl;
-            if (auto gift = dynamic_cast<ExtraHealthGift*>(entityB)) {
-                std::cout << "Extra Life" << std::endl;
-                if (gift && gift->isVisible())
-                {
-                    std::cout << "Player collected a healthgift!" << std::endl;
-                    gift->setVisible(false);
-                   
-                }
-                player->addHealth();
-            }
-            else if (auto gift = dynamic_cast<ExtraArmorGift*>(entityB)) {
-				std::cout << "Extra Armor" << std::endl;
-                if (gift && gift->isVisible()) {
-                    std::cout << "Player collided with a armor!" << std::endl;
-					gift->setVisible(false);
-                    player->addArmor();
-                }
-            }
-			else if (auto gift = dynamic_cast<SpeedUpGift*>(entityB)) {
-				std::cout << "Speed Up" << std::endl;
-				if (gift && gift->isVisible()) {
-					std::cout << "Player collected a speedupgift!" << std::endl;
-					gift->setVisible(false);
-				}
-				player->addSpeed();
-			}
-			else if (auto gift = dynamic_cast<EnemySpDwGift*>(entityB)) {
-				std::cout << "Enemy Speed Down" << std::endl;
-				if (gift && gift->isVisible()) {
-				    std::cout << "Player collided with a enemyspeedgift!" << std::endl;
-					gift->setVisible(false);
-					//enemy->speedDown();
-				}
-			}
-			else if (auto gift = dynamic_cast<SpyGift*>(entityB)) {
-				std::cout << "Spy" << std::endl;
-				if (gift && gift->isVisible()) {
-					std::cout << "Player collected a spy gift!" << std::endl;
-					gift->setVisible(false);
+			if (auto gift = dynamic_cast<Gift*>(entityB)) {
+				switch (gift->getType())
+				{
+				case GiftType::ARMOR:
+					std::cout << "Armor" << std::endl;
+					player->addArmor();
+					break;
+				case GiftType::HEALTH:
+					std::cout << "Health" << std::endl;
+					player->addHealth();
+					break;
+				case GiftType::ENEMYSPEEDDOWN:
+					std::cout << "Speed Down" << std::endl;
+					//enemy->speedDown(); // Assuming you have a method to slow down enemies
+					break;
+				case GiftType::SPEEDUP:
+					std::cout << "Speed Up" << std::endl;
+					player->addSpeed();
+					break;
+				case GiftType::SPY:
+					std::cout << "Spy" << std::endl;
 					//player->setSpy(true); // Assuming Player has a method to set spy mode
+					break;
+				default:
+					std::runtime_error("Unknown GiftType collected!");
+					break;
 				}
+				gift->des();
 			}
+
+   //         if (auto gift = dynamic_cast<ExtraHealthGift*>(entityB)) {
+   //             std::cout << "Extra Life" << std::endl;
+   //             if (gift && gift->isVisible())
+   //             {
+   //                 std::cout << "Player collected a healthgift!" << std::endl;
+   //                 gift->des();
+   //                
+   //             }
+   //             player->addHealth();
+   //         }
+   //         else if (auto gift = dynamic_cast<ExtraArmorGift*>(entityB)) {
+			//	std::cout << "Extra Armor" << std::endl;
+   //             if (gift && gift->isVisible()) {
+   //                 std::cout << "Player collided with a armor!" << std::endl;
+			//		gift->des();
+   //                 player->addArmor();
+   //             }
+   //         }
+			//else if (auto gift = dynamic_cast<SpeedUpGift*>(entityB)) {
+			//	std::cout << "Speed Up" << std::endl;
+			//	if (gift && gift->isVisible()) {
+			//		std::cout << "Player collected a speedupgift!" << std::endl;
+			//		gift->des();
+			//	}
+			//	player->addSpeed();
+			//}
+			//else if (auto gift = dynamic_cast<EnemySpDwGift*>(entityB)) {
+			//	std::cout << "Enemy Speed Down" << std::endl;
+			//	if (gift && gift->isVisible()) {
+			//	    std::cout << "Player collided with a enemyspeedgift!" << std::endl;
+			//		gift->des();
+			//		//enemy->speedDown();
+			//	}
+			//}
+			//else if (auto gift = dynamic_cast<SpyGift*>(entityB)) {
+			//	std::cout << "Spy" << std::endl;
+			//	if (gift && gift->isVisible()) {
+			//		std::cout << "Player collected a spy gift!" << std::endl;
+			//		gift->des();
+			//		//player->setSpy(true); // Assuming Player has a method to set spy mode
+			//	}
+			//}
 			else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
 				std::cout << "Player collided with an enemy!" << std::endl;
 				player->takeDamage(10); // Example damage value
