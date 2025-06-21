@@ -12,9 +12,10 @@ public:
 	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		sf::Vector2u imageCount, float switchTime);
 
+	void init();
+
 	virtual void update(float deltaTime) = 0;
 	virtual void render(sf::RenderWindow& window);
-	virtual void customizeBodyDef(b2BodyDef& bodyDef) {}
 	b2Vec2 getPositionB2() const;
 
 	sf::Vector2f getPosition() const;
@@ -39,13 +40,17 @@ public:
 
 protected:
 	b2Body* m_body = nullptr;
+    World& m_world;
 
 	sf::Sprite m_sprite;
 	Animation m_animation;
-
+	sf::Vector2f m_position;
 	bool m_visable = false;
 	float m_speed = 0.f;
 
+	virtual void customizeBodyDef(b2BodyDef& bodyDef) {}
+	virtual void customizeFixtureDef(b2FixtureDef& fixtureDef) {}
+	virtual b2BodyType getBodyType() const { return b2_dynamicBody; };
 	static constexpr float SCALE = 30.f;
 
 };

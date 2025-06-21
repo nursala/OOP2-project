@@ -1,4 +1,4 @@
-#include "WorldInc/World.h"
+﻿#include "WorldInc/World.h"
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
@@ -10,7 +10,6 @@ World::World()
 {
     initWorld();
 }
-
 
 void World::initWorld()
 {
@@ -35,7 +34,7 @@ void World::createPlayer()
 {
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
-    m_player->setPostion({ 10, 10 });
+	m_player->init();
 }
 
 void World::createEnemy()
@@ -48,6 +47,7 @@ void World::createEnemy()
         randomIQ);
 
     m_enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
+	m_enemy->init();
 }
 
 void World::setupMap()
@@ -66,11 +66,23 @@ void World::update(sf::RenderWindow& window, float deltaTime)
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
     m_enemy->update(deltaTime);
-    for (auto& bullet : m_bullets)
-    {
-        bullet->update(deltaTime);
-    }
+    updateBullets(deltaTime);
     updateLightSystem(window);
+}
+
+void World::updateBullets(float deltaTime)
+{
+    for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
+        (*it)->update(deltaTime);
+
+        if ((*it)->shouldDestroy()) {
+            m_world.DestroyBody((*it)->getBody());
+            it = m_bullets.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
 void World::updateLightSystem(sf::RenderWindow& window)
@@ -94,6 +106,11 @@ void World::render(sf::RenderWindow& window)
     m_player->render(window);
 
     m_enemy->render(window);
+
+    for (auto& bullet : m_bullets)
+    {
+        bullet->render(window);
+    }
 
     //m_gift->render(window);
 
@@ -130,7 +147,7 @@ b2World& World::getWorld()
 void World::addBullet(std::unique_ptr<Bullet> bullet)
 {
 	if (bullet) {
-		bullet->setPostion(bullet->getPositionB2());
+        bullet->init();
 		m_bullets.push_back(std::move(bullet));
 	}
 }

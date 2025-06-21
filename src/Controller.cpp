@@ -16,10 +16,9 @@ Controller::Controller()
 		m_nextScreen = id;
 		};
 	setScreen(ScreenID::Game);
-	SoundManager::instance().play(SoundID::BackgroundMusic);
+	//SoundManager::instance().play(SoundID::BackgroundMusic);
 	m_window.setFramerateLimit(60);
 }
-
 
 void Controller::run()
 {
