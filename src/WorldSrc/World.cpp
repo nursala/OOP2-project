@@ -91,7 +91,7 @@ void World::updateLightSystem(sf::RenderWindow& window)
     sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
-    calcNearlyEdge();
+    calcNearlyEdge(window);
     m_light.update(playerPos, mouseWorld);
     m_light.updateCastLight(m_closeEdges, m_world);
     sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
@@ -184,10 +184,14 @@ void World::buildAllEdges()
     }
 }
 
-void World::calcNearlyEdge()
+void World::calcNearlyEdge(sf::RenderWindow& window)
 {
-    sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
-    float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
+    sf::Vector2f viewCenter = window.getView().getCenter();   // مركز المشهد
+    sf::Vector2f viewSize = window.getView().getSize();       // حجم المشهد
+
+    sf::Vector2f lightPos = viewCenter;
+    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; // مجال أوسع قليلًا من الشاشة
+    float rangeSq = radius * radius;
 
     m_closeEdges.clear();
     for (const auto& edge : m_allEdges) {
@@ -210,6 +214,7 @@ void World::calcNearlyEdge()
             m_closeEdges.push_back(edge);
         }
     }
+
 }
 
 void World::DebugEdge(sf::RenderWindow& window)
