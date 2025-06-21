@@ -11,6 +11,7 @@ World::World()
     initWorld();
 }
 
+
 void World::initWorld()
 {
     loadMapTexture();
