@@ -17,7 +17,7 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	{
 		m_weaponLight->setPosition(playerPos);
 		m_weaponLight->update(playerPos, angle);
-	}*/
+	}
 }
 
 void Weapon::draw(sf::RenderWindow& window)

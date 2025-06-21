@@ -35,6 +35,8 @@ public:
 
 	void adjustSpriteToFixtureSize();
 
+	World& getWorld();
+
 	bool isVisible() const { return m_visable; }
 	void setVisible(bool visible) { m_visable = visible; }
 

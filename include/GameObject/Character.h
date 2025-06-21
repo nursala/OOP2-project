@@ -28,7 +28,6 @@ public:
     virtual void shoot(float dt) = 0;
 
     Weapon* getWeapon();
-    World& getWorld();
     virtual sf::Vector2f getTarget() const = 0;
 
 protected:

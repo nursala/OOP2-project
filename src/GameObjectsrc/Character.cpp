@@ -21,12 +21,12 @@ void Character::update(float deltaTime) {
 
     if (m_weapon)
     {
-        m_weapon->update(getPosition(),this->getBody()->GetAngle());
+        m_weapon->update(getPosition(),this->getBody()->GetAngle(), deltaTime);
     }
-    if (m_visionLight)
-    {
-        m_visionLight->update(getPosition(), this->getBody()->GetAngle());
-    }
+    //if (m_visionLight)
+    //{
+    //    m_visionLight->update(getPosition(), this->getBody()->GetAngle());
+    //}
 
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation.getUvRect());

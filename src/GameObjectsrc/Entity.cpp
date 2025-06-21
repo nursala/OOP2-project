@@ -119,3 +119,7 @@ void Entity::adjustSpriteToFixtureSize()
 	m_sprite.setScale(scale);
 	m_sprite.setOrigin(frameSize.x / 2.f, frameSize.y / 2.f);
 }
+
+World& Entity::getWorld() {
+	return m_world;
+}
