@@ -17,13 +17,13 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	{
 		m_weaponLight->setPosition(playerPos);
 		m_weaponLight->update(playerPos, angle);
-	}
+	}*/
 }
 
 void Weapon::draw(sf::RenderWindow& window)
 {
-	if (m_weaponLight)
-		window.draw(*m_weaponLight);
+	/*if (m_weaponLight)
+		window.draw(*m_weaponLight);*/
 }
 
 void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
