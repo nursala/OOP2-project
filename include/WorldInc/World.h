@@ -34,7 +34,8 @@ private:
     void drawGameObjects(sf::RenderWindow& window);
     void drawLighting(sf::RenderWindow& window);
     void buildAllEdges();
-    void calcNearlyEdge();
+    void calcNearlyEdge(sf::RenderWindow& window);
+    //void calcNearlyEdge();
     void DebugEdge(sf::RenderWindow& window);
 
 private:
