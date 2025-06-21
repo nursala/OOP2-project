@@ -36,7 +36,8 @@ void Character::update(float deltaTime) {
 }
 
 void Character::render(sf::RenderWindow& window) {
-	window.draw(m_sprite);
+	//if(m_visable)
+		window.draw(m_sprite);
 	/*  m_healthBar.draw(window)*/;
 }
 
@@ -63,3 +64,18 @@ Weapon* Character::getWeapon()
 	return m_weapon.get();
 }
 
+void Character::shoot(float dt) {
+	//m_body->SetLinearVelocity(b2Vec2_zero);
+
+	if (m_attackStrategy)
+	{
+		m_attackStrategy->attack(*this, dt);
+	}
+}
+
+float Character::getShootingRange() const {
+	if (m_weapon) {
+		return m_weapon->getShootingRange();
+	}
+	return 0.f;
+}

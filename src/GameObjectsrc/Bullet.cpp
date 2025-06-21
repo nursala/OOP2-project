@@ -7,6 +7,7 @@ Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& d
     : Entity(world, TextureManager::instance().get(TextureID::Gift), position, { 1, 1 }, 0.1f),
     m_direction(direction)
 {
+	m_visable = true;
     m_speed = 10.f; 
 }
 
@@ -39,7 +40,6 @@ void Bullet::update(float deltaTime)
     if (m_lifetime > MAX_LIFETIME)
         m_destroy = true;
 }
-
 
 bool Bullet::shouldDestroy() const
 {

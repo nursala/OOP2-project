@@ -7,13 +7,14 @@
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
 #include "WeponInc/Gun.h"
+#include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
     : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 5, 5 }, 0.4)
 {
-    m_state = std::make_unique<IdleStatePlayer>();
+    m_state = std::make_unique<WalkingStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
-   
+	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
     if (m_state)
         m_state->enter(*this);
 
@@ -43,17 +44,21 @@ void Player::setFacingRight(bool right)
     }
 }
 
-void Player::shoot(float dt) {
-    //m_body->SetLinearVelocity(b2Vec2_zero);
-
-    if (m_attackStrategy)
-    {
-        m_attackStrategy->attack(*this, dt);
-    }
-}
-
 sf::Vector2f Player::getTarget() const
 {
-	return m_weapon->getWeaponLight()->getClosestTarget(this)->getPosition();
+	return m_target->getPosition();
 }
 
+std::pair<bool, float> Player::EnemyIsVisible()  
+{  
+   auto WeaponLight = m_weapon->getWeaponLight();  
+   if (m_visionLight) {  
+       auto closestTarget = WeaponLight->getClosestTarget(this);  
+       if (closestTarget) {  
+           m_target = closestTarget; 
+           sf::Vector2f diff = getPosition() - closestTarget->getPosition();  
+           return {true, std::sqrt(diff.x * diff.x + diff.y * diff.y)}; // Fix syntax for returning a pair.  
+       }  
+   }  
+   return {false, 0.0f};
+}

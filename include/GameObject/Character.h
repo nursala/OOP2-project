@@ -25,13 +25,16 @@ public:
     virtual b2BodyType getBodyType() const override;
     void move(float dt);
 
-    virtual void shoot(float dt) = 0;
+    virtual void shoot(float dt);
+
+    float getShootingRange() const;
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;
 
 protected:
 
+	Character* m_target;
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;

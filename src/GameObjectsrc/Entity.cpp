@@ -13,7 +13,6 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		m_sprite.setTextureRect(m_animation.getUvRect());
 		m_sprite.setPosition(position);
 	}
-	m_visable = false;
 }
 
 void Entity::init() 
@@ -45,7 +44,7 @@ void Entity::init()
 }
 
 void Entity::render(sf::RenderWindow& window) {
-	/*if (m_visable)*/
+	if (m_visable)
 		window.draw(m_sprite);
 }
 

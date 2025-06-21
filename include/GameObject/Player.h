@@ -16,7 +16,7 @@ public:
     void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
     void setFacingRight(bool right);
     sf::Vector2f getTarget() const override;
-    void shoot(float dt);
+    std::pair<bool, float> EnemyIsVisible() ;
 private:
     std::shared_ptr<VisionLight> m_visionLight;
     bool m_visable = true;

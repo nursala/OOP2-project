@@ -3,6 +3,7 @@
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 #include "GameObject/Character.h"
+#include <iostream>
 
 WeaponLight::WeaponLight(float range, float beamAngle)
     : candle::RadialLight() 
@@ -62,29 +63,43 @@ Character* WeaponLight::getClosestTarget(const Character* self) {
 
     bool lookingForEnemy = dynamic_cast<const Player*>(self);
 
+
     for (auto* fixture : m_hitFixtures) {
         b2Body* body = fixture->GetBody();
-        if (auto* charater = reinterpret_cast<Character*>(body->GetUserData().pointer)) {
-            if (!charater->isVisible())
-                continue;
 
-            if (lookingForEnemy && !dynamic_cast<Enemy*>(charater))
-                continue;
-            if (!lookingForEnemy && !dynamic_cast<Player*>(charater))
-                continue;
+        auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
-            sf::Vector2f charaterPos = charater->getPosition();
-            float dx = charaterPos.x - lightPos.x;
-            float dy = charaterPos.y - lightPos.y;
-            float distSq = dx * dx + dy * dy;
+        if (!character) {
+            continue;
+        }
 
-            if (distSq < minDistSq) {
-                minDistSq = distSq;
-                closestCharacter = charater;
-            }
+
+        if (!character->isVisible()) {
+            continue;
+        }
+
+        if (lookingForEnemy && !dynamic_cast<Enemy*>(character)) {
+            continue;
+        }
+        if (!lookingForEnemy && !dynamic_cast<Player*>(character)) {
+            continue;
+        }
+
+        sf::Vector2f charPos = character->getPosition();
+        float dx = charPos.x - lightPos.x;
+        float dy = charPos.y - lightPos.y;
+        float distSq = dx * dx + dy * dy;
+
+
+        if (distSq < minDistSq) {
+            minDistSq = distSq;
+            closestCharacter = character;
         }
     }
 
     m_hitFixtures.clear();
+
+
+
     return closestCharacter;
 }

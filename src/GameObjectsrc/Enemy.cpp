@@ -8,11 +8,13 @@
 #include <cmath>
 #include "WeponInc/Gun.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
+
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player, int iq)
     : Character(world, TextureManager::instance().get(TextureID::Enemy), { 150, 150}, { 5, 5 }, 0.4f),
     m_playerRef(player)
    
 {
+    m_visable = true;
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, iq);
     m_state = std::make_unique<ChasingState>();
     if (m_state)
@@ -26,15 +28,6 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player, int iq)
 Enemy::~Enemy() {
     if (m_body)
         m_body->GetWorld()->DestroyBody(m_body);
-}
-
-void Enemy::shoot(float dt) {
-    m_body->SetLinearVelocity(b2Vec2_zero);
-
-    if (m_attackStrategy)
-    {
-        m_attackStrategy->attack(*this, dt);
-    }
 }
 
 bool Enemy::isPlayerVisible() const {
@@ -52,21 +45,14 @@ bool Enemy::isPlayerVisible() const {
     return raycast.hit() && raycast.getBody() == m_playerRef.getBody();
 }
 
-
 float Enemy::distanceToPlayer() const 
 {
     sf::Vector2f diff = m_playerRef.getPosition() - getPosition();
     return std::hypot(diff.x, diff.y);
 }
 
-float Enemy::getShootingRange() const
-{
-	if (m_weapon) {
-		return m_weapon->getShootingRange();
-	}
-}
-
 sf::Vector2f Enemy::getTarget() const
 {
     return m_playerRef.getPosition();
 }
+

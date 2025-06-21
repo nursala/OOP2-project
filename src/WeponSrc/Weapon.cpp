@@ -8,6 +8,7 @@ std::unique_ptr<Bullet> Weapon::fire(World& world,
 	m_fireTimer = m_fireCooldown;
 	auto bullet = std::make_unique<Bullet>(world, position, direction);
 	return bullet;
+	m_shootingRange = 100.f; // Set a default shooting range, can be overridden by derived classes
 }
 
 void Weapon::update(sf::Vector2f playerPos, float angle, float dt)

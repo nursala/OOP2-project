@@ -18,3 +18,4 @@ void SimpleShootStrategy::attack(Character& self, float dt) {
         direction /= length;
 	self.getWorld().addBullet(weapon->fire(self.getWorld(), self.getPosition(), direction));
 }
+
