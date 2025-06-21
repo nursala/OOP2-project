@@ -5,7 +5,6 @@
 #include "GameObject/Gift.h"
 #include <iostream>
 
-
 void ContactListener::BeginContact(b2Contact* contact) {
     b2Body* bodyA = contact->GetFixtureA()->GetBody();
     b2Body* bodyB = contact->GetFixtureB()->GetBody();

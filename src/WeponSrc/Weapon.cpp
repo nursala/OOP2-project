@@ -3,17 +3,21 @@
 std::unique_ptr<Bullet> Weapon::fire(World& world,
 	const sf::Vector2f& position, const sf::Vector2f& direction)
 {
+	if (m_fireTimer > 0.f)
+		return nullptr; 
+	m_fireTimer = m_fireCooldown;
 	auto bullet = std::make_unique<Bullet>(world, position, direction);
 	return bullet;
 }
 
-void Weapon::update(sf::Vector2f playerPos, float angle)
+void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 {
-	/*if (m_weaponLight)
+	m_fireTimer -= dt;
+	if (m_weaponLight)
 	{
 		m_weaponLight->setPosition(playerPos);
 		m_weaponLight->update(playerPos, angle);
-	}*/
+	}
 }
 
 void Weapon::draw(sf::RenderWindow& window)
@@ -29,5 +33,10 @@ void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
 
 float Weapon::getShootingRange() const
 {
-	return 0.0f;
+	return m_shootingRange;
+}
+
+WeaponLight* Weapon::getWeaponLight()
+{
+	return m_weaponLight.get();
 }

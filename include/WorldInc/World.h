@@ -23,6 +23,7 @@ public:
     b2World& getWorld();
 	void addBullet(std::unique_ptr<Bullet> bullet);
 private:
+
     void initWorld();
     void loadMapTexture();
     void createPlayer();
@@ -33,6 +34,7 @@ private:
     void drawMap(sf::RenderWindow& window);
     void drawGameObjects(sf::RenderWindow& window);
     void drawLighting(sf::RenderWindow& window);
+    void updateBullets(float deltaTime);
     void buildAllEdges();
     void calcNearlyEdge(sf::RenderWindow& window);
     //void calcNearlyEdge();
