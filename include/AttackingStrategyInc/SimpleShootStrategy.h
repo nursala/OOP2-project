@@ -3,5 +3,5 @@
 
 class SimpleShootStrategy : public AttackStrategy {
 public:
-    void attack(Enemy& enemy, float deltaTime) override;
+    void attack(Character& character, float deltaTime) override;
 };

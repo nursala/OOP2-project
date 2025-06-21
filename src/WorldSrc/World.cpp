@@ -18,7 +18,6 @@ World::World()
     initWorld();
 }
 
-
 void World::initWorld()
 {
     loadMapTexture();
@@ -40,12 +39,7 @@ void World::loadMapTexture()
         throw std::runtime_error("Failed to load map.png!");
     }
     m_mapSprite.setTexture(m_mapTexture);
-
-
-	//m_contactListener = std::make_unique<ContactListener>();
     m_world.SetContactListener(new ContactListener());
-    
-
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 }
 
@@ -54,12 +48,13 @@ void World::createPlayer()
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
     m_player->setPostion({ 10, 10 });
-
+    m_player->init();
 }
 
 void World::createGift(GiftType type,b2Vec2 pos)
 {
 	sf::Vector2f tempPos(pos.x * SCALE, pos.y * SCALE);
+	std::cout << tempPos.x << ", " << tempPos.y << std::endl;
 	switch (type)
 	{
 	case GiftType::ARMOR:
@@ -85,8 +80,9 @@ void World::createGift(GiftType type,b2Vec2 pos)
 	default:
 		throw std::runtime_error("Unknown GiftType");
 	}
+	m_gifts.back()->init();
 	m_gifts.back()->setPostion(pos);
-}
+//}
    /* Factory::instance().registerType<Gift>(
         TextureID::Life,
         std::ref(*this),
@@ -96,6 +92,8 @@ void World::createGift(GiftType type,b2Vec2 pos)
     m_gift = Factory::instance().createAs<Gift>(TextureID::Life);
 }*/
 
+	
+}
 
 void World::createEnemy()
 {
@@ -107,6 +105,7 @@ void World::createEnemy()
         randomIQ);
 
     m_enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
+	m_enemy->init();
 }
 
 void World::setupMap()
@@ -124,13 +123,15 @@ void World::update(sf::RenderWindow& window, float deltaTime)
 {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
-    m_enemy->update(deltaTime);
+    //m_enemy->update(deltaTime);
+
     for (auto& bullet : m_bullets)
     {
         bullet->update(deltaTime);
     }
 	for (auto& gift : m_gifts)
 	{
+        //std::cout << gift->getPositionB2().x << ", " << gift->getPositionB2().y << std::endl;
         if (gift->isDestroyed())
         {
             m_gifts.erase(std::remove_if(m_gifts.begin(), m_gifts.end(),
@@ -138,6 +139,23 @@ void World::update(sf::RenderWindow& window, float deltaTime)
         }
 	}
     updateLightSystem(window);
+    updateBullets(deltaTime);
+    //updateLightSystem(window);
+}
+
+void World::updateBullets(float deltaTime)
+{
+    for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
+        (*it)->update(deltaTime);
+
+        if ((*it)->shouldDestroy()) {
+            m_world.DestroyBody((*it)->getBody());
+            it = m_bullets.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
 void World::updateLightSystem(sf::RenderWindow& window)
@@ -146,7 +164,7 @@ void World::updateLightSystem(sf::RenderWindow& window)
     sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
 
-    calcNearlyEdge();
+    calcNearlyEdge(window);
     m_light.update(playerPos, mouseWorld);
     m_light.updateCastLight(m_closeEdges, m_world);
     sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
@@ -167,6 +185,12 @@ void World::render(sf::RenderWindow& window)
         if (gift->isVisible())
             gift->render(window);
     }
+    for (auto& bullet : m_bullets)
+    {
+        bullet->render(window);
+    }
+
+    //m_gift->render(window);
 
     m_light.drawLights(window);
     DebugEdge(window);
@@ -202,7 +226,7 @@ b2World& World::getWorld()
 void World::addBullet(std::unique_ptr<Bullet> bullet)
 {
 	if (bullet) {
-		bullet->setPostion(bullet->getPositionB2());
+        bullet->init();
 		m_bullets.push_back(std::move(bullet));
 	}
 }
@@ -239,10 +263,14 @@ void World::buildAllEdges()
     }
 }
 
-void World::calcNearlyEdge()
+void World::calcNearlyEdge(sf::RenderWindow& window)
 {
-    sf::Vector2f lightPos = m_light.getPlayerVision()->getPosition();
-    float rangeSq = m_light.getPlayerVision()->getRange() * m_light.getPlayerVision()->getRange();
+    sf::Vector2f viewCenter = window.getView().getCenter();   // مركز المشهد
+    sf::Vector2f viewSize = window.getView().getSize();       // حجم المشهد
+
+    sf::Vector2f lightPos = viewCenter;
+    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; // مجال أوسع قليلًا من الشاشة
+    float rangeSq = radius * radius;
 
     m_closeEdges.clear();
     for (const auto& edge : m_allEdges) {
@@ -265,6 +293,7 @@ void World::calcNearlyEdge()
             m_closeEdges.push_back(edge);
         }
     }
+
 }
 
 void World::DebugEdge(sf::RenderWindow& window)

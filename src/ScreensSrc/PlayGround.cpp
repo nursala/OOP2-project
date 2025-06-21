@@ -59,15 +59,6 @@ void PlayGround::render(sf::RenderWindow& window)
 		button.render(window);
 	}
     m_statusBar.render(window, 10, 100, m_view.getCenter() - m_view.getSize()/2.f);
-	m_world.getWorld().DebugDraw();
+    m_world.getWorld().DebugDraw();
 
 }
-
-//void PlayGround::processEvent(sf::Event& event, sf::RenderWindow& window) {
-//    window.setView(window.getDefaultView());
-//
-//    for (auto& [id, button] : m_buttons) {
-//        button.handleEvent(event, window);
-//    }
-//}
-//

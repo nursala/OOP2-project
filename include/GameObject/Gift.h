@@ -2,7 +2,7 @@
 #include "GameObject/Entity.h" 
 
 
-enum class GiftType { ARMOR, HEALTH, AMMO,ENEMYSPEEDDOWN,SPEEDUP,DAMAGEDOWN,SPY};  
+enum class GiftType { ARMOR, HEALTH,ENEMYSPEEDDOWN,SPEEDUP,SPY};
 
 class Gift : public Entity {  
 public:  

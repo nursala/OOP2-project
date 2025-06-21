@@ -1,15 +1,21 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
-#include <cmath>
-#include "GameObject/Enemy.h"
-
-void SimpleShootStrategy::attack(Enemy& enemy, float deltaTime) {
-    sf::Vector2f dir = enemy.getPlayerPos() - enemy.getPosition();
-    float len = std::hypot(dir.x, dir.y);
-
-    if (len == 0.f)
+#include "GameObject/Character.h"
+#include "WeponInc/Weapon.h"
+#include "GameObject/Entity.h"
+#include "WorldInc/World.h"
+#include <iostream>
+void SimpleShootStrategy::attack(Character& self, float dt) {
+    
+    auto* weapon = self.getWeapon();
+    if (!weapon)
         return;
 
-    sf::Vector2f unitDir = dir / len;
-    enemy.fireBullet(unitDir);
+    sf::Vector2f target = self.getTarget();
+
+    sf::Vector2f direction = target - self.getPosition();
+    float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (length != 0)
+        direction /= length;
+	self.getWorld().addBullet(weapon->fire(self.getWorld(), self.getPosition(), direction));
 }
 

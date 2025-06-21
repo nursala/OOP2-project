@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include "RayCastClosest.h"
 #include "candle/RadialLight.hpp"
+#include "GameObject/Character.h"
 
 class VisionLight : public candle::RadialLight {
 public:
@@ -13,7 +14,7 @@ public:
 
     void update(const sf::Vector2f& position, float rotation);
 
-    void castLightCustom(const candle::EdgeVector::iterator& begin, const candle::EdgeVector::iterator& end, b2World& world, std::unordered_set<b2Fixture*>& hitFixtures);
-    
-
+    void castLightCustom(const candle::EdgeVector::iterator& begin, const candle::EdgeVector::iterator& end, b2World& world);
+private:
+	std::unordered_set<b2Fixture*> m_hitFixtures; 
 };

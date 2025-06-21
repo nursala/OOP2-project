@@ -7,12 +7,17 @@
 #include "RayCastClosest.h"
 #include "candle/RadialLight.hpp"
 
+class Character; // Forward declaration to avoid circular dependency
 class WeaponLight : public candle::RadialLight {
 public:
     WeaponLight(float range, float beamAngle);
 
     void update(const sf::Vector2f& position, float rotation);
 
-    void castLightCustom(const candle::EdgeVector::iterator& begin, const candle::EdgeVector::iterator& end, b2World& world, std::unordered_set<b2Fixture*>& hitFixtures);
+    void castLightCustom(const candle::EdgeVector::iterator& begin,
+        const candle::EdgeVector::iterator& end, b2World& world);
+    Character* getClosestTarget(const Character* self);
+private:
+    std::unordered_set<b2Fixture*> m_hitFixtures;
 
 };

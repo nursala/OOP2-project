@@ -11,8 +11,6 @@ Gift::Gift(World& world, const sf::Texture* texture, sf::Vector2f position, sf::
 {
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
-	std::cout << "Sprite: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
-	std::cout << "Body: " << getPosition().x << ", " << getPosition().y << std::endl;
 }
 
 GiftType Gift::getType() const { return m_type; }

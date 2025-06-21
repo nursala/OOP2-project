@@ -1,10 +1,10 @@
 #pragma once
 
-class Enemy;
+class Character;
 
 class AttackStrategy {
 public:
     virtual ~AttackStrategy() = default;
 
-    virtual void attack(Enemy& enemy, float deltaTime) = 0;
+    virtual void attack(Character& character, float deltaTime) = 0;
 };

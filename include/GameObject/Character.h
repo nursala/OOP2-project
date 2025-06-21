@@ -6,14 +6,13 @@
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "AttackingStrategyInc/AttakStrategy.h"
 #include "StatesInc/State.h"
-#include "WeponInc/Weapon.h"
-#include "VisionLight.h"
 #include "HealthBar.h"
 #include "ArmorBar.h"
 
+class Weapon;
 class World;
 
-class Character : public Entity 
+class Character : public Entity
 {
 public:
     Character(World& world, const sf::Texture* texture, sf::Vector2f position,
@@ -24,22 +23,26 @@ public:
     void update(float deltaTime);
     void render(sf::RenderWindow& window) override;
     const MoveInfo& getLastMoveInfo();
-
+    virtual b2BodyType getBodyType() const override;
     void move(float dt);
+
     virtual void takeDamage(int damage) = 0;
+    virtual void shoot(float dt);
 
-    void shoot(float dt);
+    float getShootingRange() const;
 
-    Weapon* getWeapon() const;
+    Weapon* getWeapon();
+    virtual sf::Vector2f getTarget() const = 0;
 
 protected:
     
     World& m_world;
+
+	Character* m_target;
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
-    std::shared_ptr<VisionLight> m_visionLight;
     MoveInfo m_lastMoveInfo;
     std::unique_ptr <HealthBar> m_healthBar;
     float m_health = 100.f;

@@ -1,4 +1,4 @@
-#include <SFML/System.hpp>Add commentMore actions
+#include <SFML/System.hpp>
 #include <vector>
 #include "LoadMap.h"
 

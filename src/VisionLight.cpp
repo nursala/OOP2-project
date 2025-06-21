@@ -1,5 +1,7 @@
 ﻿#include "VisionLight.h"
 #include <cmath>
+#include "GameObject/Player.h"
+#include "GameObject/Enemy.h"
 
 // البناء
 VisionLight::VisionLight(float range, float beamAngle)
@@ -20,11 +22,10 @@ void VisionLight::update(const sf::Vector2f& position, float rotation) {
 void VisionLight::castLightCustom(
     const candle::EdgeVector::iterator& begin,
     const candle::EdgeVector::iterator& end,
-    b2World& world,
-    std::unordered_set<b2Fixture*>& hitFixtures)
+    b2World& world)
 {
     this->castLight(begin, end); // استدعاء الدالة الأصلية للرسم
-    hitFixtures.clear();
+    m_hitFixtures.clear();
 
     float startAngle = getRotation() - getBeamAngle() / 2.f;
     float endAngle = getRotation() + getBeamAngle() / 2.f;
@@ -47,8 +48,9 @@ void VisionLight::castLightCustom(
         if (callback.hit() && callback.getFixture()) {
             b2Body* body = callback.getFixture()->GetBody();
             if (body->GetType() == b2_dynamicBody) {
-                hitFixtures.insert(callback.getFixture());
+                m_hitFixtures.insert(callback.getFixture());
             }
         }
     }
 }
+

@@ -6,17 +6,20 @@
 #include "StatesInc/IdleStatePlayer.h"
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
+#include "WeponInc/Gun.h"
+#include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 150, 150 }, { 5, 5 }, 0.4)
+    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 5, 5 }, 0.4)
 {
-    m_state = std::make_unique<IdleStatePlayer>();
+	std::cout << "Player created" << std::endl;
+    m_state = std::make_unique<WalkingStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
-   
+	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
     if (m_state)
         m_state->enter(*this);
 
-    //m_weapon = std::make_unique<Weapon>(world);
+    m_weapon = std::make_unique<Gun>();
 
     m_visable = true;
    
@@ -29,8 +32,8 @@ void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
 
 void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
-    /*if (m_weapon)
-        m_weapon->setLight(weaponLight);*/
+    if (m_weapon)
+        m_weapon->setLight(weaponLight);
 }
 
 void Player::setFacingRight(bool right)
@@ -79,5 +82,24 @@ void Player::addSpeed()
 	m_speed += 0.5f; // Increase speed by 0.5
 	if (m_speed > 5.f) m_speed = 5.f; // Cap speed at 5
 	std::cout << "Player speed increased to: " << m_speed << std::endl;
+}
+
+sf::Vector2f Player::getTarget() const
+{
+	return m_target->getPosition();
+}
+
+std::pair<bool, float> Player::EnemyIsVisible()  
+{  
+   auto WeaponLight = m_weapon->getWeaponLight();  
+   if (m_visionLight) {  
+       auto closestTarget = WeaponLight->getClosestTarget(this);  
+       if (closestTarget) {  
+           m_target = closestTarget; 
+           sf::Vector2f diff = getPosition() - closestTarget->getPosition();  
+           return {true, std::sqrt(diff.x * diff.x + diff.y * diff.y)}; // Fix syntax for returning a pair.  
+       }  
+   }  
+   return {false, 0.0f};
 }
 

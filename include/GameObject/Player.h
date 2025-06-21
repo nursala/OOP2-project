@@ -6,6 +6,7 @@
 #include "HealthBar.h"
 #include "ArmorBar.h"
 #include <WeponInc/Weapon.h>
+#include "VisionLight.h"
 
 class World;
 class Player : public Character {  
@@ -20,5 +21,10 @@ public:
    void addArmor();
    void addSpeed();
 
-   
+
+    sf::Vector2f getTarget() const override;
+    std::pair<bool, float> EnemyIsVisible() ;
+private:
+    std::shared_ptr<VisionLight> m_visionLight;
+    bool m_visable = true;
 };

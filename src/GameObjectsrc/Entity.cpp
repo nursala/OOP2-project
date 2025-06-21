@@ -1,22 +1,30 @@
-#include "GameObject/Entity.h"
+﻿#include "GameObject/Entity.h"
 #include "WorldInc/World.h"
 
 #include <iostream>
 
 Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 	sf::Vector2u imageCount, float switchTime)
+	: m_animation(texture, imageCount, switchTime), m_world(world), m_position(position)
+{
+	if (texture)
+	{
+		m_sprite.setTexture(*texture);
+		m_sprite.setTextureRect(m_animation.getUvRect());
+		m_sprite.setPosition(position);
+	}
+}
 
-	: m_animation(texture, imageCount, switchTime)
+void Entity::init() 
 {
 	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(position.x / SCALE, position.y / SCALE);
+	bodyDef.type = getBodyType(); // Use the virtual method to determine body type
+	bodyDef.position.Set(m_position.x / SCALE, m_position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
 
-	customizeBodyDef(bodyDef);
+	customizeBodyDef(bodyDef); 
 
-	m_body = world.getWorld().CreateBody(&bodyDef);
-
+	m_body = m_world.getWorld().CreateBody(&bodyDef);
 
 	b2CircleShape shape;
 	shape.m_radius = 10.f / SCALE;
@@ -24,21 +32,16 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
+	fixtureDef.friction = 0.0f;
 	fixtureDef.restitution = 0.0f;
+	customizeFixtureDef(fixtureDef);
 
 	b2Fixture* fixture = m_body->CreateFixture(&fixtureDef);
 	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
-	m_sprite.setTexture(*texture);
-	m_sprite.setTextureRect(m_animation.getUvRect());
-	this->adjustSpriteToFixtureSize();
-	m_sprite.setPosition(position);
-	m_visable = false;
+	this->adjustSpriteToFixtureSize(); // Adjust sprite size based on fixture size
 }
-
-
 
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)
@@ -87,6 +90,7 @@ Animation& Entity::getAnimation() {
 float Entity::getSpeed() const {
 	return m_speed;
 }
+
 void Entity::adjustSpriteToFixtureSize()
 {
 	if (!m_body || !m_body->GetFixtureList())
@@ -114,4 +118,8 @@ void Entity::adjustSpriteToFixtureSize()
 
 	m_sprite.setScale(scale);
 	m_sprite.setOrigin(frameSize.x / 2.f, frameSize.y / 2.f);
+}
+
+World& Entity::getWorld() {
+	return m_world;
 }
