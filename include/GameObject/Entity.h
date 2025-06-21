@@ -14,7 +14,7 @@ public:
 
 	virtual void update(float deltaTime) = 0;
 	virtual void render(sf::RenderWindow& window);
-
+	virtual void customizeBodyDef(b2BodyDef& bodyDef) {}
 	b2Vec2 getPositionB2() const;
 
 	sf::Vector2f getPosition() const;
@@ -36,14 +36,17 @@ public:
 
 	bool isVisible() const { return m_visable; }
 	void setVisible(bool visible) { m_visable = visible; }
+	void setDestroyed(bool destroyed) { m_destroyed = destroyed; }
+	bool isDestroyed() const { return m_destroyed; }
 
 protected:
+	bool m_visable = false;
+	bool m_destroyed = false;
 	b2Body* m_body = nullptr;
 
 	sf::Sprite m_sprite;
 	Animation m_animation;
 
-	bool m_visable = false;
 	float m_speed = 0.f;
 
 	static constexpr float SCALE = 30.f;

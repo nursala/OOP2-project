@@ -1,13 +1,11 @@
-#include "StatesInc/AttacingState.h"
+#include "StatesInc/AttackingStateEnemy.h"
 #include "StatesInc/ChasingState.h"
 #include "GameObject/Enemy.h"
-#include "iostream"
+#include <iostream>
 
-void AttackingState::update(Enemy& enemy, float dt) {
-    enemy.shootAtPlayer(dt); 
-}
+std::unique_ptr<State> AttackingStateEnemy::handleInput(Character& character) {
+    Enemy& enemy = static_cast<Enemy&>(character);
 
-std::unique_ptr<State<Enemy>> AttackingState::handleInput(Enemy& enemy) {
     if (!enemy.isPlayerVisible() || enemy.distanceToPlayer() > enemy.getShootingRange()) {
         return std::make_unique<ChasingState>();
     }

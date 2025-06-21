@@ -30,7 +30,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     sfml-audio
     sfml-main
     box2d
-    OpenGL::GL 
     Candle-s
 )
 

@@ -2,14 +2,17 @@
 #include "GameObject/Player.h"
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
+#include "WorldInc/World.h"
+#include <iostream> 
 
-
-Gift::Gift(World& world)
-    : Entity(world, TextureManager::instance().get(TextureID::Gift), { 200,200 }, { 1,1 }, 0.4f)
+Gift::Gift(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount)
+	: Entity(world, texture, position, imageCount, 0.4f),
+	m_world(world)
 {
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
-
+	std::cout << "Sprite: " << m_sprite.getPosition().x << ", " << m_sprite.getPosition().y << std::endl;
+	std::cout << "Body: " << getPosition().x << ", " << getPosition().y << std::endl;
 }
 
 GiftType Gift::getType() const { return m_type; }
@@ -25,20 +28,17 @@ void Gift::update(float deltaTime)
 void Gift::render(sf::RenderWindow& window)
 {
 	if (isVisible())
-	window.draw(m_sprite);
+		window.draw(m_sprite);
 }
 
-//void Gift::apply(Player& player) {
-//    //switch (m_type) {
-//    //case GiftType::Armor:
-//    //    player.addArmor(25); // You need to implement addArmor in Player
-//    //    break;
-//    //case GiftType::Life:
-//    //    player.addLife(20); // You need to implement addLife in Player
-//    //    break;
-//    //case GiftType::Ammo:
-//    //    player.addAmmo(10); // You need to implement addAmmo in Player or Weapon
-//    //    break;
-//    //}
-//}
-//
+void Gift::des()
+{
+	if (m_body) {
+		//m_body->SetUserData(nullptr); // Clear user data before destruction
+		// Destroy the Box2D body associated with this gift
+		m_world.getWorld().DestroyBody(m_body);
+		m_body = nullptr;
+	}
+	m_visable = false; // Hide the gift after destruction
+	setDestroyed(true); // Mark the gift as destroyed
+}

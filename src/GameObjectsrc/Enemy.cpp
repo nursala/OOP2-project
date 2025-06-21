@@ -21,6 +21,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player, int iq)
     //m_weapon = std::make_unique<Weapon>(world);
 
     m_speed = 2.f;
+    m_visable = true;
 }
 
 Enemy::~Enemy() {
@@ -44,22 +45,30 @@ float Enemy::distanceToPlayer() const {
     return std::hypot(diff.x, diff.y);
 }
 
-void Enemy::shootAtPlayer(float deltaTime) {
-    m_body->SetLinearVelocity(b2Vec2_zero);
-    if (m_attackStrategy)
-        m_attackStrategy->attack(*this, deltaTime);
-}
-
 void Enemy::fireBullet(const sf::Vector2f& direction) {
     //if (m_weapon)
     //    m_weapon->shoot(getPosition(), direction);
 }
 
-float Enemy::getShootingRange() const {
-    //return m_shootingRange;
-    return 0;
+void Enemy::takeDamage(int damage)
+{
+	if (m_health > 0) {
+		m_health -= damage;
+		if (m_health < 0.f) m_health = 0.f;
+	}
+	// Update the health bar (use Character's member)
+	m_healthBar->setValue(m_health);
 }
-void Enemy::moveToPlayer(float deltaTime) {
-	if (m_moveStrategy)
-		m_lastMoveInfo = m_moveStrategy->move(*this, deltaTime);
+
+float Enemy::getShootingRange() const
+{
+	if (m_weapon) {
+		return m_weapon->getShootingRange();
+	}
+}
+
+void Enemy::speedDown()
+{
+	m_speed -= 0.5f; // Decrease speed by 0.5
+	if (m_speed < 0.f) m_speed = 0.f; // Ensure speed doesn't go below 0
 }

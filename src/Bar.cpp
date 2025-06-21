@@ -1,13 +1,13 @@
 #include "Bar.h"
 #include <algorithm>
 
-Bar::Bar(float width, float height, sf::Color color)
+Bar::Bar(float width, float height, sf::Color color,float maxValue)
 {
-    m_maxValue = 100.f;
-    m_currentValue = 100.f;
+    m_maxValue = maxValue;
+    m_currentValue = maxValue;
 
     m_border.setSize({ width, height });
-    m_border.setFillColor(sf::Color(50, 50, 50, 200));
+    m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineColor(sf::Color::Black);
     m_border.setOutlineThickness(1.f);
     m_border.setOrigin(width / 2, height / 2);
@@ -35,10 +35,28 @@ void Bar::setPosition(const sf::Vector2f& pos) {
 void Bar::draw(sf::RenderWindow& window) const {
     window.draw(m_inner);
     window.draw(m_border);
+
+        sf::Text text;
+        sf::Font font;
+        if (!font.loadFromFile("ARIBLK.TTF")) {
+            throw std::runtime_error("Failed to load font!");
+        }
+        text.setFont(font);
+        text.setString(
+            std::to_string(static_cast<int>(m_currentValue)) + " / " +
+			std::to_string(static_cast<int>(m_maxValue))
+        );
+        text.setCharacterSize(5);
+        text.setFillColor(sf::Color::White);
+        text.setPosition(m_border.getPosition().x - 10.f,
+            m_border.getPosition().y - 3.f);
+        window.draw(text);
 }
 
 void Bar::updateBar() {
     float ratio = (m_maxValue > 0) ? (m_currentValue / m_maxValue) : 0.f;
     float width = m_border.getSize().x;
     m_inner.setSize({ width * ratio, m_border.getSize().y });
+    updateColor();
 }
+

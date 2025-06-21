@@ -7,6 +7,7 @@ LightSystem::LightSystem(sf::Vector2f areaSize)
     m_lightingArea(candle::LightingArea::FOG, { 0.f, 0.f }, areaSize),
 	m_weaponLight(std::make_shared<WeaponLight>(150, 45)) // Initialize WeaponLight with range and beam angle
 {
+
     m_playerVision->setIntensity(0.5f);
     
     m_radialLight.setRange(25); 

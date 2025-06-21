@@ -1,25 +1,23 @@
 ﻿#pragma once
 
-#include "GameObject/Character.h"  // هذا لازم يكون أول شيء
-#include "GameObject/Player.h"  // هذا لازم يكون أول شيء
-#include <SFML/Graphics.hpp>       // لو بدك تستخدم sf::Vector2f مثلاً
+#include "GameObject/Character.h" 
+#include "GameObject/Player.h"  
+#include <SFML/Graphics.hpp>     
 
-// التصريحات فقط، طالما تستخدم مراجع أو مؤشرات
 class LoadMap;
 class World;
 
-class Enemy : public Character<Enemy> {
+class Enemy : public Character {
 public:
     Enemy(World& world, const LoadMap& map, const Player& player, int iq);
     ~Enemy() override;
     sf::Vector2f getPlayerPos() { return m_playerRef.getPosition(); };
     bool isPlayerVisible() const;
     float distanceToPlayer() const;
-    void shootAtPlayer(float deltaTime);
     void fireBullet(const sf::Vector2f& dir);
+    void takeDamage(int damage) override;
     float getShootingRange() const;
-    void moveToPlayer(float deltaTime);
-
+    void speedDown();
 private:
     const Player& m_playerRef;
 };

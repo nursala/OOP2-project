@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Bar.h"
 
-class HealthBar : public  Bar{
+class ArmorBar : public  Bar {
 public:
-    HealthBar(float width, float height, int maxHealth);
+    ArmorBar(float width, float height, int maxArmor);
 	void updateColor() override;
 };

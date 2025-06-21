@@ -3,7 +3,8 @@
 
 #include <iostream>
 
-Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
+Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
+	sf::Vector2u imageCount, float switchTime)
 
 	: m_animation(texture, imageCount, switchTime)
 {
@@ -11,6 +12,9 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position, 
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(position.x / SCALE, position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
+
+	customizeBodyDef(bodyDef);
+
 	m_body = world.getWorld().CreateBody(&bodyDef);
 
 
@@ -45,6 +49,7 @@ void Entity::setPostion(const b2Vec2& position)
 {
 	if (m_body) {
 		m_body->SetTransform({ position.x / SCALE, position.y / SCALE }, m_body->GetAngle());
+		m_sprite.setPosition(position.x, position.y);
 	}
 }
 
