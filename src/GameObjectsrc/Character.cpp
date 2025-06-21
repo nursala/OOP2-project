@@ -6,6 +6,7 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
     m_world(world),
     m_healthBar(100.f, 10.f)
 {
+
 }
 
 void Character::update(float deltaTime) {
@@ -20,7 +21,11 @@ void Character::update(float deltaTime) {
 
     if (m_weapon)
     {
-        //m_weapon->update(getPosition(), m_sprite.getRotation());
+        m_weapon->update(getPosition(),this->getBody()->GetAngle());
+    }
+    if (m_visionLight)
+    {
+        m_visionLight->update(getPosition(), this->getBody()->GetAngle());
     }
 
     m_sprite.setPosition(getPosition());
