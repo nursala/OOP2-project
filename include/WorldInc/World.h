@@ -25,6 +25,7 @@ public:
 private:
 
     void initWorld();
+	void createGifts();
     void loadMapTexture();
     void createPlayer();
     void createGift(GiftType type,b2Vec2 pos);

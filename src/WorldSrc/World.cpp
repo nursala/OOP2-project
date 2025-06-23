@@ -23,11 +23,7 @@ void World::initWorld()
     loadMapTexture();
     createPlayer();
     createEnemy();
-	for (int i = 0; i < 5; ++i) {
-		// Randomly create gifts at different positions
-		b2Vec2 pos(rand() % 100 + 50 * (i + 1), rand() % 100 + 50 * (i + 1));
-		createGift(static_cast<GiftType>(rand() % 5), pos); // Randomly choose a gift type
-	}
+    createGifts();
     setupMap();
     buildAllEdges();
     setupPlayerLight();
@@ -47,8 +43,18 @@ void World::createPlayer()
 {
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
-    m_player->setPostion({ 100, 100 });
+	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
+    m_player->setPostion(b2Vec2(pos.x, pos.y));
     m_player->init();
+}
+
+void World::createGifts()
+{
+	auto giftPositions = m_tileMap.getGiftSpawns();
+	for (const auto& pos : giftPositions)
+	{
+        createGift(static_cast<GiftType>(rand() % 5), b2Vec2(pos.x, pos.y));
+	}
 }
 
 void World::createGift(GiftType type,b2Vec2 pos)
@@ -97,13 +103,7 @@ void World::createGift(GiftType type,b2Vec2 pos)
 
 void World::createEnemy()
 {
-    std::vector<b2Vec2> enemyPositions = {
-        { 50.f, 50.f },
-        { 500.f, 500.f },
-        { 700.f, 100.f },
-        { 800.f, 800.f },
-        { 900.f, 900.f }
-    };
+	auto enemyPositions = m_tileMap.getEnemySpawns();
 
     Factory::instance().registerType<Enemy>(
         TextureID::Enemy,
@@ -117,7 +117,7 @@ void World::createEnemy()
         int randomIQ = rand() % 10 + 1;
 
         auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
-        enemy->setPostion(enemyPositions[i]);
+        enemy->setPostion(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
         enemy->init();           
         m_enemies.push_back(std::move(enemy));
     }

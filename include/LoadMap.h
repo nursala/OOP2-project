@@ -20,7 +20,7 @@ public:
     void parseSpawnLayer(const std::string& layerName, int playerId, int enemyId, int giftId);
 
     // Getters for spawn points
-    const std::vector<sf::Vector2f>& getPlayerSpawns() const;
+    const sf::Vector2f getPlayerSpawns() const;
     const std::vector<sf::Vector2f>& getEnemySpawns() const;
     const std::vector<sf::Vector2f>& getGiftSpawns() const;
 
@@ -45,7 +45,7 @@ private:
 
     std::vector<Layer> m_layers;
 
-    std::vector<sf::Vector2f> m_playerSpawns;
+    sf::Vector2f m_playerSpawn;
     std::vector<sf::Vector2f> m_enemySpawns;
     std::vector<sf::Vector2f> m_giftSpawns;
 
