@@ -21,7 +21,7 @@ public:
 	sf::Vector2f getPosition() const;
 
 
-	void setPostion(const b2Vec2& position);
+	void setPosition(const b2Vec2& position);
 
 	virtual ~Entity() = default;
 
@@ -43,7 +43,7 @@ public:
 	bool isDestroyed() const { return m_destroyed; }
 
 protected:
-	bool m_visable = false;
+	bool m_visable;
 	bool m_destroyed = false;
 	b2Body* m_body = nullptr;
     World& m_world;

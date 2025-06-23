@@ -1,14 +1,17 @@
 ﻿#include "WeponInc/Weapon.h"
+#include "GameObject/Character.h"  // Needed for Character*
+#include "WorldInc/World.h"        // If not already included
 
 std::unique_ptr<Bullet> Weapon::fire(World& world,
-	const sf::Vector2f& position, const sf::Vector2f& direction)
+	const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
 {
 	if (m_fireTimer > 0.f)
-		return nullptr; 
+		return nullptr;
+
 	m_fireTimer = m_fireCooldown;
-	auto bullet = std::make_unique<Bullet>(world, position, direction);
-	return bullet;
 	m_shootingRange = 100.f; // Set a default shooting range, can be overridden by derived classes
+
+	return std::make_unique<Bullet>(world, position, direction, owner);
 }
 
 void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
@@ -23,8 +26,9 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 
 void Weapon::draw(sf::RenderWindow& window)
 {
-	/*if (m_weaponLight)
-		window.draw(*m_weaponLight);*/
+	// You may restore this if you want to visualize weapon light
+	// if (m_weaponLight)
+	//     window.draw(*m_weaponLight);
 }
 
 void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)

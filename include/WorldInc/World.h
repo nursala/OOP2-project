@@ -4,31 +4,34 @@
 #include <Box2D/Box2D.h>
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
-#include "GameObject/Gift.h" // Ensure this include is present
+#include "GameObject/Gift.h"
 #include "LoadMap.h"
 #include "DebugDraw.h"
 #include "LightSystem.h"
+#include "GameObject/Bullet.h"
 #include <vector>
 #include <memory>
-#include "GameObject/Bullet.h"
 
-class World
-{
+class World {
 public:
     World();
+
     void update(sf::RenderWindow& window, float deltaTime);
     void render(sf::RenderWindow& window);
+
     const sf::Vector2f getMapTextureSize() const;
     const Player& getPlayer() const;
     b2World& getWorld();
     void addBullet(std::unique_ptr<Bullet> bullet);
-private:
 
+    std::vector<Enemy*> getEnemies() const;
+
+private:
     void initWorld();
 	void createGifts();
     void loadMapTexture();
     void createPlayer();
-    void createGift(GiftType type,b2Vec2 pos);
+    void createGift(GiftType type, b2Vec2 pos);
     void createEnemy();
     void setupMap();
     void setupPlayerLight();
@@ -46,7 +49,7 @@ private:
     std::unique_ptr<Player> m_player;
     std::vector <std::unique_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
-    std::vector<std::unique_ptr<Gift>> m_gifts; // Gift is now recognized
+    std::vector<std::unique_ptr<Gift>> m_gifts;
 
     sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;

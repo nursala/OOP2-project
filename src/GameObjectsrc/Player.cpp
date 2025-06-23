@@ -10,9 +10,8 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 5, 5 }, 0.4)
+    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4)
 {
-	std::cout << "Player created" << std::endl;
     m_state = std::make_unique<WalkingStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
@@ -20,6 +19,7 @@ Player::Player(World& world)
         m_state->enter(*this);
 
     m_weapon = std::make_unique<Gun>();
+    m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 
     m_visable = true;
    
@@ -34,6 +34,11 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
     if (m_weapon)
         m_weapon->setLight(weaponLight);
+}
+
+float Player::getShootingRange() const
+{
+    return m_weapon->getShootingRange()+300.f;
 }
 
 void Player::setFacingRight(bool right)
@@ -86,20 +91,29 @@ void Player::addSpeed()
 
 sf::Vector2f Player::getTarget() const
 {
-	return m_target->getPosition();
+    if (m_target)
+        return m_target->getPosition();
+    return getPosition(); // fallback: target self
 }
 
-std::pair<bool, float> Player::EnemyIsVisible()  
-{  
-   auto WeaponLight = m_weapon->getWeaponLight();  
-   if (m_visionLight) {  
-       auto closestTarget = WeaponLight->getClosestTarget(this);  
-       if (closestTarget) {  
-           m_target = closestTarget; 
-           sf::Vector2f diff = getPosition() - closestTarget->getPosition();  
-           return {true, std::sqrt(diff.x * diff.x + diff.y * diff.y)}; // Fix syntax for returning a pair.  
-       }  
-   }  
-   return {false, 0.0f};
+
+std::pair<bool, float> Player::EnemyIsVisible()
+{
+    if (!m_weapon) return { false, 0.f };
+
+    auto weaponLight = m_weapon->getWeaponLight();
+    if (!m_visionLight || !weaponLight)
+        return { false, 0.f };
+
+    // Get the closest visible enemy (non-spy)
+    Character* closest = weaponLight->getClosestTarget(this);
+    if (closest) {
+        m_target = closest;
+        sf::Vector2f diff = getPosition() - closest->getPosition();
+        float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+        return { true, dist };
+    }
+
+    return { false, 0.f };
 }
 

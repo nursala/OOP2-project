@@ -35,7 +35,7 @@ void LightSystem::update(const sf::Vector2f& playerPos, const sf::Vector2f& mous
 
 void LightSystem::drawFinalLights(sf::RenderTarget& target) {
     m_lightingArea.clear();
-    m_lightingArea.draw(*m_playerVision);
+    m_lightingArea.draw(*m_weaponLight);
     m_lightingArea.display();
     target.draw(m_lightingArea); // أو Alpha حسب التأثير المراد
 }
@@ -43,7 +43,7 @@ void LightSystem::drawFinalLights(sf::RenderTarget& target) {
 void LightSystem::drawLights(sf::RenderTarget& target) {
     target.draw(m_radialLight);
     target.draw(*m_weaponLight);
-    target.draw(*m_playerVision);
+    //target.draw(*m_playerVision);
 }
 
 std::shared_ptr<VisionLight>& LightSystem::getPlayerVision() {
