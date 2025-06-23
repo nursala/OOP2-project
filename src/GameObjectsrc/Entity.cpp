@@ -50,6 +50,7 @@ void Entity::render(sf::RenderWindow& window) {
 
 void Entity::setPostion(const b2Vec2& position)
 {
+	m_position = {position.x, position.y};
 	if (m_body) {
 		m_body->SetTransform({ position.x / SCALE, position.y / SCALE }, m_body->GetAngle());
 		m_sprite.setPosition(position.x, position.y);

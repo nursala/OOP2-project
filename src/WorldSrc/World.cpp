@@ -47,7 +47,7 @@ void World::createPlayer()
 {
     Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
-    m_player->setPostion({ 10, 10 });
+    m_player->setPostion({ 100, 100 });
     m_player->init();
 }
 
@@ -97,15 +97,30 @@ void World::createGift(GiftType type,b2Vec2 pos)
 
 void World::createEnemy()
 {
-    int randomIQ = rand() % 10 + 1;
-    Factory::instance().registerType<Enemy>(TextureID::Enemy,
+    std::vector<b2Vec2> enemyPositions = {
+        { 50.f, 50.f },
+        { 500.f, 500.f },
+        { 700.f, 100.f },
+        { 800.f, 800.f },
+        { 900.f, 900.f }
+    };
+
+    Factory::instance().registerType<Enemy>(
+        TextureID::Enemy,
         std::ref(*this),
         std::cref(m_tileMap),
-        std::cref(*m_player),
-        randomIQ);
+        std::cref(*m_player)
+    );
 
-    m_enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
-	m_enemy->init();
+    for (int i = 0; i < enemyPositions.size(); ++i)
+    {
+        int randomIQ = rand() % 10 + 1;
+
+        auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
+        enemy->setPostion(enemyPositions[i]);
+        enemy->init();           
+        m_enemies.push_back(std::move(enemy));
+    }
 }
 
 void World::setupMap()
@@ -123,7 +138,10 @@ void World::update(sf::RenderWindow& window, float deltaTime)
 {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
-    //m_enemy->update(deltaTime);
+    for (auto& enemy : m_enemies)
+    {
+        enemy->update(deltaTime);
+    }
 
     for (auto& bullet : m_bullets)
     {
@@ -178,7 +196,10 @@ void World::render(sf::RenderWindow& window)
 
     m_player->render(window);
 
-    m_enemy->render(window);
+    for (auto& enemy : m_enemies)
+    {
+        enemy->render(window);
+    }
 
     for (auto& gift : m_gifts)
     {
@@ -193,7 +214,7 @@ void World::render(sf::RenderWindow& window)
     //m_gift->render(window);
 
     m_light.drawLights(window);
-    DebugEdge(window);
+    //DebugEdge(window);
 }
 
 void World::drawMap(sf::RenderWindow& window)
@@ -211,7 +232,6 @@ void World::drawLighting(sf::RenderWindow& window)
 void World::drawGameObjects(sf::RenderWindow& window)
 {
     m_player->render(window);
-    m_enemy->render(window);
     for (auto& bullet : m_bullets)
     {
         bullet->render(window);

@@ -43,7 +43,7 @@ private:
 
     b2World m_world;
     std::unique_ptr<Player> m_player;
-    std::unique_ptr<Enemy> m_enemy;
+    std::vector <std::unique_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
     std::vector<std::unique_ptr<Gift>> m_gifts; // Gift is now recognized
 

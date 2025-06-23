@@ -51,9 +51,9 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 
 void PlayGround::render(sf::RenderWindow& window)
 {
-    DebugDraw d(&window);
-    d.SetFlags(b2Draw::e_shapeBit);
-    m_world.getWorld().SetDebugDraw(&d);
+    //DebugDraw d(&window);
+    //d.SetFlags(b2Draw::e_shapeBit);
+    //m_world.getWorld().SetDebugDraw(&d);
     m_world.render(window);
 	for (auto& [id, button] : m_buttons) {
 		button.render(window);

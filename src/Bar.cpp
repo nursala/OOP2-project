@@ -36,21 +36,6 @@ void Bar::draw(sf::RenderWindow& window) const {
     window.draw(m_inner);
     window.draw(m_border);
 
-        sf::Text text;
-        sf::Font font;
-        if (!font.loadFromFile("ARIBLK.TTF")) {
-            throw std::runtime_error("Failed to load font!");
-        }
-        text.setFont(font);
-        text.setString(
-            std::to_string(static_cast<int>(m_currentValue)) + " / " +
-			std::to_string(static_cast<int>(m_maxValue))
-        );
-        text.setCharacterSize(5);
-        text.setFillColor(sf::Color::White);
-        text.setPosition(m_border.getPosition().x - 10.f,
-            m_border.getPosition().y - 3.f);
-        window.draw(text);
 }
 
 void Bar::updateBar() {
