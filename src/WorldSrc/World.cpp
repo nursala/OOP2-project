@@ -19,14 +19,7 @@ void World::initWorld() {
     loadMapTexture();
     createPlayer();
     createEnemy();
-    int begin = static_cast<int>(TextureID::ARMOR);
-    for (int i = begin; i < static_cast<int>(TextureID::SIZE); i++) {
-        Factory::instance().registerType<Gift>(TextureID(i), std::ref(*this), TextureManager::instance().get(TextureID(i)));
-    }
-    for (int i = 0; i < 7; ++i) {
-        b2Vec2 pos(rand() % 100 + 50 * (i + 1), rand() % 100 + 50 * (i + 1));
-        createGift(GiftType::SPY, pos);
-    }
+    createGifts();
     setupMap();
     buildAllEdges();
     setupPlayerLight();
@@ -44,12 +37,27 @@ void World::loadMapTexture() {
 void World::createPlayer() {
 
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
-    m_player->setPosition({ 10, 10 });
+	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
+    m_player->setPosition(b2Vec2(pos.x, pos.y));
     m_player->init();
 }
 
-void World::createGift(GiftType type, b2Vec2 pos) {
+void World::createGifts()
+{
+    int begin = static_cast<int>(TextureID::ARMOR);
+    for (int i = begin; i < static_cast<int>(TextureID::SIZE); i++) {
+        Factory::instance().registerType<Gift>(TextureID(i), std::ref(*this), TextureManager::instance().get(TextureID(i)));
+    }
+	auto giftPositions = m_tileMap.getGiftSpawns();
+	int giftsTypeCount = static_cast<int>(GiftType::SIZE);
+	for (const auto& pos : giftPositions)
+	{
+        createGift(static_cast<GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
+	}
+}
 
+void World::createGift(GiftType type,b2Vec2 pos)
+{
     auto textureId = static_cast<TextureID>(static_cast<int>(type)+2);
     m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
     m_gifts.back()->setType(type);
@@ -57,19 +65,24 @@ void World::createGift(GiftType type, b2Vec2 pos) {
     m_gifts.back()->setPosition(pos);
 }
 
-void World::createEnemy() {
+void World::createEnemy()
+{
+	auto enemyPositions = m_tileMap.getEnemySpawns();
 
-    for (int i = 0; i < 3; ++i) {
+    Factory::instance().registerType<Enemy>(
+        TextureID::Enemy,
+        std::ref(*this),
+        std::cref(m_tileMap),
+        std::cref(*m_player)
+    );
+
+    for (int i = 0; i < enemyPositions.size(); ++i)
+    {
         int randomIQ = rand() % 10 + 1;
-        Factory::instance().registerType<Enemy>(TextureID::Enemy,
-            std::ref(*this),
-            std::cref(m_tileMap),
-            std::cref(*m_player),
-            randomIQ);
 
         auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
-        enemy->init();
-        enemy->setPosition({ float(300 + i * 100), float(200 + i * 50) });
+        enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
+        enemy->init();           
         m_enemies.push_back(std::move(enemy));
     }
 }
@@ -87,7 +100,10 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
     for (auto& enemy : m_enemies)
+    {
         enemy->update(deltaTime);
+    }
+
     for (auto& bullet : m_bullets)
         bullet->update(deltaTime);
     for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
@@ -127,13 +143,16 @@ void World::render(sf::RenderWindow& window) {
 
     window.draw(m_mapSprite);
     m_player->render(window);
+
     for (auto& enemy : m_enemies)
         enemy->render(window);
+
     for (auto& gift : m_gifts)
         if (gift->isVisible()) gift->render(window);
     for (auto& bullet : m_bullets)
         bullet->render(window);
     m_light.drawLights(window);
+    DebugEdge(window);
 }
 
 void World::drawMap(sf::RenderWindow& window) {
@@ -147,8 +166,6 @@ void World::drawLighting(sf::RenderWindow& window) {
 
 void World::drawGameObjects(sf::RenderWindow& window) {
     m_player->render(window);
-    for (auto& enemy : m_enemies)
-        enemy->render(window);
     for (auto& bullet : m_bullets)
         bullet->render(window);
 }

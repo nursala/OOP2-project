@@ -28,6 +28,7 @@ public:
 
 private:
     void initWorld();
+	void createGifts();
     void loadMapTexture();
     void createPlayer();
     void createGift(GiftType type, b2Vec2 pos);
@@ -41,11 +42,12 @@ private:
     void updateBullets(float deltaTime);
     void buildAllEdges();
     void calcNearlyEdge(sf::RenderWindow& window);
+    //void calcNearlyEdge();
     void DebugEdge(sf::RenderWindow& window);
 
     b2World m_world;
     std::unique_ptr<Player> m_player;
-    std::vector<std::unique_ptr<Enemy>> m_enemies;
+    std::vector <std::unique_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
     std::vector<std::unique_ptr<Gift>> m_gifts;
 

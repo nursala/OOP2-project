@@ -6,9 +6,8 @@
 //playground.cpp
 PlayGround::PlayGround()
 {   
-    m_view.setCenter({m_world.getPlayer().getPosition().x / 2 ,m_world.getPlayer().getPosition().y / 2});
-    m_view.setSize(1300/ 3.f, 1000 / 3.f);
-
+    m_view.setSize(1280, 720);
+	m_view.zoom(0.5f); // Zoom out to see more of the world
 }
 
 void PlayGround::init()
