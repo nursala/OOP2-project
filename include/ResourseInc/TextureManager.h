@@ -13,6 +13,7 @@ enum class TextureID {
 	ENEMYSPEEDDOWN,
 	SPEEDUP,
 	SPY,
+	MARKET,
 
 };
 
@@ -26,7 +27,9 @@ const std::unordered_map<TextureID, std::string> TextureFileMap = {
 	{TextureID::ENEMYSPEEDDOWN, "EnemySpeedDownGift.png"},
 	{TextureID::SPEEDUP, "SpeedUpGift.png"},
 	{ TextureID::SPY, "spy.png" },
-	{ TextureID::Kill, "kill.png" }}; 
+	{ TextureID::Kill, "kill.png" },
+	{ TextureID::MARKET, "market.JPG" },
+};
 
 class TextureManager : public BaseResourceManager<sf::Texture, TextureID> {
 public:

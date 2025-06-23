@@ -9,13 +9,13 @@ public:
     const sf::IntRect& getUvRect() const;
 
 private:
-    sf::Vector2u m_imageCount;     // عدد الإطارات (أعمدة، صفوف)
-    sf::Vector2u m_currentImage;   // الإطار الحالي (x: العمود، y: الصف)
+    sf::Vector2u m_imageCount;    
+    sf::Vector2u m_currentImage;   
 
-    float m_totalTime;             // الوقت التراكمي بين الإطارات
-    float m_switchTime;            // الوقت بين كل إطار
-    int m_totalImages;             // عدد الإطارات الفعلي للحركة الحالية
-    int m_displayed;               // كم إطار تم عرضه حتى الآن
+    float m_totalTime;            
+    float m_switchTime;            
+    int m_totalImages;            
+    int m_displayed;               
 
-    sf::IntRect m_uvRect;          // المنطقة الحالية من الـ texture
+    sf::IntRect m_uvRect;         
 };

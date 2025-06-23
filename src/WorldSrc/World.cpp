@@ -60,7 +60,6 @@ void World::createGifts()
 void World::createGift(GiftType type,b2Vec2 pos)
 {
 	sf::Vector2f tempPos(pos.x * SCALE, pos.y * SCALE);
-	std::cout << tempPos.x << ", " << tempPos.y << std::endl;
 	switch (type)
 	{
 	case GiftType::ARMOR:
@@ -88,6 +87,7 @@ void World::createGift(GiftType type,b2Vec2 pos)
 	}
 	m_gifts.back()->init();
 	m_gifts.back()->setPostion(pos);
+
 //}
    /* Factory::instance().registerType<Gift>(
         TextureID::Life,
@@ -97,8 +97,6 @@ void World::createGift(GiftType type,b2Vec2 pos)
     );
     m_gift = Factory::instance().createAs<Gift>(TextureID::Life);
 }*/
-
-	
 }
 
 void World::createEnemy()
@@ -228,7 +226,6 @@ void World::drawLighting(sf::RenderWindow& window)
     m_light.drawLights(window);
 }
 	
-
 void World::drawGameObjects(sf::RenderWindow& window)
 {
     m_player->render(window);

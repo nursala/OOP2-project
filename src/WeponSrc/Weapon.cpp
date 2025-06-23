@@ -41,3 +41,14 @@ WeaponLight* Weapon::getWeaponLight()
 {
 	return m_weaponLight.get();
 }
+
+//int Weapon::getPrice(WeaponType type)
+//{
+//	switch (type) {
+//	case WeaponType::BasicGun: return 0;
+//	case WeaponType::Shotgun:  return 200;
+//	case WeaponType::Sniper:   return 300;
+//	case WeaponType::Laser:    return 500;
+//	}
+//	return 0;
+//}
