@@ -29,7 +29,7 @@ public:
     virtual void takeDamage(int damage) = 0;
     virtual void shoot(float dt);
 
-    float getShootingRange() const;
+    virtual float getShootingRange() const;
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;

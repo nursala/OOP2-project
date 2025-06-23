@@ -3,12 +3,12 @@
 #include "WorldInc/World.h"
 #include "ResourseInc/TextureManager.h"
 
-Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction)
-    : Entity(world, TextureManager::instance().get(TextureID::HEALTH), position, { 1, 1 }, 0.1f),
-    m_direction(direction)
+Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
+    : Entity(world, TextureManager::instance().get(TextureID::BULLET), position, { 1, 1 }, 0.1f),
+    m_direction(direction), m_owner(owner)
 {
-	m_visable = true;
-    m_speed = 10.f; 
+    m_visable = true;
+    m_speed = 10.f;
 }
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)

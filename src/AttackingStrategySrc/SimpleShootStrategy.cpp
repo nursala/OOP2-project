@@ -4,8 +4,9 @@
 #include "GameObject/Entity.h"
 #include "WorldInc/World.h"
 #include <iostream>
+
 void SimpleShootStrategy::attack(Character& self, float dt) {
-    
+
     auto* weapon = self.getWeapon();
     if (!weapon)
         return;
@@ -16,6 +17,6 @@ void SimpleShootStrategy::attack(Character& self, float dt) {
     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     if (length != 0)
         direction /= length;
-	self.getWorld().addBullet(weapon->fire(self.getWorld(), self.getPosition(), direction));
+	self.getWorld().addBullet(weapon->fire(self.getWorld(), self.getPosition(), direction,&self));
 }
 

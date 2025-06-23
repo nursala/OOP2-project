@@ -15,6 +15,7 @@ Bar::Bar(float width, float height, sf::Color color,float maxValue)
     m_inner.setSize({ width, height });
     m_inner.setFillColor(color);
     m_inner.setOrigin(width / 2, height / 2);
+	setFont();
 }
 
 void Bar::setMaxValue(float maxValue) {
@@ -37,11 +38,7 @@ void Bar::draw(sf::RenderWindow& window) const {
     window.draw(m_border);
 
         sf::Text text;
-        sf::Font font;
-        if (!font.loadFromFile("ARIBLK.TTF")) {
-            throw std::runtime_error("Failed to load font!");
-        }
-        text.setFont(font);
+        text.setFont(m_font);
         text.setString(
             std::to_string(static_cast<int>(m_currentValue)) + " / " +
 			std::to_string(static_cast<int>(m_maxValue))
@@ -58,5 +55,10 @@ void Bar::updateBar() {
     float width = m_border.getSize().x;
     m_inner.setSize({ width * ratio, m_border.getSize().y });
     updateColor();
+}
+
+void Bar::setFont()
+{
+    m_font.loadFromFile("ARIBLK.TTF");
 }
 

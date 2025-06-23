@@ -8,7 +8,6 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 
 {
     m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
-    m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 }
 
 void Character::update(float deltaTime) {
@@ -49,7 +48,8 @@ void Character::update(float deltaTime) {
 void Character::render(sf::RenderWindow& window) {
     window.draw(m_sprite);
     m_healthBar->draw(window);
-	m_armorBar->draw(window);
+	if(m_armorBar)
+		m_armorBar->draw(window);
 }
 
 const MoveInfo& Character::getLastMoveInfo()
