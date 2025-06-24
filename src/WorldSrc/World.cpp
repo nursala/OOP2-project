@@ -101,13 +101,25 @@ void World::setupPlayerLight() {
 void World::update(sf::RenderWindow& window, float deltaTime) {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
-    for (auto& enemy : m_enemies)
+	m_player->rotateTowardMouse(window);
+    for (auto enemy = m_enemies.begin(); enemy != m_enemies.end();)
     {
-        enemy->update(deltaTime);
+        if ((*enemy)->isDestroyed()) {
+            //m_world.DestroyBody((*enemy)->getBody());
+            enemy = m_enemies.erase(enemy);
+            //(*enemy) = nullptr; // Set to nullptr to avoid dangling pointer
+            continue; // Skip to the next iteration
+        }
+        else 
+        {
+            (*enemy)->update(deltaTime);
+            ++enemy;
+        }
     }
 
     for (auto& bullet : m_bullets)
         bullet->update(deltaTime);
+
     for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
 		//std::cout << "radius: " << (*it)->getSpriteRadius().x << " " << (*it)->getSpriteRadius().y << std::endl;
 		

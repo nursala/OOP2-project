@@ -18,7 +18,7 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     sf::Vector2f playerPos = m_player.getPosition();
 
     float distToPlayer = distance(enemyPos, playerPos);
-    if (distToPlayer < 150.f && m_iqLevel < 10) ++m_iqLevel;
+    if (distToPlayer < 350.f && m_iqLevel < 10) ++m_iqLevel;
     if (distToPlayer > 400.f && m_iqLevel > 1) --m_iqLevel;
 
     float chanceToUseAStar = m_iqLevel / 10.f;
@@ -91,7 +91,9 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
         float speed = character.getSpeed();
         body->SetLinearVelocity(b2Vec2(dir.x * speed, dir.y * speed));
     }
-
+    sf::Vector2f direction = playerPos - enemyPos; // getPosition() returns player center
+    float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+    character.setRotation(angle); // Implement this in your Character or Sprite wrapper
     return {
         2,
         dir.x >= 0,

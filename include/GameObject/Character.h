@@ -20,21 +20,23 @@ public:
 
     virtual ~Character() = default;
 
-    void update(float deltaTime);
-    void render(sf::RenderWindow& window) override;
+    virtual void update(float );
+    void render(sf::RenderWindow& ) override;
     const MoveInfo& getLastMoveInfo();
     virtual b2BodyType getBodyType() const override;
     void move(float dt);
 
-    virtual void takeDamage(int damage) = 0;
-    virtual void shoot(float dt);
+    virtual void takeDamage(int ) = 0;
+    virtual void shoot(float );
 
     float getShootingRange() const;
-    void setShootingRange(float range);
+    void setShootingRange(float );
+	void setRotation(float angle);
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;
 	float getSpeed() const { return m_speed; }
+    virtual void rotateTowardMouse(sf::RenderWindow&) {};
 
 protected:
     

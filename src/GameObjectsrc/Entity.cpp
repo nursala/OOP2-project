@@ -14,6 +14,7 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		m_sprite.setPosition(position);
 	}
 	m_bodyRadius = 1.2f; // Default radius for circle bodies
+	m_initialPosition = m_position;
 }
 
 void Entity::init() 

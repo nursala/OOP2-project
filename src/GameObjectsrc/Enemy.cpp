@@ -20,8 +20,8 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
         m_state->enter(*this);
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<Weapon>(WeaponType::HandGun);
-    m_weapon->setShootingRange(150.f);
+    m_weapon = std::make_unique<HandGun>();
+    //m_weapon->setShootingRange(150.f);
     m_speed = 5.f;
     m_armorBar = nullptr;
 }
@@ -88,6 +88,15 @@ sf::Vector2f Enemy::getTarget() const {
     }
 
     return closestEnemyPos;
+}
+
+void Enemy::update(float deltaTime)
+{
+	Character::update(deltaTime);
+    // check if the health is 0 so kill me
+	if (m_health <= 0.f) {
+		setDestroyed(true); // Mark as destroyed
+	}
 }
 
 void Enemy::speedDown() {

@@ -42,7 +42,6 @@ void Character::update(float deltaTime) {
         m_armorBar->setValue(m_armor);
 		//std::cout << getShootingRange() << std::endl;
     }
-	
 }
 
 void Character::render(sf::RenderWindow& window) {
@@ -95,5 +94,13 @@ void Character::setShootingRange(float range)
 {
 	if (m_weapon) {
 		m_weapon->setShootingRange(range);
+	}
+}
+
+void Character::setRotation(float angle)
+{
+	if (m_body) {
+		m_body->SetTransform(b2Vec2(getPosition().x / SCALE, getPosition().y / SCALE), angle * SCALE);
+		m_sprite.setRotation(angle);
 	}
 }

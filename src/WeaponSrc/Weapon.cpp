@@ -21,7 +21,7 @@ std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
 	{
 		// Shotgun logic - fire one bullet straight and two bullets at angles
 		// Straight bullet
-		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage));
+		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage, m_shootingRange));
 		
 		// Left bullet (20 degrees counterclockwise)
 		float leftAngle = -20.f * 3.14159f / 180.f; // Convert to radians
@@ -29,7 +29,7 @@ std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
 			direction.x * std::cos(leftAngle) - direction.y * std::sin(leftAngle),
 			direction.x * std::sin(leftAngle) + direction.y * std::cos(leftAngle)
 		);
-		bullets.push_back(std::make_unique<Bullet>(world, position, leftDir, owner, m_damage));
+		bullets.push_back(std::make_unique<Bullet>(world, position, leftDir, owner, m_damage, m_shootingRange));
 		
 		// Right bullet (20 degrees clockwise)
 		float rightAngle = 20.f * 3.14159f / 180.f; // Convert to radians
@@ -37,10 +37,10 @@ std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
 			direction.x * std::cos(rightAngle) - direction.y * std::sin(rightAngle),
 			direction.x * std::sin(rightAngle) + direction.y * std::cos(rightAngle)
 		);
-		bullets.push_back(std::make_unique<Bullet>(world, position, rightDir, owner, m_damage));
+		bullets.push_back(std::make_unique<Bullet>(world, position, rightDir, owner, m_damage, m_shootingRange));
 	}
 	else {
-		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage));
+		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage, m_shootingRange));
 	}
 	return bullets;
 }
@@ -50,7 +50,7 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	m_fireTimer -= dt;
 	if (m_weaponLight)
 	{
-		m_weaponLight->setPosition(playerPos);
+		m_weaponLight->setPosition(playerPos - sf::Vector2f(20.f, 20.f));
 		m_weaponLight->update(playerPos, angle);
 	}
 }
@@ -65,6 +65,7 @@ void Weapon::draw(sf::RenderWindow&)
 void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
 	m_weaponLight = weaponLight;
+	m_weaponLight->setRange(m_shootingRange);
 }
 
 float Weapon::getShootingRange() const

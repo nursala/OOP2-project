@@ -18,6 +18,7 @@ public:
     void takeDamage(int damage) override;
     void speedDown();
     sf::Vector2f getTarget() const override;
+	void update(float deltaTime) override;
 
     // Spy methods
     void setSpy(bool value);

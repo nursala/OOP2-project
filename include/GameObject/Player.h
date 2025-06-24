@@ -20,9 +20,9 @@ public:
    void addHealth();
    void addArmor();
    void addSpeed();
-
     sf::Vector2f getTarget() const override;
     std::pair<bool, float> EnemyIsVisible() ;
+	void rotateTowardMouse(sf::RenderWindow& window) ;
 private:
     std::shared_ptr<VisionLight> m_visionLight;
     bool m_visable = true;

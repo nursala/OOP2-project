@@ -19,11 +19,11 @@ Player::Player(World& world)
     if (m_state)
         m_state->enter(*this);
 
-    m_weapon = std::make_unique<Shotgun>();
+    m_weapon = std::make_unique<HandGun>();
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
     m_speed = 10.f;
     m_visable = true;
-   
+	
 }
 
 void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
@@ -81,9 +81,10 @@ void Player::addArmor()
 void Player::addSpeed()
 {
 	m_speed += 0.5f; // Increase speed by 0.5
-	if (m_speed > 5.f) m_speed = 5.f; // Cap speed at 5
+	if (m_speed > 17.f) m_speed = 17.f; // Cap speed at 5
 	std::cout << "Player speed increased to: " << m_speed << std::endl;
 }
+
 
 sf::Vector2f Player::getTarget() const
 {
@@ -111,5 +112,16 @@ std::pair<bool, float> Player::EnemyIsVisible()
     }
 
     return { false, 0.f };
+}
+
+
+
+void Player::rotateTowardMouse(sf::RenderWindow& window)
+{
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+    sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+    sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
+    float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+    setRotation(angle); // Implement this in your Character or Sprite wrapper
 }
 

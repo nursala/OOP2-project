@@ -26,10 +26,12 @@ void ContactListener::BeginContact(b2Contact* contact) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
             if (bullet->getOwner() != player) {
                 // Prevent spy bullets from damaging player
-                if (auto spy = dynamic_cast<Enemy*>(bullet->getOwner()); spy && spy->isSpy())
-                    return;
+                if (auto enemy = dynamic_cast<Enemy*>(bullet->getOwner()))
+                    if (enemy->isSpy())
+                        return;
 
                 player->takeDamage(bullet->getDamage());
+                bullet->setDestroyed(true);
             }
         }
         else if (auto gift = dynamic_cast<Gift*>(entityB)) {
@@ -74,8 +76,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 // Prevent player bullets from damaging spy
                 if (enemy->isSpy() && dynamic_cast<Player*>(bullet->getOwner()))
                     return;
-
+                
                 enemy->takeDamage(bullet->getDamage());
+                bullet->setDestroyed(true);
             }
         }
     }

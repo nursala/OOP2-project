@@ -14,7 +14,7 @@ LightSystem::LightSystem(sf::Vector2f areaSize)
     m_radialLight.setFade(true);
     m_radialLight.setColor(sf::Color::Blue);
     
-    m_weaponLight->setRange(100.f);
+    m_weaponLight->setRange(200.f);
     m_weaponLight->setFade(true);
     m_weaponLight->setIntensity(1.f);
     m_weaponLight->setColor(sf::Color::Red);
@@ -27,7 +27,16 @@ void LightSystem::update(const sf::Vector2f& playerPos, const sf::Vector2f& mous
 {
     float angle = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x) * 180.f / 3.14159265f;
     m_playerVision->update(playerPos, angle);
-    m_weaponLight->update(playerPos, angle);
+    sf::Vector2f weaponLightOffset(10.f, 10.f);
+    float radians = angle * 3.14159265f / 180.f;
+    sf::Vector2f rotatedOffset(
+        weaponLightOffset.x * std::cos(radians) - weaponLightOffset.y * std::sin(radians),
+        weaponLightOffset.x * std::sin(radians) + weaponLightOffset.y * std::cos(radians)
+    );
+
+    m_playerVision->update(playerPos, angle);
+    m_weaponLight->update(playerPos + rotatedOffset, angle);
+    //m_weaponLight->update(playerPos + sf::Vector2f(10.f, 10.f), angle);
     m_radialLight.setPosition(playerPos);
 }
 

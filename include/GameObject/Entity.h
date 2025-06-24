@@ -46,6 +46,7 @@ protected:
 	sf::Sprite m_sprite;
 	Animation m_animation;
 	sf::Vector2f m_position;
+	sf::Vector2f m_initialPosition;
 	
 	virtual void customizeBodyDef(b2BodyDef&) {}
 	virtual void customizeFixtureDef(b2FixtureDef&) {}
