@@ -8,14 +8,12 @@
 #include "GameObject/Bullet.h"
 #include <string>
 
-//enum class WeaponType {
-//    BasicGun,
-//    Shotgun,
-//    Sniper,
-//    Laser
-//};
-
-
+enum class WeaponType {
+    BasicGun,
+    Shotgun,
+    Sniper,
+    Rifle
+};
 
 class Character;
 class World;
@@ -37,11 +35,9 @@ public:
     WeaponLight* getWeaponLight();
     std::shared_ptr<WeaponLight> m_weaponLight;
 
-    //static int getPrice(WeaponType type);
+    static int getPrice(WeaponType type);
 
 protected:
-    float m_bulletSpeed = 0;
-    std::shared_ptr<WeaponLight> m_weaponLight;
 
     float m_bulletSpeed = 0;
     float m_shootingRange = 0;

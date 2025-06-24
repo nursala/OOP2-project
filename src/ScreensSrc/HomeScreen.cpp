@@ -1,8 +1,9 @@
 #include "ScreensInc/HomeScreen.h"
 #include "ResourseInc/SoundManager.h"
-#include "CommandInc/SwitchScreenCommand.h"
+#include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
 #include "CommandInc/StopMusicCommand.h"
+#include "ScreensInc/PlayGround.h"
 
 HomeScreen::HomeScreen()
 {
@@ -17,23 +18,24 @@ void HomeScreen::initButtons()
 {
     auto [playIt, insertedPlay] = m_buttons.emplace(
         ButtonID::Play,
-        Button(sf::Vector2f(20, 20), sf::Vector2f(200, 50), "Play")
+        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 100), "Play")
     );
-    playIt->second.setCommand(std::make_unique<SwitchScreenCommand>(
-        m_changeScreen, ScreenID::Game
-    ));
+    playIt->second.setCommand(std::make_unique<PushScreenCommand<PlayGround>>());
 
     auto [exitIt, insertedExit] = m_buttons.emplace(
         ButtonID::Exit,
-        Button(sf::Vector2f(20, 20), sf::Vector2f(250, 50), "Exit")
+        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 160), "Exit")
     );
-
-    exitIt->second.setCommand(std::make_unique<ExitCommand>(
-    ));
+    exitIt->second.setCommand(std::make_unique<ExitCommand>());
 
     auto [stopMusicIt, insertedStop] = m_buttons.emplace(
         ButtonID::Stop,
-        Button(sf::Vector2f(50, 50), sf::Vector2f(300, 50), "Stop")
+        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 220), "Stop")
     );
-	stopMusicIt->second.setCommand(std::make_unique<StopMusicCommand>());
+    stopMusicIt->second.setCommand(std::make_unique<StopMusicCommand>());
+}
+
+ScreenID HomeScreen::getScreenID() const
+{
+	return ScreenID::Home;
 }

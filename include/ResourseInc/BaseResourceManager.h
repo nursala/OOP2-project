@@ -6,7 +6,8 @@
 #include <memory>
 
 template <typename ResourceType, typename IdentifierType>
-class BaseResourceManager {
+class BaseResourceManager 
+{
 public:
     bool load(const IdentifierType& id, const std::string& filename);
     const ResourceType* get(const IdentifierType& id) const;

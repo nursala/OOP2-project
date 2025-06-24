@@ -1,15 +1,17 @@
-#include "ScreensInc/Button.h"
+﻿#include "ScreensInc/Button.h"
 #include <iostream>
-Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text)
-{
+#include "Controller.h"
+
+Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text) {
 	m_shape.setSize(size);
 	m_shape.setPosition(position);
-	std::cout << "Button position: " << position.x << ", " << position.y << std::endl;
 	m_shape.setFillColor(m_idleColor);
 
+	m_text.setFont(Controller::getInstance().getFont()); // ← استخدام الخط المشترك
 	m_text.setString(text);
 	m_text.setCharacterSize(24);
 	m_text.setFillColor(sf::Color::Black);
+	m_text.setPosition(position.x + 10, position.y + 10);
 }
 
 void Button::setCommand(std::unique_ptr<Command> command)
@@ -46,4 +48,9 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
 			}
 		}
 	}
+}
+
+void Button::setText(const std::string& text)
+{
+	m_text.setString(text);
 }

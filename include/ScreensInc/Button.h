@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <string>
@@ -9,9 +9,12 @@ enum class ButtonID {
     Settings,
     Exit,
     Stop,
-    Restart,
+	Back,
+	BasicGun,
+	Shotgun,
+	Sniper,
+	Rifle,
 };
-
 
 namespace std {
     template<>
@@ -31,9 +34,10 @@ public:
     void updateHover(const sf::RenderWindow& window);
     void render(sf::RenderWindow& window);
     void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
-
+    void setText(const std::string& text);
 private:
     sf::RectangleShape m_shape;
+
     sf::Text m_text;
     std::unique_ptr<Command> m_command;
 	sf::Color m_defaultColor = sf::Color::White; 
