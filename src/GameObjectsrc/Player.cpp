@@ -6,11 +6,12 @@
 #include "StatesInc/IdleStatePlayer.h"
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
-#include "WeponInc/Gun.h"
+#include "WeaponInc/HandGun.h"
+#include "WeaponInc/Shotgun.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4)
+    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
 {
     m_state = std::make_unique<WalkingStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
@@ -18,11 +19,12 @@ Player::Player(World& world)
     if (m_state)
         m_state->enter(*this);
 
-    m_weapon = std::make_unique<Gun>();
+    m_weapon = std::make_unique<Shotgun>();
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
     m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
     m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
 
+    m_speed = 10.f;
     m_visable = true;
    
 }
@@ -40,10 +42,7 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
     }
 }
 
-float Player::getShootingRange() const
-{
-    return m_weapon->getShootingRange()+300.f;
-}
+
 
 void Player::setFacingRight(bool right)
 {

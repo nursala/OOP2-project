@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-ArmorBar::ArmorBar(float width, float height, int maxArmor)
+ArmorBar::ArmorBar(float width, float height, float maxArmor)
 	: Bar(width, height, sf::Color::Blue, maxArmor)
 {
 }

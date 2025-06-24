@@ -1,97 +1,110 @@
-﻿//controller.cpp
-#include "Controller.h"
-#include <SFML/Graphics.hpp>
-#include "ResourseInc/SoundManager.h"
-#include "ResourseInc/TextureManager.h"
-#include <iostream>
-#include <cmath>
-#include "Factory.h"
-#include "ScreensInc/HomeScreen.h"
+﻿#include "Controller.h"
 #include "ScreensInc/PlayGround.h"
+#include "ScreensInc/HomeScreen.h"
+#include "ScreensInc/Market.h"
+#include "ScreensInc/Help.h"
 
-Controller::Controller()
-{
-	sf::ContextSettings settings;
-	settings.antialiasingLevel = 16;
-
-	m_window.create(sf::VideoMode(1280, 720), "test", sf::Style::Default, settings);
-
-	m_changeScreen = [this](ScreenID id) {
-		m_nextScreen = id;
-		};
-	setScreen(ScreenID::Game);
-	//SoundManager::instance().play(SoundID::BackgroundMusic);
-	m_window.setFramerateLimit(60);
+Controller& Controller::getInstance() {
+    static Controller instance;
+    return instance;
 }
 
-void Controller::run()
-{
-	while (m_window.isOpen())
-	{
-		if (m_nextScreen.has_value()) {
-			removeScreen();
-			setScreen(m_nextScreen.value());
-			m_nextScreen.reset();
-		}
-		processEvents();
-		update();
-		render();
+// Constructor
+Controller::Controller(){
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 16;
+
+    m_window.create(sf::VideoMode(1280, 720), "test", sf::Style::Default, settings);
+
+    m_window.setFramerateLimit(60);
+
+	if (!m_font.loadFromFile("myFont.otf")) {
+		throw std::runtime_error("Failed to load font");
 	}
 }
 
-void Controller::setScreen(ScreenID screen)
+const sf::Font& Controller::getFont() {
+	return m_font;
+}
+
+// Push a new screen onto the stack
+void Controller::pushScreen(std::unique_ptr<Screen> screen) {
+    if (screen) {
+        screen->setScreenAction([this](ScreenID id) {
+            this->setScreen(id);
+            });
+        m_screens.push(std::move(screen));
+    }
+}
+
+// Pop the top screen from the stack
+void Controller::popScreen() {
+    if (!m_screens.empty()) {
+        m_screens.pop();
+    }
+}
+
+void Controller::popToHome()
 {
-	std::unique_ptr<Screen> screenPtr;
+    while (!m_screens.empty()) {
+        if (m_screens.top()->getScreenID() == ScreenID::Home)
+            break;
+        m_screens.pop();
+    }
+}
 
-	switch (screen)
-	{
-	case ScreenID::Home:
-		screenPtr = std::make_unique<HomeScreen>();
-		break;
-	case ScreenID::Game:
-		screenPtr = std::make_unique<PlayGround>();
-		break;
-	}
+// Optional set/remove screen (legacy or switching style)
+void Controller::setScreen(ScreenID screen) {
+    m_nextScreen = screen;
+}
 
-	if (screenPtr)
-	{
-		screenPtr->setScreenAction(m_changeScreen);
-		m_screens.push(std::move(screenPtr));
+void Controller::removeScreen() {
+    popScreen();
+}
+
+// Main game loop
+void Controller::run() {
+    pushScreen(std::make_unique<PlayGround>());
+    while (m_window.isOpen()) {
+        if (m_screens.empty()) {
+            m_window.close();
+            break;
+        }
+
+        processEvents();
+        update();
+        render();
+    }
+}
+
+void Controller::setPopFlag() {
+    m_shouldPop = true;
+}
+
+// Handle input
+void Controller::processEvents() {
+    sf::Event event;
+    while (m_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
+            m_window.close();
+        else
+            m_screens.top()->processEvent(event, m_window);
+    }
+}
+
+// Update current screen
+void Controller::update() {
+    float dt = m_clock.restart().asSeconds();
+    m_screens.top()->update(m_window, dt);
+	if (m_shouldPop) {
+		popScreen();
+		m_shouldPop = false;
 	}
 }
 
-void Controller::removeScreen()
-{
-	if (!m_screens.empty())
-	{
-		m_screens.pop();
-	}
-}
-
-void Controller::processEvents()
-{
-	sf::Event event;
-	while (m_window.pollEvent(event))
-	{
-		if (event.type == sf::Event::Closed)
-			m_window.close();
-
-		if (!m_screens.empty())
-			m_screens.top()->processEvent(event, m_window);
-	}
-}
-
-void Controller::update()
-{
-	float deltaTime = m_clock.restart().asSeconds();
-	if (!m_screens.empty())
-		m_screens.top()->update(m_window, deltaTime);
-}
-
-void Controller::render()
-{
-	m_window.clear();
-	if (!m_screens.empty())
-		m_screens.top()->render(m_window);
-	m_window.display();
+// Render current screen
+void Controller::render() {
+    m_window.clear();
+    m_screens.top()->render(m_window);
+    m_window.display();
 }

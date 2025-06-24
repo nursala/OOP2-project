@@ -4,6 +4,6 @@
 
 class HealthBar : public  Bar{
 public:
-    HealthBar(float width, float height, int maxHealth);
+    HealthBar(float width, float height, float maxHealth);
 	void updateColor() override;
 };

@@ -13,6 +13,7 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		m_sprite.setTextureRect(m_animation.getUvRect());
 		m_sprite.setPosition(position);
 	}
+	m_bodyRadius = 1.2f; // Default radius for circle bodies
 }
 
 void Entity::init() 
@@ -27,7 +28,7 @@ void Entity::init()
 	m_body = m_world.getWorld().CreateBody(&bodyDef);
 
 	b2CircleShape shape;
-	shape.m_radius = 10.f / SCALE;
+	shape.m_radius = m_bodyRadius;
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
@@ -42,6 +43,8 @@ void Entity::init()
 
 	this->adjustSpriteToFixtureSize(); // Adjust sprite size based on fixture size
 }
+
+
 
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)
@@ -88,10 +91,6 @@ Animation& Entity::getAnimation() {
 	return m_animation;
 }
 
-float Entity::getSpeed() const {
-	return m_speed;
-}
-
 void Entity::adjustSpriteToFixtureSize()
 {
 	if (!m_body || !m_body->GetFixtureList())
@@ -112,9 +111,11 @@ void Entity::adjustSpriteToFixtureSize()
 	sf::IntRect frameRect = m_sprite.getTextureRect();
 	sf::Vector2f frameSize(static_cast<float>(frameRect.width), static_cast<float>(frameRect.height));
 
+	float spriteRadiusFactor = 1.2f;
+
 	sf::Vector2f scale = {
-		desiredSize.x / frameSize.x,
-		desiredSize.y / frameSize.y
+		(desiredSize.x * spriteRadiusFactor) / frameSize.x,
+		(desiredSize.y * spriteRadiusFactor) / frameSize.y
 	};
 
 	m_sprite.setScale(scale);
@@ -123,4 +124,10 @@ void Entity::adjustSpriteToFixtureSize()
 
 World& Entity::getWorld() {
 	return m_world;
+}
+
+void Entity::setSpriteRadius(float radius)
+{
+	m_sprite.setScale(m_sprite.getScale().x * radius, m_sprite.getScale().y * radius);
+	b2FixtureDef fixtureDef;
 }

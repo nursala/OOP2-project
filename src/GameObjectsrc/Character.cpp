@@ -1,6 +1,8 @@
 #include "GameObject/Character.h"
 #include "WorldInc/World.h"
 #include "VisionLight.h"
+#include "StatesInc/AttackingStatePlayer.h"
+#include <iostream>
 
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position,
@@ -16,7 +18,6 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 }
 
 void Character::update(float deltaTime) {
-
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
 		if (newState) {
@@ -125,3 +126,11 @@ float Character::getShootingRange() const {
 	}
 	return 0.f;
 }
+
+void Character::setShootingRange(float range)
+{
+	if (m_weapon) {
+		m_weapon->setShootingRange(range);
+	}
+}
+

@@ -8,8 +8,9 @@ enum class ScreenID {
 	Settings,
 	Game,
 	GameOver,
+	Market,
+	Help,
 };
-
 
 class Screen
 {
@@ -19,7 +20,9 @@ public:
 	virtual void render(sf::RenderWindow& window);
 	virtual void update(sf::RenderWindow& window, float dt);
 	virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
-	//ScreenID getScreenID() const;
+	void drawButtons(sf::RenderWindow& window);
+	virtual void customizeProcessEvent() {};
+	virtual ScreenID getScreenID() const = 0;
 	void setScreenAction(std::function<void(ScreenID)> action);
 protected:
 	//ScreenID m_screenID;
@@ -27,5 +30,5 @@ protected:
 	sf::RectangleShape m_backGround;
 	std::unordered_map<ButtonID, Button> m_buttons;
 	std::function<void(ScreenID)> m_changeScreen;
-	virtual void init() {};
+	virtual void init() = 0;
 };

@@ -2,10 +2,11 @@
 
 #include "MoveInfo.h"
 
-class Entity;
+
+class Character;
 
 class MoveStrategy {
 public:
     virtual ~MoveStrategy() = default;
-    virtual MoveInfo move(Entity& entity, float deltaTime) = 0;
+    virtual MoveInfo move(Character& character, float deltaTime) = 0;
 };

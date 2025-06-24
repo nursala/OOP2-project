@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <string>
 
-HealthBar::HealthBar(float width, float height, int maxHealth)
-	: Bar(width, height, sf::Color::Green,maxHealth)
+HealthBar::HealthBar(float width, float height, float maxHealth)
+	: Bar(width, height, sf::Color::Green, maxHealth)
 {
 }
 

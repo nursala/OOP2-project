@@ -3,7 +3,6 @@
 
 int main() {
 	//Game game;
-	Controller controller;
-	controller.run();
+	Controller::getInstance().run();
 	//game.run();
 }

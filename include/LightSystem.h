@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "VisionLight.h"
-#include "WeponInc/WeaponLight.h"
+#include "WeaponInc/WeaponLight.h"
 #include "Candle/LightingArea.hpp"
 #include <Box2D/Box2D.h>
 

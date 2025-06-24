@@ -5,7 +5,7 @@
 #include "StatesInc/State.h"
 #include "HealthBar.h"
 #include "ArmorBar.h"
-#include <WeponInc/Weapon.h>
+#include <WeaponInc/Weapon.h>
 #include "VisionLight.h"
 
 class World;
@@ -14,14 +14,12 @@ public:
    Player(World& world);  
    void setLight(std::shared_ptr<VisionLight>& visionLight);  
    void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
-   float getShootingRange() const;
    void setFacingRight(bool right);  
    //void setHealthBar(HealthBar* healthBar);  
    void takeDamage(int damage) override;
    void addHealth();
    void addArmor();
    void addSpeed();
-
 
     sf::Vector2f getTarget() const override;
     std::pair<bool, float> EnemyIsVisible() ;

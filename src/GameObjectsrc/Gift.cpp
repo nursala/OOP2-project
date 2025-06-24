@@ -11,11 +11,13 @@ Gift::Gift(World& world, const sf::Texture* texture)
 {
     // Set up Box2D body as static or kinematic, and set up sprite
     m_visable = true;
+	m_bodyRadius = 0.6f; // Set a default radius for the gift
+	//m_sprite.setScale(m_sprite.getScale().x * 0.5f, m_sprite.getScale().y * 0.5f);
 }
 
 GiftType Gift::getType() const { return m_type; }
 
-void Gift::update(float deltaTime)
+void Gift::update(float)
 {
 	if (m_body) {
 		b2Vec2 pos = m_body->GetPosition();
@@ -25,7 +27,7 @@ void Gift::update(float deltaTime)
 
 void Gift::render(sf::RenderWindow& window)
 {
-	if (isVisible())
+	if (true)
 		window.draw(m_sprite);
 }
 

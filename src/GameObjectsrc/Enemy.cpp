@@ -6,7 +6,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include <cmath>
-#include "WeponInc/Gun.h"
+#include "WeaponInc/HandGun.h"
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
@@ -20,8 +20,9 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
         m_state->enter(*this);
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<Gun>();
-    m_speed = 2.f;
+    m_weapon = std::make_unique<Weapon>(WeaponType::HandGun);
+    m_weapon->setShootingRange(150.f);
+    m_speed = 5.f;
     m_armorBar = nullptr;
     m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 }
@@ -39,7 +40,7 @@ bool Enemy::isPlayerVisible() const {
     b2Vec2 end = { targetPos.x / SCALE, targetPos.y / SCALE };
 
     b2Vec2 delta = end - start;
-    if (delta.LengthSquared() < 0.0001f)
+    if (delta.LengthSquared() < 0.0001f || delta.LengthSquared() > getShootingRange())
         return false;
 
     m_body->GetWorld()->RayCast(&raycast, start, end);
@@ -53,7 +54,7 @@ float Enemy::distanceToPlayer() const {
     return std::hypot(diff.x, diff.y);
 }
 
-void Enemy::fireBullet(const sf::Vector2f& direction) {
+void Enemy::fireBullet(const sf::Vector2f&) {
     // if (m_weapon)
     //     m_weapon->shoot(getPosition(), direction);
 }
@@ -90,13 +91,9 @@ sf::Vector2f Enemy::getTarget() const {
     return closestEnemyPos;
 }
 
-float Enemy::getShootingRange() const {
-    return m_weapon->getShootingRange() - 75.f;
-}
-
 void Enemy::speedDown() {
-    m_speed -= 1.f;
-    if (m_speed < 0.f) m_speed = 0.f;
+    m_speed -= 0.5f;
+    if (m_speed < 1.f) m_speed = 1.f;
 }
 
 void Enemy::setSpy(bool value) {
