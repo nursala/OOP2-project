@@ -14,8 +14,6 @@ IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int i
 
 MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
 {
-	
-
     sf::Vector2f enemyPos = character.getPosition();
     sf::Vector2f playerPos = m_player.getPosition();
 
@@ -41,8 +39,8 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
         }*/
 
         if (m_usingAStar) {
-            sf::Vector2i start(enemyPos.x / m_map.getTileWidth(), enemyPos.y / m_map.getTileHeight());
-            sf::Vector2i goal(playerPos.x / m_map.getTileWidth(), playerPos.y / m_map.getTileHeight());
+            sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()), static_cast<int>(enemyPos.y / m_map.getTileHeight()));
+            sf::Vector2i goal(static_cast<int>(playerPos.x / m_map.getTileWidth()), static_cast<int>(playerPos.y / m_map.getTileHeight()));
 
             auto path = AStarPathfinder::findPath(m_map, start, goal);
             if (!path.empty()) {

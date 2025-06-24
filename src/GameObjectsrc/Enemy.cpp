@@ -6,7 +6,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include <cmath>
-#include "WeponInc/HandGun.h"
+#include "WeaponInc/HandGun.h"
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
@@ -53,7 +53,7 @@ float Enemy::distanceToPlayer() const {
     return std::hypot(diff.x, diff.y);
 }
 
-void Enemy::fireBullet(const sf::Vector2f& direction) {
+void Enemy::fireBullet(const sf::Vector2f&) {
     // if (m_weapon)
     //     m_weapon->shoot(getPosition(), direction);
 }

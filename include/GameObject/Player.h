@@ -5,7 +5,7 @@
 #include "StatesInc/State.h"
 #include "HealthBar.h"
 #include "ArmorBar.h"
-#include <WeponInc/Weapon.h>
+#include <WeaponInc/Weapon.h>
 #include "VisionLight.h"
 
 class World;

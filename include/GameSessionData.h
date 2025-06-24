@@ -1,7 +1,7 @@
 #pragma once
 #include <set>
 #include "Macros.h"
-#include "WeponInc/Weapon.h"
+#include "WeaponInc/Weapon.h"
 
 class GameSessionData {
 public:

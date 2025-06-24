@@ -29,7 +29,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (auto spy = dynamic_cast<Enemy*>(bullet->getOwner()); spy && spy->isSpy())
                     return;
 
-                player->takeDamage(5);
+                player->takeDamage(bullet->getDamage());
             }
         }
         else if (auto gift = dynamic_cast<Gift*>(entityB)) {
@@ -75,7 +75,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (enemy->isSpy() && dynamic_cast<Player*>(bullet->getOwner()))
                     return;
 
-                enemy->takeDamage(20);
+                enemy->takeDamage(bullet->getDamage());
             }
         }
     }

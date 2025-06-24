@@ -3,13 +3,14 @@
 #include "WorldInc/World.h"
 #include "ResourseInc/TextureManager.h"
 
-Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
+Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner, float damage)
     : Entity(world, TextureManager::instance().get(TextureID::BULLET), position, { 1, 1 }, 0.1f),
     m_direction(direction), m_owner(owner)
 {
     m_visable = true;
     m_speed = 10.f;
 	m_bodyRadius = 0.5f; // Set a small radius for the bullet
+    m_damage = damage;
 }
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)
@@ -45,4 +46,14 @@ void Bullet::update(float deltaTime)
 bool Bullet::shouldDestroy() const
 {
     return m_destroy;
+}
+
+float Bullet::getDamage() const
+{
+    return m_damage;
+}
+
+void Bullet::setDamage(float damage)
+{
+    m_damage = damage;
 }

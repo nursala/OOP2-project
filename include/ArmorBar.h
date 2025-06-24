@@ -4,6 +4,6 @@
 
 class ArmorBar : public  Bar {
 public:
-    ArmorBar(float width, float height, int maxArmor);
+    ArmorBar(float width, float height, float maxArmor);
 	void updateColor() override;
 };

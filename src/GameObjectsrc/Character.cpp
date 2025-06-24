@@ -1,6 +1,6 @@
 #include "GameObject/Character.h"
 #include "WorldInc/World.h"
-#include "StatesInc/AttackingState.h"
+#include "StatesInc/AttackingStatePlayer.h"
 #include <iostream>
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position,
@@ -21,10 +21,6 @@ void Character::update(float deltaTime) {
 			m_state->enter((*this));
 		}
 		m_state->update((*this), deltaTime);
-		/*if (typeid(*this) == typeid(Enemy) && typeid(*m_state).name() == typeid(AttackingState).name())
-		{
-			std::cout << "Attack" << std::endl;
-		}*/
 	}
 
     if (m_weapon)

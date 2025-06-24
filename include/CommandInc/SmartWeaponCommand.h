@@ -2,7 +2,7 @@
 #pragma once
 #include "CommandInc/Command.h"
 #include "GameSessionData.h"
-#include "WeponInc/Weapon.h"
+#include "WeaponInc/Weapon.h"
 #include "ScreensInc/Market.h" 
 
 class SmartWeaponCommand : public Command {

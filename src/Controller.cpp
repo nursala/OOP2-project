@@ -60,7 +60,7 @@ void Controller::removeScreen() {
 
 // Main game loop
 void Controller::run() {
-    pushScreen(std::make_unique<HomeScreen>());
+    pushScreen(std::make_unique<PlayGround>());
     while (m_window.isOpen()) {
         if (m_screens.empty()) {
             m_window.close();
