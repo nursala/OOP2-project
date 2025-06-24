@@ -6,6 +6,15 @@
 #include "VisionLight.h"
 #include "WeponInc/WeaponLight.h"
 #include "GameObject/Bullet.h"
+#include <string>
+
+//enum class WeaponType {
+//    BasicGun,
+//    Shotgun,
+//    Sniper,
+//    Laser
+//};
+
 
 // Forward declaration to avoid circular dependency
 
@@ -37,8 +46,13 @@ public:
     WeaponLight* getWeaponLight();
     std::shared_ptr<WeaponLight> m_weaponLight;
 
+    //static int getPrice(WeaponType type);
+
 protected:
 	WeaponType m_type = WeaponType::HANDGUN; // Default weapon type
+    float m_bulletSpeed = 0;
+    std::shared_ptr<WeaponLight> m_weaponLight;
+
     float m_bulletSpeed = 0;
     float m_shootingRange = 0;
     float m_fireCooldown = 1.f;
