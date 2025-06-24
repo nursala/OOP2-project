@@ -9,6 +9,7 @@ enum class ScreenID {
 	Game,
 	GameOver,
 	Market,
+	Help,
 };
 
 class Screen
@@ -19,6 +20,8 @@ public:
 	virtual void render(sf::RenderWindow& window);
 	virtual void update(sf::RenderWindow& window, float dt);
 	virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
+	void drawButtons(sf::RenderWindow& window);
+	virtual void customizeProcessEvent() {};
 	virtual ScreenID getScreenID() const = 0;
 	void setScreenAction(std::function<void(ScreenID)> action);
 protected:

@@ -17,6 +17,7 @@ enum class WeaponType {
 
 class Character;
 class World;
+class RenderLayers;
 
 class Weapon
 {
@@ -28,13 +29,12 @@ public:
 
     void update(sf::Vector2f playerPos, float angle, float dt);
     void draw(sf::RenderWindow& window);
-    void setLight(std::shared_ptr<WeaponLight>& weaponLight);
+    void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
 	void setShootingRange(float range) { m_shootingRange = range; }
 	WeaponType getType() const { return m_type; }
 
     WeaponLight* getWeaponLight();
-    std::shared_ptr<WeaponLight> m_weaponLight;
 
     static int getPrice(WeaponType type);
 
@@ -44,6 +44,7 @@ public:
 protected:
 	WeaponType m_type;
     float m_bulletSpeed = 0;
+    std::unique_ptr<WeaponLight> m_weaponLight;
 
     float m_shootingRange = 0;
     float m_fireCooldown = 1.f;

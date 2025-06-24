@@ -2,6 +2,7 @@
 #include "ScreensInc/PlayGround.h"
 #include "ScreensInc/HomeScreen.h"
 #include "ScreensInc/Market.h"
+#include "ScreensInc/Help.h"
 
 Controller& Controller::getInstance() {
     static Controller instance;
@@ -9,9 +10,12 @@ Controller& Controller::getInstance() {
 }
 
 // Constructor
-Controller::Controller()
-    : m_window(sf::VideoMode(1280, 720), "Game Window") 
-{
+Controller::Controller(){
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 16;
+
+    m_window.create(sf::VideoMode(1280, 720), "test", sf::Style::Default, settings);
+
     m_window.setFramerateLimit(60);
 
 	if (!m_font.loadFromFile("myFont.otf")) {

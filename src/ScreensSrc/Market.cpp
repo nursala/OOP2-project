@@ -3,7 +3,6 @@
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/SmartWeaponCommand.h"
-
 Market::Market()
 {
 	setBackGroundTexture(TextureID::MARKET);
@@ -21,10 +20,10 @@ ScreenID Market::getScreenID() const
 
 void Market::init()
 {
-    auto& basic = m_buttons.emplace(ButtonID::BasicGun, Button({ 120, 40 }, { 250, 365 }, "Equipped")).first->second;
-    auto& shot = m_buttons.emplace(ButtonID::Rifle, Button({ 120, 40 }, { 850, 365 }, "Buy")).first->second;
-    auto& snipe = m_buttons.emplace(ButtonID::Shotgun, Button({ 120, 40 }, { 250, 620 }, "Buy")).first->second;
-    auto& laser = m_buttons.emplace(ButtonID::Sniper, Button({ 120, 40 }, { 850, 620 }, "Buy")).first->second;
+    auto& basic = m_buttons.emplace(ButtonID::BasicGun, Button({ 120, 40 }, { 250, 365 }, "")).first->second;
+    auto& shot = m_buttons.emplace(ButtonID::Rifle, Button({ 120, 40 }, { 850, 365 }, "")).first->second;
+    auto& snipe = m_buttons.emplace(ButtonID::Shotgun, Button({ 120, 40 }, { 250, 620 }, "")).first->second;
+    auto& laser = m_buttons.emplace(ButtonID::Sniper, Button({ 120, 40 }, { 850, 620 }, "")).first->second;
 
     m_weaponButtons = {
         {WeaponType::HandGun, &basic},
@@ -51,7 +50,7 @@ void Market::updateWeaponButtonLabels()
     for (auto& [type, btn] : m_weaponButtons) 
     {
         if (!session.hasWeapon(type))
-            btn->setText("Buy");
+            btn->setText("Buy -" + std::to_string(Weapon::getPrice(type) )+ "$");
         else if (session.getSelectedWeapon() == type)
             btn->setText("Equipped");
         else

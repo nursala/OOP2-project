@@ -1,7 +1,9 @@
 #include "GameObject/Character.h"
 #include "WorldInc/World.h"
+#include "VisionLight.h"
 #include "StatesInc/AttackingStatePlayer.h"
 #include <iostream>
+
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position,
     sf::Vector2u imageCount, float switchTime)
@@ -9,11 +11,13 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
     m_world(world)
 
 {
-    m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
+	m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
+	m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
+
+	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
 }
 
 void Character::update(float deltaTime) {
-	
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
 		if (newState) {
@@ -28,6 +32,11 @@ void Character::update(float deltaTime) {
         m_weapon->update(getPosition(),this->getBody()->GetAngle(), deltaTime);
     }
 
+    //if (m_visionLight)
+    //{
+    //    m_visionLight->update(getPosition(), this->getBody()->GetAngle());
+    //}
+
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation.getUvRect());
 
@@ -40,8 +49,20 @@ void Character::update(float deltaTime) {
         m_armorBar->setPosition(armorBarPos);
         // Update health and armor bars
         m_armorBar->setValue(m_armor);
-		//std::cout << getShootingRange() << std::endl;
     }
+	if (m_visionLight)
+	{
+		m_visionLight->update(getPosition(), this->getBody()->GetAngle());
+	}
+	if (m_weapon->getWeaponLight() || m_visionLight)
+	{
+		auto& CloseEdges = m_world.getCloseEdges();
+		if (m_weapon->getWeaponLight())
+			m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
+		if (m_visionLight)
+		m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
+	}
+
 }
 
 void Character::render(sf::RenderWindow& window) {
@@ -50,6 +71,23 @@ void Character::render(sf::RenderWindow& window) {
 	if(m_armorBar)
 		m_armorBar->draw(window);
 }
+
+void Character::render(RenderLayers& renderLayers) {
+	renderLayers.drawForeground(m_sprite);
+	m_healthBar->draw(renderLayers);
+	if (m_armorBar)
+		m_armorBar->draw(renderLayers);
+
+	if (m_visionLight)
+	{
+		renderLayers.drawLight(*m_visionLight);
+		renderLayers.drawForeground(*m_visionLight);
+	}
+	if (m_weapon)
+		m_weapon->draw(renderLayers);
+	
+}
+	
 
 const MoveInfo& Character::getLastMoveInfo()
 {
@@ -75,7 +113,6 @@ Weapon* Character::getWeapon()
 }
 
 void Character::shoot(float dt) {
-	//m_body->SetLinearVelocity(b2Vec2_zero);
 
 	if (m_attackStrategy)
 	{

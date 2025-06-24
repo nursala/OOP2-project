@@ -5,6 +5,9 @@
 
 Weapon::Weapon(WeaponType type): m_type(type)
 {
+	m_weaponLight = std::make_unique<WeaponLight>(100, 30); // Correct type for m_weaponLight
+	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light
+	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
 }
 
 std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
@@ -61,12 +64,20 @@ void Weapon::draw(sf::RenderWindow&)
 	// if (m_weaponLight)
 	//     window.draw(*m_weaponLight);
 }
+void Weapon::draw(RenderLayers& renderLayers)
+{
+	if (m_weaponLight)
+	{
+		renderLayers.drawLight(*m_weaponLight);
+		renderLayers.drawForeground(*m_weaponLight);
+	}
 
 void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
 	m_weaponLight = weaponLight;
 	m_weaponLight->setRange(m_shootingRange);
 }
+
 
 float Weapon::getShootingRange() const
 {

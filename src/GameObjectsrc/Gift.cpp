@@ -27,7 +27,7 @@ void Gift::update(float)
 
 void Gift::render(sf::RenderWindow& window)
 {
-	if (isVisible())
+	if (true)
 		window.draw(m_sprite);
 }
 

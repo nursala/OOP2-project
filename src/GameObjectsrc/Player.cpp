@@ -21,6 +21,9 @@ Player::Player(World& world)
 
     m_weapon = std::make_unique<HandGun>();
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
+    m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
+    m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
+
     m_speed = 10.f;
     m_visable = true;
 	
@@ -34,8 +37,12 @@ void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
 void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
     if (m_weapon)
-        m_weapon->setLight(weaponLight);
+    {
+
+    }
 }
+
+
 
 void Player::setFacingRight(bool right)
 {
