@@ -24,10 +24,7 @@ void Screen::setScreenAction(std::function<void(ScreenID)> action)
 void Screen::render(sf::RenderWindow& window)
 {
 	window.draw(m_backGround);
-	for (auto& [id, button] : m_buttons)
-	{
-		button.render(window);
-	}
+	drawButtons(window);
 }
 
 void Screen::update(sf::RenderWindow& window, float dt)
@@ -44,5 +41,13 @@ void Screen::processEvent(sf::Event& event, sf::RenderWindow& window)
 	for (auto& [id, button] : m_buttons)
 	{
 		button.handleEvent(event, window);
+	}
+}
+
+void Screen::drawButtons(sf::RenderWindow& window)
+{
+	for (auto& [id, button] : m_buttons)
+	{
+		button.render(window);
 	}
 }
