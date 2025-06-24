@@ -2,6 +2,7 @@
 #include "ScreensInc/PlayGround.h"
 #include "ScreensInc/HomeScreen.h"
 #include "ScreensInc/Market.h"
+#include "ScreensInc/Help.h"
 
 Controller& Controller::getInstance() {
     static Controller instance;
@@ -60,7 +61,7 @@ void Controller::removeScreen() {
 
 // Main game loop
 void Controller::run() {
-    pushScreen(std::make_unique<PlayGround>());
+    pushScreen(std::make_unique<Help>());
     while (m_window.isOpen()) {
         if (m_screens.empty()) {
             m_window.close();
