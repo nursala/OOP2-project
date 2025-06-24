@@ -20,7 +20,7 @@ LightSystem::LightSystem(sf::Vector2f areaSize)
     m_weaponLight->setColor(sf::Color::Red);
 
     m_lightingArea.setAreaColor(sf::Color::Black);
-    m_lightingArea.setAreaOpacity(0.8);
+    m_lightingArea.setAreaOpacity(0.8f);
 }
 
 void LightSystem::update(const sf::Vector2f& playerPos, const sf::Vector2f& mouseWorld)

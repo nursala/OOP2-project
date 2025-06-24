@@ -5,7 +5,7 @@
 #include "StatesInc/State.h"
 #include "HealthBar.h"
 #include "ArmorBar.h"
-#include <WeponInc/Weapon.h>
+#include <WeaponInc/Weapon.h>
 #include "VisionLight.h"
 
 class World;
@@ -20,7 +20,6 @@ public:
    void addHealth();
    void addArmor();
    void addSpeed();
-
 
     sf::Vector2f getTarget() const override;
     std::pair<bool, float> EnemyIsVisible() ;

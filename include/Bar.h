@@ -4,6 +4,7 @@
 class Bar {
 public:
     Bar(float width, float height, sf::Color color,float maxValue);
+	virtual ~Bar() = default;
     void setMaxValue(float maxValue);
     void setValue(float value);
     void setPosition(const sf::Vector2f& pos);

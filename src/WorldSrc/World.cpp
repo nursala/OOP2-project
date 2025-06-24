@@ -80,7 +80,7 @@ void World::createEnemy()
 	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
     for (int i = 0; i < enemyPositions.size(); ++i)
     {
-        int randomIQ = rand() % 10 + 1;
+        //int randomIQ = rand() % 10 + 1;
 
         auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
         enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
@@ -135,7 +135,7 @@ void World::updateBullets(float deltaTime) {
 void World::updateLightSystem(sf::RenderWindow& window) {
     sf::Vector2f playerPos = m_player->getPosition();
     sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
+    //float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
     calcNearlyEdge(window);
     m_light.update(playerPos, mouseWorld);
     m_light.updateCastLight(m_closeEdges, m_world);

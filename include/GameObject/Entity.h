@@ -47,9 +47,9 @@ protected:
 	Animation m_animation;
 	sf::Vector2f m_position;
 	
-	virtual void customizeBodyDef(b2BodyDef& bodyDef) {}
-	virtual void customizeFixtureDef(b2FixtureDef& fixtureDef) {}
-	virtual b2BodyType getBodyType() const { return b2_dynamicBody; };
+	virtual void customizeBodyDef(b2BodyDef&) {}
+	virtual void customizeFixtureDef(b2FixtureDef&) {}
+	virtual b2BodyType getBodyType() const { return b2_dynamicBody; }
 	static constexpr float SCALE = 30.f;
 
 };

@@ -1,11 +1,11 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "GameObject/Character.h"
-#include "WeponInc/Weapon.h"
+#include "WeaponInc/Weapon.h"
 #include "GameObject/Entity.h"
 #include "WorldInc/World.h"
 #include <iostream>
 
-void SimpleShootStrategy::attack(Character& self, float dt) {
+void SimpleShootStrategy::attack(Character& self, float) {
 
     auto* weapon = self.getWeapon();
     if (!weapon)

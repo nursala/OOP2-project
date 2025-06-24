@@ -4,25 +4,15 @@
 #include <memory>  // Required for unique_ptr
 
 #include "VisionLight.h"
-#include "WeponInc/WeaponLight.h"
+#include "WeaponInc/WeaponLight.h"
 #include "GameObject/Bullet.h"
 #include <string>
 
-//enum class WeaponType {
-//    BasicGun,
-//    Shotgun,
-//    Sniper,
-//    Laser
-//};
-
-
-// Forward declaration to avoid circular dependency
-
 enum class WeaponType {
-	HANDGUN,
-	SHOTGUN,
-	RIFLE,
-    SNIPER,
+    HandGun,
+    Shotgun,
+    Sniper,
+    Rifle
 };
 
 class Character;
@@ -46,13 +36,18 @@ public:
     WeaponLight* getWeaponLight();
     std::shared_ptr<WeaponLight> m_weaponLight;
 
-    //static int getPrice(WeaponType type);
+    static int getPrice(WeaponType type);
+
+    float getDamage() const;
+    void setDamage(float damage);
 
 protected:
-	WeaponType m_type = WeaponType::HANDGUN; // Default weapon type
+	WeaponType m_type;
     float m_bulletSpeed = 0;
 
     float m_shootingRange = 0;
     float m_fireCooldown = 1.f;
     float m_fireTimer = 0.f;
+    float m_damage = 10.f;
+
 };

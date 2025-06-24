@@ -17,7 +17,7 @@ Gift::Gift(World& world, const sf::Texture* texture)
 
 GiftType Gift::getType() const { return m_type; }
 
-void Gift::update(float deltaTime)
+void Gift::update(float)
 {
 	if (m_body) {
 		b2Vec2 pos = m_body->GetPosition();

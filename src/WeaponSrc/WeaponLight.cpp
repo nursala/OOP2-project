@@ -1,4 +1,4 @@
-﻿#include "WeponInc/WeaponLight.h"
+﻿#include "WeaponInc/WeaponLight.h"
 #include <cmath>
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
