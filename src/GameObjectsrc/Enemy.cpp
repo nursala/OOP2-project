@@ -6,7 +6,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include <cmath>
-#include "WeponInc/Gun.h"
+#include "WeponInc/HandGun.h"
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)

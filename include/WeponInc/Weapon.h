@@ -51,9 +51,7 @@ public:
 protected:
 	WeaponType m_type = WeaponType::HANDGUN; // Default weapon type
     float m_bulletSpeed = 0;
-    std::shared_ptr<WeaponLight> m_weaponLight;
 
-    float m_bulletSpeed = 0;
     float m_shootingRange = 0;
     float m_fireCooldown = 1.f;
     float m_fireTimer = 0.f;

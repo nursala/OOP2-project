@@ -6,7 +6,7 @@
 #include "StatesInc/IdleStatePlayer.h"
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
-#include "WeponInc/Gun.h"
+#include "WeponInc/HandGun.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
@@ -18,7 +18,7 @@ Player::Player(World& world)
     if (m_state)
         m_state->enter(*this);
 
-    m_weapon = std::make_unique<Weapon>(WeaponType::SHOTGUN);
+    m_weapon = std::make_unique<Weapon>(WeaponType::HANDGUN);
     m_weapon->setShootingRange(300.f);
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
     m_speed = 10.f;
