@@ -16,8 +16,8 @@ public:
         int price = Weapon::getPrice(m_weapon);
 
         if (!session.hasWeapon(m_weapon)) {
-            if (session.money >= price) {
-                session.money -= price;
+            if (session.getMoney() >= price) {
+                session.getMoney() -= price;
                 session.addWeapon(m_weapon);
                 m_market.setMessage("Weapon purchased!");
             }
@@ -25,11 +25,12 @@ public:
                 m_market.setMessage("You don't have enough money!");
             }
         }
-        else if (session.selectedWeapon != m_weapon) {
-            session.selectedWeapon = m_weapon;
+        else if (session.getSelectedWeapon() != m_weapon) {
+            session.setSelectedWeapon(m_weapon);
             m_market.setMessage("Weapon equipped!");
         }
-        else {
+        else 
+        {
             m_market.setMessage("Weapon already equipped.");
         }
 

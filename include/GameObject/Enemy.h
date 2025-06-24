@@ -16,7 +16,6 @@ public:
     float distanceToPlayer() const;
     void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
-    float getShootingRange() const;
     void speedDown();
     sf::Vector2f getTarget() const override;
 

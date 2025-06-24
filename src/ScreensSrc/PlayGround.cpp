@@ -7,7 +7,7 @@
 PlayGround::PlayGround()
 {   
     m_view.setSize(1280, 720);
-	m_view.zoom(0.5f); // Zoom out to see more of the world
+	//m_view.zoom(0.25f); // Zoom out to see more of the world
 }
 
 void PlayGround::init()

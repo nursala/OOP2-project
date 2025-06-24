@@ -1,5 +1,7 @@
 #include "GameObject/Character.h"
 #include "WorldInc/World.h"
+#include "StatesInc/AttackingState.h"
+#include <iostream>
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position,
     sf::Vector2u imageCount, float switchTime)
@@ -11,6 +13,7 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 }
 
 void Character::update(float deltaTime) {
+	
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
 		if (newState) {
@@ -18,16 +21,16 @@ void Character::update(float deltaTime) {
 			m_state->enter((*this));
 		}
 		m_state->update((*this), deltaTime);
+		/*if (typeid(*this) == typeid(Enemy) && typeid(*m_state).name() == typeid(AttackingState).name())
+		{
+			std::cout << "Attack" << std::endl;
+		}*/
 	}
 
     if (m_weapon)
     {
         m_weapon->update(getPosition(),this->getBody()->GetAngle(), deltaTime);
     }
-    //if (m_visionLight)
-    //{
-    //    m_visionLight->update(getPosition(), this->getBody()->GetAngle());
-    //}
 
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation.getUvRect());
@@ -41,6 +44,7 @@ void Character::update(float deltaTime) {
         m_armorBar->setPosition(armorBarPos);
         // Update health and armor bars
         m_armorBar->setValue(m_armor);
+		//std::cout << getShootingRange() << std::endl;
     }
 	
 }
@@ -89,4 +93,11 @@ float Character::getShootingRange() const {
 		return m_weapon->getShootingRange();
 	}
 	return 0.f;
+}
+
+void Character::setShootingRange(float range)
+{
+	if (m_weapon) {
+		m_weapon->setShootingRange(range);
+	}
 }

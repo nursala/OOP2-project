@@ -28,6 +28,7 @@ public:
     void setScreen(ScreenID screen);     // if using switch-style
     void removeScreen();                 // legacy or custom
     const sf::Font& getFont();
+    void setPopFlag();
 private:
     // Singleton enforcement
     Controller();
@@ -39,6 +40,7 @@ private:
     void update();
     void render();
 
+    bool m_shouldPop = false;
     std::stack<std::unique_ptr<Screen>> m_screens;
     sf::Clock m_clock;
     sf::RenderWindow m_window;

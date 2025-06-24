@@ -6,7 +6,7 @@
 #include "StatesInc/IdleStatePlayer.h"
 #include "StatesInc/WalkingStatePlayer.h"
 #include <iostream>
-#include "WeponInc/Gun.h"
+#include "WeponInc/HandGun.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
@@ -18,9 +18,10 @@ Player::Player(World& world)
     if (m_state)
         m_state->enter(*this);
 
-    m_weapon = std::make_unique<Gun>();
+    m_weapon = std::make_unique<Weapon>(WeaponType::Shotgun);
+    m_weapon->setShootingRange(300.f);
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
-
+    m_speed = 10.f;
     m_visable = true;
    
 }
@@ -34,11 +35,6 @@ void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
 {
     if (m_weapon)
         m_weapon->setLight(weaponLight);
-}
-
-float Player::getShootingRange() const
-{
-    return m_weapon->getShootingRange()+300.f;
 }
 
 void Player::setFacingRight(bool right)

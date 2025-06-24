@@ -4,5 +4,5 @@
 
 class KeyboardMoveStrategy : public MoveStrategy {
 public:
-	MoveInfo move(Entity& entity, float deltaTime) override;
+	MoveInfo move(Character& entity, float deltaTime) override;
 };

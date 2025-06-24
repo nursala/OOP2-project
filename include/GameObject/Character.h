@@ -29,15 +29,17 @@ public:
     virtual void takeDamage(int damage) = 0;
     virtual void shoot(float dt);
 
-    virtual float getShootingRange() const;
+    float getShootingRange() const;
+    void setShootingRange(float range);
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;
+	float getSpeed() const { return m_speed; }
 
 protected:
     
     World& m_world;
-
+    float m_speed = 0.f;
 	Character* m_target;
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;

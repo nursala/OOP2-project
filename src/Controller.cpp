@@ -17,9 +17,6 @@ Controller::Controller()
 	if (!m_font.loadFromFile("myFont.otf")) {
 		throw std::runtime_error("Failed to load font");
 	}
-    
-
-
 }
 
 const sf::Font& Controller::getFont() {
@@ -63,7 +60,7 @@ void Controller::removeScreen() {
 
 // Main game loop
 void Controller::run() {
-    pushScreen(std::make_unique<Market>());
+    pushScreen(std::make_unique<HomeScreen>());
     while (m_window.isOpen()) {
         if (m_screens.empty()) {
             m_window.close();
@@ -74,6 +71,10 @@ void Controller::run() {
         update();
         render();
     }
+}
+
+void Controller::setPopFlag() {
+    m_shouldPop = true;
 }
 
 // Handle input
@@ -91,6 +92,10 @@ void Controller::processEvents() {
 void Controller::update() {
     float dt = m_clock.restart().asSeconds();
     m_screens.top()->update(m_window, dt);
+	if (m_shouldPop) {
+		popScreen();
+		m_shouldPop = false;
+	}
 }
 
 // Render current screen

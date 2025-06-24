@@ -1,9 +1,11 @@
 #include "ScreensInc/HomeScreen.h"
+#include "ScreensInc/Market.h"
 #include "ResourseInc/SoundManager.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
 #include "CommandInc/StopMusicCommand.h"
 #include "ScreensInc/PlayGround.h"
+#include "CommandInc/PopToHomeCommand.h"
 
 HomeScreen::HomeScreen()
 {
@@ -20,7 +22,7 @@ void HomeScreen::initButtons()
         ButtonID::Play,
         Button(sf::Vector2f(200, 50), sf::Vector2f(200, 100), "Play")
     );
-    playIt->second.setCommand(std::make_unique<PushScreenCommand<PlayGround>>());
+    playIt->second.setCommand(std::make_unique<PushScreenCommand<Market>>());
 
     auto [exitIt, insertedExit] = m_buttons.emplace(
         ButtonID::Exit,

@@ -22,7 +22,7 @@ public:
     const sf::Vector2f getMapTextureSize() const;
     const Player& getPlayer() const;
     b2World& getWorld();
-    void addBullet(std::unique_ptr<Bullet> bullet);
+    void addBullets(std::vector<std::unique_ptr<Bullet>> bullets);
 
     std::vector<Enemy*> getEnemies() const;
 
@@ -42,7 +42,6 @@ private:
     void updateBullets(float deltaTime);
     void buildAllEdges();
     void calcNearlyEdge(sf::RenderWindow& window);
-    //void calcNearlyEdge();
     void DebugEdge(sf::RenderWindow& window);
 
     b2World m_world;

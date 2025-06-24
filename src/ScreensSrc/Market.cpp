@@ -27,16 +27,21 @@ void Market::init()
     auto& laser = m_buttons.emplace(ButtonID::Sniper, Button({ 120, 40 }, { 850, 620 }, "Buy")).first->second;
 
     m_weaponButtons = {
-        {WeaponType::BasicGun, &basic},
+        {WeaponType::HandGun, &basic},
         {WeaponType::Shotgun,  &shot},
         {WeaponType::Sniper,   &snipe},
         {WeaponType::Rifle,    &laser}
     };
 
-    basic.setCommand(std::make_unique<SmartWeaponCommand>(WeaponType::BasicGun, *this));
+    basic.setCommand(std::make_unique<SmartWeaponCommand>(WeaponType::HandGun, *this));
     shot.setCommand(std::make_unique<SmartWeaponCommand>(WeaponType::Shotgun, *this));
     snipe.setCommand(std::make_unique<SmartWeaponCommand>(WeaponType::Sniper, *this));
     laser.setCommand(std::make_unique<SmartWeaponCommand>(WeaponType::Rifle, *this));
+
+	auto& back = m_buttons.emplace(ButtonID::Back, Button({ 120, 40 }, { 100, 100 }, "Back")).first->second;
+	back.setCommand(std::make_unique<PopScreenCommand>());
+	updateWeaponButtonLabels();
+
 }
 
 void Market::updateWeaponButtonLabels() 
@@ -47,7 +52,7 @@ void Market::updateWeaponButtonLabels()
     {
         if (!session.hasWeapon(type))
             btn->setText("Buy");
-        else if (session.selectedWeapon == type)
+        else if (session.getSelectedWeapon() == type)
             btn->setText("Equipped");
         else
             btn->setText("Equip");

@@ -11,7 +11,7 @@ class IQChaseStrategy : public MoveStrategy {
 public:
     IQChaseStrategy(const Player& player, const LoadMap& map, int iqLevel);
 
-    MoveInfo move(Entity& entity, float deltaTime) override;
+    MoveInfo move(Character& character, float deltaTime) override;
     sf::Vector2f getPlayerPostion() const;
 
 private:
@@ -36,7 +36,7 @@ private:
     const float m_stuckThreshold = 1.0f;
     const float m_stuckTimeLimit = 0.1f;
 
-    sf::Vector2f generateRandomDirection(const Entity& enemy, float deltaTime);
+    sf::Vector2f generateRandomDirection(const Character& enemy, float deltaTime);
     sf::Vector2f normalize(const sf::Vector2f& v);
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
 };

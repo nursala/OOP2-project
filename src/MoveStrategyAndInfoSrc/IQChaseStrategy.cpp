@@ -1,19 +1,22 @@
 #include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 #include <cmath>
 #include <algorithm>
-#include "GameObject/Entity.h"
+#include "GameObject/Character.h"
+#include "GameObject/Enemy.h"
 #include <random>
 #include <iostream>
+
 IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int iqLevel)
     : m_player(player), m_map(map), m_iqLevel(iqLevel), m_pathUpdateTimer(0.f), m_randomDirTimer(0.f),
     m_lastPosition(0.f, 0.f), m_stuckTimer(0.f)
 {
 }
 
-MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
+MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
 {
+	
 
-    sf::Vector2f enemyPos = entity.getPosition();
+    sf::Vector2f enemyPos = character.getPosition();
     sf::Vector2f playerPos = m_player.getPosition();
 
     float distToPlayer = distance(enemyPos, playerPos);
@@ -32,6 +35,10 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
     if (m_behaviorLockTimer >= m_behaviorLockDuration) {
         m_behaviorLockTimer = 0.f;
         m_usingAStar = dist(rng) < chanceToUseAStar;
+        /*if (auto self = dynamic_cast<Enemy*>(&character)) {
+            if (self->isSpy())
+                m_usingAStar = false;
+        }*/
 
         if (m_usingAStar) {
             sf::Vector2i start(enemyPos.x / m_map.getTileWidth(), enemyPos.y / m_map.getTileHeight());
@@ -61,7 +68,7 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
     else {
         m_randomDirTimer += deltaTime;
         if (m_randomDirTimer >= m_randomDirDuration) {
-            m_randomDirection = generateRandomDirection(entity, deltaTime);
+            m_randomDirection = generateRandomDirection(character, deltaTime);
             m_randomDirTimer = 0.f;
         }
         dir = m_randomDirection;
@@ -74,7 +81,7 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
         m_stuckTimer = 0.f;
 
     if (m_stuckTimer > m_stuckTimeLimit) {
-        m_randomDirection = generateRandomDirection(entity, deltaTime);
+        m_randomDirection = generateRandomDirection(character, deltaTime);
         m_randomDirTimer = 0.f;
         m_stuckTimer = 0.f;
         dir = m_randomDirection;
@@ -82,8 +89,8 @@ MoveInfo IQChaseStrategy::move(Entity& entity, float deltaTime)
 
     m_lastPosition = enemyPos;
 
-    if (auto* body = entity.getBody()) {
-        float speed = entity.getSpeed();
+    if (auto* body = character.getBody()) {
+        float speed = character.getSpeed();
         body->SetLinearVelocity(b2Vec2(dir.x * speed, dir.y * speed));
     }
 
@@ -100,8 +107,9 @@ sf::Vector2f IQChaseStrategy::getPlayerPostion() const
 }
 
 
-sf::Vector2f IQChaseStrategy::generateRandomDirection(const Entity& enemy, float) {
-    std::vector<sf::Vector2f> dirs = { {4,0}, {-4,0}, {0,4}, {0,-4} };
+sf::Vector2f IQChaseStrategy::generateRandomDirection(const Character& enemy, float) {
+	float speed = enemy.getSpeed();
+    std::vector<sf::Vector2f> dirs = { {speed,0}, {-speed,0}, {0,speed}, {0,-speed} };
     sf::Vector2f lastDir = { 0.f, 0.f };
     dirs.erase(std::remove(dirs.begin(), dirs.end(), lastDir), dirs.end());
     std::shuffle(dirs.begin(), dirs.end(), std::mt19937(std::random_device{}()));
