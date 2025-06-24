@@ -1,8 +1,8 @@
-#include "WeponInc/Gun.h"
+#include "WeponInc/HandGun.h"
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-Gun::Gun() : Weapon()
+HandGun::HandGun() : Weapon(WeaponType::HANDGUN)
 {
 	 m_shootingRange = 100.f; 
 }

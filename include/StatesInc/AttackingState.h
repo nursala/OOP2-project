@@ -1,7 +1,10 @@
 #pragma once
 
 #include "StatesInc/State.h"
+#include "GameObject/Character.h"
+#include "WeponInc/Weapon.h"
 #include <memory>
+#include <iostream>
 
 template<typename T>
 class AttackingState : public State {

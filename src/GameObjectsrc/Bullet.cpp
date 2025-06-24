@@ -9,6 +9,7 @@ Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& d
 {
     m_visable = true;
     m_speed = 10.f;
+	m_bodyRadius = 0.5f; // Set a small radius for the bullet
 }
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)

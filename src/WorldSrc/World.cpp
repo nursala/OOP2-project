@@ -53,6 +53,7 @@ void World::createGifts()
 	for (const auto& pos : giftPositions)
 	{
         createGift(static_cast<GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
+        //createGift(GiftType::SPY, b2Vec2(pos.x, pos.y));
 	}
 }
 
@@ -63,6 +64,7 @@ void World::createGift(GiftType type,b2Vec2 pos)
     m_gifts.back()->setType(type);
     m_gifts.back()->init();
     m_gifts.back()->setPosition(pos);
+	//m_gifts.back()->setSpriteRadius(0.5f); // Set the radius for the gift
 }
 
 void World::createEnemy()
@@ -75,7 +77,7 @@ void World::createEnemy()
         std::cref(m_tileMap),
         std::cref(*m_player)
     );
-
+	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
     for (int i = 0; i < enemyPositions.size(); ++i)
     {
         int randomIQ = rand() % 10 + 1;
@@ -107,6 +109,8 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
     for (auto& bullet : m_bullets)
         bullet->update(deltaTime);
     for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
+		//std::cout << "radius: " << (*it)->getSpriteRadius().x << " " << (*it)->getSpriteRadius().y << std::endl;
+		
         if ((*it)->isDestroyed()) {
             m_world.DestroyBody((*it)->getBody());
             it = m_gifts.erase(it);
@@ -174,8 +178,9 @@ b2World& World::getWorld() {
     return m_world;
 }
 
-void World::addBullet(std::unique_ptr<Bullet> bullet) {
-    if (bullet) {
+void World::addBullets(std::vector<std::unique_ptr<Bullet>> bullets) {
+    for (auto& bullet: bullets)
+    {
         bullet->init();
         m_bullets.push_back(std::move(bullet));
     }

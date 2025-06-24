@@ -17,6 +17,9 @@ void SimpleShootStrategy::attack(Character& self, float dt) {
     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     if (length != 0)
         direction /= length;
-	self.getWorld().addBullet(weapon->fire(self.getWorld(), self.getPosition(), direction,&self));
+    float muzzleOffset = 30.f; // adjust as needed
+    
+
+	self.getWorld().addBullets(weapon->fire(self.getWorld(), self.getPosition() + direction * muzzleOffset, direction,&self));
 }
 

@@ -14,7 +14,6 @@ public:
    Player(World& world);  
    void setLight(std::shared_ptr<VisionLight>& visionLight);  
    void setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight);
-   float getShootingRange() const;
    void setFacingRight(bool right);  
    //void setHealthBar(HealthBar* healthBar);  
    void takeDamage(int damage) override;

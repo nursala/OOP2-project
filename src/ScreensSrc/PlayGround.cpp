@@ -7,7 +7,7 @@
 PlayGround::PlayGround()
 {   
     m_view.setSize(1280, 720);
-	m_view.zoom(0.5f); // Zoom out to see more of the world
+	//m_view.zoom(0.25f); // Zoom out to see more of the world
 }
 
 void PlayGround::init()
@@ -50,9 +50,9 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 
 void PlayGround::render(sf::RenderWindow& window)
 {
-    //DebugDraw d(&window);
-    //d.SetFlags(b2Draw::e_shapeBit);
-    //m_world.getWorld().SetDebugDraw(&d);
+    /*DebugDraw d(&window);
+    d.SetFlags(b2Draw::e_shapeBit);
+    m_world.getWorld().SetDebugDraw(&d);*/
     m_world.render(window);
 	for (auto& [id, button] : m_buttons) {
 		button.render(window);
