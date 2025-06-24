@@ -13,7 +13,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     : Character(world, TextureManager::instance().get(TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
-    m_visable = true;
+    m_visable = false;
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
     m_state = std::make_unique<ChasingState>();
     if (m_state)
@@ -23,6 +23,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_weapon = std::make_unique<Gun>();
     m_speed = 2.f;
     m_armorBar = nullptr;
+    m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 }
 
 Enemy::~Enemy() {

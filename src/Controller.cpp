@@ -10,8 +10,12 @@
 #include "ScreensInc/PlayGround.h"
 
 Controller::Controller()
-	: m_window(sf::VideoMode(1280, 720), "SFML Application")
 {
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 16;
+
+	m_window.create(sf::VideoMode(1280, 720), "test", sf::Style::Default, settings);
+
 	m_changeScreen = [this](ScreenID id) {
 		m_nextScreen = id;
 		};

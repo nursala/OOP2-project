@@ -8,9 +8,9 @@
 
 World::World()
     : m_world(b2Vec2(0.f, 0.f)),
-    m_tileMap("map.json"),
-    m_light({ 2400, 2400 })
+    m_tileMap("map.json")
 {
+	m_renderLayers = std::make_unique<RenderLayers>();
     initWorld();
 }
 
@@ -92,8 +92,6 @@ void World::setupMap() {
 }
 
 void World::setupPlayerLight() {
-    m_player->setLight(m_light.getPlayerVision());
-    m_player->setWeaponLight(m_light.getWeaponLight());
 }
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
@@ -115,6 +113,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
     }
     updateLightSystem(window);
     updateBullets(deltaTime);
+    m_renderLayers->setView(window.getView());
 }
 
 void World::updateBullets(float deltaTime) {
@@ -133,26 +132,27 @@ void World::updateLightSystem(sf::RenderWindow& window) {
     sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
     calcNearlyEdge(window);
-    m_light.update(playerPos, mouseWorld);
-    m_light.updateCastLight(m_closeEdges, m_world);
-    sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
-    m_light.setPosition(topLeft);
 }
 
 void World::render(sf::RenderWindow& window) {
 
-    window.draw(m_mapSprite);
-    m_player->render(window);
+	m_renderLayers->clear();
+	m_renderLayers->drawBackground(m_mapSprite);
+    //window.draw(m_mapSprite);
+    m_player->render(*m_renderLayers);
 
     for (auto& enemy : m_enemies)
-        enemy->render(window);
+        enemy->render(*m_renderLayers);
 
     for (auto& gift : m_gifts)
         if (gift->isVisible()) gift->render(window);
+
     for (auto& bullet : m_bullets)
         bullet->render(window);
-    m_light.drawLights(window);
-    DebugEdge(window);
+
+    m_renderLayers->display();
+    m_renderLayers->renderFinal(window);
+    //DebugEdge(window);
 }
 
 void World::drawMap(sf::RenderWindow& window) {
@@ -160,8 +160,7 @@ void World::drawMap(sf::RenderWindow& window) {
 }
 
 void World::drawLighting(sf::RenderWindow& window) {
-    m_light.drawFinalLights(window);
-    m_light.drawLights(window);
+
 }
 
 void World::drawGameObjects(sf::RenderWindow& window) {

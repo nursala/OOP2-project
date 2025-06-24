@@ -19,31 +19,29 @@
 
 class Character;
 class World;
+class RenderLayers;
 
 class Weapon
 {
 public:
    
-    Weapon() = default;
+    Weapon();
 
     std::unique_ptr<Bullet> fire(World& world, const sf::Vector2f& position,
         const sf::Vector2f& direction, Character* owner);
 
     void update(sf::Vector2f playerPos, float angle, float dt);
     void draw(sf::RenderWindow& window);
-    void setLight(std::shared_ptr<WeaponLight>& weaponLight);
+    void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
 
     WeaponLight* getWeaponLight();
-    std::shared_ptr<WeaponLight> m_weaponLight;
 
-    //static int getPrice(WeaponType type);
 
 protected:
     float m_bulletSpeed = 0;
-    std::shared_ptr<WeaponLight> m_weaponLight;
+    std::unique_ptr<WeaponLight> m_weaponLight;
 
-    float m_bulletSpeed = 0;
     float m_shootingRange = 0;
     float m_fireCooldown = 1.f;
     float m_fireTimer = 0.f;

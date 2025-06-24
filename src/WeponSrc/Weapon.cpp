@@ -2,6 +2,16 @@
 #include "GameObject/Character.h"  // Needed for Character*
 #include "WorldInc/World.h"        // If not already included
 
+Weapon::Weapon()
+{
+	m_fireCooldown = 1.f; // Default cooldown, can be overridden by derived classes
+	m_fireTimer = 0.f;     // Initialize fire timer to zero
+	m_shootingRange = 100.f; // Default shooting range, can be overridden by derived classes
+    m_weaponLight = std::make_unique<WeaponLight>(100, 30); // Correct type for m_weaponLight
+	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light
+	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
+}
+
 std::unique_ptr<Bullet> Weapon::fire(World& world,
 	const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
 {
@@ -31,10 +41,15 @@ void Weapon::draw(sf::RenderWindow& window)
 	//     window.draw(*m_weaponLight);
 }
 
-void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
+void Weapon::draw(RenderLayers& renderLayers)
 {
-	m_weaponLight = weaponLight;
+	if (m_weaponLight)
+	{
+		renderLayers.drawLight(*m_weaponLight);
+		renderLayers.drawForeground(*m_weaponLight);
+	}
 }
+
 
 float Weapon::getShootingRange() const
 {

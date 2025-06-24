@@ -11,6 +11,8 @@
 
 class Weapon;
 class World;
+class RenderLayers;
+class VisionLight;
 
 class Character : public Entity
 {
@@ -22,6 +24,7 @@ public:
 
     void update(float deltaTime);
     void render(sf::RenderWindow& window) override;
+    void render(RenderLayers& renderLayers);
     const MoveInfo& getLastMoveInfo();
     virtual b2BodyType getBodyType() const override;
     void move(float dt);
@@ -43,6 +46,8 @@ protected:
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
+    std::unique_ptr<VisionLight> m_visionLight;
+
     MoveInfo m_lastMoveInfo;
     std::unique_ptr <HealthBar> m_healthBar;
     float m_health = 100.f;

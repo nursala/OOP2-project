@@ -5,14 +5,15 @@
 #include "CommandInc/ExitCommand.h"
 //playground.cpp
 PlayGround::PlayGround()
-{   
+{
     m_view.setSize(1280, 720);
-	m_view.zoom(0.5f); // Zoom out to see more of the world
+    m_view.zoom(0.25f); // Adjust zoom level as needed
+
 }
 
 void PlayGround::init()
 {
-	initButtons();
+    initButtons();
 }
 
 void PlayGround::initButtons()
@@ -21,7 +22,7 @@ void PlayGround::initButtons()
         ButtonID::Play,
         Button(sf::Vector2f(20, 20), sf::Vector2f(200, 50), "Play")
     );
-   
+
     playIt->second.setCommand(std::make_unique<SwitchScreenCommand>(
         m_changeScreen, ScreenID::Home
     ));
@@ -36,28 +37,28 @@ void PlayGround::initButtons()
 
 void PlayGround::update(sf::RenderWindow& window, float dt)
 {
-	for (auto& [id, button] : m_buttons) {
-		button.updateHover(window);
-	}
+    for (auto& [id, button] : m_buttons) {
+        button.updateHover(window);
+    }
     sf::Vector2f center = m_world.getPlayer().getPosition();
     sf::Vector2f viewSize = m_view.getSize();
     center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
     center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
-	m_view.setCenter(center);
+    m_view.setCenter(center);
     window.setView(m_view);
     m_world.update(window, dt);
 }
 
 void PlayGround::render(sf::RenderWindow& window)
 {
-    //DebugDraw d(&window);
-    //d.SetFlags(b2Draw::e_shapeBit);
-    //m_world.getWorld().SetDebugDraw(&d);
+    DebugDraw d(&window);
+    d.SetFlags(b2Draw::e_shapeBit);
+    m_world.getWorld().SetDebugDraw(&d);
     m_world.render(window);
-	for (auto& [id, button] : m_buttons) {
-		button.render(window);
-	}
-    m_statusBar.render(window, 10, 100, m_view.getCenter() - m_view.getSize()/2.f);
-    //m_world.getWorld().DebugDraw();
+    for (auto& [id, button] : m_buttons) {
+        button.render(window);
+    }
+    m_statusBar.render(window, 10, 100, m_view.getCenter() - m_view.getSize() / 2.f);
+    m_world.getWorld().DebugDraw();
 
 }

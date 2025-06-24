@@ -49,6 +49,23 @@ void Bar::draw(sf::RenderWindow& window) const {
             m_border.getPosition().y - 3.f);
         window.draw(text);
 }
+void Bar::draw(RenderLayers& renderLayers) const {
+    renderLayers.drawForeground(m_inner);
+    renderLayers.drawForeground(m_border);
+
+    sf::Text text;
+    text.setFont(m_font);
+    text.setString(
+        std::to_string(static_cast<int>(m_currentValue)) + " / " +
+        std::to_string(static_cast<int>(m_maxValue))
+    );
+    text.setCharacterSize(5);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(m_border.getPosition().x - 10.f,
+        m_border.getPosition().y - 3.f);
+    renderLayers.drawForeground(text);
+}
+
 
 void Bar::updateBar() {
     float ratio = (m_maxValue > 0) ? (m_currentValue / m_maxValue) : 0.f;

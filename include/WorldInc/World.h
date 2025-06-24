@@ -11,6 +11,7 @@
 #include "GameObject/Bullet.h"
 #include <vector>
 #include <memory>
+#include "RenderLayers.h"
 
 class World {
 public:
@@ -23,6 +24,7 @@ public:
     const Player& getPlayer() const;
     b2World& getWorld();
     void addBullet(std::unique_ptr<Bullet> bullet);
+    std::vector<candle::Edge>& getCloseEdges() { return m_closeEdges; };
 
     std::vector<Enemy*> getEnemies() const;
 
@@ -45,7 +47,10 @@ private:
     //void calcNearlyEdge();
     void DebugEdge(sf::RenderWindow& window);
 
+
     b2World m_world;
+    std::unique_ptr<RenderLayers> m_renderLayers;
+
     std::unique_ptr<Player> m_player;
     std::vector <std::unique_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
@@ -57,9 +62,9 @@ private:
     sf::Clock m_movementClock;
     float m_elapsedTime;
     LoadMap m_tileMap;
-    LightSystem m_light;
     candle::EdgeVector m_allEdges;
     std::vector<candle::Edge> m_closeEdges;
+
 
     static constexpr float SCALE = 30.f;
 };
