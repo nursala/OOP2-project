@@ -148,6 +148,7 @@ void World::updateLightSystem(sf::RenderWindow& window) {
     sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     //float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
     calcNearlyEdge(window);
+    
 }
 
 void World::render(sf::RenderWindow& window) {

@@ -9,6 +9,7 @@
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
+#include "WorldInc/World.h"
 
 Player::Player(World& world)
     : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
@@ -23,7 +24,10 @@ Player::Player(World& world)
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
     m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
     m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
-
+	m_visionLight->castLightCustom(world.getWorld().getCloseEdges().begin(),
+		m_world.getCloseEdges().end(),
+		m_world.getWorld()
+	);
     m_speed = 10.f;
     m_visable = true;
 	

@@ -52,7 +52,7 @@ void Character::update(float deltaTime) {
     }
 	if (m_visionLight)
 	{
-		m_visionLight->update(getPosition(), this->getBody()->GetAngle());
+		m_visionLight->update(getPosition(), this->getBody()->GetAngle() / 30.f);
 	}
 	if (m_weapon->getWeaponLight() || m_visionLight)
 	{
@@ -60,7 +60,7 @@ void Character::update(float deltaTime) {
 		if (m_weapon->getWeaponLight())
 			m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
 		if (m_visionLight)
-		m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
+			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
 
 }
@@ -140,4 +140,41 @@ void Character::setRotation(float angle)
 		m_body->SetTransform(b2Vec2(getPosition().x / SCALE, getPosition().y / SCALE), angle * SCALE);
 		m_sprite.setRotation(angle);
 	}
+}
+
+Character* Character::getClosestTarget(const Character* self) {
+
+	Character* closestCharacter = nullptr;
+	float minDistSq = std::numeric_limits<float>::max();
+	sf::Vector2f lightPos = getPosition();
+
+	bool lookingForEnemy = dynamic_cast<const Player*>(self);
+
+	for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		if (!character || !character->isVisible()) continue;
+
+		if (lookingForEnemy) {
+			auto* enemy = dynamic_cast<Enemy*>(character);
+			if (!enemy || enemy->isSpy()) continue; // Skip spies
+		}
+		else {
+			if (!dynamic_cast<Player*>(character)) continue;
+		}
+
+		sf::Vector2f charPos = character->getPosition();
+		float dx = charPos.x - lightPos.x;
+		float dy = charPos.y - lightPos.y;
+		float distSq = dx * dx + dy * dy;
+
+		if (distSq < minDistSq) {
+			minDistSq = distSq;
+			closestCharacter = character;
+		}
+	}
+
+	m_hitFixtures.clear();
+	return closestCharacter;
 }

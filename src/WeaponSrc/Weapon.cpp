@@ -54,7 +54,7 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	if (m_weaponLight)
 	{
 		m_weaponLight->setPosition(playerPos - sf::Vector2f(20.f, 20.f));
-		m_weaponLight->update(playerPos, angle);
+		m_weaponLight->update(playerPos, angle / 30.f);
 	}
 }
 
@@ -71,12 +71,13 @@ void Weapon::draw(RenderLayers& renderLayers)
 		renderLayers.drawLight(*m_weaponLight);
 		renderLayers.drawForeground(*m_weaponLight);
 	}
-
-void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
-{
-	m_weaponLight = weaponLight;
-	m_weaponLight->setRange(m_shootingRange);
 }
+
+//void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
+//{
+//	m_weaponLight = weaponLight;
+//	m_weaponLight->setRange(m_shootingRange);
+//}
 
 
 float Weapon::getShootingRange() const

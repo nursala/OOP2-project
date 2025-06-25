@@ -67,6 +67,7 @@ std::shared_ptr<WeaponLight>& LightSystem::getWeaponLight() {
 void LightSystem::setPosition(const sf::Vector2f& topLeft) {
     m_lightingArea.setPosition(topLeft);
 }
+
 void LightSystem::updateCastLight(
     candle::EdgeVector& closeEdges,
     b2World& world)

@@ -24,8 +24,6 @@ public:
 
     virtual void update(float );
     void render(sf::RenderWindow& ) override;
-    void update(float deltaTime);
-    void render(sf::RenderWindow& window) override;
     void render(RenderLayers& renderLayers);
     const MoveInfo& getLastMoveInfo();
     virtual b2BodyType getBodyType() const override;
@@ -37,6 +35,8 @@ public:
     float getShootingRange() const;
     void setShootingRange(float );
 	void setRotation(float angle);
+
+    Character* getClosestTarget(const Character* self);
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;
@@ -52,7 +52,7 @@ protected:
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
-    std::unique_ptr<VisionLight> m_visionLight;
+    std::shared_ptr<VisionLight> m_visionLight;
 
     MoveInfo m_lastMoveInfo;
     std::unique_ptr <HealthBar> m_healthBar;
