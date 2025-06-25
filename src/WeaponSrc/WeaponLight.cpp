@@ -60,7 +60,7 @@ void WeaponLight::castLightCustom(
 
 // Returns closest visible enemy (if self is player) or player (if self is enemy)
 Character* WeaponLight::getClosestTarget(const Character* self) {
-   
+
     Character* closestCharacter = nullptr;
     float minDistSq = std::numeric_limits<float>::max();
     sf::Vector2f lightPos = getPosition();

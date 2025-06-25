@@ -22,40 +22,10 @@ Player::Player(World& world)
 
     m_weapon = std::make_unique<HandGun>();
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
-    m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
-    m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
-	m_visionLight->castLightCustom(world.getWorld().getCloseEdges().begin(),
-		m_world.getCloseEdges().end(),
-		m_world.getWorld()
-	);
+   
     m_speed = 10.f;
     m_visable = true;
 	
-}
-
-void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
-{
-    m_visionLight = visionLight;
-}
-
-void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
-{
-    if (m_weapon)
-    {
-
-    }
-}
-
-
-
-void Player::setFacingRight(bool right)
-{
-    if (m_lastMoveInfo.faceRight != right) {
-        m_lastMoveInfo.faceRight = right;
-
-        sf::Vector2f currentScale = m_sprite.getScale();
-        m_sprite.setScale(right ? std::abs(currentScale.x) : -std::abs(currentScale.x), currentScale.y);
-    }
 }
 
 void Player::takeDamage(int damage)
@@ -101,7 +71,7 @@ sf::Vector2f Player::getTarget() const
 {
     if (m_target)
         return m_target->getPosition();
-    return getPosition(); // fallback: target self
+    return getPosition(); 
 }
 
 
@@ -114,18 +84,16 @@ std::pair<bool, float> Player::EnemyIsVisible()
         return { false, 0.f };
 
     // Get the closest visible enemy (non-spy)
-    Character* closest = weaponLight->getClosestTarget(this);
+    Character* closest = getClosestTarget(this);
+    
     if (closest) {
         m_target = closest;
         sf::Vector2f diff = getPosition() - closest->getPosition();
         float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
         return { true, dist };
     }
-
     return { false, 0.f };
 }
-
-
 
 void Player::rotateTowardMouse(sf::RenderWindow& window)
 {

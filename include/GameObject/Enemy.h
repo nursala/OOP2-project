@@ -17,14 +17,20 @@ public:
     void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
     void speedDown();
+    void setSpeedDownTimer(float seconds); 
     sf::Vector2f getTarget() const override;
-	void update(float deltaTime) override;
+    void update(float deltaTime) override;
 
     // Spy methods
     void setSpy(bool value);
     bool isSpy() const;
+    void setSpyTimer(float seconds);
 
 private:
     const Player& m_playerRef;
     bool m_isSpy = false;
+    float m_spyTimer = 0.f;
+
+    float m_speedDownTimer = 0.f; 
+    float m_originalSpeed = 5.f;  
 };

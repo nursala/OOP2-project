@@ -13,7 +13,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     : Character(world, TextureManager::instance().get(TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
-    m_visable = false;
+    m_visable = true;
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
     m_state = std::make_unique<ChasingState>();
     if (m_state)
@@ -21,8 +21,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
     m_weapon = std::make_unique<HandGun>();
-    //m_weapon->setShootingRange(150.f);
-    m_speed = 5.f;
+    m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
     m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 }
@@ -36,7 +35,7 @@ bool Enemy::isPlayerVisible() const {
     RayCastClosest raycast;
 
     b2Vec2 start = { getPosition().x / SCALE, getPosition().y / SCALE };
-    sf::Vector2f targetPos = getTarget();  // Could be player or another enemy
+    sf::Vector2f targetPos = getTarget();
     b2Vec2 end = { targetPos.x / SCALE, targetPos.y / SCALE };
 
     b2Vec2 delta = end - start;
@@ -45,9 +44,8 @@ bool Enemy::isPlayerVisible() const {
 
     m_body->GetWorld()->RayCast(&raycast, start, end);
 
-    return raycast.hit(); // don't check if it's the player – just check if the path is clear
+    return raycast.hit();
 }
-
 
 float Enemy::distanceToPlayer() const {
     sf::Vector2f diff = m_playerRef.getPosition() - getPosition();
@@ -71,7 +69,6 @@ sf::Vector2f Enemy::getTarget() const {
     if (!m_isSpy)
         return m_playerRef.getPosition();
 
-    // Spy: target the closest non-spy enemy
     float minDist = std::numeric_limits<float>::max();
     sf::Vector2f closestEnemyPos = getPosition();
 
@@ -91,18 +88,40 @@ sf::Vector2f Enemy::getTarget() const {
     return closestEnemyPos;
 }
 
-void Enemy::update(float deltaTime)
-{
-	Character::update(deltaTime);
-    // check if the health is 0 so kill me
-	if (m_health <= 0.f) {
-		setDestroyed(true); // Mark as destroyed
-	}
+void Enemy::update(float deltaTime) {
+    Character::update(deltaTime);
+
+    if (m_health <= 0.f) {
+        setDestroyed(true);
+        return;
+    }
+
+    // Handle spy timeout
+    if (m_isSpy) {
+        m_spyTimer -= deltaTime;
+        if (m_spyTimer <= 0.f) {
+            m_isSpy = false;
+            m_sprite.setColor(sf::Color::White);
+        }
+    }
+
+    // Handle speed reset
+    if (m_speedDownTimer > 0.f) {
+        m_speedDownTimer -= deltaTime;
+        if (m_speedDownTimer <= 0.f) {
+            m_speed = m_originalSpeed;  // reset to normal speed
+        }
+    }
 }
 
 void Enemy::speedDown() {
     m_speed -= 0.5f;
     if (m_speed < 1.f) m_speed = 1.f;
+}
+
+void Enemy::setSpeedDownTimer(float seconds) {
+    speedDown();               // Apply slow
+    m_speedDownTimer = seconds;
 }
 
 void Enemy::setSpy(bool value) {
@@ -113,4 +132,8 @@ void Enemy::setSpy(bool value) {
 
 bool Enemy::isSpy() const {
     return m_isSpy;
+}
+
+void Enemy::setSpyTimer(float seconds) {
+    m_spyTimer = seconds;
 }

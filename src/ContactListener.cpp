@@ -47,13 +47,17 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 break;
             case GiftType::ENEMYSPEEDDOWN:
                 for (auto enemy : m_world.getEnemies())
+                {
                     enemy->speedDown();
+					enemy->setSpeedDownTimer(15.f);  // seconds of speed down
+                }
                 break;
             case GiftType::SPY:
                 // Convert first non-spy enemy to spy
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
+                        enemy->setSpyTimer(20.f);  //seconds of spy behavior
                         break;
                     }
                 }

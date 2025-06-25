@@ -8,6 +8,8 @@
 #include "StatesInc/State.h"
 #include "HealthBar.h"
 #include "ArmorBar.h"
+#include <box2d/b2_fixture.h>
+#include <unordered_set>
 
 class Weapon;
 class World;
@@ -35,6 +37,7 @@ public:
     float getShootingRange() const;
     void setShootingRange(float );
 	void setRotation(float angle);
+	void updateTargets();
 
     Character* getClosestTarget(const Character* self);
 
@@ -59,6 +62,9 @@ protected:
     float m_health = 100.f;
     float m_armor = 50.f;
     std::unique_ptr<ArmorBar> m_armorBar;
+
+    std::unordered_set<b2Fixture*> m_hitFixtures;
+
 };
 
 

@@ -1,15 +1,12 @@
-#include "GameObject/Character.h"
+﻿#include "GameObject/Character.h"
 #include "WorldInc/World.h"
 #include "VisionLight.h"
 #include "StatesInc/AttackingStatePlayer.h"
 #include <iostream>
 
 
-Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position,
-    sf::Vector2u imageCount, float switchTime)
-    : Entity(world, texture, position, imageCount, switchTime),
-    m_world(world)
-
+Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
+    : Entity(world, texture, position, imageCount, switchTime), m_world(world)
 {
 	m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
@@ -18,6 +15,7 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 }
 
 void Character::update(float deltaTime) {
+	this->updateTargets();
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
 		if (newState) {
@@ -62,6 +60,8 @@ void Character::update(float deltaTime) {
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
+
+
 
 }
 
@@ -142,11 +142,12 @@ void Character::setRotation(float angle)
 	}
 }
 
-Character* Character::getClosestTarget(const Character* self) {
-
+Character* Character::getClosestTarget(const Character* self) 
+{
+	
 	Character* closestCharacter = nullptr;
 	float minDistSq = std::numeric_limits<float>::max();
-	sf::Vector2f lightPos = getPosition();
+	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
 
 	bool lookingForEnemy = dynamic_cast<const Player*>(self);
 
@@ -154,20 +155,21 @@ Character* Character::getClosestTarget(const Character* self) {
 		b2Body* body = fixture->GetBody();
 		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
-		if (!character || !character->isVisible()) continue;
+		if (!character || !character->isVisible()) 
+		{
+			continue;
+		}
 
 		if (lookingForEnemy) {
 			auto* enemy = dynamic_cast<Enemy*>(character);
 			if (!enemy || enemy->isSpy()) continue; // Skip spies
 		}
-		else {
-			if (!dynamic_cast<Player*>(character)) continue;
-		}
+		else if (!dynamic_cast<Player*>(character)) continue;
 
 		sf::Vector2f charPos = character->getPosition();
 		float dx = charPos.x - lightPos.x;
 		float dy = charPos.y - lightPos.y;
-		float distSq = dx * dx + dy * dy;
+		float distSq = std::sqrt(dx * dx + dy * dy);
 
 		if (distSq < minDistSq) {
 			minDistSq = distSq;
@@ -175,6 +177,44 @@ Character* Character::getClosestTarget(const Character* self) {
 		}
 	}
 
-	m_hitFixtures.clear();
+	//m_hitFixtures.clear();
 	return closestCharacter;
+}
+
+void Character::updateTargets()
+{
+
+	m_hitFixtures.clear();
+	if (!m_visionLight)
+	{
+		return;
+	}
+
+	float startAngle = m_visionLight->getRotation() - m_visionLight->getBeamAngle() / 2.f;
+	float endAngle = m_visionLight->getRotation() + m_visionLight->getBeamAngle() / 2.f;
+
+	const int rayCount = 100;
+	float angleStep = (endAngle - startAngle) / static_cast<float>(rayCount);
+
+	sf::Vector2f lightPos = m_visionLight->getPosition();
+	b2Vec2 origin(lightPos.x / 30.f, lightPos.y / 30.f);  // تحويل للمتر
+
+	for (int i = 0; i <= rayCount; ++i) {
+		float angleDeg = startAngle + i * angleStep;
+		float angleRad = angleDeg * b2_pi / 180.f;
+		b2Vec2 direction(std::cos(angleRad), std::sin(angleRad));
+		b2Vec2 endPoint = origin + (m_visionLight->getRange() / 30.f) * direction;
+
+		RayCastClosest callback;
+		m_world.getWorld().RayCast(&callback, origin, endPoint);
+
+		if (callback.hit() && callback.getFixture()) {
+			b2Body* body = callback.getFixture()->GetBody();
+			if (body->GetType() == b2_dynamicBody && body != m_body) {
+				m_hitFixtures.insert(callback.getFixture());
+			}
+		}
+	}
+	/*if (typeid(*this).name() == typeid(Player).name())
+		std::cout << m_hitFixtures.size() << " targets" << std::endl;*/
 }

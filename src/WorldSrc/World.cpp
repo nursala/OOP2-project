@@ -237,11 +237,11 @@ void World::buildAllEdges()
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
 {
-    sf::Vector2f viewCenter = window.getView().getCenter();   // مركز المشهد
-    sf::Vector2f viewSize = window.getView().getSize();       // حجم المشهد
+    sf::Vector2f viewCenter = window.getView().getCenter(); 
+    sf::Vector2f viewSize = window.getView().getSize();     
 
     sf::Vector2f lightPos = viewCenter;
-    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; // مجال أوسع قليلًا من الشاشة
+    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; 
     float rangeSq = radius * radius;
 
     m_closeEdges.clear();
