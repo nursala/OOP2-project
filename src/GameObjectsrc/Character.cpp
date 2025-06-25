@@ -10,8 +10,9 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 {
 	m_visionLight = std::make_unique<VisionLight>(200.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.7f); // Set default intensity for the weapon light
-
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
+	init(b2_dynamicBody, 1.f);
+	m_visionLight->setScale(1.2f, 1.2f);
 }
 
 void Character::update(float deltaTime) {
@@ -29,11 +30,6 @@ void Character::update(float deltaTime) {
     {
         m_weapon->update(getPosition(),this->getBody()->GetAngle(), deltaTime);
     }
-
-    //if (m_visionLight)
-    //{
-    //    m_visionLight->update(getPosition(), this->getBody()->GetAngle());
-    //}
 
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation.getUvRect());
@@ -60,9 +56,6 @@ void Character::update(float deltaTime) {
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
-
-
-
 }
 
 void Character::render(sf::RenderWindow& window) {
@@ -142,25 +135,19 @@ void Character::setRotation(float angle)
 	}
 }
 
-Character* Character::getClosestTarget(const Character* self) 
+Character* Character::getClosestTarget(bool isPlayerChecking)
 {
-	
 	Character* closestCharacter = nullptr;
 	float minDistSq = std::numeric_limits<float>::max();
 	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
-
-	bool lookingForEnemy = dynamic_cast<const Player*>(self);
 
 	for (auto* fixture : m_hitFixtures) {
 		b2Body* body = fixture->GetBody();
 		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
-		if (!character || !character->isVisible()) 
-		{
-			continue;
-		}
+		if (!character || !character->isVisible()) continue;
 
-		if (lookingForEnemy) {
+		if (isPlayerChecking) {
 			auto* enemy = dynamic_cast<Enemy*>(character);
 			if (!enemy || enemy->isSpy()) continue; // Skip spies
 		}

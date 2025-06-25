@@ -2,8 +2,6 @@
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-HandGun::HandGun() : Weapon(WeaponType::HandGun)
+HandGun::HandGun() : Weapon(WeaponType::HandGun, 200.f, 5.f, 30.f)
 {
-	 m_shootingRange = 100.f; 
-	 m_damage = 5.f;
 }

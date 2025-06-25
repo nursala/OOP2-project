@@ -12,7 +12,6 @@ public:
 	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		sf::Vector2u imageCount, float switchTime);
 
-	void init();
 
 	virtual void update(float deltaTime) = 0;
 	virtual void render(sf::RenderWindow& window);
@@ -35,6 +34,7 @@ public:
 	sf::Vector2f getSpriteRadius() const {
 		return m_sprite.getScale();
 	}
+	void init(b2BodyType type, float radius);
 
 protected:
 	bool m_visable;
@@ -52,5 +52,4 @@ protected:
 	virtual void customizeFixtureDef(b2FixtureDef&) {}
 	virtual b2BodyType getBodyType() const { return b2_dynamicBody; }
 	static constexpr float SCALE = 30.f;
-
 };

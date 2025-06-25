@@ -19,13 +19,9 @@ Player::Player(World& world)
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
     if (m_state)
         m_state->enter(*this);
-
-    m_weapon = std::make_unique<HandGun>();
+    m_weapon = std::make_unique<Shotgun>();
     m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
-   
     m_speed = 10.f;
-    m_visable = true;
-	
 }
 
 void Player::takeDamage(int damage)
@@ -84,7 +80,7 @@ std::pair<bool, float> Player::EnemyIsVisible()
         return { false, 0.f };
 
     // Get the closest visible enemy (non-spy)
-    Character* closest = getClosestTarget(this);
+    Character* closest = getClosestTarget(true);
     
     if (closest) {
         m_target = closest;

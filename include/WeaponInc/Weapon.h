@@ -22,10 +22,11 @@ class RenderLayers;
 class Weapon
 {
 public:
-    Weapon(WeaponType);
 
-    std::vector<std::unique_ptr<Bullet>>fire(World& world, const sf::Vector2f& position,
+    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, const sf::Vector2f& position,
         const sf::Vector2f& direction,Character* owner);
+
+    
 
     void update(sf::Vector2f playerPos, float angle, float dt);
     void draw(sf::RenderWindow& window);
@@ -42,13 +43,14 @@ public:
     void setDamage(float damage);
 
 protected:
+    Weapon(WeaponType, float shootingRange, float damage, float angle);
 	WeaponType m_type;
-    float m_bulletSpeed = 0;
+    float m_bulletSpeed;
     std::unique_ptr<WeaponLight> m_weaponLight;
 
-    float m_shootingRange = 0;
+    float m_shootingRange;
     float m_fireCooldown = 1.f;
     float m_fireTimer = 0.f;
-    float m_damage = 10.f;
+    float m_damage;
 
 };

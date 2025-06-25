@@ -11,9 +11,9 @@ Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& d
 {
     m_visable = true;
     m_speed = 15.f;
-	m_bodyRadius = 0.3f; // Set a small radius for the bullet
     m_damage = damage;
 	m_range = range + 10.f;
+    init(b2_kinematicBody, 0.3f);
 }
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)

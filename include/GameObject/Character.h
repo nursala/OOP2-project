@@ -19,27 +19,25 @@ class VisionLight;
 class Character : public Entity
 {
 public:
-    Character(World& world, const sf::Texture* texture, sf::Vector2f position,
-        sf::Vector2u imageCount, float switchTime);
-
+    Character(World& , const sf::Texture* , sf::Vector2f , sf::Vector2u , float );
     virtual ~Character() = default;
 
     virtual void update(float );
     void render(sf::RenderWindow& ) override;
-    void render(RenderLayers& renderLayers);
+    void render(RenderLayers& );
     const MoveInfo& getLastMoveInfo();
     virtual b2BodyType getBodyType() const override;
-    void move(float dt);
+    void move(float );
 
     virtual void takeDamage(int ) = 0;
     virtual void shoot(float );
 
     float getShootingRange() const;
     void setShootingRange(float );
-	void setRotation(float angle);
+	void setRotation(float );
 	void updateTargets();
 
-    Character* getClosestTarget(const Character* self);
+    Character* getClosestTarget(bool);
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;

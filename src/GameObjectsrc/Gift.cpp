@@ -5,14 +5,10 @@
 #include "WorldInc/World.h"
 #include <iostream> 
 
-Gift::Gift(World& world, const sf::Texture* texture)
-	: Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
+Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
 	m_world(world)
 {
-    // Set up Box2D body as static or kinematic, and set up sprite
-    m_visable = true;
-	m_bodyRadius = 0.6f; // Set a default radius for the gift
-	//m_sprite.setScale(m_sprite.getScale().x * 0.5f, m_sprite.getScale().y * 0.5f);
+	init(b2_staticBody, 0.6f);
 }
 
 GiftType Gift::getType() const { return m_type; }

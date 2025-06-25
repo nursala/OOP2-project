@@ -17,12 +17,12 @@ World::World()
 void World::initWorld() {
 
     loadMapTexture();
+    m_world.SetContactListener(new ContactListener(*this));
     createPlayer();
     createEnemy();
     createGifts();
     setupMap();
     buildAllEdges();
-    setupPlayerLight();
 }
 
 void World::loadMapTexture() {
@@ -30,16 +30,14 @@ void World::loadMapTexture() {
         throw std::runtime_error("Failed to load map.png!");
     }
     m_mapSprite.setTexture(m_mapTexture);
-    m_world.SetContactListener(new ContactListener(*this));
-    Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 }
 
 void World::createPlayer() {
 
+    Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(TextureID::Player);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
     m_player->setPosition(b2Vec2(pos.x, pos.y));
-    m_player->init();
 }
 
 void World::createGifts()
@@ -53,18 +51,15 @@ void World::createGifts()
 	for (const auto& pos : giftPositions)
 	{
         createGift(static_cast<GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
-        //createGift(GiftType::SPY, b2Vec2(pos.x, pos.y));
 	}
 }
 
 void World::createGift(GiftType type,b2Vec2 pos)
 {
-    auto textureId = static_cast<TextureID>(static_cast<int>(type)+2);
+    auto textureId = static_cast<TextureID>(static_cast<int>(type) + 2);
     m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
     m_gifts.back()->setType(type);
-    m_gifts.back()->init();
     m_gifts.back()->setPosition(pos);
-	//m_gifts.back()->setSpriteRadius(0.5f); // Set the radius for the gift
 }
 
 void World::createEnemy()
@@ -77,23 +72,16 @@ void World::createEnemy()
         std::cref(m_tileMap),
         std::cref(*m_player)
     );
-	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
     for (int i = 0; i < enemyPositions.size(); ++i)
     {
-        //int randomIQ = rand() % 10 + 1;
-
         auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
         enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
-        enemy->init();           
         m_enemies.push_back(std::move(enemy));
     }
 }
 
 void World::setupMap() {
     m_tileMap.createCollisionObjects(m_world, "walls");
-}
-
-void World::setupPlayerLight() {
 }
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
@@ -127,7 +115,6 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
         }
         else ++it;
     }
-    updateLightSystem(window);
     updateBullets(deltaTime);
     m_renderLayers->setView(window.getView());
 }
@@ -141,14 +128,6 @@ void World::updateBullets(float deltaTime) {
         }
         else ++it;
     }
-}
-
-void World::updateLightSystem(sf::RenderWindow& window) {
-    sf::Vector2f playerPos = m_player->getPosition();
-    sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    //float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
-    calcNearlyEdge(window);
-    
 }
 
 void World::render(sf::RenderWindow& window) {
@@ -173,20 +152,6 @@ void World::render(sf::RenderWindow& window) {
         bullet->render(window);
 }
 
-void World::drawMap(sf::RenderWindow& window) {
-    window.draw(m_mapSprite);
-}
-
-void World::drawLighting(sf::RenderWindow& window) {
-
-}
-
-void World::drawGameObjects(sf::RenderWindow& window) {
-    m_player->render(window);
-    for (auto& bullet : m_bullets)
-        bullet->render(window);
-}
-
 b2World& World::getWorld() {
     return m_world;
 }
@@ -194,7 +159,6 @@ b2World& World::getWorld() {
 void World::addBullets(std::vector<std::unique_ptr<Bullet>> bullets) {
     for (auto& bullet: bullets)
     {
-        bullet->init();
         m_bullets.push_back(std::move(bullet));
     }
 }
