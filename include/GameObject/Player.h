@@ -9,15 +9,14 @@
 #include "VisionLight.h"
 
 class World;
-class Player : public Character {  
-public:  
-   Player(World& );  
-   void takeDamage(int ) override;
-   void addHealth();
-   void addArmor();
-   void addSpeed();
-    sf::Vector2f getTarget() const override;
-    std::pair<bool, float> EnemyIsVisible() ;
-	void rotateTowardMouse(sf::RenderWindow& ) ;
-   
+class Player : public Character {
+public:
+	Player(World&);
+	void takeDamage(int) override;
+	void addHealth();
+	void addArmor();
+	void addSpeed();
+	sf::Vector2f getTarget() const override;
+	void rotateTowardMouse(sf::RenderWindow&);
+	virtual Character* getClosestTarget()override;
 };

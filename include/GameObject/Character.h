@@ -36,8 +36,14 @@ public:
     void setShootingRange(float );
 	void setRotation(float );
 	void updateTargets();
+    void updateTargets(sf::RenderWindow& window);
 
-    Character* getClosestTarget(bool);
+	void setTarget(Character* target) { m_target = target; }
+
+
+    Character* getTargetsss() const;
+
+    virtual Character* getClosestTarget() = 0;
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;

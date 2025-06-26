@@ -7,6 +7,7 @@
 #include "MoveStrategyAndInfoInc/MoveInfo.h"
 
 class World;
+class RenderLayers; // Forward declaration
 class Entity {
 public:
 	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
@@ -15,6 +16,7 @@ public:
 
 	virtual void update(float deltaTime) = 0;
 	virtual void render(sf::RenderWindow& window);
+	virtual void render(RenderLayers& renderLayers);
 	b2Vec2 getPositionB2() const;
 
 	sf::Vector2f getPosition() const;

@@ -47,7 +47,6 @@ private:
     sf::Sprite m_mapSprite;
     sf::Clock m_clock;
     sf::Clock m_movementClock;
-    float m_elapsedTime;
     LoadMap m_tileMap;
     candle::EdgeVector m_allEdges;
     std::vector<candle::Edge> m_closeEdges;

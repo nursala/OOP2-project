@@ -8,37 +8,40 @@
 #include <iostream>
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
+#include "WeaponInc/Sniper.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
+	: Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
 {
-    m_state = std::make_unique<WalkingStatePlayer>();
-    m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
+	m_state = std::make_unique<WalkingStatePlayer>();
+	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    if (m_state)
-        m_state->enter(*this);
-    m_weapon = std::make_unique<Shotgun>();
-    m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
-    m_speed = 10.f;
+	if (m_state)
+		m_state->enter(*this);
+	m_weapon = std::make_unique<HandGun>();
+	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
+	m_speed = 10.f;
+	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
+
 }
 
 void Player::takeDamage(int damage)
 {
-    if (m_armor > 0) {
-        float armorDamage = std::min(m_armor, static_cast<float>(damage));
-        m_armor -= armorDamage;
-        damage -= static_cast<int>(armorDamage);
-    }
-    if (damage > 0) {
-        m_health -= damage;
-        if (m_health < 0.f) m_health = 0.f;
-    }
+	if (m_armor > 0) {
+		float armorDamage = std::min(m_armor, static_cast<float>(damage));
+		m_armor -= armorDamage;
+		damage -= static_cast<int>(armorDamage);
+	}
+	if (damage > 0) {
+		m_health -= damage;
+		if (m_health < 0.f) m_health = 0.f;
+	}
 
-    //  Update the health bar (use Character's member)
-    m_healthBar->setValue(m_health);
-    m_armorBar->setValue(m_armor);
+	//  Update the health bar (use Character's member)
+	m_healthBar->setValue(m_health);
+	m_armorBar->setValue(m_armor);
 }
 
 void Player::addHealth()
@@ -65,38 +68,49 @@ void Player::addSpeed()
 
 sf::Vector2f Player::getTarget() const
 {
-    if (m_target)
-        return m_target->getPosition();
-    return getPosition(); 
+	if (m_target)
+		return m_target->getPosition();
+	return getPosition();
 }
 
 
-std::pair<bool, float> Player::EnemyIsVisible()
-{
-    if (!m_weapon) return { false, 0.f };
-
-    auto weaponLight = m_weapon->getWeaponLight();
-    if (!m_visionLight || !weaponLight)
-        return { false, 0.f };
-
-    // Get the closest visible enemy (non-spy)
-    Character* closest = getClosestTarget(true);
-    
-    if (closest) {
-        m_target = closest;
-        sf::Vector2f diff = getPosition() - closest->getPosition();
-        float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
-        return { true, dist };
-    }
-    return { false, 0.f };
-}
 
 void Player::rotateTowardMouse(sf::RenderWindow& window)
 {
-    sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-    sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-    sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
-    float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
-    setRotation(angle); // Implement this in your Character or Sprite wrapper
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
+	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+	setRotation(angle); // Implement this in your Character or Sprite wrapper
+}
+
+Character* Player::getClosestTarget()
+{
+	Character* closestCharacter = nullptr;
+	float minDistSq = std::numeric_limits<float>::max();
+	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
+
+	for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		if (!character || !character->isVisible()) continue;
+
+		auto* enemy = dynamic_cast<Enemy*>(character);
+		if (!enemy || enemy->isSpy()) continue; 
+
+
+		sf::Vector2f charPos = character->getPosition();
+		float dx = charPos.x - lightPos.x;
+		float dy = charPos.y - lightPos.y;
+		float distSq = std::sqrt(dx * dx + dy * dy);
+
+		if (distSq < minDistSq) {
+			minDistSq = distSq;
+			closestCharacter = character;
+		}
+	}
+	m_target = closestCharacter;
+	return closestCharacter;
 }
 

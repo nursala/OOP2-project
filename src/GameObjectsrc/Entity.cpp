@@ -52,6 +52,13 @@ void Entity::render(sf::RenderWindow& window) {
 		window.draw(m_sprite);
 }
 
+void Entity::render(RenderLayers& renderLayers) {
+	if (m_visable)
+		renderLayers.drawForeground(m_sprite);
+	else
+		renderLayers.drawBackground(m_sprite); 
+}
+
 void Entity::setPosition(const b2Vec2& position)
 {
 	m_position = {position.x, position.y};

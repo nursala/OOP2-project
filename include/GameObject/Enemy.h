@@ -12,8 +12,7 @@ public:
     Enemy(World& world, const LoadMap& map, const Player& player);
     ~Enemy() override;
 
-    bool isPlayerVisible() const;
-    float distanceToPlayer() const;
+    virtual Character* getClosestTarget();
     void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
     void speedDown();
@@ -21,7 +20,7 @@ public:
     sf::Vector2f getTarget() const override;
     void update(float deltaTime) override;
 
-    // Spy methods
+
     void setSpy(bool value);
     bool isSpy() const;
     void setSpyTimer(float seconds);

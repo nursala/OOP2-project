@@ -57,7 +57,8 @@ bool Bullet::shouldDestroy() const
 
 Character* Bullet::getOwner() const
 {
-    return m_owner->isDestroyed() ? nullptr : m_owner;
+	return m_owner; // Return the owner of the bullet, or nullptr if it has no owner
+    //return (!m_owner || m_owner->isDestroyed()) ? nullptr : m_owner;
 }
 
 float Bullet::getDamage() const

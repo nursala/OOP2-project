@@ -5,10 +5,14 @@
 #include <iostream>
 
 std::unique_ptr<State> AttackingStateEnemy::handleInput(Character& character) {
-    Enemy& enemy = static_cast<Enemy&>(character);
+   
 
-    if (!enemy.isPlayerVisible() || enemy.distanceToPlayer() > enemy.getShootingRange()) {
+    if (!character.getTargetsss())
+    {
+        return nullptr;
+    }
+    else
+    {
         return std::make_unique<ChasingState>();
     }
-    return nullptr;
 }
