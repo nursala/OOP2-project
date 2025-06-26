@@ -6,7 +6,7 @@
 #include <iostream> 
 
 Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
-	m_world(world)
+m_world(world)
 {
 
 	init(b2_staticBody, 0.6f);
