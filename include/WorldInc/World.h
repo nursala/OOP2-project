@@ -9,6 +9,7 @@
 #include "DebugDraw.h"
 #include "LightSystem.h"
 #include "GameObject/Bullet.h"
+#include "Statusbar.h"
 #include <vector>
 #include <memory>
 #include "RenderLayers.h"
@@ -38,6 +39,7 @@ private:
     void DebugEdge(sf::RenderWindow& );
 
     b2World m_world;
+	Statusbar m_statusbar;
     std::unique_ptr<RenderLayers> m_renderLayers;
     std::unique_ptr<Player> m_player;
     std::vector <std::unique_ptr<Enemy>> m_enemies;
@@ -52,4 +54,5 @@ private:
     candle::EdgeVector m_allEdges;
     std::vector<candle::Edge> m_closeEdges;
     static constexpr float SCALE = 30.f;
+    bool m_gameOver = false;
 };

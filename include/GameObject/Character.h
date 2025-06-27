@@ -54,7 +54,6 @@ protected:
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
     std::shared_ptr<VisionLight> m_visionLight;
-
     MoveInfo m_lastMoveInfo;
     std::unique_ptr <HealthBar> m_healthBar;
     float m_health = 100.f;

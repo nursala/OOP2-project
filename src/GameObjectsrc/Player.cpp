@@ -24,6 +24,18 @@ Player::Player(World& world)
     m_speed = 10.f;
 }
 
+void Player::update(float deltaTime) {
+    Character::update(deltaTime);
+
+    // Handle vision boost timer
+    if (m_visionBoostActive) {
+        m_visionBoostTimer -= deltaTime;
+        if (m_visionBoostTimer <= 0.f && m_visionLight) {
+            m_visionLight->setRange(m_originalVisionRange);
+            m_visionBoostActive = false;
+        }
+    }
+}
 void Player::takeDamage(int damage)
 {
     if (m_armor > 0) {
@@ -35,7 +47,10 @@ void Player::takeDamage(int damage)
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;
     }
-
+    if (m_health == 0.f) {
+        setDestroyed(true);   // Mark the player as destroyed
+        m_alive = false;      // Optional: track status
+    }
     //  Update the health bar (use Character's member)
     m_healthBar->setValue(m_health);
     m_armorBar->setValue(m_armor);
@@ -58,10 +73,19 @@ void Player::addArmor()
 void Player::addSpeed()
 {
 	m_speed += 0.5f; // Increase speed by 0.5
-	if (m_speed > 17.f) m_speed = 17.f; // Cap speed at 5
+	if (m_speed > 16.f) m_speed = 16.f; // Cap speed at 5
 	std::cout << "Player speed increased to: " << m_speed << std::endl;
 }
 
+void Player::increaseVisionTemporarily(float extraRange, float duration)
+{
+    if (!m_visionBoostActive && m_visionLight) {
+        m_originalVisionRange = m_visionLight->getRange();
+        m_visionLight->setRange(m_originalVisionRange + extraRange);
+        m_visionBoostTimer = duration;
+        m_visionBoostActive = true;
+    }
+}
 
 sf::Vector2f Player::getTarget() const
 {
@@ -69,7 +93,6 @@ sf::Vector2f Player::getTarget() const
         return m_target->getPosition();
     return getPosition(); 
 }
-
 
 std::pair<bool, float> Player::EnemyIsVisible()
 {
@@ -99,4 +122,3 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
     float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
     setRotation(angle); // Implement this in your Character or Sprite wrapper
 }
-

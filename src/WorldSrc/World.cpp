@@ -88,11 +88,18 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
     m_world.Step(deltaTime, 8, 3);
     m_player->update(deltaTime);
 	m_player->rotateTowardMouse(window);
+	//if (!m_player->isAlive()) {
+	//	m_player->isDestroyed(); // Mark the player as destroyed
+ //       // Stop game logic and show game over screen
+	//	return; // Early exit if player is dead
+	//}
     for (auto enemy = m_enemies.begin(); enemy != m_enemies.end();)
     {
         if ((*enemy)->isDestroyed()) {
             //m_world.DestroyBody((*enemy)->getBody());
             enemy = m_enemies.erase(enemy);
+			m_statusbar.setKills(m_statusbar.getKills() + 1); // Increment kills count 
+			m_statusbar.setCoins(m_statusbar.getCoins() + 25); // Increment coins count
             //(*enemy) = nullptr; // Set to nullptr to avoid dangling pointer
             continue; // Skip to the next iteration
         }

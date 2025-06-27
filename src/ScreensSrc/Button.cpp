@@ -31,7 +31,6 @@ void Button::updateHover(const sf::RenderWindow& window) {
 
 void Button::render(sf::RenderWindow& window) {
 	window.draw(m_shape);
-	window.draw(m_text);
 }
 
 void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window) {

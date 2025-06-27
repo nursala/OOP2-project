@@ -2,7 +2,7 @@
 #include "GameObject/Entity.h" 
 
 
-enum class GiftType { ARMOR, HEALTH, ENEMYSPEEDDOWN, SPEEDUP, SPY, SIZE};
+enum class GiftType { ARMOR, HEALTH, ENEMYSPEEDDOWN, SPEEDUP, SPY,INCREASERANGE,SIZE};
 
 class Gift : public Entity {  
 public:  
@@ -12,9 +12,9 @@ public:
     //virtual void apply(Player& player) = 0; // Applies the effect to the player  
     void update(float deltaTime) override;  
     void render(sf::RenderWindow& window) override;  
-     b2BodyType getBodyType() const override { return b2_staticBody; } ;
-     void customizeFixtureDef(b2FixtureDef& fixtureDef);
-   void des();  
+    b2BodyType getBodyType() const override { return b2_staticBody; } ;
+    void customizeFixtureDef(b2FixtureDef& fixtureDef);
+    void des();  
 
 protected:  
    GiftType m_type;  
