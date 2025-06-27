@@ -22,35 +22,36 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_weapon = std::make_unique<HandGun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
+    //m_weapon->setFireCooldown(0.1f);
+    m_weapon->setBulletSpeed(1);
 }
 
-Enemy::~Enemy() {
-    if (m_body)
-        m_body->GetWorld()->DestroyBody(m_body);
-}
+
 
 Character* Enemy::getClosestTarget()
 {
-    if (m_target  && !m_target->isDestroyed()) {
-        for (b2Fixture* fixture = m_target->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
-            if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
-                return m_target;
-            }
-        }
-    }
-    if (m_target) {
-        sf::Vector2f targetPos = m_target->getPosition();
-        sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
 
-        float dx = targetPos.x - selfPos.x;
-        float dy = targetPos.y - selfPos.y;
-        float distSq = dx * dx + dy * dy;
 
-        float radius = m_target->getWeapon()->getWeaponLight()->getRange();
-        if (distSq <= radius * radius) {
-            return m_target;
-        }
-    }
+    //if (m_target  && !m_target->isDestroyed()) {
+    //    for (b2Fixture* fixture = m_target->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    //        if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
+    //            return m_target;
+    //        }
+    //    }
+    //}
+    //if (m_target) {
+    //    sf::Vector2f targetPos = m_target->getPosition();
+    //    sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
+
+    //    float dx = targetPos.x - selfPos.x;
+    //    float dy = targetPos.y - selfPos.y;
+    //    float distSq = dx * dx + dy * dy;
+
+    //    float radius = m_target->getWeapon()->getWeaponLight()->getRange();
+    //    if (distSq <= radius * radius) {
+    //        return m_target;
+    //    }
+    //}
     if (m_hitFixtures.empty())
     {
 		m_target = nullptr; // No targets found
@@ -119,7 +120,7 @@ void Enemy::fireBullet(const sf::Vector2f&) {
 }
 
 void Enemy::takeDamage(int damage) {
-    damage += 100;
+    damage += 50;
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;

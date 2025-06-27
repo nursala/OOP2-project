@@ -24,15 +24,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
     // === Player Collisions ===
     if (auto player = dynamic_cast<Player*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
-            if (bullet->getOwner() != player) {
-                // Prevent spy bullets from damaging player
-                if (auto enemy = dynamic_cast<Enemy*>(bullet->getOwner()))
-                    if (enemy->isSpy())
-                        return;
-
+            
                 player->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
-            }
         }
         else if (auto gift = dynamic_cast<Gift*>(entityB)) {
             switch (gift->getType()) {
@@ -76,23 +70,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
     // === Enemy Collisions ===
     else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
-			std::cout << "Enemy hit by bullet" << std::endl;
-            if (!bullet->getOwner() || !bullet)
-            {
-                return;
-            }
-            std::cerr << "Bullet owner is null!" << std::endl;
-            if (bullet->getOwner() != enemy) {
-                // Prevent player bullets from damaging spy
-                if (enemy->isSpy() && dynamic_cast<Player*>(bullet->getOwner()))
-                    return;
-                /*if (auto e = dynamic_cast<Enemy*>(bullet->getOwner()) ; !e->isSpy() && enemy->isSpy())
-                {
-                    enemy->setTarget(bullet->getOwner());
-                }*/
-                //enemy->takeDamage(bullet->getDamage());
+			
+                enemy->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
-            }
+            
         }
     }
 }

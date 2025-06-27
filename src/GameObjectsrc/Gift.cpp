@@ -50,12 +50,10 @@ void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
 
 void Gift::des()
 {
-	//if (m_body) {
-	//	//m_body->SetUserData(nullptr); // Clear user data before destruction
-	//	// Destroy the Box2D body associated with this gift
-	//	//m_world.getWorld().DestroyBody(m_body);
-	//	m_body = nullptr;
-	//}
+
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
+
 }
+
+

@@ -42,6 +42,9 @@ public:
     float getDamage() const;
     void setDamage(float damage);
 
+	void setFireCooldown(float cooldown) { m_fireCooldown = cooldown; }
+    void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
+
 protected:
     Weapon(WeaponType, float shootingRange, float damage, float angle);
 	WeaponType m_type;

@@ -10,10 +10,15 @@ Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& d
     m_direction(direction), m_owner(owner)
 {
     m_visable = true;
-    m_speed = 15.f;
+    m_speed = 1;
     m_damage = damage;
 	m_range = range + 10.f;
     init(b2_kinematicBody, 0.3f);
+}
+
+Bullet::~Bullet()
+{
+	m_owner = nullptr; // Clear owner reference
 }
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)
@@ -33,7 +38,7 @@ b2BodyType Bullet::getBodyType() const
 
 void Bullet::update(float deltaTime)
 {
-    if (!m_body || m_destroy) return;
+    if (!m_body || m_destroyed) return;
 
     b2Vec2 velocity(m_direction.x * m_speed, m_direction.y * m_speed);
     m_body->SetLinearVelocity(velocity);
@@ -47,18 +52,13 @@ void Bullet::update(float deltaTime)
     float dy = m_position.y - m_initialPosition.y;
     float distance = std::sqrt(dx * dx + dy * dy);
     if (distance > m_range)
-        m_destroy = true;
+        m_destroyed = true;
 }
 
-bool Bullet::shouldDestroy() const
-{
-    return m_destroy;
-}
 
 Character* Bullet::getOwner() const
 {
-	return m_owner; // Return the owner of the bullet, or nullptr if it has no owner
-    //return (!m_owner || m_owner->isDestroyed()) ? nullptr : m_owner;
+	return m_owner; 
 }
 
 float Bullet::getDamage() const

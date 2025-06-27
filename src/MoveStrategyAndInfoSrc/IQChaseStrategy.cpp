@@ -25,11 +25,11 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
         targetPos = m_player.getPosition();
     }
 
-
-    float distToPlayer = distance(enemyPos, targetPos);
-    if (distToPlayer < 350.f && m_iqLevel < 10) ++m_iqLevel;
-    if (distToPlayer > 400.f && m_iqLevel > 1) --m_iqLevel;
-    if (auto e = dynamic_cast<Enemy*>(&character); e && e->isSpy() && m_iqLevel < 10) ++m_iqLevel;
+    auto e = dynamic_cast<Enemy*>(&character);
+    float distToTarget = distance(enemyPos, targetPos);
+    if (distToTarget < 350.f && m_iqLevel < 10) ++m_iqLevel;
+    if (distToTarget > 400.f && m_iqLevel > 1 && !e->isSpy()) --m_iqLevel;
+    if ( e && e->isSpy() && m_iqLevel < 10) ++m_iqLevel;
 
 
     float chanceToUseAStar = m_iqLevel / 10.f;

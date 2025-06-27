@@ -58,6 +58,7 @@ void World::createGift(GiftType type, b2Vec2 pos)
 {
 	auto textureId = static_cast<TextureID>(static_cast<int>(type) + 2);
 	m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
+	m_gifts.back()->setType(type);
 	m_gifts.back()->setPosition(pos);
 }
 
@@ -85,50 +86,91 @@ void World::setupMap() {
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
 	calcNearlyEdge(window);
+	int index = 0;
+	for (const auto& enemy : m_enemies) {
+		std::cout << "Enemy #" << index << " - "
+			<< (enemy->isSpy() ? "Spy" : "Not Spy");
 
+		Character* target = enemy->getTargetsss();
+
+		if (!target) {
+			std::cout << " -> Target: None" << std::endl;
+		}
+		else if (target == m_player.get()) {
+			std::cout << " -> Target: Player" << std::endl;
+		}
+		else {
+			// الهدف هو عدو تاني
+			auto it = std::find_if(m_enemies.begin(), m_enemies.end(),
+				[&](const auto& other) { return other.get() == target; });
+
+			if (it != m_enemies.end()) {
+				int targetIndex = std::distance(m_enemies.begin(), it);
+				bool isTargetSpy = static_cast<Enemy*>(target)->isSpy();
+
+				std::cout << " -> Target: Enemy #" << targetIndex
+					<< " - " << (isTargetSpy ? "Spy" : "Not Spy") << std::endl;
+			}
+			else {
+				std::cout << " -> Target: Unknown" << std::endl;
+			}
+		}
+
+		++index;
+	}
+
+
+	// Step physics
 	m_world.Step(deltaTime, 8, 3);
+
+	// Update player
 	m_player->update(deltaTime);
 	m_player->rotateTowardMouse(window);
-
-	if (m_player->getTargetsss())
-	{
+	for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
+		(*it)->update(deltaTime);
+		if ((*it)->isDestroyed()) {
+			(*it)->setDestroyed(true);
+			it = m_bullets.erase(it);
+		}
+		else ++it;
 	}
+
+	// Update enemies
 	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end();)
 	{
-		
 		if ((*enemy)->isDestroyed()) {
-			//m_world.DestroyBody((*enemy)->getBody());
 			enemy = m_enemies.erase(enemy);
-			//(*enemy) = nullptr; // Set to nullptr to avoid dangling pointer
-			continue; // Skip to the next iteration
 		}
-		else
-		{
+		else {
 			(*enemy)->update(deltaTime);
 			++enemy;
 		}
 	}
 
-	for (auto& bullet : m_bullets)
-		bullet->update(deltaTime);
+	// Update bullets
 
+
+	// Update gifts
 	for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
 		it->get()->update(deltaTime);
 		if ((*it)->isDestroyed()) {
-			m_world.DestroyBody((*it)->getBody());
 			it = m_gifts.erase(it);
 		}
 		else ++it;
 	}
-	updateBullets(deltaTime);
+
+	// Handle bullet collisions or extra logic
+	
+	// View update
+
 	m_renderLayers->setView(window.getView());
+
 }
 
 void World::updateBullets(float deltaTime) {
 	for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
 		(*it)->update(deltaTime);
-		if ((*it)->shouldDestroy()) {
-			m_world.DestroyBody((*it)->getBody());
+		if ((*it)->isDestroyed()) {
 			it = m_bullets.erase(it);
 		}
 		else ++it;
@@ -154,12 +196,6 @@ void World::render(sf::RenderWindow& window) {
 
 	m_renderLayers->display();
 	m_renderLayers->renderFinal(window);
-	//DebugEdge(window
-	//m_player->updateTargets(window);
-	//for (auto& enemy : m_enemies)
-	//	enemy->updateTargets(window);
-
-
 }
 
 b2World& World::getWorld() {

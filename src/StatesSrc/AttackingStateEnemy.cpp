@@ -6,13 +6,7 @@
 
 std::unique_ptr<State> AttackingStateEnemy::handleInput(Character& character) {
    
-
-    if (!character.getTargetsss())
-    {
-        return nullptr;
-    }
-    else
-    {
+    if (character.getTargetsss())
         return std::make_unique<ChasingState>();
-    }
+    return nullptr;
 }

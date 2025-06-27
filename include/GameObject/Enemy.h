@@ -10,7 +10,6 @@ class World;
 class Enemy : public Character {
 public:
     Enemy(World& world, const LoadMap& map, const Player& player);
-    ~Enemy() override;
 
     virtual Character* getClosestTarget();
     void fireBullet(const sf::Vector2f& dir);

@@ -12,7 +12,7 @@ class Entity {
 public:
 	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		sf::Vector2u imageCount, float switchTime);
-
+	virtual ~Entity();
 
 	virtual void update(float deltaTime) = 0;
 	virtual void render(sf::RenderWindow& window);
@@ -21,7 +21,6 @@ public:
 
 	sf::Vector2f getPosition() const;
 	void setPosition(const b2Vec2& position);
-	virtual ~Entity() = default;
 	void setVelocity(const b2Vec2& velocity);
 	b2Vec2 getVelocity() const;
 	b2Body* getBody() const;
@@ -38,9 +37,11 @@ public:
 	}
 	void init(b2BodyType type, float radius);
 
+
 protected:
 	bool m_visable;
 	bool m_destroyed = false;
+
 	b2Body* m_body = nullptr;
     World& m_world;
 	float m_bodyRadius = 0.f; // Used for circle bodies

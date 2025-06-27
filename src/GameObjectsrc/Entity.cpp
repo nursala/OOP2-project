@@ -17,6 +17,13 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 	m_visable = true;
 }
 
+Entity::~Entity() {
+	if (m_body) {
+		m_body->GetWorld()->DestroyBody(m_body);
+		m_body = nullptr;
+	}
+}
+
 void Entity::init(b2BodyType type, float radius)
 {
 	b2BodyDef bodyDef;

@@ -3,6 +3,7 @@
 #include "VisionLight.h"
 #include "StatesInc/AttackingStatePlayer.h"
 #include <iostream>
+#include "WeaponInc/Weapon.h"
 
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
@@ -15,6 +16,11 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 	m_visionLight->setScale(1.2f, 1.2f);
 	 m_target = nullptr;
 
+}
+
+Character::~Character()
+{
+	m_target = nullptr; // Clear target reference
 }
 
 void Character::update(float deltaTime) {
@@ -78,12 +84,26 @@ void Character::render(RenderLayers& renderLayers) {
 
 	if (m_visionLight)
 	{
-		renderLayers.drawLight(*m_visionLight);
-		renderLayers.drawForeground(*m_visionLight);
+		//renderLayers.drawLight(*m_visionLight);
+		//renderLayers.drawForeground(*m_visionLight);
 	}
 	if (m_weapon)
 		m_weapon->draw(renderLayers);
+
+	// رسم خط بين الشخصية والهدف
+	//if (m_target && !m_target->isDestroyed())
+	//{
+	//	sf::VertexArray line(sf::Lines, 5);
+	//	line[0].position = this->getPosition();
+	//	line[0].color = sf::Color::Magenta;
+
+	//	line[1].position = m_target->getPosition();
+	//	line[1].color = sf::Color::Magenta;
+
+	//	renderLayers.drawForeground(line); // أو drawDebug إذا عندك طبقة مخصصة
+	//}
 }
+
 	
 
 const MoveInfo& Character::getLastMoveInfo()
