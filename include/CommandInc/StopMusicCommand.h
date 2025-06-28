@@ -5,6 +5,6 @@
 class StopMusicCommand : public Command {
 public:
     void execute() override { 
-        SoundManager::instance().pause(SoundID::BackgroundMusic);
+        SoundManager::instance().pause(Constants::SoundID::BackgroundMusic);
     };
 };

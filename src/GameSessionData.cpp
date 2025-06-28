@@ -7,8 +7,8 @@ GameSessionData& GameSessionData::instance() {
 
 
 GameSessionData::GameSessionData()
-    : money(200), selectedWeapon(WeaponType::HandGun) {
-    ownedWeapons.insert(WeaponType::HandGun);
+    : money(200), selectedWeapon(Constants::WeaponType::HandGun) {
+    ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
 int& GameSessionData::getMoney()
@@ -16,21 +16,21 @@ int& GameSessionData::getMoney()
     return money;
 }
 
-bool GameSessionData::hasWeapon(WeaponType weapon) const {
+bool GameSessionData::hasWeapon(Constants::WeaponType weapon) const {
     return ownedWeapons.find(weapon) != ownedWeapons.end();
 }
 
-void GameSessionData::addWeapon(WeaponType weapon) {
+void GameSessionData::addWeapon(Constants::WeaponType weapon) {
     ownedWeapons.insert(weapon);
 }
 
 // GameSessionData.h
-void GameSessionData::setSelectedWeapon(WeaponType weapon) {
+void GameSessionData::setSelectedWeapon(Constants::WeaponType weapon) {
     selectedWeapon = weapon;
     shouldUpdateWeapon = true;
 }
 
-WeaponType GameSessionData::getSelectedWeapon() const {
+Constants::WeaponType GameSessionData::getSelectedWeapon() const {
     return selectedWeapon;
 }
 

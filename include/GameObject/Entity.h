@@ -5,6 +5,7 @@
 #include "AnimationInc/Animation.h"
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "MoveStrategyAndInfoInc/MoveInfo.h"
+#include "Constants.h"
 
 class World;
 class Entity {

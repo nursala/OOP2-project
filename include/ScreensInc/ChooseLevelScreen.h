@@ -1,13 +1,16 @@
 #pragma once
+
 #include "ScreensInc/Screen.h"
 #include "ScreensInc/Button.h"
 #include "ResourseInc/TextureManager.h"
 
-class HomeScreen : public Screen {
+class ChooseLevelScreen : public Screen {
+
 public:
-	HomeScreen();
-	virtual ~HomeScreen() = default;
-	void init() override;
+	ChooseLevelScreen();
+	~ChooseLevelScreen() = default;
 	Constants::ScreenID getScreenID() const override;
 private:
+	std::vector <sf::RectangleShape> m_level;
+	void init() override;
 };

@@ -4,6 +4,7 @@
 #include "Factory.h"
 #include "WorldInc/World.h"
 #include <iostream> 
+#include "Constants.h"
 
 Gift::Gift(World& world, const sf::Texture* texture)
 	: Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
@@ -15,7 +16,7 @@ Gift::Gift(World& world, const sf::Texture* texture)
 	//m_sprite.setScale(m_sprite.getScale().x * 0.5f, m_sprite.getScale().y * 0.5f);
 }
 
-GiftType Gift::getType() const { return m_type; }
+Constants::GiftType Gift::getType() const { return m_type; }
 
 void Gift::update(float)
 {

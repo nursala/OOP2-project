@@ -1,29 +1,40 @@
-#include "ScreensInc/Screen.h"
+﻿#include "ScreensInc/Screen.h"
 #include "ResourseInc/TextureManager.h"
 
 Screen::Screen()
 {
-	m_backGround.setSize(sf::Vector2f(1280, 720));
 	m_backGround.setPosition(0.0f, 0.0f);
 }
 
-void Screen::setBackGroundTexture(const TextureID texture)
+void Screen::setSize(const sf::Vector2f& size)
 {
-	m_backGround.setTexture(TextureManager::instance().get(texture));
-	m_backGround.setTextureRect(sf::IntRect(0, 0,
-		TextureManager::instance().get(texture)->getSize().x,
-		TextureManager::instance().get(texture)->getSize().y));
+	m_backGround.setSize(size);
 }
 
-void Screen::setScreenAction(std::function<void(ScreenID)> action)
+void Screen::setButtons()
 {
-	m_changeScreen = std::move(action);
-	init();
+	for (auto& info : m_buttonInfos)
+	{
+		auto& btn = m_buttons.emplace(
+			info.id,
+			Button(info.size, info.position, info.label)
+		).first->second;
+
+		btn.setCommand(std::move(info.command));
+	}
+}
+
+void Screen::setBackGroundTexture(const Constants::TextureID texture)
+{
+	auto tex = TextureManager::instance().get(texture);
+	m_backGround.setTexture(tex);
+	m_backGround.setTextureRect(sf::IntRect(0, 0, tex->getSize().x, tex->getSize().y));
 }
 
 void Screen::render(sf::RenderWindow& window)
 {
 	window.draw(m_backGround);
+	window.setView(window.getDefaultView());
 	drawButtons(window);
 }
 

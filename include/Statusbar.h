@@ -17,7 +17,7 @@ public:
     int getWaves() const;
 
     // Render the status bar (implementation depends on your graphics library)
-    void render(sf::RenderWindow& window,float elapsedTime, float timeLeft, sf::Vector2f playerpos);
+    void render(sf::RenderWindow& window,float elapsedTime, float timeLeft);
     void drawLevels(int levels, sf::RenderWindow& window, sf::Vector2f playerpos);
     void drawLives(int lives, sf::RenderWindow& window, sf::Vector2f playerpos);
     void drawPercentage(float percentage, sf::RenderWindow& window, sf::Vector2f playerpos);

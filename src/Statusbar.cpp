@@ -32,17 +32,14 @@ int Statusbar::getWaves() const {
 	return m_waves;
 }
 
-void Statusbar::render(sf::RenderWindow& window, float elapsedTime, float timeLeft, sf::Vector2f playerpos) {
-
-	float x = playerpos.x;
-	float y = playerpos.y;
+void Statusbar::render(sf::RenderWindow& window, float elapsedTime, float timeLeft) {
 	sf::Text text;
 	text.setFont(m_font);
 	float curTimeLeft = timeLeft - elapsedTime + 1;
 	text.setString("Left: " + std::to_string((int)curTimeLeft));
 	text.setCharacterSize(10);
 	text.setFillColor(sf::Color::White);
-	text.setPosition(x, y);
+	text.setPosition(10,10);
 	window.draw(text);
 
 }

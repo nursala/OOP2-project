@@ -2,7 +2,7 @@
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-Rifle::Rifle() : Weapon(WeaponType::Rifle)
+Rifle::Rifle() : Weapon(Constants::WeaponType::Rifle)
 {
 	m_shootingRange = 100.f;
 	m_damage = 10.f;

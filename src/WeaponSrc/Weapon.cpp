@@ -3,7 +3,7 @@
 #include "WorldInc/World.h"        // If not already included
 #include <iostream>
 
-Weapon::Weapon(WeaponType type): m_type(type)
+Weapon::Weapon(Constants::WeaponType type): m_type(type)
 {
 }
 
@@ -17,7 +17,7 @@ std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
 	m_fireTimer = m_fireCooldown;
 	m_shootingRange = 100.f; // Set a default shooting range, can be overridden by derived classes
 	//std::cout << typeid(*owner).name() << " " << static_cast<int>(m_type) << std::endl;
-	if (m_type == WeaponType::Shotgun)
+	if (m_type == Constants::WeaponType::Shotgun)
 	{
 		// Shotgun logic - fire one bullet straight and two bullets at angles
 		// Straight bullet
@@ -76,18 +76,6 @@ WeaponLight* Weapon::getWeaponLight()
 {
 	return m_weaponLight.get();
 }
-
-int Weapon::getPrice(WeaponType type)
-{
-	switch (type) {
-	case WeaponType::HandGun: return 0;
-	case WeaponType::Shotgun:  return 200;
-	case WeaponType::Sniper:   return 300;
-	case WeaponType::Rifle:    return 500;
-	}
-	return 0;
-}
-
 
 float Weapon::getDamage() const
 {

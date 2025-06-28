@@ -7,13 +7,7 @@
 #include "WeaponInc/WeaponLight.h"
 #include "GameObject/Bullet.h"
 #include <string>
-
-enum class WeaponType {
-    HandGun,
-    Shotgun,
-    Sniper,
-    Rifle
-};
+#include "Constants.h"
 
 class Character;
 class World;
@@ -21,9 +15,10 @@ class World;
 class Weapon
 {
 public:
-    Weapon(WeaponType);
+    Weapon(Constants::WeaponType);
 
-    std::vector<std::unique_ptr<Bullet>>fire(World& world, const sf::Vector2f& position,
+    std::vector<std::unique_ptr<Bullet>>fire(World& world,
+            const sf::Vector2f& position,
         const sf::Vector2f& direction,Character* owner);
 
     void update(sf::Vector2f playerPos, float angle, float dt);
@@ -31,18 +26,16 @@ public:
     void setLight(std::shared_ptr<WeaponLight>& weaponLight);
     float getShootingRange() const;
 	void setShootingRange(float range) { m_shootingRange = range; }
-	WeaponType getType() const { return m_type; }
+	Constants::WeaponType getType() const { return m_type; }
 
     WeaponLight* getWeaponLight();
     std::shared_ptr<WeaponLight> m_weaponLight;
-
-    static int getPrice(WeaponType type);
 
     float getDamage() const;
     void setDamage(float damage);
 
 protected:
-	WeaponType m_type;
+	Constants::WeaponType m_type;
     float m_bulletSpeed = 0;
 
     float m_shootingRange = 0;

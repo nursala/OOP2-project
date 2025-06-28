@@ -1,14 +1,11 @@
 #pragma once  
 #include "GameObject/Entity.h" 
 
-
-enum class GiftType { ARMOR, HEALTH, ENEMYSPEEDDOWN, SPEEDUP, SPY, SIZE};
-
 class Gift : public Entity {  
 public:  
 	Gift(World& world, const sf::Texture* texture);
-	GiftType getType() const;  
-	void setType(GiftType type) { m_type = type; }
+	Constants::GiftType getType() const;  
+	void setType(Constants::GiftType type) { m_type = type; }
     //virtual void apply(Player& player) = 0; // Applies the effect to the player  
     void update(float deltaTime) override;  
     void render(sf::RenderWindow& window) override;  
@@ -17,6 +14,6 @@ public:
    void des();  
 
 protected:  
-   GiftType m_type;  
+   Constants::GiftType m_type;  
    World& m_world;  
 };

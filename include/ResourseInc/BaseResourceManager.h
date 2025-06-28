@@ -4,14 +4,14 @@
 #include <memory>
 #include <string>
 #include <memory>
+#include "Constants.h"
 
 template <typename ResourceType, typename IdentifierType>
 class BaseResourceManager 
-{
+{                                                                           
 public:
     bool load(const IdentifierType& id, const std::string& filename);
     const ResourceType* get(const IdentifierType& id) const;
-
 protected:
     std::unordered_map<IdentifierType, std::unique_ptr<ResourceType>> m_resources;
 };
@@ -32,3 +32,5 @@ const ResourceType* BaseResourceManager<ResourceType, IdentifierType>::get(const
         return it->second.get();
     return nullptr;
 }
+
+

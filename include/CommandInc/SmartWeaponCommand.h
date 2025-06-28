@@ -7,13 +7,13 @@
 
 class SmartWeaponCommand : public Command {
 public:
-    SmartWeaponCommand(WeaponType weapon, Market& screen)
+    SmartWeaponCommand(Constants::WeaponType weapon, Market& screen)
         : m_weapon(weapon), m_market(screen) {
     }
 
     void execute() override {
         auto& session = GameSessionData::instance();
-        int price = Weapon::getPrice(m_weapon);
+        int price = Constants::WeaponPrice[m_weapon];
 
         if (!session.hasWeapon(m_weapon)) {
             if (session.getMoney() >= price) {
@@ -39,6 +39,6 @@ public:
     }
 
 private:
-    WeaponType m_weapon;
+    Constants::WeaponType m_weapon;
     Market& m_market;
 };

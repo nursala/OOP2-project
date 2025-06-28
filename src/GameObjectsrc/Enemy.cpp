@@ -10,7 +10,7 @@
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
-    : Character(world, TextureManager::instance().get(TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
+    : Character(world, TextureManager::instance().get(Constants::TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
     m_visable = true;
@@ -20,7 +20,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
         m_state->enter(*this);
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<Weapon>(WeaponType::HandGun);
+    m_weapon = std::make_unique<Weapon>(Constants::WeaponType::HandGun);
     m_weapon->setShootingRange(150.f);
     m_speed = 5.f;
     m_armorBar = nullptr;

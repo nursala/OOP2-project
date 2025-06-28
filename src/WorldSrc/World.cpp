@@ -5,18 +5,21 @@
 #include <iostream>
 #include <cmath>
 #include "Factory.h"
+#include "LevelManager.h"
+#include "ResourseInc/TextureManager.h"
 
 World::World()
-    : m_world(b2Vec2(0.f, 0.f)),
-    m_tileMap("map.json"),
-    m_light({ 2400, 2400 })
+	: m_world(b2Vec2(0.f, 0.f)),
+    m_light({ 2400, 2400 }),
+	m_tileMap(LevelManager::instance().getCurrentLevelPath())
 {
     initWorld();
 }
 
 void World::initWorld() {
-
-    loadMapTexture();
+	//m_tileMap.initMap(LevelManager::instance().getCurrentLevelPath());
+    setMapTexture();
+    m_world.SetContactListener(new ContactListener(*this));
     createPlayer();
     createEnemy();
     createGifts();
@@ -25,18 +28,29 @@ void World::initWorld() {
     setupPlayerLight();
 }
 
-void World::loadMapTexture() {
-    if (!m_mapTexture.loadFromFile("map.png")) {
-        throw std::runtime_error("Failed to load map.png!");
+void World::setMapTexture() {
+    
+
+    //unoederd map
+    switch (LevelManager::instance().getCurrentLevel())
+    {
+    case Constants::LevelID::EasyMap:
+		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::EASYMAP));
+        break;
+    case Constants::LevelID::MediumMap:
+		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::MEDIUMMAP));
+        break;
+    case Constants::LevelID::HardMap:
+		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::HARDMAP));
+        break;
+    default:
+        break;
     }
-    m_mapSprite.setTexture(m_mapTexture);
-    m_world.SetContactListener(new ContactListener(*this));
-    Factory::instance().registerType<Player>(TextureID::Player, std::ref(*this));
 }
 
 void World::createPlayer() {
-
-    m_player = Factory::instance().createAs<Player>(TextureID::Player);
+    Factory::instance().registerType<Player>(Constants::TextureID::Player, std::ref(*this));
+    m_player = Factory::instance().createAs<Player>(Constants::TextureID::Player);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
     m_player->setPosition(b2Vec2(pos.x, pos.y));
     m_player->init();
@@ -44,22 +58,22 @@ void World::createPlayer() {
 
 void World::createGifts()
 {
-    int begin = static_cast<int>(TextureID::ARMOR);
-    for (int i = begin; i < static_cast<int>(TextureID::SIZE); i++) {
-        Factory::instance().registerType<Gift>(TextureID(i), std::ref(*this), TextureManager::instance().get(TextureID(i)));
+    int begin = static_cast<int>(Constants::TextureID::ARMOR);
+    for (int i = begin; i < static_cast<int>(Constants::TextureID::SIZE); i++) {
+        Factory::instance().registerType<Gift>(Constants::TextureID(i), std::ref(*this), TextureManager::instance().get(Constants::TextureID(i)));
     }
 	auto giftPositions = m_tileMap.getGiftSpawns();
-	int giftsTypeCount = static_cast<int>(GiftType::SIZE);
+	int giftsTypeCount = static_cast<int>(Constants::GiftType::SIZE);
 	for (const auto& pos : giftPositions)
 	{
-        createGift(static_cast<GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
-        //createGift(GiftType::SPY, b2Vec2(pos.x, pos.y));
+        createGift(static_cast<Constants::GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
+        //createGift(Constants::GiftType::SPY, b2Vec2(pos.x, pos.y));
 	}
 }
 
-void World::createGift(GiftType type,b2Vec2 pos)
+void World::createGift(Constants::GiftType type,b2Vec2 pos)
 {
-    auto textureId = static_cast<TextureID>(static_cast<int>(type)+2);
+    auto textureId = static_cast<Constants::TextureID>(static_cast<int>(type)+2);
     m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
     m_gifts.back()->setType(type);
     m_gifts.back()->init();
@@ -72,7 +86,7 @@ void World::createEnemy()
 	auto enemyPositions = m_tileMap.getEnemySpawns();
 
     Factory::instance().registerType<Enemy>(
-        TextureID::Enemy,
+        Constants::TextureID::Enemy,
         std::ref(*this),
         std::cref(m_tileMap),
         std::cref(*m_player)
@@ -82,7 +96,7 @@ void World::createEnemy()
     {
         //int randomIQ = rand() % 10 + 1;
 
-        auto enemy = Factory::instance().createAs<Enemy>(TextureID::Enemy);
+        auto enemy = Factory::instance().createAs<Enemy>(Constants::TextureID::Enemy);
         enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
         enemy->init();           
         m_enemies.push_back(std::move(enemy));
@@ -187,9 +201,12 @@ void World::addBullets(std::vector<std::unique_ptr<Bullet>> bullets) {
 }
 
 const sf::Vector2f World::getMapTextureSize() const {
-    if (!m_mapTexture.getSize().x || !m_mapTexture.getSize().y)
+    const sf::Texture* texture = m_mapSprite.getTexture();
+    if (!texture)
         return sf::Vector2f(0.f, 0.f);
-    return sf::Vector2f(static_cast<float>(m_mapTexture.getSize().x), static_cast<float>(m_mapTexture.getSize().y));
+
+    sf::Vector2u size = texture->getSize();
+    return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
 }
 
 const Player& World::getPlayer() const {
@@ -224,13 +241,12 @@ void World::buildAllEdges()
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
 {
-    sf::Vector2f viewCenter = window.getView().getCenter();   // مركز المشهد
-    sf::Vector2f viewSize = window.getView().getSize();       // حجم المشهد
+    sf::Vector2f viewCenter = window.getView().getCenter(); 
+    sf::Vector2f viewSize = window.getView().getSize();      
 
     sf::Vector2f lightPos = viewCenter;
-    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; // مجال أوسع قليلًا من الشاشة
-    float rangeSq = radius * radius;
-
+    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; 
+	float rangeSq = radius * radius;
     m_closeEdges.clear();
     for (const auto& edge : m_allEdges) {
         sf::Vector2f p1 = edge.m_origin;

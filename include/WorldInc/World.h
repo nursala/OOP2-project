@@ -23,15 +23,14 @@ public:
     const Player& getPlayer() const;
     b2World& getWorld();
     void addBullets(std::vector<std::unique_ptr<Bullet>> bullets);
-
+    void initWorld();
     std::vector<Enemy*> getEnemies() const;
 
 private:
-    void initWorld();
 	void createGifts();
-    void loadMapTexture();
+    void setMapTexture();
     void createPlayer();
-    void createGift(GiftType type, b2Vec2 pos);
+    void createGift(Constants::GiftType type, b2Vec2 pos);
     void createEnemy();
     void setupMap();
     void setupPlayerLight();
@@ -50,7 +49,6 @@ private:
     std::vector<std::unique_ptr<Bullet>> m_bullets;
     std::vector<std::unique_ptr<Gift>> m_gifts;
 
-    sf::Texture m_mapTexture;
     sf::Sprite m_mapSprite;
     sf::Clock m_clock;
     sf::Clock m_movementClock;

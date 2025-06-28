@@ -4,7 +4,7 @@
 #include "ResourseInc/TextureManager.h"
 
 Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner, float damage)
-    : Entity(world, TextureManager::instance().get(TextureID::BULLET), position, { 1, 1 }, 0.1f),
+    : Entity(world, TextureManager::instance().get(Constants::TextureID::BULLET), position, { 1, 1 }, 0.1f),
     m_direction(direction), m_owner(owner)
 {
     m_visable = true;

@@ -11,7 +11,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
+    : Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
 {
     m_state = std::make_unique<WalkingStatePlayer>();
     m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();

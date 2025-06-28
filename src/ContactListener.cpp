@@ -34,20 +34,20 @@ void ContactListener::BeginContact(b2Contact* contact) {
         }
         else if (auto gift = dynamic_cast<Gift*>(entityB)) {
             switch (gift->getType()) {
-            case GiftType::ARMOR:
+            case Constants::GiftType::ARMOR:
                 player->addArmor();
                 break;
-            case GiftType::HEALTH:
+            case Constants::GiftType::HEALTH:
                 player->addHealth();
                 break;
-            case GiftType::SPEEDUP:
+            case Constants::GiftType::SPEEDUP:
                 player->addSpeed();
                 break;
-            case GiftType::ENEMYSPEEDDOWN:
+            case Constants::GiftType::ENEMYSPEEDDOWN:
                 for (auto enemy : m_world.getEnemies())
                     enemy->speedDown();
                 break;
-            case GiftType::SPY:
+            case Constants::GiftType::SPY:
                 // Convert first non-spy enemy to spy
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
@@ -57,7 +57,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 }
                 break;
             default:
-                throw std::runtime_error("Unknown GiftType");
+                throw std::runtime_error("Unknown Constants::GiftType");
             }
             gift->des();
         }
