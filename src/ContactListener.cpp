@@ -63,7 +63,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 }
                 break;
 			case GiftType::INCREASERANGE:
-                player->increaseVisionTemporarily(100.f, 10.f); // example: +300 radius for 10 seconds
+                player->increaseVisionTemporarily(100.f, 10.f); // example: +100 radius for 10 seconds
                 break;
             default:
                 throw std::runtime_error("Unknown GiftType");

@@ -18,7 +18,6 @@ void SimpleShootStrategy::attack(Character& self, float) {
     if (length != 0)
         direction /= length;
     float muzzleOffset = 30.f; // adjust as needed
-    
 
 	self.getWorld().addBullets(weapon->fire(self.getWorld(), self.getPosition() + direction * muzzleOffset, direction,&self));
 }

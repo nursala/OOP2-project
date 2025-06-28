@@ -25,7 +25,7 @@ public:
 	virtual ScreenID getScreenID() const = 0;
 	void setScreenAction(std::function<void(ScreenID)> action);
 protected:
-	//ScreenID m_screenID;
+	ScreenID m_screenID;
 	void setBackGroundTexture(const TextureID texture);
 	sf::RectangleShape m_backGround;
 	std::unordered_map<ButtonID, Button> m_buttons;

@@ -157,6 +157,8 @@ void World::render(sf::RenderWindow& window) {
 
     for (auto& bullet : m_bullets)
         bullet->render(window);
+    
+    m_statusbar.render(window);
 }
 
 b2World& World::getWorld() {

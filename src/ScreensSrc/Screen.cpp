@@ -5,6 +5,7 @@ Screen::Screen()
 {
 	m_backGround.setSize(sf::Vector2f(1280, 720));
 	m_backGround.setPosition(0.0f, 0.0f);
+
 }
 
 void Screen::setBackGroundTexture(const TextureID texture)

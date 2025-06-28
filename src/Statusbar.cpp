@@ -8,6 +8,7 @@
 
 Statusbar::Statusbar() {
     setFont();
+	m_level = "Easy";
 }
 
 void Statusbar::setFont() {
@@ -16,44 +17,40 @@ void Statusbar::setFont() {
     }
 }
 
-
 void Statusbar::setKills(int kills) { m_kills = kills;}
 int Statusbar::getKills() const { return m_kills; }
 void Statusbar::setCoins(int coins) { m_coins = coins;}
 int Statusbar::getCoins() const { return m_coins; }
-void Statusbar::setLevel(int level) { m_level = level;}
-int Statusbar::getLevel() const { return m_level; }
-void Statusbar::setTimer(float seconds) { m_timer = seconds;}
 
-void Statusbar::render(sf::RenderWindow& window, const sf::Vector2f& playerPos, float deltaTime) {
-    float startX = playerPos.x;
-    float y = playerPos.y + 20.f;
+void Statusbar::setLevel(std::string level) { m_level = level;}
+std::string Statusbar::getLevel() const { return m_level; }
 
-    // Decrease the timer
-    if (m_timer > 0.f)
-        m_timer -= deltaTime;
-    if (m_timer < 0.f)
-        m_timer = 0.f;
+void Statusbar::render(sf::RenderWindow& window) {
+	auto viewSize = window.getView().getSize();
+    auto pos = window.getView().getCenter();
 
-    drawIconWithText(window, TextureManager::instance().get(TextureID::KILLS), { startX + 50 ,y },std::to_string(m_kills));
-    drawIconWithText(window, TextureManager::instance().get(TextureID::COINS), {startX + 350, y},std::to_string(m_coins));
-    drawIconWithText(window, TextureManager::instance().get(TextureID::TIMER), { startX + 650, y },std::to_string(m_timer));
-    drawIconWithText(window, TextureManager::instance().get(TextureID::LEVELS), { startX + 950, y },std::to_string(m_level));
+    float startX = pos.x - viewSize.x / 2;
+    float startY = pos.y - viewSize.y / 2 + 10.f;
+
+    drawIconWithText(window, TextureManager::instance().get(TextureID::KILLS), { startX + 50 , startY }, std::to_string(m_kills));
+    drawIconWithText(window, TextureManager::instance().get(TextureID::COINS), {startX + 350,  startY }, std::to_string(m_coins));
+	auto levelColor = m_level == "Easy" ? sf::Color::Green : (m_level == "Medium" ? sf::Color::Yellow : sf::Color::Red);
+    drawIconWithText(window, TextureManager::instance().get(TextureID::LEVELS), { startX + 650,  startY }, m_level, levelColor);
 }
 
-void Statusbar::drawIconWithText(sf::RenderWindow& window,const sf::Texture* texture,const sf::Vector2f& pos,std::string value)
+void Statusbar::drawIconWithText(sf::RenderWindow& window,const sf::Texture* texture,const sf::Vector2f& pos,std::string value, sf::Color color)
 {
     if (!texture) return; // Ensure texture is valid
 	sf::Sprite icon;
 	icon.setTexture(*texture);
 	icon.setPosition(pos);
-	icon.setScale(0.5f, 0.5f); // Adjust scale as needed
+	icon.setScale(0.4f, 0.4f); // Adjust scale as needed
 	// Draw the icon and text
 	window.draw(icon);
     sf::Text text;
     text.setFont(m_font);
-    text.setCharacterSize(36);
-    text.setFillColor(sf::Color::White);
+    text.setCharacterSize(30);
+    text.setFillColor(color);
     text.setString(": " + value);
     text.setPosition(pos.x + icon.getGlobalBounds().height + 2, pos.y);
     window.draw(text);

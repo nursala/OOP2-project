@@ -54,7 +54,6 @@ void PlayGround::render(sf::RenderWindow& window)
     for (auto& [id, button] : m_buttons) {
         button.render(window);
     }
-    m_statusBar.render(window,m_view.getCenter() - m_view.getSize() / 2.f,300);
     //m_world.getWorld().DebugDraw();
 
 }
