@@ -13,13 +13,21 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 		m_sprite.setTextureRect(m_animation.getUvRect());
 		m_sprite.setPosition(position);
 	}
-	m_bodyRadius = 1.2f; // Default radius for circle bodies
+	m_initialPosition = m_position;
+	m_visable = true;
 }
 
-void Entity::init() 
+Entity::~Entity() {
+	if (m_body) {
+		m_body->GetWorld()->DestroyBody(m_body);
+		m_body = nullptr;
+	}
+}
+
+void Entity::init(b2BodyType type, float radius)
 {
 	b2BodyDef bodyDef;
-	bodyDef.type = getBodyType(); // Use the virtual method to determine body type
+	bodyDef.type = type;
 	bodyDef.position.Set(m_position.x / SCALE, m_position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
 
@@ -28,7 +36,7 @@ void Entity::init()
 	m_body = m_world.getWorld().CreateBody(&bodyDef);
 
 	b2CircleShape shape;
-	shape.m_radius = m_bodyRadius;
+	shape.m_radius = radius;
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
@@ -49,6 +57,13 @@ void Entity::init()
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)
 		window.draw(m_sprite);
+}
+
+void Entity::render(RenderLayers& renderLayers) {
+	if (m_visable)
+		renderLayers.drawForeground(m_sprite);
+	else
+		renderLayers.drawBackground(m_sprite); 
 }
 
 void Entity::setPosition(const b2Vec2& position)

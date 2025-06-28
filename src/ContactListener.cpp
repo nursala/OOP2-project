@@ -24,13 +24,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
     // === Player Collisions ===
     if (auto player = dynamic_cast<Player*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
-            if (bullet->getOwner() != player) {
-                // Prevent spy bullets from damaging player
-                if (auto spy = dynamic_cast<Enemy*>(bullet->getOwner()); spy && spy->isSpy())
-                    return;
-
+            
                 player->takeDamage(bullet->getDamage());
-            }
+                bullet->setDestroyed(true);
         }
         else if (auto gift = dynamic_cast<Gift*>(entityB)) {
             switch (gift->getType()) {
@@ -45,13 +41,17 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 break;
             case Constants::GiftType::ENEMYSPEEDDOWN:
                 for (auto enemy : m_world.getEnemies())
+                {
                     enemy->speedDown();
+					enemy->setSpeedDownTimer(15.f);  // seconds of speed down
+                }
                 break;
             case Constants::GiftType::SPY:
                 // Convert first non-spy enemy to spy
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
+                        enemy->setSpyTimer(20.f);  //seconds of spy behavior
                         break;
                     }
                 }
@@ -70,13 +70,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
     // === Enemy Collisions ===
     else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
-            if (bullet->getOwner() != enemy) {
-                // Prevent player bullets from damaging spy
-                if (enemy->isSpy() && dynamic_cast<Player*>(bullet->getOwner()))
-                    return;
-
+			
                 enemy->takeDamage(bullet->getDamage());
-            }
+                bullet->setDestroyed(true);
+            
         }
     }
 }

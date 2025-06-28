@@ -13,7 +13,8 @@ World::World()
     m_light({ 2400, 2400 }),
 	m_tileMap(LevelManager::instance().getCurrentLevelPath())
 {
-    initWorld();
+	m_renderLayers = std::make_unique<RenderLayers>();
+	initWorld();
 }
 
 void World::initWorld() {
@@ -52,8 +53,7 @@ void World::createPlayer() {
     Factory::instance().registerType<Player>(Constants::TextureID::Player, std::ref(*this));
     m_player = Factory::instance().createAs<Player>(Constants::TextureID::Player);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
-    m_player->setPosition(b2Vec2(pos.x, pos.y));
-    m_player->init();
+	m_player->setPosition(b2Vec2(pos.x, pos.y));
 }
 
 void World::createGifts()
@@ -76,9 +76,7 @@ void World::createGift(Constants::GiftType type,b2Vec2 pos)
     auto textureId = static_cast<Constants::TextureID>(static_cast<int>(type)+2);
     m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
     m_gifts.back()->setType(type);
-    m_gifts.back()->init();
     m_gifts.back()->setPosition(pos);
-	//m_gifts.back()->setSpriteRadius(0.5f); // Set the radius for the gift
 }
 
 void World::createEnemy()
@@ -98,106 +96,137 @@ void World::createEnemy()
 
         auto enemy = Factory::instance().createAs<Enemy>(Constants::TextureID::Enemy);
         enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
-        enemy->init();           
         m_enemies.push_back(std::move(enemy));
     }
 }
 
 void World::setupMap() {
-    m_tileMap.createCollisionObjects(m_world, "walls");
-}
-
-void World::setupPlayerLight() {
-    m_player->setLight(m_light.getPlayerVision());
-    m_player->setWeaponLight(m_light.getWeaponLight());
+	m_tileMap.createCollisionObjects(m_world, "walls");
 }
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
-    m_world.Step(deltaTime, 8, 3);
-    m_player->update(deltaTime);
-    for (auto& enemy : m_enemies)
-    {
-        enemy->update(deltaTime);
-    }
+	calcNearlyEdge(window);
+	int index = 0;
+	for (const auto& enemy : m_enemies) {
+		std::cout << "Enemy #" << index << " - "
+			<< (enemy->isSpy() ? "Spy" : "Not Spy");
 
-    for (auto& bullet : m_bullets)
-        bullet->update(deltaTime);
-    for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
-		//std::cout << "radius: " << (*it)->getSpriteRadius().x << " " << (*it)->getSpriteRadius().y << std::endl;
-		
-        if ((*it)->isDestroyed()) {
-            m_world.DestroyBody((*it)->getBody());
-            it = m_gifts.erase(it);
-        }
-        else ++it;
-    }
-    updateLightSystem(window);
-    updateBullets(deltaTime);
+		Character* target = enemy->getTargetsss();
+
+		if (!target) {
+			std::cout << " -> Target: None" << std::endl;
+		}
+		else if (target == m_player.get()) {
+			std::cout << " -> Target: Player" << std::endl;
+		}
+		else {
+			// الهدف هو عدو تاني
+			auto it = std::find_if(m_enemies.begin(), m_enemies.end(),
+				[&](const auto& other) { return other.get() == target; });
+
+			if (it != m_enemies.end()) {
+				int targetIndex = std::distance(m_enemies.begin(), it);
+				bool isTargetSpy = static_cast<Enemy*>(target)->isSpy();
+
+				std::cout << " -> Target: Enemy #" << targetIndex
+					<< " - " << (isTargetSpy ? "Spy" : "Not Spy") << std::endl;
+			}
+			else {
+				std::cout << " -> Target: Unknown" << std::endl;
+			}
+		}
+
+		++index;
+	}
+
+
+	// Step physics
+	m_world.Step(deltaTime, 8, 3);
+
+	// Update player
+	m_player->update(deltaTime);
+	m_player->rotateTowardMouse(window);
+	for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
+		(*it)->update(deltaTime);
+		if ((*it)->isDestroyed()) {
+			(*it)->setDestroyed(true);
+			it = m_bullets.erase(it);
+		}
+		else ++it;
+	}
+
+	// Update enemies
+	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end();)
+	{
+		if ((*enemy)->isDestroyed()) {
+			enemy = m_enemies.erase(enemy);
+		}
+		else {
+			(*enemy)->update(deltaTime);
+			++enemy;
+		}
+	}
+
+	// Update bullets
+
+
+	// Update gifts
+	for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
+		it->get()->update(deltaTime);
+		if ((*it)->isDestroyed()) {
+			it = m_gifts.erase(it);
+		}
+		else ++it;
+	}
+
+	// Handle bullet collisions or extra logic
+	
+	// View update
+
+	m_renderLayers->setView(window.getView());
+
 }
 
 void World::updateBullets(float deltaTime) {
-    for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
-        (*it)->update(deltaTime);
-        if ((*it)->shouldDestroy()) {
-            m_world.DestroyBody((*it)->getBody());
-            it = m_bullets.erase(it);
-        }
-        else ++it;
-    }
-}
-
-void World::updateLightSystem(sf::RenderWindow& window) {
-    sf::Vector2f playerPos = m_player->getPosition();
-    sf::Vector2f mouseWorld = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-    //float angleToMouse = std::atan2(mouseWorld.y - playerPos.y, mouseWorld.x - playerPos.x);
-    calcNearlyEdge(window);
-    m_light.update(playerPos, mouseWorld);
-    m_light.updateCastLight(m_closeEdges, m_world);
-    sf::Vector2f topLeft = window.getView().getCenter() - window.getView().getSize() / 2.f;
-    m_light.setPosition(topLeft);
+	for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
+		(*it)->update(deltaTime);
+		if ((*it)->isDestroyed()) {
+			it = m_bullets.erase(it);
+		}
+		else ++it;
+	}
 }
 
 void World::render(sf::RenderWindow& window) {
 
-    window.draw(m_mapSprite);
-    m_player->render(window);
+	m_renderLayers->clear();
+	m_renderLayers->drawBackground(m_mapSprite);
+	//window.draw(m_mapSprite);
+	m_player->render(*m_renderLayers);
 
-    for (auto& enemy : m_enemies)
-        enemy->render(window);
+	for (auto& enemy : m_enemies)
+		enemy->render(*m_renderLayers);
 
-    for (auto& gift : m_gifts)
-        if (gift->isVisible()) gift->render(window);
-    for (auto& bullet : m_bullets)
-        bullet->render(window);
-    m_light.drawLights(window);
-    DebugEdge(window);
-}
+	for (auto& gift : m_gifts)
+		 gift->render(*m_renderLayers);
 
-void World::drawMap(sf::RenderWindow& window) {
-    window.draw(m_mapSprite);
-}
+	for (auto& bullet : m_bullets)
+		bullet->render(*m_renderLayers);
 
-void World::drawLighting(sf::RenderWindow& window) {
-    m_light.drawFinalLights(window);
-    m_light.drawLights(window);
-}
 
-void World::drawGameObjects(sf::RenderWindow& window) {
-    m_player->render(window);
-    for (auto& bullet : m_bullets)
-        bullet->render(window);
+	m_renderLayers->display();
+	m_renderLayers->renderFinal(window);
 }
 
 b2World& World::getWorld() {
-    return m_world;
+	return m_world;
 }
 
 void World::addBullets(std::vector<std::unique_ptr<Bullet>> bullets) {
-    for (auto& bullet: bullets)
-    {
-        bullet->init();
-        m_bullets.push_back(std::move(bullet));
-    }
+	for (auto& bullet : bullets)
+	{
+		m_bullets.push_back(std::move(bullet));
+	}
 }
 
 const sf::Vector2f World::getMapTextureSize() const {
@@ -210,33 +239,33 @@ const sf::Vector2f World::getMapTextureSize() const {
 }
 
 const Player& World::getPlayer() const {
-    return *m_player;
+	return *m_player;
 }
 
 std::vector<Enemy*> World::getEnemies() const {
-    std::vector<Enemy*> result;
-    for (const auto& e : m_enemies)
-        result.push_back(e.get());
-    return result;
+	std::vector<Enemy*> result;
+	for (const auto& e : m_enemies)
+		result.push_back(e.get());
+	return result;
 }
 
 void World::buildAllEdges()
 {
-    for (b2Body* body = m_world.GetBodyList(); body != nullptr; body = body->GetNext()) {
-        for (b2Fixture* fixture = body->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext()) {
-            if (fixture->GetType() == b2Shape::e_polygon) {
-                auto* shape = static_cast<b2PolygonShape*>(fixture->GetShape());
-                for (int i = 0; i < shape->m_count; ++i) {
-                    b2Vec2 v1 = body->GetWorldPoint(shape->m_vertices[i]);
-                    b2Vec2 v2 = body->GetWorldPoint(shape->m_vertices[(i + 1) % shape->m_count]);
-                    m_allEdges.emplace_back(
-                        sf::Vector2f(v1.x * SCALE, v1.y * SCALE),
-                        sf::Vector2f(v2.x * SCALE, v2.y * SCALE)
-                    );
-                }
-            }
-        }
-    }
+	for (b2Body* body = m_world.GetBodyList(); body != nullptr; body = body->GetNext()) {
+		for (b2Fixture* fixture = body->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext()) {
+			if (fixture->GetType() == b2Shape::e_polygon) {
+				auto* shape = static_cast<b2PolygonShape*>(fixture->GetShape());
+				for (int i = 0; i < shape->m_count; ++i) {
+					b2Vec2 v1 = body->GetWorldPoint(shape->m_vertices[i]);
+					b2Vec2 v2 = body->GetWorldPoint(shape->m_vertices[(i + 1) % shape->m_count]);
+					m_allEdges.emplace_back(
+						sf::Vector2f(v1.x * SCALE, v1.y * SCALE),
+						sf::Vector2f(v2.x * SCALE, v2.y * SCALE)
+					);
+				}
+			}
+		}
+	}
 }
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
@@ -244,60 +273,61 @@ void World::calcNearlyEdge(sf::RenderWindow& window)
     sf::Vector2f viewCenter = window.getView().getCenter(); 
     sf::Vector2f viewSize = window.getView().getSize();      
 
-    sf::Vector2f lightPos = viewCenter;
-    float radius = std::max(viewSize.x, viewSize.y) * 0.6f; 
+	sf::Vector2f lightPos = viewCenter;
+	float radius = std::max(viewSize.x, viewSize.y) * 0.6f;
 	float rangeSq = radius * radius;
-    m_closeEdges.clear();
-    for (const auto& edge : m_allEdges) {
-        sf::Vector2f p1 = edge.m_origin;
-        sf::Vector2f p2 = edge.point(1.f);
-        sf::Vector2f ab = p2 - p1;
-        sf::Vector2f ap = lightPos - p1;
 
-        float abDotAb = ab.x * ab.x + ab.y * ab.y;
-        if (abDotAb == 0) continue;
+	m_closeEdges.clear();
+	for (const auto& edge : m_allEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f ab = p2 - p1;
+		sf::Vector2f ap = lightPos - p1;
 
-        float t = std::max(0.f, std::min(1.f, (ap.x * ab.x + ap.y * ab.y) / abDotAb));
-        sf::Vector2f closestPoint = p1 + ab * t;
+		float abDotAb = ab.x * ab.x + ab.y * ab.y;
+		if (abDotAb == 0) continue;
 
-        float dx = closestPoint.x - lightPos.x;
-        float dy = closestPoint.y - lightPos.y;
-        float distSq = dx * dx + dy * dy;
+		float t = std::max(0.f, std::min(1.f, (ap.x * ab.x + ap.y * ab.y) / abDotAb));
+		sf::Vector2f closestPoint = p1 + ab * t;
 
-        if (distSq <= rangeSq) {
-            m_closeEdges.push_back(edge);
-        }
-    }
+		float dx = closestPoint.x - lightPos.x;
+		float dy = closestPoint.y - lightPos.y;
+		float distSq = dx * dx + dy * dy;
+
+		if (distSq <= rangeSq) {
+			m_closeEdges.push_back(edge);
+		}
+	}
 
 }
 
 void World::DebugEdge(sf::RenderWindow& window)
 {
-    for (const auto& edge : m_allEdges) {
-        sf::Vector2f p1 = edge.m_origin;
-        sf::Vector2f p2 = edge.point(1.f);
-        sf::Vector2f direction = p2 - p1;
-        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	for (const auto& edge : m_allEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f direction = p2 - p1;
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-        sf::RectangleShape rect;
-        rect.setSize({ length, 2.f });
-        rect.setFillColor(sf::Color::Red);
-        rect.setPosition(p1);
-        rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
-        window.draw(rect);
-    }
+		sf::RectangleShape rect;
+		rect.setSize({ length, 2.f });
+		rect.setFillColor(sf::Color::Red);
+		rect.setPosition(p1);
+		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
+		window.draw(rect);
+	}
 
-    for (const auto& edge : m_closeEdges) {
-        sf::Vector2f p1 = edge.m_origin;
-        sf::Vector2f p2 = edge.point(1.f);
-        sf::Vector2f direction = p2 - p1;
-        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	for (const auto& edge : m_closeEdges) {
+		sf::Vector2f p1 = edge.m_origin;
+		sf::Vector2f p2 = edge.point(1.f);
+		sf::Vector2f direction = p2 - p1;
+		float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-        sf::RectangleShape rect;
-        rect.setSize({ length, 3.f });
-        rect.setFillColor(sf::Color::Green);
-        rect.setPosition(p1);
-        rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
-        window.draw(rect);
-    }
+		sf::RectangleShape rect;
+		rect.setSize({ length, 3.f });
+		rect.setFillColor(sf::Color::Green);
+		rect.setPosition(p1);
+		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
+		window.draw(rect);
+	}
 }

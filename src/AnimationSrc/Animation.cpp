@@ -11,11 +11,11 @@ Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float 
 		m_uvRect.width = texture->getSize().x / static_cast<int>(imageCount.x);
 		m_uvRect.height = texture->getSize().y / static_cast<int>(imageCount.y);
 
-		update(1, 1, 0.0f, true); // Initialize with row 1 and total images 1
+		update(1, 1, 0.0f); // Initialize with row 1 and total images 1
 	}
 }
 
-void Animation::update(int row, int totalImages, float deltaTime, bool isFaceRight)
+void Animation::update(int row, int totalImages, float deltaTime)
 {
 	//std::cout << "Updating animation with row = " << row << " deltaTime = " << deltaTime << "\n";
 
@@ -43,17 +43,6 @@ void Animation::update(int row, int totalImages, float deltaTime, bool isFaceRig
 	}
 
 	m_uvRect.top = m_currentImage.y * m_uvRect.height;
-
-	if (isFaceRight)
-	{
-		m_uvRect.left = m_currentImage.x * m_uvRect.width;
-		m_uvRect.width = std::abs(m_uvRect.width);
-	}
-	else
-	{
-		m_uvRect.left = (m_currentImage.x + 1) * std::abs(m_uvRect.width);
-		m_uvRect.width = -std::abs(m_uvRect.width);
-	}
 }
 
 const sf::IntRect& Animation::getUvRect() const

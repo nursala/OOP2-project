@@ -3,45 +3,21 @@
 #include "WorldInc/World.h"        // If not already included
 #include <iostream>
 
-Weapon::Weapon(Constants::WeaponType type): m_type(type)
+Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
 {
+	m_weaponLight = std::make_unique<WeaponLight>(shootingRange, angle); // Correct type for m_weaponLight
+	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light
+	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
 }
 
-std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,
-	const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
+std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner)
 {
 	std::vector<std::unique_ptr<Bullet>> bullets ;
 	if (m_fireTimer > 0.f)
 		return bullets;
 
 	m_fireTimer = m_fireCooldown;
-	m_shootingRange = 100.f; // Set a default shooting range, can be overridden by derived classes
-	//std::cout << typeid(*owner).name() << " " << static_cast<int>(m_type) << std::endl;
-	if (m_type == Constants::WeaponType::Shotgun)
-	{
-		// Shotgun logic - fire one bullet straight and two bullets at angles
-		// Straight bullet
-		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage));
-		
-		// Left bullet (20 degrees counterclockwise)
-		float leftAngle = -20.f * 3.14159f / 180.f; // Convert to radians
-		sf::Vector2f leftDir = sf::Vector2f(
-			direction.x * std::cos(leftAngle) - direction.y * std::sin(leftAngle),
-			direction.x * std::sin(leftAngle) + direction.y * std::cos(leftAngle)
-		);
-		bullets.push_back(std::make_unique<Bullet>(world, position, leftDir, owner, m_damage));
-		
-		// Right bullet (20 degrees clockwise)
-		float rightAngle = 20.f * 3.14159f / 180.f; // Convert to radians
-		sf::Vector2f rightDir = sf::Vector2f(
-			direction.x * std::cos(rightAngle) - direction.y * std::sin(rightAngle),
-			direction.x * std::sin(rightAngle) + direction.y * std::cos(rightAngle)
-		);
-		bullets.push_back(std::make_unique<Bullet>(world, position, rightDir, owner, m_damage));
-	}
-	else {
-		bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage));
-	}
+	bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage, m_weaponLight->getRange()));
 	return bullets;
 }
 
@@ -50,8 +26,8 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	m_fireTimer -= dt;
 	if (m_weaponLight)
 	{
-		m_weaponLight->setPosition(playerPos);
-		m_weaponLight->update(playerPos, angle);
+		m_weaponLight->setPosition(playerPos - sf::Vector2f(20.f, 20.f));
+		m_weaponLight->update(playerPos, angle / 30.f);
 	}
 }
 
@@ -61,15 +37,25 @@ void Weapon::draw(sf::RenderWindow&)
 	// if (m_weaponLight)
 	//     window.draw(*m_weaponLight);
 }
-
-void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
+void Weapon::draw(RenderLayers& renderLayers)
 {
-	m_weaponLight = weaponLight;
+	if (m_weaponLight)
+	{
+		renderLayers.drawLight(*m_weaponLight);
+		renderLayers.drawForeground(*m_weaponLight);
+	}
 }
+
+//void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
+//{
+//	m_weaponLight = weaponLight;
+//	m_weaponLight->setRange(m_shootingRange);
+//}
+
 
 float Weapon::getShootingRange() const
 {
-	return m_shootingRange;
+	return m_weaponLight->getRange();
 }
 
 WeaponLight* Weapon::getWeaponLight()

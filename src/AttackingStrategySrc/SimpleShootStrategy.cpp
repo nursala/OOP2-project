@@ -1,4 +1,4 @@
-#include "AttackingStrategyInc/SimpleShootStrategy.h"
+﻿#include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "GameObject/Character.h"
 #include "WeaponInc/Weapon.h"
 #include "GameObject/Entity.h"
@@ -6,20 +6,32 @@
 #include <iostream>
 
 void SimpleShootStrategy::attack(Character& self, float) {
-
     auto* weapon = self.getWeapon();
     if (!weapon)
         return;
 
-    sf::Vector2f target = self.getTarget();
+
+    Character* targetC = self.getTargetsss();
+    sf::Vector2f target;
+
+    if (targetC) {
+        target = targetC->getPosition();
+    }
+    else {
+        return; 
+    }
 
     sf::Vector2f direction = target - self.getPosition();
     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-    if (length != 0)
-        direction /= length;
-    float muzzleOffset = 30.f; // adjust as needed
-    
+    if (length == 0.f)
+        return;
 
-	self.getWorld().addBullets(weapon->fire(self.getWorld(), self.getPosition() + direction * muzzleOffset, direction,&self));
+    direction /= length;
+    float muzzleOffset = 30.f;
+    sf::Vector2f bulletPos = self.getPosition() + direction * muzzleOffset;
+
+    self.getWorld().addBullets(
+        weapon->fire(self.getWorld(), bulletPos, direction, &self)
+    );
 }
 

@@ -16,5 +16,5 @@ void WalkingState<T>::update(Character& character, float dt) {
     T& specific = static_cast<T&>(character);
     specific.move(dt);
     const MoveInfo& info = specific.getLastMoveInfo();
-    specific.getAnimation().update(info.row, 5, dt, info.faceRight);
+    specific.getAnimation().update(info.row, 5, dt);
 }

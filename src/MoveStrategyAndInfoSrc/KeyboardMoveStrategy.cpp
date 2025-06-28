@@ -9,28 +9,20 @@ MoveInfo KeyboardMoveStrategy::move(Character& character, float) {
 	auto speed = character.getSpeed();
 
     MoveInfo info;
-    info.row = 1;
+    info.row = 2;
     info.faceRight = true;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         body->SetLinearVelocity(b2Vec2(speed, 0));
-        info.row = 2;
-        info.faceRight = true;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         body->SetLinearVelocity(b2Vec2(-speed, 0));
-        info.row = 2;
-        info.faceRight = false;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         body->SetLinearVelocity(b2Vec2(0, -speed));
-        info.row = 2;
-        info.faceRight = false;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         body->SetLinearVelocity(b2Vec2(0, speed));
-        info.row = 2;
-        info.faceRight = false;
     }
     else {
         body->SetLinearVelocity(b2Vec2(0.f, 0));

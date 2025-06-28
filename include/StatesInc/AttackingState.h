@@ -18,4 +18,5 @@ template<typename T>
 void AttackingState<T>::update(Character& character, float dt) {
     T& specific = static_cast<T&>(character);
     specific.shoot(dt);
+	specific.move(dt);
 }

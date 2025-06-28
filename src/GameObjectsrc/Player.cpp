@@ -1,4 +1,4 @@
-#include "GameObject/Player.h"
+﻿#include "GameObject/Player.h"
 #include <SFML/Window/Keyboard.hpp>
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
@@ -8,60 +8,41 @@
 #include <iostream>
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
+#include "WeaponInc/Sniper.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
+#include "WorldInc/World.h"
 
 Player::Player(World& world)
-    : Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
+	: Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
 {
-    m_state = std::make_unique<WalkingStatePlayer>();
-    m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
+
+	m_state = std::make_unique<WalkingStatePlayer>();
+	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    if (m_state)
-        m_state->enter(*this);
+	if (m_state)
+		m_state->enter(*this);
+	m_weapon = std::make_unique<HandGun>();
+	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
+	m_speed = 10.f;
+	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 
-    m_weapon = std::make_unique<Shotgun>();
-    m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
-    m_speed = 10.f;
-    m_visable = true;
-   
-}
-
-void Player::setLight(std::shared_ptr<VisionLight>& visionLight)
-{
-    m_visionLight = visionLight;
-}
-
-void Player::setWeaponLight(std::shared_ptr<WeaponLight>& weaponLight)
-{
-    if (m_weapon)
-        m_weapon->setLight(weaponLight);
-}
-
-void Player::setFacingRight(bool right)
-{
-    if (m_lastMoveInfo.faceRight != right) {
-        m_lastMoveInfo.faceRight = right;
-
-        sf::Vector2f currentScale = m_sprite.getScale();
-        m_sprite.setScale(right ? std::abs(currentScale.x) : -std::abs(currentScale.x), currentScale.y);
-    }
 }
 
 void Player::takeDamage(int damage)
 {
-    if (m_armor > 0) {
-        float armorDamage = std::min(m_armor, static_cast<float>(damage));
-        m_armor -= armorDamage;
-        damage -= static_cast<int>(armorDamage);
-    }
-    if (damage > 0) {
-        m_health -= damage;
-        if (m_health < 0.f) m_health = 0.f;
-    }
+	if (m_armor > 0) {
+		float armorDamage = std::min(m_armor, static_cast<float>(damage));
+		m_armor -= armorDamage;
+		damage -= static_cast<int>(armorDamage);
+	}
+	if (damage > 0) {
+		m_health -= damage;
+		if (m_health < 0.f) m_health = 0.f;
+	}
 
-    //  Update the health bar (use Character's member)
-    m_healthBar->setValue(m_health);
-    m_armorBar->setValue(m_armor);
+	//  Update the health bar (use Character's member)
+	m_healthBar->setValue(m_health);
+	m_armorBar->setValue(m_armor);
 }
 
 void Player::addHealth()
@@ -81,35 +62,56 @@ void Player::addArmor()
 void Player::addSpeed()
 {
 	m_speed += 0.5f; // Increase speed by 0.5
-	if (m_speed > 5.f) m_speed = 5.f; // Cap speed at 5
+	if (m_speed > 17.f) m_speed = 17.f; // Cap speed at 5
 	std::cout << "Player speed increased to: " << m_speed << std::endl;
 }
 
+
 sf::Vector2f Player::getTarget() const
 {
-    if (m_target)
-        return m_target->getPosition();
-    return getPosition(); // fallback: target self
+	if (m_target)
+		return m_target->getPosition();
+	return getPosition();
 }
 
 
-std::pair<bool, float> Player::EnemyIsVisible()
+
+void Player::rotateTowardMouse(sf::RenderWindow& window)
 {
-    if (!m_weapon) return { false, 0.f };
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+	sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
+	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+	setRotation(angle); // Implement this in your Character or Sprite wrapper
+}
 
-    auto weaponLight = m_weapon->getWeaponLight();
-    if (!m_visionLight || !weaponLight)
-        return { false, 0.f };
+Character* Player::getClosestTarget()
+{
+	Character* closestCharacter = nullptr;
+	float minDistSq = std::numeric_limits<float>::max();
+	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
 
-    // Get the closest visible enemy (non-spy)
-    Character* closest = weaponLight->getClosestTarget(this);
-    if (closest) {
-        m_target = closest;
-        sf::Vector2f diff = getPosition() - closest->getPosition();
-        float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
-        return { true, dist };
-    }
+	for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
-    return { false, 0.f };
+		if (!character || !character->isVisible()) continue;
+
+		auto* enemy = dynamic_cast<Enemy*>(character);
+		if (!enemy || enemy->isSpy()) continue; 
+
+
+		sf::Vector2f charPos = character->getPosition();
+		float dx = charPos.x - lightPos.x;
+		float dy = charPos.y - lightPos.y;
+		float distSq = std::sqrt(dx * dx + dy * dy);
+
+		if (distSq < minDistSq) {
+			minDistSq = distSq;
+			closestCharacter = character;
+		}
+	}
+	m_target  = closestCharacter; // Set the target for the player
+	return closestCharacter;
 }
 

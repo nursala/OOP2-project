@@ -2,8 +2,6 @@
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-Sniper::Sniper() : Weapon(Constants::WeaponType::Sniper)
+Sniper::Sniper() : Weapon(Constants::WeaponType::Sniper, 300.f, 15.f, 15.f)
 {
-	m_shootingRange = 100.f;
-	m_damage = 10.f;
 }

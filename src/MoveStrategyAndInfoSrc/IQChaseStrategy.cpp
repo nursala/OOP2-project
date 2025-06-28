@@ -1,4 +1,4 @@
-#include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
+﻿#include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 #include <cmath>
 #include <algorithm>
 #include "GameObject/Character.h"
@@ -14,12 +14,23 @@ IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int i
 
 MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
 {
+    Character* target = character.getTargetsss();
     sf::Vector2f enemyPos = character.getPosition();
-    sf::Vector2f playerPos = m_player.getPosition();
+    sf::Vector2f targetPos;
 
-    float distToPlayer = distance(enemyPos, playerPos);
-    if (distToPlayer < 150.f && m_iqLevel < 10) ++m_iqLevel;
-    if (distToPlayer > 400.f && m_iqLevel > 1) --m_iqLevel;
+    if (auto e = dynamic_cast<Enemy*>(&character); e && target) {
+        targetPos = target->getPosition();
+    }
+    else {
+        targetPos = m_player.getPosition();
+    }
+
+    auto e = dynamic_cast<Enemy*>(&character);
+    float distToTarget = distance(enemyPos, targetPos);
+    if (distToTarget < 350.f && m_iqLevel < 10) ++m_iqLevel;
+    if (distToTarget > 400.f && m_iqLevel > 1 && !e->isSpy()) --m_iqLevel;
+    if ( e && e->isSpy() && m_iqLevel < 10) ++m_iqLevel;
+
 
     float chanceToUseAStar = m_iqLevel / 10.f;
     sf::Vector2f dir;
@@ -40,7 +51,7 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
 
         if (m_usingAStar) {
             sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()), static_cast<int>(enemyPos.y / m_map.getTileHeight()));
-            sf::Vector2i goal(static_cast<int>(playerPos.x / m_map.getTileWidth()), static_cast<int>(playerPos.y / m_map.getTileHeight()));
+            sf::Vector2i goal(static_cast<int>(targetPos.x / m_map.getTileWidth()), static_cast<int>(targetPos.y / m_map.getTileHeight()));
 
             auto path = AStarPathfinder::findPath(m_map, start, goal);
             if (!path.empty()) {
@@ -85,12 +96,26 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
         dir = m_randomDirection;
     }
 
-    m_lastPosition = enemyPos;
+    sf::Vector2f distanceToTargetVec = targetPos - enemyPos;
+    float distanceSq = distanceToTargetVec.x * distanceToTargetVec.x + distanceToTargetVec.y * distanceToTargetVec.y;
+
+    if (distanceSq <  100.f)
+    {
+        m_randomDirection = generateRandomDirection(character, deltaTime);
+        m_randomDirTimer = 0.f;
+        m_stuckTimer = 0.f;
+        dir = m_randomDirection;
+
+    }
 
     if (auto* body = character.getBody()) {
         float speed = character.getSpeed();
         body->SetLinearVelocity(b2Vec2(dir.x * speed, dir.y * speed));
     }
+    sf::Vector2f direction = targetPos - m_lastPosition; // getPosition() returns player center
+    float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+    character.setRotation(angle); // Implement this in your Character or Sprite wrapper
+    m_lastPosition = enemyPos;
 
     return {
         2,
