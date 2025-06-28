@@ -20,7 +20,6 @@ public:
    void addArmor();
    void addSpeed();
    void increaseVisionTemporarily(float extraRange, float duration);
-   sf::Vector2f getTarget() const override;
    void rotateTowardMouse(sf::RenderWindow& ) ;
    bool isAlive() const { return m_alive; }  // or use m_alive if you prefer
 

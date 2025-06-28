@@ -29,7 +29,7 @@ const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
 	{ Constants::TextureID::COINS, "coins.png" },
 	{ Constants::TextureID::VISIONUP, "vision_up.png" },
 	{ Constants::TextureID::KILLS, "kills.png" },
-	{ Constants::TextureID::COINS, "coins.png" },
+	{ Constants::TextureID::COINSMARKET, "coins_market.png" },
 	{ Constants::TextureID::LEVELS, "Levels.png" },
 	{ Constants::TextureID::MARKET, "market.JPG" },
 };

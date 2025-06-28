@@ -23,6 +23,4 @@ protected:
 
 private:
     void updateBar();
-    void setFont();
-	sf::Font m_font;
 };

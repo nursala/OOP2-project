@@ -63,7 +63,7 @@ protected:
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
-    std::unique_ptr<VisionLight> m_visionLight;
+    //std::unique_ptr<VisionLight> m_visionLight;
     std::unique_ptr <HealthBar> m_healthBar;
     std::unique_ptr<ArmorBar> m_armorBar;
 

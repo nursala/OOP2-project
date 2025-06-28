@@ -13,7 +13,6 @@ m_world(world)
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
 	m_radialLight.setFade(true);
-	//if(m_type == GiftType::SPY)
 }
 
 Constants::GiftType Gift::getType() const { return m_type; }
@@ -56,5 +55,3 @@ void Gift::des()
 	setDestroyed(true); // Mark the gift as destroyed
 
 }
-
-

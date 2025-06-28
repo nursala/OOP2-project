@@ -122,6 +122,7 @@ namespace Constants {
 		SNIPER,
 		RIFLE,
 		COINS,
+		COINSMARKET,
 		KILLS,
 		LEVELS,
 	};

@@ -4,17 +4,11 @@
 #include <sstream>
 #include <SFML/Graphics/Texture.hpp>
 #include "ResourseInc/TextureManager.h"
+#include "Controller.h"
 #include <string>
 
 Statusbar::Statusbar() {
-    setFont();
 	m_level = "Easy";
-}
-
-void Statusbar::setFont() {
-    if (!m_font.loadFromFile("ARIAL.TTF")) {
-        std::cerr << "Failed to load font!\n";
-    }
 }
 
 void Statusbar::setKills(int kills) { m_kills = kills;}
@@ -48,7 +42,7 @@ void Statusbar::drawIconWithText(sf::RenderWindow& window,const sf::Texture* tex
 	// Draw the icon and text
 	window.draw(icon);
     sf::Text text;
-    text.setFont(m_font);
+    text.setFont(Controller::getInstance().getFont());
     text.setCharacterSize(30);
     text.setFillColor(color);
     text.setString(": " + value);
