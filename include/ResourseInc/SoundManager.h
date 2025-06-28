@@ -2,6 +2,7 @@
 #include "ResourseInc/BaseResourceManager.h"
 #include <SFML/Audio.hpp>
 #include <unordered_map>
+#include "Constants.h"
 
 enum class SoundID {
     SHOOT,BACKGROUNDMUSIC,MENUMUSIC,MATCHMAKINGMUSIC,GAMEOVERSOUND,
@@ -10,7 +11,7 @@ enum class SoundID {
 	SPEEDUPGRADE,SPEEDDOWN,SPY,GAMEBEGIN,ENEMYDEATH, PLAYERDEATH,
 };
 
-const std::unordered_map<SoundID, std::string> SoundFileMap = {
+const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 
       {SoundID::BACKGROUNDMUSIC, "background_music.ogg"}    , {SoundID::MENUMUSIC, "menu_music.ogg"}
 	, {SoundID::MATCHMAKINGMUSIC, "matchmaking_music.ogg"}  //, {SoundID::GAMEOVERSOUND, "game_over.ogg"}           
@@ -30,12 +31,12 @@ class SoundManager : public BaseResourceManager<sf::SoundBuffer, SoundID> {
 public:
     static SoundManager& instance();
 
-    void play(SoundID id);
-    void pause(SoundID id);
-    void setVolume(SoundID id, float volume);
-    bool isPlaying(SoundID id) const;
+    void play(Constants::SoundID id);
+    void pause(Constants::SoundID id);
+    void setVolume(Constants::SoundID id, float volume);
+    bool isPlaying(Constants::SoundID id) const;
 
 private:
     SoundManager();
-    std::unordered_map<SoundID, sf::Sound> m_sounds;
+    std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
 };

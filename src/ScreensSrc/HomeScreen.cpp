@@ -1,43 +1,59 @@
-#include "ScreensInc/HomeScreen.h"
+﻿#include "ScreensInc/HomeScreen.h"
 #include "ScreensInc/Market.h"
 #include "ResourseInc/SoundManager.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
-#include "CommandInc/StopMusicCommand.h"
-#include "ScreensInc/PlayGround.h"
-#include "CommandInc/PopToHomeCommand.h"
+#include "ScreensInc/ChooseLevelScreen.h"
+#include "ScreensInc/Market.h"
+#include "ScreensInc/Help.h"
 
 HomeScreen::HomeScreen()
 {
-	setBackGroundTexture(TextureID::Enemy);
+	setBackGroundTexture(Constants::TextureID::HOMEPAGE);
+	setSize();
 }
 
-void HomeScreen::init() {
-    initButtons();
-}
-
-void HomeScreen::initButtons()
+void HomeScreen::init()
 {
-    auto [playIt, insertedPlay] = m_buttons.emplace(
-        ButtonID::Play,
-        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 100), "Play")
-    );
-    playIt->second.setCommand(std::make_unique<PushScreenCommand<Market>>());
+    m_buttonInfos.clear(); 
 
-    auto [exitIt, insertedExit] = m_buttons.emplace(
-        ButtonID::Exit,
-        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 160), "Exit")
+    m_buttonInfos.emplace_back(
+        Constants::ButtonID::Play,
+        "Play",
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.2f),
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+        std::make_unique<PushScreenCommand<ChooseLevelScreen>>()
     );
-    exitIt->second.setCommand(std::make_unique<ExitCommand>());
 
-    auto [stopMusicIt, insertedStop] = m_buttons.emplace(
-        ButtonID::Stop,
-        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 220), "Stop")
+    m_buttonInfos.emplace_back(
+        Constants::ButtonID::Market,
+        "Market",
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.3f),
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+        std::make_unique<PushScreenCommand<Market>>()
     );
-    stopMusicIt->second.setCommand(std::make_unique<StopMusicCommand>());
+
+    m_buttonInfos.emplace_back(
+        Constants::ButtonID::Help,
+        "Help",
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.4f),
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+        std::make_unique<PushScreenCommand<Help>>()
+    );
+
+    m_buttonInfos.emplace_back(
+        Constants::ButtonID::Exit,
+        "Exit",
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.5f),
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+        std::make_unique<ExitCommand>()
+    );
+
+	setButtons();
 }
 
-ScreenID HomeScreen::getScreenID() const
+
+Constants::ScreenID HomeScreen::getScreenID() const
 {
-	return ScreenID::Home;
+	return Constants::ScreenID::Home;
 }

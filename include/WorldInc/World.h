@@ -26,11 +26,11 @@ public:
     std::vector<candle::Edge>& getCloseEdges() { return m_closeEdges; };
     std::vector<Enemy*> getEnemies() const;
 private:
-    void initWorld();
+	void initWorld();
 	void createGifts();
-    void loadMapTexture();
+    void setMapTexture();
     void createPlayer();
-    void createGift(GiftType , b2Vec2 );
+    void createGift(Constants::GiftType type, b2Vec2 pos);
     void createEnemy();
     void setupMap();
     void updateBullets(float );
@@ -45,11 +45,10 @@ private:
     std::vector <std::unique_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
     std::vector<std::unique_ptr<Gift>> m_gifts;
-    sf::Texture m_mapTexture;
+
     sf::Sprite m_mapSprite;
     sf::Clock m_clock;
     sf::Clock m_movementClock;
-    float m_elapsedTime;
     LoadMap m_tileMap;
     candle::EdgeVector m_allEdges;
     std::vector<candle::Edge> m_closeEdges;

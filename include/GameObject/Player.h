@@ -28,4 +28,5 @@ private:
 	bool m_visionBoostActive = false;
 	float m_visionBoostTimer = 0.f;
 	float m_originalVisionRange = 0.f;
+	virtual Character* getClosestTarget()override;
 };

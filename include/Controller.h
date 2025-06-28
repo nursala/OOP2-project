@@ -25,12 +25,10 @@ public:
     void popScreen();
     void popToHome();
     // Optional screen switching logic
-    void setScreen(ScreenID screen);     // if using switch-style
     void removeScreen();                 // legacy or custom
     const sf::Font& getFont();
     void setPopFlag();
 private:
-    // Singleton enforcement
     Controller();
     Controller(const Controller&) = delete;
     Controller& operator=(const Controller&) = delete;
@@ -44,7 +42,5 @@ private:
     std::stack<std::unique_ptr<Screen>> m_screens;
     sf::Clock m_clock;
     sf::RenderWindow m_window;
-    std::function<void(ScreenID)> m_changeScreen;
-    std::optional<ScreenID> m_nextScreen;
 	sf::Font m_font; // Font for UI elements
 };

@@ -2,15 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "ResourseInc/TextureManager.h"
 #include "ScreensInc/Button.h"
-
-enum class ScreenID {
-	Home,
-	Settings,
-	Game,
-	GameOver,
-	Market,
-	Help,
-};
+#include <Constants.h>
 
 class Screen
 {
@@ -22,13 +14,15 @@ public:
 	virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
 	void drawButtons(sf::RenderWindow& window);
 	virtual void customizeProcessEvent() {};
-	virtual ScreenID getScreenID() const = 0;
-	void setScreenAction(std::function<void(ScreenID)> action);
-protected:
-	ScreenID m_screenID;
-	void setBackGroundTexture(const TextureID texture);
-	sf::RectangleShape m_backGround;
-	std::unordered_map<ButtonID, Button> m_buttons;
-	std::function<void(ScreenID)> m_changeScreen;
+	virtual Constants::ScreenID getScreenID() const = 0;
 	virtual void init() = 0;
+	virtual void setSize(const sf::Vector2f& size =
+						{ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT });
+	void setButtons();
+protected:
+	//Constans::Constants::ScreenID m_screenID;
+	void setBackGroundTexture(const Constants::TextureID texture);
+	sf::RectangleShape m_backGround;
+	std::vector <Constants::ButtonInfo> m_buttonInfos;
+	std::unordered_map<Constants::ButtonID, Button> m_buttons;
 };

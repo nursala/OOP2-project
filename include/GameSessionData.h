@@ -9,23 +9,23 @@ public:
 
 
 
-    void setSelectedWeapon(WeaponType weapon);
-    WeaponType getSelectedWeapon() const;
+    void setSelectedWeapon(Constants::WeaponType weapon);
+    Constants::WeaponType getSelectedWeapon() const;
 
     void setShouldUpdateWeapon(bool value);
     bool getShouldUpdateWeapon() const;
 
     int& getMoney();
-    bool hasWeapon(WeaponType weapon) const;
-    void addWeapon(WeaponType weapon);
+    bool hasWeapon(Constants::WeaponType weapon) const;
+    void addWeapon(Constants::WeaponType weapon);
 private:
     GameSessionData();
     GameSessionData(const GameSessionData&) = delete;
     GameSessionData& operator=(const GameSessionData&) = delete;
 
     int money;
-    std::set<WeaponType> ownedWeapons;
-    WeaponType selectedWeapon;
+    std::set<Constants::WeaponType> ownedWeapons;
+    Constants::WeaponType selectedWeapon;
     bool shouldUpdateWeapon = false;
     
 };

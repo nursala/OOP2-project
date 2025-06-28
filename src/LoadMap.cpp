@@ -6,12 +6,9 @@
 using json = nlohmann::json;
 constexpr float SCALE = 30;
 
-// Constructor initializes map dimensions and tile sizes
-LoadMap::LoadMap(const std::string& jsonPath) {
+LoadMap::LoadMap(const std::string& jsonPath)
+{
     std::ifstream file(jsonPath);
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to open JSON map file");
-    }
 
     json j;
     file >> j;
@@ -26,14 +23,14 @@ LoadMap::LoadMap(const std::string& jsonPath) {
         std::vector<int> tiles = layer["data"].get<std::vector<int>>();
         addLayer(name, tiles);
     }
-	if (m_layers.empty()) {
-		throw std::runtime_error("No layers found in the map JSON file");
-	}
+    if (m_layers.empty()) {
+        throw std::runtime_error("No layers found in the map JSON file");
+    }
 
-	parseSpawnLayer("Spawns", 82, 253, 181); 
+    parseSpawnLayer("Spawns", 82, 253, 181);
     if (m_enemySpawns.empty() || m_giftSpawns.empty()) {
-		throw std::runtime_error("No spawn points found in the map JSON file");
-	}
+        throw std::runtime_error("No spawn points found in the map JSON file");
+    }
 }
 
 // Creates collision objects for a specified layer

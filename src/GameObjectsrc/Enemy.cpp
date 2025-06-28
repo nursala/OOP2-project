@@ -10,7 +10,7 @@
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
-    : Character(world, TextureManager::instance().get(TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
+    : Character(world, TextureManager::instance().get(Constants::TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
@@ -22,34 +22,97 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_weapon = std::make_unique<HandGun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
-    m_weapon->getWeaponLight()->setColor(sf::Color::Green);
+    //m_weapon->setFireCooldown(0.1f);
+    m_weapon->setBulletSpeed(1);
 }
 
-Enemy::~Enemy() {
-    if (m_body)
-        m_body->GetWorld()->DestroyBody(m_body);
+
+
+Character* Enemy::getClosestTarget()
+{
+
+
+    //if (m_target  && !m_target->isDestroyed()) {
+    //    for (b2Fixture* fixture = m_target->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    //        if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
+    //            return m_target;
+    //        }
+    //    }
+    //}
+    //if (m_target) {
+    //    sf::Vector2f targetPos = m_target->getPosition();
+    //    sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
+
+    //    float dx = targetPos.x - selfPos.x;
+    //    float dy = targetPos.y - selfPos.y;
+    //    float distSq = dx * dx + dy * dy;
+
+    //    float radius = m_target->getWeapon()->getWeaponLight()->getRange();
+    //    if (distSq <= radius * radius) {
+    //        return m_target;
+    //    }
+    //}
+    if (m_hitFixtures.empty())
+    {
+		m_target = nullptr; // No targets found
+        return nullptr;
+    }
+
+  
+
+    Character* closestCharacter = nullptr;
+    float minDistSq = std::numeric_limits<float>::max();
+    sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
+
+    for (auto* fixture : m_hitFixtures) {
+        b2Body* body = fixture->GetBody();
+        auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+        if (!character || !character->isVisible()) continue;
+
+       
+		auto* enemy = dynamic_cast<Enemy*>(character);
+        if (enemy)
+        {
+            if (this->isSpy() && enemy->isSpy())
+                 continue; // Skip spy enemies
+			if (!enemy->isSpy() && !this->isSpy())
+				continue; // Skip non-spy enemies if this is a spy
+        }
+        if (auto* P = dynamic_cast<Player*>(character) ; P)
+        {
+			if (this->isSpy())
+				continue; // Skip player if they are a spy
+        }
+       
+
+        
+        sf::Vector2f charPos = character->getPosition();
+        float dx = charPos.x - lightPos.x;
+        float dy = charPos.y - lightPos.y;
+        float distSq = std::sqrt(dx * dx + dy * dy);
+
+        if (distSq < minDistSq) {
+            if (closestCharacter && dynamic_cast<Player*>(closestCharacter) && !isSpy())
+            {
+
+            }
+            else
+            {
+                minDistSq = distSq;
+                closestCharacter = character;
+            }
+        }
+    }
+	if (!closestCharacter) {
+		m_target = nullptr; // No valid target found
+		return nullptr;
+	}
+	m_target = closestCharacter; // Update target reference
+    return closestCharacter;
 }
 
-bool Enemy::isPlayerVisible() const {
-    RayCastClosest raycast;
 
-    b2Vec2 start = { getPosition().x / SCALE, getPosition().y / SCALE };
-    sf::Vector2f targetPos = getTarget();
-    b2Vec2 end = { targetPos.x / SCALE, targetPos.y / SCALE };
-
-    b2Vec2 delta = end - start;
-    if (delta.LengthSquared() < 0.0001f || delta.LengthSquared() > getShootingRange())
-        return false;
-
-    m_body->GetWorld()->RayCast(&raycast, start, end);
-
-    return raycast.hit();
-}
-
-float Enemy::distanceToPlayer() const {
-    sf::Vector2f diff = m_playerRef.getPosition() - getPosition();
-    return std::hypot(diff.x, diff.y);
-}
 
 void Enemy::fireBullet(const sf::Vector2f&) {
     // if (m_weapon)
@@ -57,6 +120,7 @@ void Enemy::fireBullet(const sf::Vector2f&) {
 }
 
 void Enemy::takeDamage(int damage) {
+    damage += 50;
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;
@@ -65,26 +129,8 @@ void Enemy::takeDamage(int damage) {
 }
 
 sf::Vector2f Enemy::getTarget() const {
-    if (!m_isSpy)
-        return m_playerRef.getPosition();
-
-    float minDist = std::numeric_limits<float>::max();
-    sf::Vector2f closestEnemyPos = getPosition();
-
-    for (const auto& enemy : m_world.getEnemies()) {
-        if (enemy == this || enemy->isSpy())
-            continue;
-
-        sf::Vector2f pos = enemy->getPosition();
-        float dist = std::hypot(pos.x - getPosition().x, pos.y - getPosition().y);
-
-        if (dist < minDist) {
-            minDist = dist;
-            closestEnemyPos = pos;
-        }
-    }
-
-    return closestEnemyPos;
+	
+	return m_playerRef.getPosition();  // Return player's position as target
 }
 
 void Enemy::update(float deltaTime) {
@@ -99,9 +145,10 @@ void Enemy::update(float deltaTime) {
     if (m_isSpy) {
         m_spyTimer -= deltaTime;
         if (m_spyTimer <= 0.f) {
-            m_isSpy = false;
+            //m_isSpy = false;
             m_sprite.setColor(sf::Color::White);
         }
+        
     }
 
     // Handle speed reset
@@ -111,6 +158,10 @@ void Enemy::update(float deltaTime) {
             m_speed = m_originalSpeed;  // reset to normal speed
         }
     }
+    if (m_isSpy)
+        m_weapon->getWeaponLight()->setColor(sf::Color::Blue);
+    else
+        m_weapon->getWeaponLight()->setColor(sf::Color::Red);
 }
 
 void Enemy::speedDown() {
@@ -125,8 +176,8 @@ void Enemy::setSpeedDownTimer(float seconds) {
 
 void Enemy::setSpy(bool value) {
     m_isSpy = value;
-    if (m_isSpy)
-        m_sprite.setColor(sf::Color::Green);
+	m_target = nullptr; // Clear target when becoming a spy
+    
 }
 
 bool Enemy::isSpy() const {

@@ -17,6 +17,13 @@ Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
 	m_visable = true;
 }
 
+Entity::~Entity() {
+	if (m_body) {
+		m_body->GetWorld()->DestroyBody(m_body);
+		m_body = nullptr;
+	}
+}
+
 void Entity::init(b2BodyType type, float radius)
 {
 	b2BodyDef bodyDef;
@@ -50,6 +57,13 @@ void Entity::init(b2BodyType type, float radius)
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)
 		window.draw(m_sprite);
+}
+
+void Entity::render(RenderLayers& renderLayers) {
+	if (m_visable)
+		renderLayers.drawForeground(m_sprite);
+	else
+		renderLayers.drawBackground(m_sprite); 
 }
 
 void Entity::setPosition(const b2Vec2& position)

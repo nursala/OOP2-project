@@ -8,9 +8,6 @@ public:
 	HomeScreen();
 	virtual ~HomeScreen() = default;
 	void init() override;
-	ScreenID getScreenID() const override;
+	Constants::ScreenID getScreenID() const override;
 private:
-	void initButtons();
-	sf::Font m_font;
-	sf::Text m_title;
 };

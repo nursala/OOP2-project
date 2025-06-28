@@ -7,13 +7,7 @@
 #include "WeaponInc/WeaponLight.h"
 #include "GameObject/Bullet.h"
 #include <string>
-
-enum class WeaponType {
-    HandGun,
-    Shotgun,
-    Sniper,
-    Rifle
-};
+#include "Constants.h"
 
 class Character;
 class World;
@@ -33,18 +27,19 @@ public:
     void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
 	void setShootingRange(float range) { m_shootingRange = range; }
-	WeaponType getType() const { return m_type; }
+	Constants::WeaponType getType() const { return m_type; }
 
     WeaponLight* getWeaponLight();
-
-    static int getPrice(WeaponType type);
 
     float getDamage() const;
     void setDamage(float damage);
 
+	void setFireCooldown(float cooldown) { m_fireCooldown = cooldown; }
+    void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
+
 protected:
-    Weapon(WeaponType, float shootingRange, float damage, float angle);
-	WeaponType m_type;
+    Weapon(Constants::WeaponType, float shootingRange, float damage, float angle);
+    Constants::WeaponType m_type;
     float m_bulletSpeed;
     std::unique_ptr<WeaponLight> m_weaponLight;
 

@@ -8,11 +8,11 @@ public:
 	Help();
 	void init();
 	void processEvent(sf::Event& event, sf::RenderWindow& window) override;
-	ScreenID getScreenID() const override;
+	Constants::ScreenID getScreenID() const override;
 	void render(sf::RenderWindow& window) override;
 private:
 	sf::View m_view;
-	float m_scrollSpeed = 30.0f;
+	float m_scrollSpeed = 50.0f;
 
 	void clampView();
 

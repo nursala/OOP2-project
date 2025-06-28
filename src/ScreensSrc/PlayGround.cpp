@@ -1,64 +1,69 @@
-#include "ScreensInc/PlayGround.h"
+﻿#include "ScreensInc/PlayGround.h"
 #include <iostream>
 #include "cmath"
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
-//playground.cpp
+
 PlayGround::PlayGround()
 {
-    m_view.setSize(1280, 720);
-    //m_view.zoom(0.25f); // Adjust zoom level as needed
-
+	m_view.setSize(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
 }
 
 void PlayGround::init()
 {
-    initButtons();
-}
+	auto [playIt, insertedPlay] = m_buttons.emplace(
+		Constants::ButtonID::Play,
+		Button({ Constants::WINDOW_WIDTH * 0.05, Constants::WINDOW_HEIGHT * 0.06 },
+			{ Constants::WINDOW_WIDTH * 0.9 , Constants::WINDOW_HEIGHT * 0.1 })
+	);
+	playIt->second.setTexture(Constants::TextureID::GOTOHOME);
+	playIt->second.setCommand(std::make_unique<PopScreenCommand>());
 
-void PlayGround::initButtons()
-{
-    auto [playIt, insertedPlay] = m_buttons.emplace(
-        ButtonID::Play,
-        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 100), "Back To Home")
-    );
-    playIt->second.setCommand(std::make_unique<PopScreenCommand>());
-
-    auto [exitIt, insertedExit] = m_buttons.emplace(
-        ButtonID::Exit,
-        Button(sf::Vector2f(200, 50), sf::Vector2f(200, 160), "Exit")
-    );
-    exitIt->second.setCommand(std::make_unique<ExitCommand>());
+	auto [exitIt, insertedExit] = m_buttons.emplace(
+		Constants::ButtonID::Exit,
+		Button({ Constants::WINDOW_WIDTH * 0.1, Constants::WINDOW_HEIGHT * 0.1 },
+			{ Constants::WINDOW_WIDTH * 0.85 - 100, Constants::WINDOW_HEIGHT * 0.1
+			}, "Exit")
+	);
+	exitIt->second.setCommand(std::make_unique<ExitCommand>());
 }
 
 void PlayGround::update(sf::RenderWindow& window, float dt)
 {
-    for (auto& [id, button] : m_buttons) {
-        button.updateHover(window);
-    }
-    sf::Vector2f center = m_world.getPlayer().getPosition();
-    sf::Vector2f viewSize = m_view.getSize();
-    center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
-    center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
-    m_view.setCenter(center);
-    window.setView(m_view);
-    m_world.update(window, dt);
+	Screen::update(window, dt);
+
+	sf::Vector2f center = m_world.getPlayer().getPosition();
+	sf::Vector2f viewSize = m_view.getSize();
+
+	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
+	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
+
+	m_view.setCenter(center);
+	window.setView(m_view);
+
+	m_world.update(window, dt);
 }
 
 void PlayGround::render(sf::RenderWindow& window)
 {
-    DebugDraw d(&window);
-    d.SetFlags(b2Draw::e_shapeBit);
-    m_world.getWorld().SetDebugDraw(&d);
-    m_world.render(window);
-    for (auto& [id, button] : m_buttons) {
-        button.render(window);
-    }
-    //m_world.getWorld().DebugDraw();
+	DebugDraw d(&window);
+	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit; // أو فقط e_shapeBit
+
+	d.SetFlags(flags);
+	m_world.getWorld().SetDebugDraw(&d);
+	m_world.render(window);
+	for (auto& [id, button] : m_buttons) {
+		button.render(window);
+	}
+m_world.render(window);
+	window.setView(window.getDefaultView());
+	Screen::drawButtons(window);
+	
+	m_statusBar.render(window, 10, 100);
 
 }
 
-ScreenID PlayGround::getScreenID() const
+Constants::ScreenID PlayGround::getScreenID() const
 {
-    return ScreenID::Game;
+	return Constants::ScreenID::Game;
 }

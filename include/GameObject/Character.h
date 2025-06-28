@@ -11,8 +11,8 @@
 #include <box2d/b2_fixture.h>
 #include <unordered_set>
 
-class Weapon;
 class World;
+class Weapon;
 class RenderLayers;
 class VisionLight;
 
@@ -20,7 +20,8 @@ class Character : public Entity
 {
 public:
     Character(World& , const sf::Texture* , sf::Vector2f , sf::Vector2u , float );
-    virtual ~Character() = default;
+   
+	virtual ~Character(); 
 
     virtual void update(float );
     void render(sf::RenderWindow& ) override;
@@ -36,8 +37,14 @@ public:
     void setShootingRange(float );
 	void setRotation(float );
 	void updateTargets();
+    void updateTargets(sf::RenderWindow& window);
 
-    Character* getClosestTarget(bool);
+    void setTarget(Character* target) { m_target = target; }
+
+
+    Character* getTargetsss() const;
+
+    virtual Character* getClosestTarget() = 0;
 
     Weapon* getWeapon();
     virtual sf::Vector2f getTarget() const = 0;
@@ -47,21 +54,24 @@ public:
 protected:
     
     World& m_world;
+
     float m_speed = 0.f;
-	Character* m_target;
+
+    Character* m_target;
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
     std::shared_ptr<VisionLight> m_visionLight;
     MoveInfo m_lastMoveInfo;
+
     std::unique_ptr <HealthBar> m_healthBar;
+
     float m_health = 100.f;
     float m_armor = 50.f;
+
     std::unique_ptr<ArmorBar> m_armorBar;
-
     std::unordered_set<b2Fixture*> m_hitFixtures;
-
 };
 
 

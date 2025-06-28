@@ -1,45 +1,40 @@
 #pragma once
 #include "ResourseInc/BaseResourceManager.h"
 #include <SFML/Graphics.hpp>
-// TextureManager.h
-enum class TextureID {
-	Player,
-	Enemy,
-	ARMOR,
-	HEALTH,
-	ENEMYSPEEDDOWN,
-	SPEEDUP,
-	SPY,
-	VISIONUP,
-	SIZE,
-	TIMER,
-	KILLS,
-	COINS,
-	LEVELS,
-	BULLET,
-	MARKET,
-	HELP
+
+const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
+	{Constants::TextureID::Player, "Player_move.png"},
+	{Constants::TextureID::Enemy, "Player_move.png"},
+	{Constants::TextureID::HEALTH , "Health.png"},
+	{Constants::TextureID::ARMOR, "shield.png"},
+	{Constants::TextureID::BULLET, "game_bullet.png"},
+	{Constants::TextureID::ENEMYSPEEDDOWN, "EnemySpeedDownGift.png"},
+	{Constants::TextureID::SPEEDUP, "SpeedUpGift.png"},
+	{ Constants::TextureID::SPY, "spy.png" },
+	{ Constants::TextureID::MARKET, "market.JPG" },
+	{ Constants::TextureID::HELP, "help.jpg" },
+	{ Constants::TextureID::EASYMAP, "easy_map.png" },
+	{ Constants::TextureID::MEDIUMMAP, "medium_map.png" },
+	{ Constants::TextureID::HARDMAP, "hard_map.png" },
+	{ Constants::TextureID::BUTTON, "button.png" },
+	{ Constants::TextureID::SOUNDON, "soundon.png" },
+	{ Constants::TextureID::SOUNDOFF, "soundoff.png" },
+	{ Constants::TextureID::GOTOHOME, "home.png" },
+	{ Constants::TextureID::PAUSE, "pause.png" },
+	{ Constants::TextureID::HOMEPAGE, "homePage.png" },
+	{ Constants::TextureID::BASICGUN, "basicGun.png" },
+	{ Constants::TextureID::SHOTGUN, "shotgun.png" },
+	{ Constants::TextureID::SNIPER, "sniper.png" },
+	{ Constants::TextureID::RIFLE, "rifle.png" },
+	{ Constants::TextureID::COINS, "coins.png" },
+	{ Constants::TextureID::VISIONUP, "vision_up.png" },
+	{ Constants::TextureID::KILLS, "kills.png" },
+	{ Constants::TextureID::COINS, "coins.png" },
+	{ Constants::TextureID::LEVELS, "Levels.png" },
+	{ Constants::TextureID::MARKET, "market.JPG" },
 };
 
-const std::unordered_map<TextureID, std::string> TextureFileMap = {
-	{TextureID::Player, "Player_move.png"},
-	{TextureID::Enemy, "Player_move.png"},
-	{TextureID::HEALTH , "Health.png"},
-	{TextureID::ARMOR, "shield.png"},
-	{TextureID::BULLET, "game_bullet.png"},
-	{TextureID::ENEMYSPEEDDOWN, "EnemySpeedDownGift.png"},
-	{TextureID::SPEEDUP, "SpeedUpGift.png"},
-	{ TextureID::SPY, "spy.png" },
-	{ TextureID::VISIONUP, "vision_up.png" },
-    { TextureID::TIMER, "timer.png" },
-	{ TextureID::KILLS, "kills.png" },
-	{ TextureID::COINS, "coins.png" },
-	{ TextureID::LEVELS, "Levels.png" },
-	{ TextureID::MARKET, "market.JPG" },
-	{ TextureID::HELP, "help.jpg" },
-};
-
-class TextureManager : public BaseResourceManager<sf::Texture, TextureID> {
+class TextureManager : public BaseResourceManager<sf::Texture, Constants::TextureID> {
 public:
 	static TextureManager& instance();
 

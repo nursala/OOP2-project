@@ -4,7 +4,7 @@
 std::unique_ptr<State> AttackingStatePlayer::handleInput(Character& character) {
 	Player& player = static_cast<Player&>(character);
 
-	if (!player.EnemyIsVisible().first || player.EnemyIsVisible().second > player.getShootingRange()) {
+	if (player.getTargetsss()) {
 		return std::make_unique<WalkingStatePlayer>();
 	}
 

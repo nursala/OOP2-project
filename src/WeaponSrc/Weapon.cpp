@@ -3,7 +3,7 @@
 #include "WorldInc/World.h"        // If not already included
 #include <iostream>
 
-Weapon::Weapon(WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
+Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
 {
 	m_weaponLight = std::make_unique<WeaponLight>(shootingRange, angle); // Correct type for m_weaponLight
 	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light
@@ -62,18 +62,6 @@ WeaponLight* Weapon::getWeaponLight()
 {
 	return m_weaponLight.get();
 }
-
-int Weapon::getPrice(WeaponType type)
-{
-	switch (type) {
-	case WeaponType::HandGun: return 0;
-	case WeaponType::Shotgun:  return 200;
-	case WeaponType::Sniper:   return 300;
-	case WeaponType::Rifle:    return 500;
-	}
-	return 0;
-}
-
 
 float Weapon::getDamage() const
 {

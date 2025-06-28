@@ -2,7 +2,7 @@
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-Shotgun::Shotgun() : Weapon(WeaponType::Shotgun, 150.f, 7.f, 60.f)
+Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 150.f, 7.f, 60.f)
 {
 }
 

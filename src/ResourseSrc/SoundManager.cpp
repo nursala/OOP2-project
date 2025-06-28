@@ -13,19 +13,19 @@ SoundManager& SoundManager::instance() {
     return inst;
 }
 
-void SoundManager::play(SoundID id) {
+void SoundManager::play(Constants::SoundID id) {
     m_sounds.at(id).play();
 }
 
-void SoundManager::pause(SoundID id) {
+void SoundManager::pause(Constants::SoundID id) {
     m_sounds.at(id).pause();
 }
 
-void SoundManager::setVolume(SoundID id, float volume) {
+void SoundManager::setVolume(Constants::SoundID id, float volume) {
     m_sounds.at(id).setVolume(volume);
 }
 
-bool SoundManager::isPlaying(SoundID id) const {
+bool SoundManager::isPlaying(Constants::SoundID id) const {
     auto it = m_sounds.find(id);
     return it != m_sounds.end() && it->second.getStatus() == sf::Sound::Playing;
 }

@@ -8,10 +8,11 @@ struct Layer {
     std::string name;
     std::vector<int> tiles;
 };
+
 class LoadMap {
 public:
     // Constructor that loads map directly from JSON file
-    explicit LoadMap(const std::string& jsonPath);
+    LoadMap(const std::string& jsonPath);
 
     // Create collision objects from a specified layer name
     void createCollisionObjects(b2World& world, const std::string& layerName);
