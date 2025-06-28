@@ -38,7 +38,7 @@ public:
     void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
 
 protected:
-    Weapon(WeaponType, float shootingRange, float damage, float angle);
+    Weapon(Constants::WeaponType, float shootingRange, float damage, float angle);
     Constants::WeaponType m_type;
     float m_bulletSpeed;
     std::unique_ptr<WeaponLight> m_weaponLight;

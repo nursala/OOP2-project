@@ -25,6 +25,7 @@ public:
     std::vector<candle::Edge>& getCloseEdges() { return m_closeEdges; };
     std::vector<Enemy*> getEnemies() const;
 private:
+	void initWorld();
 	void createGifts();
     void setMapTexture();
     void createPlayer();

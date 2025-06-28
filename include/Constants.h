@@ -9,8 +9,8 @@ namespace Constants {
 	// ----------------------------
 	// Window Settings
 	// ----------------------------
-	inline constexpr unsigned int WINDOW_WIDTH = 1600;
-	inline constexpr unsigned int WINDOW_HEIGHT = 900;
+	inline constexpr unsigned int WINDOW_WIDTH = 1280;
+	inline constexpr unsigned int WINDOW_HEIGHT =720;
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
 	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;

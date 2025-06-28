@@ -10,7 +10,6 @@
 
 World::World()
 	: m_world(b2Vec2(0.f, 0.f)),
-    m_light({ 2400, 2400 }),
 	m_tileMap(LevelManager::instance().getCurrentLevelPath())
 {
 	m_renderLayers = std::make_unique<RenderLayers>();
@@ -26,7 +25,6 @@ void World::initWorld() {
     createGifts();
     setupMap();
     buildAllEdges();
-    setupPlayerLight();
 }
 
 void World::setMapTexture() {
