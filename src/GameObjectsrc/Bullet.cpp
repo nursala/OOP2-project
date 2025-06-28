@@ -10,7 +10,7 @@ Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& d
     m_direction(direction), m_owner(owner)
 {
     m_visable = true;
-    m_speed = 1;
+    m_speed = 15;
     m_damage = damage;
 	m_range = range + 10.f;
     init(b2_kinematicBody, 0.3f);
