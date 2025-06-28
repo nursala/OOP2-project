@@ -14,7 +14,7 @@ IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int i
 
 MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
 {
-    Character* target = character.getTargetsss();
+    Character* target = character.getTarget().get();
     sf::Vector2f enemyPos = character.getPosition();
     sf::Vector2f targetPos;
 

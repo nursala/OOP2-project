@@ -39,8 +39,8 @@ private:
 
     b2World m_world;
     std::unique_ptr<RenderLayers> m_renderLayers;
-    std::unique_ptr<Player> m_player;
-    std::vector <std::unique_ptr<Enemy>> m_enemies;
+    std::shared_ptr<Player> m_player;
+    std::vector <std::shared_ptr<Enemy>> m_enemies;
     std::vector<std::unique_ptr<Bullet>> m_bullets;
     std::vector<std::unique_ptr<Gift>> m_gifts;
 

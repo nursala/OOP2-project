@@ -11,7 +11,7 @@ void SimpleShootStrategy::attack(Character& self, float) {
         return;
 
 
-    Character* targetC = self.getTargetsss();
+    Character* targetC = self.getTarget().get();
     sf::Vector2f target;
 
     if (targetC) {
@@ -31,7 +31,7 @@ void SimpleShootStrategy::attack(Character& self, float) {
     sf::Vector2f bulletPos = self.getPosition() + direction * muzzleOffset;
 
     self.getWorld().addBullets(
-        weapon->fire(self.getWorld(), bulletPos, direction, &self)
+        weapon->fire(self.getWorld(), bulletPos, direction, self.shared_from_this())
     );
 }
 

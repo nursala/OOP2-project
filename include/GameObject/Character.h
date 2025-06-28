@@ -16,12 +16,12 @@ class Weapon;
 class RenderLayers;
 class VisionLight;
 
-class Character : public Entity
+class Character : public Entity, public std::enable_shared_from_this<Character>
 {
 public:
     Character(World& , const sf::Texture* , sf::Vector2f , sf::Vector2u , float );
    
-	virtual ~Character(); 
+	virtual ~Character() override = default; 
 
     virtual void update(float );
     void render(sf::RenderWindow& ) override;
@@ -39,15 +39,17 @@ public:
 	void updateTargets();
     void updateTargets(sf::RenderWindow& window);
 
-    void setTarget(Character* target) { m_target = target; }
+	void setTarget(std::shared_ptr<Character> target) {
+		m_target = target;
+	}
 
-
-    Character* getTargetsss() const;
+	std::shared_ptr<Character> getTarget() const {
+		return m_target.lock(); // Convert weak pointer to shared pointer
+	}
 
     virtual Character* getClosestTarget() = 0;
 
     Weapon* getWeapon();
-    virtual sf::Vector2f getTarget() const = 0;
 	float getSpeed() const { return m_speed; }
     virtual void rotateTowardMouse(sf::RenderWindow&) {};
 
@@ -57,21 +59,24 @@ protected:
 
     float m_speed = 0.f;
 
-    Character* m_target;
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
-    std::shared_ptr<VisionLight> m_visionLight;
+    std::unique_ptr<VisionLight> m_visionLight;
+    std::unique_ptr <HealthBar> m_healthBar;
+    std::unique_ptr<ArmorBar> m_armorBar;
+
+
+	std::weak_ptr<Character> m_target; // Weak pointer to avoid circular references
 
     MoveInfo m_lastMoveInfo;
 
-    std::unique_ptr <HealthBar> m_healthBar;
 
     float m_health = 100.f;
     float m_armor = 50.f;
+	float m_visableTime = 0.1f; // Time for which the character is visible
 
-    std::unique_ptr<ArmorBar> m_armorBar;
     std::unordered_set<b2Fixture*> m_hitFixtures;
 };
 
