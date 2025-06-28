@@ -12,11 +12,12 @@ class World;
 class Player : public Character {
 public:
 	Player(World&);
+	virtual ~Player() override = default;
 	void takeDamage(int) override;
 	void addHealth();
 	void addArmor();
 	void addSpeed();
-	sf::Vector2f getTarget() const override;
 	void rotateTowardMouse(sf::RenderWindow&);
 	virtual Character* getClosestTarget()override;
+	void makeVisble(bool visible);
 };

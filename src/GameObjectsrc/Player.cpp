@@ -67,12 +67,6 @@ void Player::addSpeed()
 }
 
 
-sf::Vector2f Player::getTarget() const
-{
-	if (m_target)
-		return m_target->getPosition();
-	return getPosition();
-}
 
 
 
@@ -87,6 +81,12 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 
 Character* Player::getClosestTarget()
 {
+	for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		character->setVisible(true);
+	}
 	Character* closestCharacter = nullptr;
 	float minDistSq = std::numeric_limits<float>::max();
 	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
@@ -111,7 +111,24 @@ Character* Player::getClosestTarget()
 			closestCharacter = character;
 		}
 	}
-	m_target  = closestCharacter; // Set the target for the player
+
+	if (!closestCharacter)
+	{
+		setTarget(nullptr); // Clear target if no closest character found
+		return nullptr;
+
+	}
+
+	setTarget(closestCharacter->shared_from_this()); // Update target reference
 	return closestCharacter;
 }
 
+void Player::makeVisble(bool visible)
+{
+	/*for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		character->setVisible(visible);
+	}*/
+}
