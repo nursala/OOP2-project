@@ -56,7 +56,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                     }
                 }
                 break;
-			case GiftType::INCREASERANGE:
+            case Constants::GiftType::VISIONUP:
                 player->increaseVisionTemporarily(100.f, 10.f); // example: +100 radius for 10 seconds
                 break;
             default:

@@ -4,30 +4,24 @@
 #include <unordered_map>
 #include "Constants.h"
 
-enum class SoundID {
-    SHOOT,BACKGROUNDMUSIC,MENUMUSIC,MATCHMAKINGMUSIC,GAMEOVERSOUND,
-	GAMEWINSOUND,RIFLESOUND,SHOTGUNSOUND,PISTOLSOUND,SNIPERSOUND,
-	BUTTOUNEVENT,HEARTBEAT,VISIONUPGRADE,SHIELDUPGRADE,HEALTHUPGRADE,
-	SPEEDUPGRADE,SPEEDDOWN,SPY,GAMEBEGIN,ENEMYDEATH, PLAYERDEATH,
-};
 
 const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 
-      {SoundID::BACKGROUNDMUSIC, "background_music.ogg"}    , {SoundID::MENUMUSIC, "menu_music.ogg"}
-	, {SoundID::MATCHMAKINGMUSIC, "matchmaking_music.ogg"}  //, {SoundID::GAMEOVERSOUND, "game_over.ogg"}           
-	, {SoundID::RIFLESOUND, "AK47.wav"}                     , {SoundID::SHOTGUNSOUND, "shotgun_shot.wav"}
-	, {SoundID::PISTOLSOUND, "pistol_shot.ogg"}             , {SoundID::SNIPERSOUND, "sniper_shot.wav"}
-	, {SoundID::BUTTOUNEVENT, "button_sound.ogg"}           , {SoundID::HEARTBEAT, "heartbeat_sound.ogg"}
-	, {SoundID::VISIONUPGRADE, "vision_up.ogg"}             , {SoundID::SHIELDUPGRADE, "shield_sound.ogg"}
-	, {SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			  //, {SoundID::SPEEDUPGRADE, "speed_upgrade.ogg"}
-	//, {SoundID::SPEEDDOWN, "speed_down.ogg"}                , {SoundID::SPY, "spy.ogg"}
-	//, {SoundID::GAMEBEGIN, "game_begin.ogg"}                
-	, {SoundID::ENEMYDEATH, "enemy_death.ogg"}
-	, {SoundID::PLAYERDEATH, "player_death.ogg"}            , {SoundID::GAMEWINSOUND, "win_sound.ogg"}
+      {Constants::SoundID::BACKGROUNDMUSIC, "background_music.ogg"}    , {Constants::SoundID::MENUMUSIC, "menu_music.ogg"}
+	, {Constants::SoundID::MATCHMAKINGMUSIC, "matchmaking_music.ogg"}  //, {Constants::SoundID::GAMEOVERSOUND, "game_over.ogg"}           
+	, {Constants::SoundID::RIFLESOUND, "AK47.wav"}                     , {Constants::SoundID::SHOTGUNSOUND, "shotgun_shot.wav"}
+	, {Constants::SoundID::PISTOLSOUND, "pistol_shot.ogg"}             , {Constants::SoundID::SNIPERSOUND, "sniper_shot.wav"}
+	, {Constants::SoundID::BUTTOUNEVENT, "button_sound.ogg"}           , {Constants::SoundID::HEARTBEAT, "heartbeat_sound.ogg"}
+	, {Constants::SoundID::VISIONUPGRADE, "vision_up.ogg"}             , {Constants::SoundID::SHIELDUPGRADE, "shield_sound.ogg"}
+	, {Constants::SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			  //, {Constants::SoundID::SPEEDUPGRADE, "speed_upgrade.ogg"}
+	//, {Constants::SoundID::SPEEDDOWN, "speed_down.ogg"}                , {Constants::SoundID::SPY, "spy.ogg"}
+	//, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                
+	, {Constants::SoundID::ENEMYDEATH, "enemy_death.ogg"}
+	, {Constants::SoundID::PLAYERDEATH, "player_death.ogg"}            , {Constants::SoundID::GAMEWINSOUND, "win_sound.ogg"}
 
 };
 
-class SoundManager : public BaseResourceManager<sf::SoundBuffer, SoundID> {
+class SoundManager : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
 public:
     static SoundManager& instance();
 

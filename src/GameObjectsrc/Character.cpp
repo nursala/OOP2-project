@@ -84,8 +84,8 @@ void Character::render(RenderLayers& renderLayers) {
 
 	if (m_visionLight)
 	{
-		//renderLayers.drawLight(*m_visionLight);
-		//renderLayers.drawForeground(*m_visionLight);
+		renderLayers.drawLight(*m_visionLight);
+		renderLayers.drawForeground(*m_visionLight);
 	}
 	if (m_weapon)
 		m_weapon->draw(renderLayers);

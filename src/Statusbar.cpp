@@ -32,10 +32,10 @@ void Statusbar::render(sf::RenderWindow& window) {
     float startX = pos.x - viewSize.x / 2;
     float startY = pos.y - viewSize.y / 2 + 10.f;
 
-    drawIconWithText(window, TextureManager::instance().get(TextureID::KILLS), { startX + 50 , startY }, std::to_string(m_kills));
-    drawIconWithText(window, TextureManager::instance().get(TextureID::COINS), {startX + 350,  startY }, std::to_string(m_coins));
+    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::KILLS), { startX + 50 , startY }, std::to_string(m_kills));
+    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::COINS), {startX + 350,  startY }, std::to_string(m_coins));
 	auto levelColor = m_level == "Easy" ? sf::Color::Green : (m_level == "Medium" ? sf::Color::Yellow : sf::Color::Red);
-    drawIconWithText(window, TextureManager::instance().get(TextureID::LEVELS), { startX + 650,  startY }, m_level, levelColor);
+    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::LEVELS), { startX + 650,  startY }, m_level, levelColor);
 }
 
 void Statusbar::drawIconWithText(sf::RenderWindow& window,const sf::Texture* texture,const sf::Vector2f& pos,std::string value, sf::Color color)

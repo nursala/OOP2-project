@@ -106,16 +106,15 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	calcNearlyEdge(window);
 	int index = 0;
 	for (const auto& enemy : m_enemies) {
-		std::cout << "Enemy #" << index << " - "
-			<< (enemy->isSpy() ? "Spy" : "Not Spy");
+		//std::cout << "Enemy #" << index << " - " << (enemy->isSpy() ? "Spy" : "Not Spy");
 
 		Character* target = enemy->getTargetsss();
 
 		if (!target) {
-			std::cout << " -> Target: None" << std::endl;
+			//std::cout << " -> Target: None" << std::endl;
 		}
 		else if (target == m_player.get()) {
-			std::cout << " -> Target: Player" << std::endl;
+			//std::cout << " -> Target: Player" << std::endl;
 		}
 		else {
 			// الهدف هو عدو تاني
@@ -126,11 +125,11 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 				int targetIndex = std::distance(m_enemies.begin(), it);
 				bool isTargetSpy = static_cast<Enemy*>(target)->isSpy();
 
-				std::cout << " -> Target: Enemy #" << targetIndex
-					<< " - " << (isTargetSpy ? "Spy" : "Not Spy") << std::endl;
+				//std::cout << " -> Target: Enemy #" << targetIndex
+					//<< " - " << (isTargetSpy ? "Spy" : "Not Spy") << std::endl;
 			}
 			else {
-				std::cout << " -> Target: Unknown" << std::endl;
+				//std::cout << " -> Target: Unknown" << std::endl;
 			}
 		}
 
