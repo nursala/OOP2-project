@@ -25,6 +25,11 @@ void ContactListener::BeginContact(b2Contact* contact) {
     if (auto player = dynamic_cast<Player*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
             
+            if (player == bullet->getOwnerShared().get())
+            {
+                return;
+            }
+
                 player->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
         }
@@ -51,7 +56,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
-                        enemy->setSpyTimer(20.f);  //seconds of spy behavior
+                        enemy->setSpyTimer(5.f);  //seconds of spy behavior
                         break;
                     }
                 }
@@ -74,6 +79,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
     else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
 			
+            if (enemy == bullet->getOwnerShared().get())
+            {
+                return;
+            }
                 enemy->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
             

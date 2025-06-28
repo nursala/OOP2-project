@@ -11,18 +11,20 @@ class Enemy : public Character {
 public:
     Enemy(World& world, const LoadMap& map, const Player& player);
 
+    virtual ~Enemy() override = default;
+
     virtual Character* getClosestTarget();
     void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
     void speedDown();
     void setSpeedDownTimer(float seconds); 
-    sf::Vector2f getTarget() const override;
     void update(float deltaTime) override;
 
 
     void setSpy(bool value);
     bool isSpy() const;
     void setSpyTimer(float seconds);
+
 
 private:
     const Player& m_playerRef;
