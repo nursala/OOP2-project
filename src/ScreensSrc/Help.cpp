@@ -12,15 +12,15 @@ Help::Help()
 
 void Help::init()
 {
-	m_buttonInfos.clear();
-	m_buttonInfos.emplace_back(
+	m_generalButtons.clear();
+	m_generalButtons.emplace_back(
 		Constants::ButtonID::Back,
 		"Back",
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.9f, Constants::WINDOW_HEIGHT * 0.05f),
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
 		std::make_unique<PopScreenCommand>()
 	);
-	setButtons();
+	setButtons(m_generalButtons);
 }
 
 void Help::processEvent(sf::Event& event, sf::RenderWindow& window)
@@ -44,7 +44,6 @@ Constants::ScreenID Help::getScreenID() const
 {
 	return Constants::ScreenID::Help;
 }
-
 
 void Help::render(sf::RenderWindow& window) {
 	window.setView(m_view);

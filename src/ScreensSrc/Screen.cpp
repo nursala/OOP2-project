@@ -11,19 +11,6 @@ void Screen::setSize(const sf::Vector2f& size)
 	m_backGround.setSize(size);
 }
 
-void Screen::setButtons()
-{
-	for (auto& info : m_buttonInfos)
-	{
-		auto& btn = m_buttons.emplace(
-			info.id,
-			Button(info.size, info.position, info.label)
-		).first->second;
-
-		btn.setCommand(std::move(info.command));
-	}
-}
-
 void Screen::setBackGroundTexture(const Constants::TextureID texture)
 {
 	auto tex = TextureManager::instance().get(texture);

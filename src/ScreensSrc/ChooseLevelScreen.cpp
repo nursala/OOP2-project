@@ -13,9 +13,9 @@ ChooseLevelScreen::ChooseLevelScreen()
 
 void ChooseLevelScreen::init()
 {
-    m_buttonInfos.clear();
+    m_generalButtons.clear();
 
-    m_buttonInfos.emplace_back(
+    m_generalButtons.emplace_back(
         Constants::ButtonID::Easy,
         "Easy",
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.6f),
@@ -23,7 +23,7 @@ void ChooseLevelScreen::init()
         std::make_unique<StartGameCommand>(Constants::LevelID::EasyMap)
     );
 
-    m_buttonInfos.emplace_back(
+    m_generalButtons.emplace_back(
         Constants::ButtonID::Medium,
         "medium",
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.4f, Constants::WINDOW_HEIGHT * 0.6f),
@@ -31,7 +31,7 @@ void ChooseLevelScreen::init()
         std::make_unique<StartGameCommand>(Constants::LevelID::MediumMap)
     );
 
-    m_buttonInfos.emplace_back(
+    m_generalButtons.emplace_back(
         Constants::ButtonID::Hard,
         "Hard",
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.7f, Constants::WINDOW_HEIGHT * 0.6f),
@@ -39,14 +39,15 @@ void ChooseLevelScreen::init()
         std::make_unique<StartGameCommand>(Constants::LevelID::HardMap)
     );
 
-    m_buttonInfos.emplace_back(
+    m_generalButtons.emplace_back(
         Constants::ButtonID::Back,
         "Back",
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
         std::make_unique<PopScreenCommand>()
     );
-	setButtons();
+
+	setButtons(m_generalButtons);
 }
 
 Constants::ScreenID ChooseLevelScreen::getScreenID() const

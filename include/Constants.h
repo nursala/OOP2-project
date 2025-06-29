@@ -1,8 +1,11 @@
-#pragma once
+﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <unordered_map>
 #include "CommandInc/Command.h"
+#include <optional>
+#include <memory>
+#include <string>
 
 namespace Constants {
 
@@ -10,7 +13,7 @@ namespace Constants {
 	// Window Settings
 	// ----------------------------
 	inline constexpr unsigned int WINDOW_WIDTH = 1280;
-	inline constexpr unsigned int WINDOW_HEIGHT =720;
+	inline constexpr unsigned int WINDOW_HEIGHT = 720;
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
 	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;
@@ -81,17 +84,6 @@ namespace Constants {
 		GoToHome,
 		Pause,
 	};
-	//------------------------------
-	// ButtonInfo
-	//------------------------------
-
-	struct ButtonInfo {
-		ButtonID id;
-		std::string label;
-		sf::Vector2f position;
-		sf::Vector2f size;
-		std::unique_ptr<Command> command;
-	};
 	// ----------------------------
 	// Texture IDs
 	// ----------------------------
@@ -131,16 +123,19 @@ namespace Constants {
 		Sniper,
 		Rifle
 	};
-	//------------------------------
-	// WeaponButtonInfo
-	// -----------------------------
-	struct WeaponButtonInfo
-	{
-		WeaponType type;
-		ButtonID id;
-		TextureID textureID;
+
+	// ----------------------------
+	// Generic Button Structure
+	// ----------------------------
+	template <typename T = std::monostate>
+	struct GenericButton {
+		Constants::ButtonID id;
+		std::string label;
 		sf::Vector2f position;
 		sf::Vector2f size;
+		std::unique_ptr<Command> command;
+		std::optional<TextureID> textureID;
+		std::optional<T> type = std::nullopt;
 
 	};
 

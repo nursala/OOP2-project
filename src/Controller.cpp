@@ -60,7 +60,6 @@ void Controller::run() {
 			m_window.close();
 			break;
 		}
-
 		processEvents();
 		update();
 		render();

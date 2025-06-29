@@ -1,25 +1,29 @@
-#pragma once
+﻿#pragma once
 
-#include <SFML/Graphics.hpp>
 #include "ScreensInc/Screen.h"
-#include "ScreensInc/Button.h"
+#include <unordered_map>
+#include <vector>
+#include <string>
 #include "WeaponInc/Weapon.h"
 
-class Market : public Screen
-{
+class Market : public Screen {
 public:
-	Market();
-	~Market() override = default;
-	Constants::ScreenID getScreenID() const override;
-	void updateWeaponButtonLabels();
-	void render(sf::RenderWindow& window) override;
-	void setMessage(const std::string string);
+    Market();
+    ~Market() override = default;
+
+    Constants::ScreenID getScreenID() const override;
+    void render(sf::RenderWindow& window) override;
+    void init() override;
+
+    void setMessage(const std::string string);
+    void updateWeaponButtonLabels();
+    
 protected:
-	void init() override;
+ 
 private:
-	std::unordered_map<Constants::WeaponType, std::pair<sf::RectangleShape, Button*>> m_weaponButtons;
-	std::vector <Constants::WeaponButtonInfo> m_weaponButtonInfo;
-	void setShapes();
-	std::pair<sf::RectangleShape, sf::Text> m_money;
-	sf::Text m_messageText;
+    std::unordered_map<Constants::WeaponType, Button*> m_weaponButtons;
+    std::vector<Constants::GenericButton<Constants::WeaponType>> m_weaponButtonInfo;
+    std::vector<sf::RectangleShape> m_weaponImages;
+    std::pair<sf::RectangleShape, sf::Text> m_money;
+    sf::Text m_messageText;
 };

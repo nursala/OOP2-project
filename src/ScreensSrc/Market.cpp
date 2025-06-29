@@ -1,131 +1,90 @@
 ﻿#include "ScreensInc/Market.h"
 #include "GameSessionData.h"
-#include "CommandInc/PushScreenCommand.h"
-#include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/SmartWeaponCommand.h"
+#include "CommandInc/PopScreenCommand.h"
 #include "WeaponInc/Weapon.h"
+#include "ResourseInc/TextureManager.h"
+#include "Controller.h"
 
-Market::Market()
-{
-	setBackGroundTexture(Constants::TextureID::MARKET);
-	setSize();
-	m_messageText.setCharacterSize(Constants::CHAR_SIZE);
-	m_messageText.setFillColor(sf::Color::Magenta);
-	m_messageText.setFont(Controller::getInstance().getFont());
-	m_messageText.setString("");
-	m_money.first.setTexture(TextureManager::instance().get(Constants::TextureID::COINS));
-	m_money.first.setSize(sf::Vector2f(Constants::WINDOW_WIDTH * 0.08f, Constants::WINDOW_HEIGHT * 0.1f));
-	m_money.first.setPosition(Constants::WINDOW_WIDTH * 0.75f, Constants::WINDOW_HEIGHT * 0.05f);
-	m_money.second.setFont(Controller::getInstance().getFont());
-	m_money.second.setCharacterSize(Constants::CHAR_SIZE);
-	m_money.second.setFillColor(sf::Color::White);
-	m_money.second.setPosition(m_money.first.getSize().x + m_money.first.getPosition().x + Constants::MARGIN,
-		m_money.first.getPosition().y);
+Market::Market() {
+    setBackGroundTexture(Constants::TextureID::MARKET);
+    setSize();
+
+    m_messageText.setFont(Controller::getInstance().getFont());
+    m_messageText.setCharacterSize(Constants::CHAR_SIZE);
+    m_messageText.setFillColor(sf::Color::Magenta);
+    m_messageText.setString("");
 }
 
-Constants::ScreenID Market::getScreenID() const
-{
-	return Constants::ScreenID::Market;
+Constants::ScreenID Market::getScreenID() const {
+    return Constants::ScreenID::Market;
 }
 
-void Market::init()
-{
-	m_weaponButtonInfo.clear();
-	m_buttonInfos.clear();
+void Market::init() {
+    m_weaponButtonInfo.clear();
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::HandGun, Constants::ButtonID::BasicGun,
-		Constants::TextureID::BASICGUN,
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.506),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
-	);
+    m_weaponButtonInfo.emplace_back(
+        Constants::ButtonID::BasicGun,
+        "",
+        sf::Vector2f(200, 300),
+        sf::Vector2f(150, 90),
+        std::make_unique<SmartWeaponCommand>(Constants::WeaponType::HandGun, *this),
+        Constants::TextureID::BASICGUN,
+        Constants::WeaponType::HandGun
+    );
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Shotgun, Constants::ButtonID::Shotgun,
-		Constants::TextureID::SHOTGUN,
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.69, Constants::WINDOW_HEIGHT * 0.506),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
-	);
+    m_weaponButtonInfo.emplace_back(
+        Constants::ButtonID::Back,
+        "Back",
+        sf::Vector2f(100, 50),
+        sf::Vector2f(100, 50),
+        std::make_unique<PopScreenCommand>()
+    );
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Sniper, Constants::ButtonID::Sniper,
-		Constants::TextureID::SNIPER,
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.861),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
-	);
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Rifle, Constants::ButtonID::Rifle,
-		Constants::TextureID::RIFLE,
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.69, Constants::WINDOW_HEIGHT * 0.861),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
-	);
-
-	m_buttonInfos.emplace_back(
-		Constants::ButtonID::Back,
-		"Back",
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
-		std::make_unique<PopScreenCommand>()
-	);
-
-	setShapes();
-	setButtons();
-	updateWeaponButtonLabels();
+    setButtons<Constants::WeaponType>(m_weaponButtonInfo);
+    updateWeaponButtonLabels();
 }
 
-void Market::setShapes()
-{
-	for (const auto& info : m_weaponButtonInfo)
-	{
-		auto& btn = m_buttons.emplace(info.id, Button(info.size, info.position)).first->second;
-		btn.setCommand(std::make_unique<SmartWeaponCommand>(info.type, *this));
+void Market::render(sf::RenderWindow& window) {
+    Screen::render(window);
 
-		sf::RectangleShape shape(sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.15));
-		sf::Vector2f pos = { info.position.x  ,info.position.y - 2*info.size.y - Constants::MARGIN};
-		shape.setTexture(TextureManager::instance().get(info.textureID));
-		shape.setPosition(pos);
-		m_weaponButtons.emplace(info.type, std::make_pair(shape, &btn));
-	}
+    for (const auto& shape : m_weaponImages)
+        window.draw(shape);
+
+    m_money.second.setString(std::to_string(GameSessionData::instance().getMoney()));
+    window.draw(m_money.second);
+    window.draw(m_money.first);
+    window.draw(m_messageText);
 }
 
-void Market::updateWeaponButtonLabels()
-{
-	auto& session = GameSessionData::instance();
-
-	for (auto& [type, pair] : m_weaponButtons)
-	{
-		if (!session.hasWeapon(type))
-			pair.second->setText("Buy -" + std::to_string(Constants::WeaponPrice[type]) + "$");
-		else if (session.getSelectedWeapon() == type)
-			pair.second->setText("Equipped");
-		else
-			pair.second->setText("Equip");
-	}
+void Market::setMessage(const std::string string) {
+    m_messageText.setString(string);
+    auto bounds = m_messageText.getLocalBounds();
+    m_messageText.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
+    m_messageText.setPosition(Constants::WINDOW_WIDTH / 2, Constants::WINDOW_HEIGHT * 0.2);
 }
 
-void Market::render(sf::RenderWindow& window)
-{
-	Screen::render(window);
-	for (auto& [type, pair] : m_weaponButtons)
-	{
-		window.draw(pair.first); 
-	}
-	//Screen::render(window);
-	//m_moneyText.setFont(Controller::getInstance().getFont());
-	//m_moneyText.setCharacterSize(24);
-	//m_moneyText.setFillColor(sf::Color::White);
-	//m_moneyText.setPosition(10.f, 10.f);
-	//m_moneyText.setString("Money: " + std::to_string(GameSessionData::instance().money));
-	//window.draw(m_moneyText);
-	m_money.second.setString(std::to_string(GameSessionData::instance().getMoney()));
-	window.draw(m_money.second);
-	window.draw(m_money.first);
-	window.draw(m_messageText);
+void Market::updateWeaponButtonLabels() {
+    for (auto& pair : m_weaponButtons) {
+        if (!GameSessionData::instance().hasWeapon(pair.first))
+            pair.second->setText("Buy");
+        else
+            pair.second->setText("Equip");
+    }
 }
 
-void Market::setMessage(const std::string string)
+template <>
+void Screen::handleExtraButtonInfo<Constants::WeaponType>(
+    const Constants::GenericButton<Constants::WeaponType>& info)
 {
-	m_messageText.setString(string);
-    sf::FloatRect bounds = m_messageText.getLocalBounds();
+    if (!info.type.has_value() || !info.textureID.has_value())
+        return;
 
-    m_messageText.setOrigin(bounds.left + bounds.width / 2.f,
-        bounds.top + bounds.height / 2.f);
+    sf::RectangleShape shape({ Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.15f });
+    shape.setTexture(TextureManager::instance().get(info.textureID.value()));
+    shape.setPosition(info.position.x, info.position.y - 2 * info.size.y - Constants::MARGIN);
+    m_weaponImages.push_back(std::move(shape));
 
-    m_messageText.setPosition(Constants::WINDOW_WIDTH /2 , Constants::WINDOW_HEIGHT * 0.2);  
+    auto& btn = m_buttons[info.id];
+    m_weaponButtons.emplace(info.type.value(), &btn);
 }
