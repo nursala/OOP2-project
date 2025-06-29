@@ -56,11 +56,11 @@ configure_file ("Sounds/sniper_shot.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/shield_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/vision_up.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/hp_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
-#configure_file ("Sounds/spy_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/spy.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #sound effects for menu
 configure_file ("Sounds/button_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("Sounds/gamestarted_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/game_begin.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/matchmaking_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/menu_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/win_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)

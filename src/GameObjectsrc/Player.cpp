@@ -11,6 +11,7 @@
 #include "WeaponInc/Sniper.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
+#include "ResourseInc/SoundManger.h"
 
 Player::Player(World& world)
 	: Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
@@ -54,7 +55,13 @@ void Player::takeDamage(int damage)
     if (m_health <= 0.f) {
         setDestroyed(true);   // Mark the player as destroyed
         m_alive = false;      // Optional: track status
+		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
+		std::cout << "Player has died." << std::endl;
     }
+	if (m_health < 20)
+	{
+		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
+	}
     //  Update the health bar (use Character's member)
     m_healthBar->setValue(m_health);
     m_armorBar->setValue(m_armor);
@@ -90,9 +97,6 @@ void Player::increaseVisionTemporarily(float extraRange, float duration)
         m_visionBoostActive = true;
     }
 }
-
-
-
 
 void Player::rotateTowardMouse(sf::RenderWindow& window)
 {

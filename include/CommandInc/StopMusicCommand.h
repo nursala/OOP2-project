@@ -1,10 +1,10 @@
 #pragma once
 #include "CommandInc/Command.h"
-#include "ResourseInc/SoundManager.h"
+#include "ResourseInc/SoundManger.h"
 
 class StopMusicCommand : public Command {
 public:
     void execute() override { 
-        SoundManager::instance().pause(Constants::SoundID::BackgroundMusic);
+        SoundManger::instance().pause(Constants::SoundID::BackgroundMusic);
     };
 };

@@ -5,6 +5,7 @@
 #include "GameObject/Gift.h"
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
+#include "ResourseInc/SoundManger.h"
 #include <iostream>
 
 ContactListener::ContactListener(World& world)
@@ -37,17 +38,21 @@ void ContactListener::BeginContact(b2Contact* contact) {
             switch (gift->getType()) {
             case Constants::GiftType::ARMOR:
                 player->addArmor();
+				SoundManger::instance().play(Constants::SoundID::SHIELDUPGRADE);
                 break;
             case Constants::GiftType::HEALTH:
                 player->addHealth();
+				SoundManger::instance().play(Constants::SoundID::HEALTHUPGRADE);
                 break;
             case Constants::GiftType::SPEEDUP:
                 player->addSpeed();
+				SoundManger::instance().play(Constants::SoundID::SPEEDUPGRADE);
                 break;
             case Constants::GiftType::ENEMYSPEEDDOWN:
                 for (auto enemy : m_world.getEnemies())
                 {
                     enemy->speedDown();
+					SoundManger::instance().play(Constants::SoundID::SPEEDDOWN);
 					enemy->setSpeedDownTimer(15.f);  // seconds of speed down
                 }
                 break;
@@ -57,12 +62,14 @@ void ContactListener::BeginContact(b2Contact* contact) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
                         enemy->setSpyTimer(5.f);  //seconds of spy behavior
+						SoundManger::instance().play(Constants::SoundID::SPY);
                         break;
                     }
                 }
                 break;
             case Constants::GiftType::VISIONUP:
                 player->increaseVisionTemporarily(100.f, 10.f); // example: +100 radius for 10 seconds
+				SoundManger::instance().play(Constants::SoundID::VISIONUPGRADE);
                 break;
             default:
                 throw std::runtime_error("Unknown Constants::GiftType");
@@ -85,7 +92,6 @@ void ContactListener::BeginContact(b2Contact* contact) {
             }
                 enemy->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
-            
         }
     }
 }

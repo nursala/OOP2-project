@@ -3,6 +3,7 @@
 #include "Controller.h"
 #include "Constants.h"
 #include "ResourseInc/BaseResourceManager.h"
+#include "ResourseInc/SoundManger.h"
 
 Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text)
 {
@@ -52,6 +53,7 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
 		if (bounds.contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)))) {
 			if (m_command) {
 				m_command->execute();
+				SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
 			}
 			else {
 				std::cerr << "Error: Command not set for this button!" << std::endl;

@@ -3,6 +3,7 @@
 #include "cmath"
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
+#include "ResourseInc/SoundManger.h"
 
 PlayGround::PlayGround()
 {
@@ -11,6 +12,9 @@ PlayGround::PlayGround()
 
 void PlayGround::init()
 {
+	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
+	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
 	auto [playIt, insertedPlay] = m_buttons.emplace(
 		Constants::ButtonID::Play,
 		Button({ Constants::WINDOW_WIDTH * 0.05, Constants::WINDOW_HEIGHT * 0.06 },

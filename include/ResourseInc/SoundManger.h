@@ -14,23 +14,25 @@ const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 	, {Constants::SoundID::BUTTOUNEVENT, "button_sound.ogg"}           , {Constants::SoundID::HEARTBEAT, "heartbeat_sound.ogg"}
 	, {Constants::SoundID::VISIONUPGRADE, "vision_up.ogg"}             , {Constants::SoundID::SHIELDUPGRADE, "shield_sound.ogg"}
 	, {Constants::SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			  //, {Constants::SoundID::SPEEDUPGRADE, "speed_upgrade.ogg"}
-	//, {Constants::SoundID::SPEEDDOWN, "speed_down.ogg"}                , {Constants::SoundID::SPY, "spy.ogg"}
-	//, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                
+	//, {Constants::SoundID::SPEEDDOWN, "speed_down.ogg"}
+	, {Constants::SoundID::SPY, "spy.wav"}
+	, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                
 	, {Constants::SoundID::ENEMYDEATH, "enemy_death.ogg"}
 	, {Constants::SoundID::PLAYERDEATH, "player_death.ogg"}            , {Constants::SoundID::GAMEWINSOUND, "win_sound.ogg"}
 
 };
 
-class SoundManager : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
+class SoundManger : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
 public:
-    static SoundManager& instance();
+    static SoundManger& instance();
 
     void play(Constants::SoundID id);
     void pause(Constants::SoundID id);
     void setVolume(Constants::SoundID id, float volume);
     bool isPlaying(Constants::SoundID id) const;
+	void stop(Constants::SoundID id);
 
 private:
-    SoundManager();
+    SoundManger();
     std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
 };

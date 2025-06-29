@@ -1,11 +1,12 @@
 ﻿#include "ScreensInc/HomeScreen.h"
 #include "ScreensInc/Market.h"
-#include "ResourseInc/SoundManager.h"
+#include "ResourseInc/SoundManger.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
 #include "ScreensInc/ChooseLevelScreen.h"
 #include "ScreensInc/Market.h"
 #include "ScreensInc/Help.h"
+#include "ResourseInc/SoundManger.h"
 
 HomeScreen::HomeScreen()
 {
@@ -15,6 +16,7 @@ HomeScreen::HomeScreen()
 
 void HomeScreen::init()
 {
+	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
     m_buttonInfos.clear(); 
 
     m_buttonInfos.emplace_back(
@@ -23,6 +25,7 @@ void HomeScreen::init()
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.2f),
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
         std::make_unique<PushScreenCommand<ChooseLevelScreen>>()
+
     );
 
     m_buttonInfos.emplace_back(

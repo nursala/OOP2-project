@@ -7,6 +7,7 @@
 #include "Factory.h"
 #include "LevelManager.h"
 #include "ResourseInc/TextureManager.h"
+#include "ResourseInc/SoundManger.h"
 
 World::World()
 	: m_world(b2Vec2(0.f, 0.f)),
@@ -128,6 +129,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	{
 		if ((*enemy)->isDestroyed()) {
 			enemy = m_enemies.erase(enemy);
+			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
 			(*enemy)->update(deltaTime);
@@ -146,7 +148,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 		}
 		else ++it;
 	}
-	//m_player->makeVisble(true);s
+	//m_player->makeVisble(true);
 
 
 	m_renderLayers->setView(window.getView());

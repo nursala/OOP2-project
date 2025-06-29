@@ -196,8 +196,8 @@ void Character::updateTargets()
 	}
 }
 
-void Character::updateTargets(sf::RenderWindow& window)
-{
+//void Character::updateTargets(sf::RenderWindow& window)
+//{
 
 	//m_hitFixtures.clear();
 	//if (!m_visionLight)
@@ -248,6 +248,6 @@ void Character::updateTargets(sf::RenderWindow& window)
 
 	//}
 
-}
+//}
 
 
