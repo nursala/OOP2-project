@@ -42,6 +42,7 @@ configure_file ("Levels.png" ${CMAKE_BINARY_DIR} COPYONLY)
 #sound_effects
 configure_file ("Sounds/enemy_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/player_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/playerdown.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/heartbeat_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #sound effects for weapons
@@ -51,8 +52,8 @@ configure_file ("Sounds/AK47.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/sniper_shot.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #sound effects for gifts
-#configure_file ("Sounds/speed_up.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
-#configure_file ("Sounds/speed_down.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/speedup.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/speeddown.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/shield_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/vision_up.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/hp_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
@@ -65,6 +66,8 @@ configure_file ("Sounds/matchmaking_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/menu_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/win_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("background_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/coins-handling.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+
 
 #light
 configure_file ("light.frag" ${CMAKE_BINARY_DIR} COPYONLY)

@@ -9,6 +9,7 @@
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
+#include "WeaponInc/Rifle.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include "ResourseInc/SoundManger.h"
@@ -22,7 +23,7 @@ Player::Player(World& world)
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 	if (m_state)
 		m_state->enter(*this);
-	m_weapon = std::make_unique<HandGun>();
+	m_weapon = std::make_unique<Shotgun>();
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
 	m_weapon->getWeaponLight()->setColor(sf::Color::Green);

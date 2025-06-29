@@ -61,7 +61,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
-                        enemy->setSpyTimer(5.f);  //seconds of spy behavior
+                        enemy->setSpyTimer(20.f);  //seconds of spy behavior
 						SoundManger::instance().play(Constants::SoundID::SPY);
                         break;
                     }

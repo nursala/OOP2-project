@@ -13,13 +13,11 @@ const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 	, {Constants::SoundID::PISTOLSOUND, "pistol_shot.ogg"}             , {Constants::SoundID::SNIPERSOUND, "sniper_shot.wav"}
 	, {Constants::SoundID::BUTTOUNEVENT, "button_sound.ogg"}           , {Constants::SoundID::HEARTBEAT, "heartbeat_sound.ogg"}
 	, {Constants::SoundID::VISIONUPGRADE, "vision_up.ogg"}             , {Constants::SoundID::SHIELDUPGRADE, "shield_sound.ogg"}
-	, {Constants::SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			  //, {Constants::SoundID::SPEEDUPGRADE, "speed_upgrade.ogg"}
-	//, {Constants::SoundID::SPEEDDOWN, "speed_down.ogg"}
-	, {Constants::SoundID::SPY, "spy.wav"}
-	, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                
-	, {Constants::SoundID::ENEMYDEATH, "enemy_death.ogg"}
-	, {Constants::SoundID::PLAYERDEATH, "player_death.ogg"}            , {Constants::SoundID::GAMEWINSOUND, "win_sound.ogg"}
-
+	, {Constants::SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			   , {Constants::SoundID::SPEEDUPGRADE, "speedup.wav"}
+	, {Constants::SoundID::SPEEDDOWN, "speeddown.wav"}                 , {Constants::SoundID::SPY, "spy.wav"}
+	, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                , {Constants::SoundID::ENEMYDEATH, "enemy_death.ogg"}
+	, {Constants::SoundID::PLAYERDEATH, "playerdown.wav"}              , {Constants::SoundID::GAMEWINSOUND, "win_sound.ogg"}
+	, {Constants::SoundID::COINS, "coins-handling.wav"}
 };
 
 class SoundManger : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {

@@ -173,6 +173,7 @@ namespace Constants {
 		GAMEBEGIN,
 		ENEMYDEATH,
 		PLAYERDEATH,
+		COINS
 	};
 	// ----------------------------
 	// Gift Types
