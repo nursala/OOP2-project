@@ -1,32 +1,25 @@
 #pragma once
 
-#include <string>
 #include <SFML/Graphics.hpp>
-#include "ScreensInc/Button.h"
+#include <unordered_map>
+#include <string>
 
 class Statusbar {
 public:
     Statusbar();
 
-    void setTimer(float timeInSeconds);
     void setKills(int kills);
-    void setWaves(int waves);
-
-    float getTimer() const;
     int getKills() const;
-    int getWaves() const;
-
-    // Render the status bar (implementation depends on your graphics library)
-    void render(sf::RenderWindow& window,float elapsedTime, float timeLeft);
-    void drawLevels(int levels, sf::RenderWindow& window, sf::Vector2f playerpos);
-    void drawLives(int lives, sf::RenderWindow& window, sf::Vector2f playerpos);
-    void drawPercentage(float percentage, sf::RenderWindow& window, sf::Vector2f playerpos);
-    void drawTimer(sf::Time elapsedTime, float timeLeft, sf::RenderWindow& window, sf::Vector2f playerpos);
-    void setFont();
+    void setCoins(int coins);
+    int getCoins() const;
+    void setLevel(std::string level);
+    std::string getLevel() const;
+    void render(sf::RenderWindow& window);
 
 private:
-    sf::Font m_font;
-    float m_timer;   // Time in seconds
-    int m_kills;
-    int m_waves;
+    void drawIconWithText(sf::RenderWindow& window, const sf::Texture* texture, const sf::Vector2f& pos, std::string value, sf::Color color = sf::Color::White);
+
+    int m_kills = 0;
+    int m_coins = 0;
+    std::string m_level;
 };

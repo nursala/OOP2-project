@@ -4,6 +4,7 @@
 Screen::Screen()
 {
 	m_backGround.setPosition(0.0f, 0.0f);
+
 }
 
 void Screen::setSize(const sf::Vector2f& size)

@@ -9,7 +9,7 @@ std::unique_ptr<State> WalkingStatePlayer::handleInput(Character& character) {
     Player& player = static_cast<Player&>(character);
 
 
-    if (player.getTargetsss()) {
+    if (player.getTarget()) {
         return std::make_unique<AttackingStatePlayer>();
     }
 

@@ -15,9 +15,9 @@ public:
     void clear();
     void display();
 
-    void drawBackground(const sf::Drawable& drawable);
-    void drawForeground(const sf::Drawable& drawable);
-    void drawLight( candle::LightSource& light);
+    void drawBackground(const sf::Drawable& drawable , sf::BlendMode = sf::BlendAdd);
+    void drawForeground(const sf::Drawable& drawable, sf::BlendMode = sf::BlendAdd );
+    void drawLight(candle::LightSource& light);
 
     void renderFinal(sf::RenderTarget& target) const;
 

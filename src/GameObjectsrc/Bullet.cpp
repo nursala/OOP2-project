@@ -5,21 +5,17 @@
 #include <cmath>
 #include <iostream>
 
-Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, Character* owner, float damage, float range)
+Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, std::shared_ptr<Character>owner, float damage, float range)
     : Entity(world, TextureManager::instance().get(Constants::TextureID::BULLET), position, { 1, 1 }, 0.1f),
     m_direction(direction), m_owner(owner)
 {
     m_visable = true;
-    m_speed = 1;
+    m_speed = 15;
     m_damage = damage;
 	m_range = range + 10.f;
     init(b2_kinematicBody, 0.3f);
 }
 
-Bullet::~Bullet()
-{
-	m_owner = nullptr; // Clear owner reference
-}
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)
 {
@@ -56,10 +52,10 @@ void Bullet::update(float deltaTime)
 }
 
 
-Character* Bullet::getOwner() const
-{
-	return m_owner; 
+std::shared_ptr<Character> Bullet::getOwnerShared() const {
+    return m_owner.lock();
 }
+
 
 float Bullet::getDamage() const
 {

@@ -1,11 +1,12 @@
 ﻿#include "ScreensInc/HomeScreen.h"
 #include "ScreensInc/Market.h"
-#include "ResourseInc/SoundManager.h"
+#include "ResourseInc/SoundManger.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
 #include "ScreensInc/ChooseLevelScreen.h"
 #include "ScreensInc/Market.h"
 #include "ScreensInc/Help.h"
+#include "ResourseInc/SoundManger.h"
 #include "ScreensInc/Screen.h"
 
 HomeScreen::HomeScreen()
@@ -17,6 +18,7 @@ HomeScreen::HomeScreen()
 void HomeScreen::init()
 {
 	m_generalButtons.clear();
+	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
 
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Play,

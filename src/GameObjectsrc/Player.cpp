@@ -9,8 +9,10 @@
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
+#include "WeaponInc/Rifle.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
+#include "ResourseInc/SoundManger.h"
 
 Player::Player(World& world)
 	: Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
@@ -21,28 +23,49 @@ Player::Player(World& world)
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 	if (m_state)
 		m_state->enter(*this);
-	m_weapon = std::make_unique<HandGun>();
+	m_weapon = std::make_unique<Shotgun>();
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
 	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 
 }
 
+void Player::update(float deltaTime) {
+    Character::update(deltaTime);
+
+    // Handle vision boost timer
+    if (m_visionBoostActive) {
+        m_visionBoostTimer -= deltaTime;
+        if (m_visionBoostTimer <= 0.f && m_visionLight) {
+            m_visionLight->setRange(m_originalVisionRange);
+            m_visionBoostActive = false;
+        }
+    }
+}
 void Player::takeDamage(int damage)
 {
-	if (m_armor > 0) {
-		float armorDamage = std::min(m_armor, static_cast<float>(damage));
-		m_armor -= armorDamage;
-		damage -= static_cast<int>(armorDamage);
+    if (m_armor > 0) {
+        float armorDamage = std::min(m_armor, static_cast<float>(damage));
+        m_armor -= armorDamage;
+        damage -= static_cast<int>(armorDamage);
+    }
+    if (damage > 0) {
+        m_health -= damage;
+        if (m_health < 0.f) m_health = 0.f;
+    }
+    if (m_health <= 0.f) {
+        setDestroyed(true);   // Mark the player as destroyed
+        m_alive = false;      // Optional: track status
+		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
+		std::cout << "Player has died." << std::endl;
+    }
+	if (m_health < 20)
+	{
+		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
 	}
-	if (damage > 0) {
-		m_health -= damage;
-		if (m_health < 0.f) m_health = 0.f;
-	}
-
-	//  Update the health bar (use Character's member)
-	m_healthBar->setValue(m_health);
-	m_armorBar->setValue(m_armor);
+    //  Update the health bar (use Character's member)
+    m_healthBar->setValue(m_health);
+    m_armorBar->setValue(m_armor);
 }
 
 void Player::addHealth()
@@ -62,19 +85,19 @@ void Player::addArmor()
 void Player::addSpeed()
 {
 	m_speed += 0.5f; // Increase speed by 0.5
-	if (m_speed > 17.f) m_speed = 17.f; // Cap speed at 5
+	if (m_speed > 16.f) m_speed = 16.f; // Cap speed at 5
 	std::cout << "Player speed increased to: " << m_speed << std::endl;
 }
 
-
-sf::Vector2f Player::getTarget() const
+void Player::increaseVisionTemporarily(float extraRange, float duration)
 {
-	if (m_target)
-		return m_target->getPosition();
-	return getPosition();
+    if (!m_visionBoostActive && m_visionLight) {
+        m_originalVisionRange = m_visionLight->getRange();
+        m_visionLight->setRange(m_originalVisionRange + extraRange);
+        m_visionBoostTimer = duration;
+        m_visionBoostActive = true;
+    }
 }
-
-
 
 void Player::rotateTowardMouse(sf::RenderWindow& window)
 {
@@ -87,6 +110,12 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 
 Character* Player::getClosestTarget()
 {
+	for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		character->setVisible(true);
+	}
 	Character* closestCharacter = nullptr;
 	float minDistSq = std::numeric_limits<float>::max();
 	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
@@ -111,7 +140,24 @@ Character* Player::getClosestTarget()
 			closestCharacter = character;
 		}
 	}
-	m_target  = closestCharacter; // Set the target for the player
+
+	if (!closestCharacter)
+	{
+		setTarget(nullptr); // Clear target if no closest character found
+		return nullptr;
+
+	}
+
+	setTarget(closestCharacter->shared_from_this()); // Update target reference
 	return closestCharacter;
 }
 
+void Player::makeVisble(bool visible)
+{
+	/*for (auto* fixture : m_hitFixtures) {
+		b2Body* body = fixture->GetBody();
+		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
+
+		character->setVisible(visible);
+	}*/
+}

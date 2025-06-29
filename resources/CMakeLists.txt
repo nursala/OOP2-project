@@ -9,6 +9,7 @@ configure_file ("easy_map.json" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("help.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("market.JPG" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("homePage.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("coins_market.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("chooseMap.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #fonts
@@ -26,10 +27,48 @@ configure_file ("EnemySpeedDownGift.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("SpeedUpGift.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("shield.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("spy.png" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("coins.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("vision_up.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
-#sounds
+#statusbar
+configure_file ("kills.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("coins.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Levels.png" ${CMAKE_BINARY_DIR} COPYONLY)
+
+
+
+
+
+
+
+#sound_effects
+configure_file ("Sounds/enemy_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/player_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/playerdown.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/heartbeat_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+
+#sound effects for weapons
+configure_file ("Sounds/pistol_shot.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/shotgun_shot.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/AK47.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/sniper_shot.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+
+#sound effects for gifts
+configure_file ("Sounds/speedup.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/speeddown.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/shield_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/vision_up.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/hp_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/spy.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+
+#sound effects for menu
+configure_file ("Sounds/button_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/game_begin.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/matchmaking_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/menu_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/win_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("background_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/coins-handling.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+
 
 #light
 configure_file ("light.frag" ${CMAKE_BINARY_DIR} COPYONLY)

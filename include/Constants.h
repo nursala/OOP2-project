@@ -95,6 +95,7 @@ namespace Constants {
 		ENEMYSPEEDDOWN,
 		SPEEDUP,
 		SPY,
+		VISIONUP,
 		SIZE,
 		BULLET,
 		MARKET,
@@ -114,6 +115,9 @@ namespace Constants {
 		RIFLE,
 		COINS,
 		CHOOSEMAP,
+		COINSMARKET,
+		KILLS,
+		LEVELS,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -143,7 +147,28 @@ namespace Constants {
 	// Sound IDs
 	// ----------------------------
 	enum class SoundID {
-		BackgroundMusic
+		SHOOT, 
+		BACKGROUNDMUSIC, 
+		MENUMUSIC,
+		MATCHMAKINGMUSIC, 
+		GAMEOVERSOUND,
+		GAMEWINSOUND,
+		RIFLESOUND, 
+		SHOTGUNSOUND, 
+		PISTOLSOUND, 
+		SNIPERSOUND,
+		BUTTOUNEVENT,
+		HEARTBEAT, 
+		VISIONUPGRADE, 
+		SHIELDUPGRADE, 
+		HEALTHUPGRADE,
+		SPEEDUPGRADE, 
+		SPEEDDOWN,
+		SPY,
+		GAMEBEGIN,
+		ENEMYDEATH,
+		PLAYERDEATH,
+		COINS
 	};
 	// ----------------------------
 	// Gift Types
@@ -154,6 +179,7 @@ namespace Constants {
 		ENEMYSPEEDDOWN,
 		SPEEDUP,
 		SPY,
+		VISIONUP,
 		SIZE
 	};
 

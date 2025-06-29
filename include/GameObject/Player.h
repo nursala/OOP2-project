@@ -12,11 +12,22 @@ class World;
 class Player : public Character {
 public:
 	Player(World&);
-	void takeDamage(int) override;
-	void addHealth();
-	void addArmor();
-	void addSpeed();
-	sf::Vector2f getTarget() const override;
-	void rotateTowardMouse(sf::RenderWindow&);
+	virtual ~Player() override = default;
+     
+   void update(float deltaTime);
+   void takeDamage(int ) override;
+   void addHealth();
+   void addArmor();
+   void addSpeed();
+   void increaseVisionTemporarily(float extraRange, float duration);
+   void rotateTowardMouse(sf::RenderWindow& ) ;
+   bool isAlive() const { return m_alive; }  // or use m_alive if you prefer
+
+private:
+	bool m_alive = true; // Track if the player is alive
+	bool m_visionBoostActive = false;
+	float m_visionBoostTimer = 0.f;
+	float m_originalVisionRange = 0.f;
 	virtual Character* getClosestTarget()override;
+	void makeVisble(bool visible);
 };

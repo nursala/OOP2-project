@@ -3,6 +3,7 @@
 #include "cmath"
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
+#include "ResourseInc/SoundManger.h"
 
 PlayGround::PlayGround()
 {
@@ -11,6 +12,9 @@ PlayGround::PlayGround()
 
 void PlayGround::init()
 {
+	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
+	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
 	auto [playIt, insertedPlay] = m_buttons.emplace(
 		Constants::ButtonID::Play,
 		Button({ Constants::WINDOW_WIDTH * 0.05, Constants::WINDOW_HEIGHT * 0.06 },
@@ -52,14 +56,9 @@ void PlayGround::render(sf::RenderWindow& window)
 	d.SetFlags(flags);
 	m_world.getWorld().SetDebugDraw(&d);
 	m_world.render(window);
-	for (auto& [id, button] : m_buttons) {
-		button.render(window);
-	}
-m_world.render(window);
 	window.setView(window.getDefaultView());
 	Screen::drawButtons(window);
-	
-	m_statusBar.render(window, 10, 100);
+	m_statusBar.render(window);
 
 }
 

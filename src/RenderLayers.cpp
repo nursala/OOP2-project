@@ -28,14 +28,14 @@ void RenderLayers::clear()
 	m_foreground.clear(sf::Color::Transparent);
 }
 
-void RenderLayers::drawBackground(const sf::Drawable& drawable)
+void RenderLayers::drawBackground(const sf::Drawable& drawable , sf::BlendMode mode)
 {
-	m_background.draw(drawable, sf::BlendAdd);
+	m_background.draw(drawable, mode);
 }
 
-void RenderLayers::drawForeground(const sf::Drawable& drawable)
+void RenderLayers::drawForeground(const sf::Drawable& drawable , sf::BlendMode mode)
 {
-	m_foreground.draw(drawable , sf::BlendAdd);
+	m_foreground.draw(drawable , mode);
 }
 
 void RenderLayers::drawLight(candle::LightSource& light)

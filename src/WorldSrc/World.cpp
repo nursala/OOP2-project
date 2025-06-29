@@ -7,6 +7,7 @@
 #include "Factory.h"
 #include "LevelManager.h"
 #include "ResourseInc/TextureManager.h"
+#include "ResourseInc/SoundManger.h"
 
 World::World()
 	: m_world(b2Vec2(0.f, 0.f)),
@@ -104,39 +105,7 @@ void World::setupMap() {
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
 	calcNearlyEdge(window);
-	int index = 0;
-	for (const auto& enemy : m_enemies) {
-		std::cout << "Enemy #" << index << " - "
-			<< (enemy->isSpy() ? "Spy" : "Not Spy");
-
-		Character* target = enemy->getTargetsss();
-
-		if (!target) {
-			std::cout << " -> Target: None" << std::endl;
-		}
-		else if (target == m_player.get()) {
-			std::cout << " -> Target: Player" << std::endl;
-		}
-		else {
-			// الهدف هو عدو تاني
-			auto it = std::find_if(m_enemies.begin(), m_enemies.end(),
-				[&](const auto& other) { return other.get() == target; });
-
-			if (it != m_enemies.end()) {
-				int targetIndex = std::distance(m_enemies.begin(), it);
-				bool isTargetSpy = static_cast<Enemy*>(target)->isSpy();
-
-				std::cout << " -> Target: Enemy #" << targetIndex
-					<< " - " << (isTargetSpy ? "Spy" : "Not Spy") << std::endl;
-			}
-			else {
-				std::cout << " -> Target: Unknown" << std::endl;
-			}
-		}
-
-		++index;
-	}
-
+	
 
 	// Step physics
 	m_world.Step(deltaTime, 8, 3);
@@ -144,6 +113,8 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	// Update player
 	m_player->update(deltaTime);
 	m_player->rotateTowardMouse(window);
+
+	//m_player->makeVisble();
 	for (auto it = m_bullets.begin(); it != m_bullets.end(); ) {
 		(*it)->update(deltaTime);
 		if ((*it)->isDestroyed()) {
@@ -158,6 +129,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	{
 		if ((*enemy)->isDestroyed()) {
 			enemy = m_enemies.erase(enemy);
+			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
 			(*enemy)->update(deltaTime);
@@ -176,10 +148,8 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 		}
 		else ++it;
 	}
+	//m_player->makeVisble(true);
 
-	// Handle bullet collisions or extra logic
-	
-	// View update
 
 	m_renderLayers->setView(window.getView());
 

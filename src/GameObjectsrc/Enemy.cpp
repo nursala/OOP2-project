@@ -22,6 +22,8 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_weapon = std::make_unique<HandGun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
+    m_visable = false;
+
     //m_weapon->setFireCooldown(0.1f);
     m_weapon->setBulletSpeed(1);
 }
@@ -32,29 +34,29 @@ Character* Enemy::getClosestTarget()
 {
 
 
-    //if (m_target  && !m_target->isDestroyed()) {
-    //    for (b2Fixture* fixture = m_target->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
-    //        if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
-    //            return m_target;
-    //        }
-    //    }
-    //}
-    //if (m_target) {
-    //    sf::Vector2f targetPos = m_target->getPosition();
-    //    sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
+    if (this->getTarget()) {
+        for (b2Fixture* fixture = this->getTarget()->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+            if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
+                return this->getTarget().get();
+            }
+        }
+    }
+    if (this->getTarget()) {
+        sf::Vector2f targetPos = this->getTarget()->getPosition();
+        sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
 
-    //    float dx = targetPos.x - selfPos.x;
-    //    float dy = targetPos.y - selfPos.y;
-    //    float distSq = dx * dx + dy * dy;
+        float dx = targetPos.x - selfPos.x;
+        float dy = targetPos.y - selfPos.y;
+        float distSq = dx * dx + dy * dy;
 
-    //    float radius = m_target->getWeapon()->getWeaponLight()->getRange();
-    //    if (distSq <= radius * radius) {
-    //        return m_target;
-    //    }
-    //}
+        float radius = this->getTarget()->getWeapon()->getWeaponLight()->getRange();
+        if (distSq <= radius * radius) {
+            return this->getTarget().get();
+        }
+    }
     if (m_hitFixtures.empty())
     {
-		m_target = nullptr; // No targets found
+		setTarget(nullptr); // Clear target if no fixtures hit
         return nullptr;
     }
 
@@ -105,10 +107,10 @@ Character* Enemy::getClosestTarget()
         }
     }
 	if (!closestCharacter) {
-		m_target = nullptr; // No valid target found
+		setTarget(nullptr); // Clear target if no closest character found
 		return nullptr;
 	}
-	m_target = closestCharacter; // Update target reference
+	setTarget(closestCharacter->shared_from_this()); // Update target reference
     return closestCharacter;
 }
 
@@ -128,14 +130,10 @@ void Enemy::takeDamage(int damage) {
     m_healthBar->setValue(m_health);
 }
 
-sf::Vector2f Enemy::getTarget() const {
-	
-	return m_playerRef.getPosition();  // Return player's position as target
-}
+
 
 void Enemy::update(float deltaTime) {
     Character::update(deltaTime);
-
     if (m_health <= 0.f) {
         setDestroyed(true);
         return;
@@ -145,10 +143,8 @@ void Enemy::update(float deltaTime) {
     if (m_isSpy) {
         m_spyTimer -= deltaTime;
         if (m_spyTimer <= 0.f) {
-            //m_isSpy = false;
-            m_sprite.setColor(sf::Color::White);
+            setSpy(false);
         }
-        
     }
 
     // Handle speed reset
@@ -176,8 +172,8 @@ void Enemy::setSpeedDownTimer(float seconds) {
 
 void Enemy::setSpy(bool value) {
     m_isSpy = value;
-	m_target = nullptr; // Clear target when becoming a spy
-    
+	m_visable = value; // Hide enemy when it becomes a spy
+	setTarget(nullptr); // Clear target when becoming a spy
 }
 
 bool Enemy::isSpy() const {

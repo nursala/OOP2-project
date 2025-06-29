@@ -13,7 +13,7 @@ Market::Market()
 	m_messageText.setFillColor(sf::Color::Magenta);
 	m_messageText.setFont(Controller::getInstance().getFont());
 	m_messageText.setString("");
-	m_money.first.setTexture(TextureManager::instance().get(Constants::TextureID::COINS));
+	m_money.first.setTexture(TextureManager::instance().get(Constants::TextureID::COINSMARKET));
 	m_money.first.setSize(sf::Vector2f(Constants::WINDOW_WIDTH * 0.08f, Constants::WINDOW_HEIGHT * 0.1f));
 	m_money.first.setPosition(Constants::WINDOW_WIDTH * 0.75f, Constants::WINDOW_HEIGHT * 0.05f);
 	m_money.second.setFont(Controller::getInstance().getFont());
