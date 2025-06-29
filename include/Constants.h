@@ -113,6 +113,7 @@ namespace Constants {
 		SNIPER,
 		RIFLE,
 		COINS,
+		CHOOSEMAP,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -136,7 +137,6 @@ namespace Constants {
 		std::unique_ptr<Command> command;
 		std::optional<TextureID> textureID;
 		std::optional<T> type = std::nullopt;
-
 	};
 
 	// ----------------------------

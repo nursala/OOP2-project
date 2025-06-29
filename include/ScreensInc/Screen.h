@@ -24,11 +24,10 @@ protected:
 	void setBackGroundTexture(const Constants::TextureID texture);
 	sf::RectangleShape m_backGround;
 	//std::vector <Constants::ButtonInfo> m_buttonInfos;
-	std::vector <Constants::GenericButton<>> m_generalButtons;
+	std::vector <Constants::GenericButton<std::monostate>> m_generalButtons;
     template <typename T = std::monostate>  
-    void setButtons(std::vector<Constants::GenericButton<T>>& buttons);
-	template <typename T>
-	void handleExtraButtonInfo(const Constants::GenericButton<T>&) {};
+    void setButtons(std::vector<Constants::GenericButton<T>>& info);
+	virtual void handleExtraButtonInfo(Constants::ButtonID id) {}
 	std::unordered_map<Constants::ButtonID, Button> m_buttons;
 };
 
@@ -47,8 +46,7 @@ void Screen::setButtons(std::vector<Constants::GenericButton<T>>& buttons)
 		if constexpr (!std::is_same_v<T, std::monostate>)
 		{
 			if (info.type.has_value())
-				this->handleExtraButtonInfo<T>(info);
+				handleExtraButtonInfo(info.id);
 		}
 	}
 }
-
