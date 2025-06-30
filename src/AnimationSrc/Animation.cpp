@@ -12,7 +12,7 @@ Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float 
 		m_uvRect.height = texture->getSize().y / static_cast<int>(imageCount.y);
 
 		update(1, 0.0f); // Initialize with row 1 and total images 1
-		m_totalImages = imageCount.x * imageCount.y; // Total images based on image count
+		m_totalImages = imageCount.x * imageCount.y - 1; // Total images based on image count
 	}
 }
 
@@ -22,7 +22,7 @@ void Animation::update(int row, float deltaTime)
 
 	//m_totalImages--;
 	//if (m_totalImages == 21 || m_totalImages == 9)
-	m_totalImages--;
+	//m_totalImages--;
 	m_currentImage.y = static_cast<int>(std::floor(m_displayed / m_imageCount.x));
 	m_totalTime += deltaTime;
 	//std::cout << "current Time: " << m_totalTime << " switchTime: " << m_switchTime << std::endl;
@@ -76,7 +76,7 @@ void Animation::setAll(const sf::Texture* texture,sf::Vector2u imageCount, float
 		m_uvRect.width = 0;
 		m_uvRect.height = 0;
 	}
-	m_totalImages = imageCount.x * imageCount.y;
+	m_totalImages = imageCount.x * imageCount.y - 1;
 	//update(1, imageCount.x * imageCount.y, deltaTime); // Initialize with row 1 and total images 1
 }
 
