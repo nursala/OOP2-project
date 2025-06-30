@@ -6,48 +6,83 @@
 #include "ResourseInc/TextureManager.h"
 #include "Controller.h"
 #include <string>
+#include "ResourseInc/TextureManager.h"
+#include "Controller.h"
+#include "GameSessionData.h"
+#include "Constants.h"
 
 Statusbar::Statusbar() {
-	m_level = "Easy";
+	m_text.resize(Constants::NUM_OF_ITEMS_IN_STATUS_BAR);
+	m_shape.resize(Constants::NUM_OF_ITEMS_IN_STATUS_BAR);
+
+	initEnemies();
+	initCoins();
+	initLevel();
 }
 
-void Statusbar::setKills(int kills) { m_kills = kills;}
-int Statusbar::getKills() const { return m_kills; }
-void Statusbar::setCoins(int coins) { m_coins = coins;}
-int Statusbar::getCoins() const { return m_coins; }
-
-void Statusbar::setLevel(std::string level) { m_level = level;}
-std::string Statusbar::getLevel() const { return m_level; }
-
-void Statusbar::render(sf::RenderWindow& window) {
-
-	auto viewSize = window.getView().getSize();
-    auto pos = window.getView().getCenter();
-
-    float startX = pos.x - viewSize.x / 2;
-    float startY = pos.y - viewSize.y / 2 + 10.f;
-
-    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::KILLS), { startX + 50 , startY }, std::to_string(m_kills));
-    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::COINS), {startX + 350,  startY }, std::to_string(m_coins));
-	auto levelColor = m_level == "Easy" ? sf::Color::Green : (m_level == "Medium" ? sf::Color::Yellow : sf::Color::Red);
-    drawIconWithText(window, TextureManager::instance().get(Constants::TextureID::LEVELS), { startX + 650,  startY }, m_level, levelColor);
-}
-
-void Statusbar::drawIconWithText(sf::RenderWindow& window,const sf::Texture* texture,const sf::Vector2f& pos,std::string value, sf::Color color)
+void Statusbar::initEnemies()
 {
-    if (!texture) return; // Ensure texture is valid
-	sf::Sprite icon;
-	icon.setTexture(*texture);
-	icon.setPosition(pos);
-	icon.setScale(0.4f, 0.4f); // Adjust scale as needed
-	// Draw the icon and text
-	window.draw(icon);
-    sf::Text text;
-    text.setFont(Controller::getInstance().getFont());
-    text.setCharacterSize(30);
-    text.setFillColor(color);
-    text.setString(": " + value);
-    text.setPosition(pos.x + icon.getGlobalBounds().height + 2, pos.y);
-    window.draw(text);
+	initializeTexture(m_shape[0], Constants::TextureID::KILLS, Constants::MARGIN);
+	setNumOfEnemeies();
 }
-    
+
+void Statusbar::setNumOfEnemeies() 
+{
+	int enemies = GameSessionData::instance().getEnemies();
+	initializeText(m_text[0], Constants::TILE_IN_STATUS_BAR + Constants::MARGIN);
+	std::string text = ": " + std::to_string(enemies);
+	setText(text, 0);
+}
+
+void Statusbar::initCoins()
+{
+	initializeTexture(m_shape[1], Constants::TextureID::COINS, Constants::MARGIN + Constants::WINDOW_WIDTH * 0.4);
+	std::string moneyText = ": " + std::to_string(GameSessionData::instance().getMoney());
+	initializeText(m_text[1], Constants::TILE_IN_STATUS_BAR + Constants::MARGIN + Constants::WINDOW_WIDTH * 0.4);
+	setText(moneyText, 1);
+}
+
+void Statusbar::initLevel()
+{
+	initializeTexture(m_shape[2], Constants::TextureID::LEVELS, Constants::MARGIN + Constants::WINDOW_WIDTH * 0.7);
+	std::string levelText = " :" + Constants::LevelNames[GameSessionData::instance().getLevelID()].first;
+	initializeText(m_text[2], Constants::TILE_IN_STATUS_BAR + Constants::MARGIN + Constants::WINDOW_WIDTH * 0.7);
+	m_text[2].setFillColor(Constants::LevelNames[GameSessionData::instance().getLevelID()].second);
+	setText(levelText, 2);
+}
+
+void Statusbar::update()
+{
+	setNumOfEnemeies();
+	std::string moneyText = ": " + std::to_string(GameSessionData::instance().getMoney());
+	setText(moneyText, 1);
+}
+
+void Statusbar::render(sf::RenderWindow& window) 
+{
+	for (size_t i = 0; i < m_shape.size(); ++i) 
+	{
+		window.draw(m_shape[i]);
+		window.draw(m_text[i]);
+	}
+}
+
+void Statusbar::initializeText(sf::Text& text, float posX) const
+{
+	text.setFont(Controller::getInstance().getFont());
+	text.setCharacterSize(Constants::CHAR_SIZE);
+	text.setFillColor(sf::Color::White);
+	text.setPosition(posX, Constants::MARGIN);
+}
+
+void Statusbar::initializeTexture(sf::RectangleShape& shape, Constants::TextureID texture, float posX)
+{
+	shape.setTexture(TextureManager::instance().get(texture));
+	shape.setPosition(posX, Constants::MARGIN);
+	shape.setSize(sf::Vector2f(Constants::WINDOW_WIDTH*0.05, Constants::WINDOW_WIDTH * 0.05));
+}
+
+void Statusbar::setText(const std::string text, int index)
+{
+	m_text[index].setString(text);
+}

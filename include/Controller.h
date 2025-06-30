@@ -19,15 +19,11 @@ public:
     // Singleton access
     static Controller& getInstance();
 
-    // Screen control
     void run();
     void pushScreen(std::unique_ptr<Screen> screen);
-    void popScreen();
-    void popToHome();
-    // Optional screen switching logic
-    void removeScreen();                 // legacy or custom
     const sf::Font& getFont();
     void setPopFlag();
+    void setPopFlagToHome();
 private:
     Controller();
     Controller(const Controller&) = delete;
@@ -37,7 +33,9 @@ private:
     void processEvents();
     void update();
     void render();
-
+    void popScreen();
+    void popToHome();
+	bool m_shouldPopToHome = false;
     bool m_shouldPop = false;
     std::stack<std::unique_ptr<Screen>> m_screens;
     sf::Clock m_clock;

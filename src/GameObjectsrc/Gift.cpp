@@ -9,7 +9,6 @@
 Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
 m_world(world)
 {
-
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
 	m_radialLight.setFade(true);
@@ -50,7 +49,6 @@ void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
 
 void Gift::des()
 {
-
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
 

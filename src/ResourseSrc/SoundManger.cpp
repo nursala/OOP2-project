@@ -1,36 +1,65 @@
 #include "ResourseInc/SoundManger.h"
 
 SoundManger::SoundManger() {
-    for (const auto& [id, path] : SoundFileMap)
-    {
-        load(id, path);
+	for (const auto& [id, path] : SoundFileMap)
+	{
+		load(id, path);
 		m_sounds[id].setBuffer(*get(id));
-    }
+	}
 }
 
 SoundManger& SoundManger::instance() {
-    static SoundManger inst;
-    return inst;
+	static SoundManger inst;
+	return inst;
 }
 
 void SoundManger::play(Constants::SoundID id) {
-    m_sounds.at(id).play();
+	if (!m_muted)
+		m_sounds.at(id).play();
 }
 
 void SoundManger::stop(Constants::SoundID id) {
 	if (!isPlaying(id)) return; // Check if sound is playing before stopping
-	m_sounds.at(id).stop();
+		m_sounds.at(id).stop();
+}
+
+void SoundManger::unmute()
+{
+	m_muted = false;
+	for (auto& [id, sound] : m_sounds)
+	{
+		if (sound.getStatus() == sf::Sound::Paused)
+		{
+			sound.play();
+		}
+	}
+}
+
+void SoundManger::mute()
+{
+	m_muted = true;
+	for (auto& [id, sound] : m_sounds)
+	{
+		if (sound.getStatus() == sf::Sound::Playing)
+		{
+			sound.pause();
+		}
+	}
 }
 
 void SoundManger::pause(Constants::SoundID id) {
-    m_sounds.at(id).pause();
+	m_sounds.at(id).pause();
 }
 
 void SoundManger::setVolume(Constants::SoundID id, float volume) {
-    m_sounds.at(id).setVolume(volume);
+	m_sounds.at(id).setVolume(volume);
 }
 
 bool SoundManger::isPlaying(Constants::SoundID id) const {
     auto it = m_sounds.find(id);
     return it != m_sounds.end() && it->second.getStatus() == sf::Sound::Playing;
+}
+
+sf::Sound& SoundManger::getSound(Constants::SoundID id) {
+    return m_sounds.at(id);
 }

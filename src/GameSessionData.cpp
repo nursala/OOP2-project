@@ -1,19 +1,18 @@
 ﻿#include "GameSessionData.h"
-
+#include "iostream"
 GameSessionData& GameSessionData::instance() {
     static GameSessionData instance;
     return instance;
 }
 
-
 GameSessionData::GameSessionData()
-    : money(200), selectedWeapon(Constants::WeaponType::HandGun) {
+    : m_money(200), selectedWeapon(Constants::WeaponType::HandGun) {
     ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
 int& GameSessionData::getMoney()
 {
-    return money;
+    return m_money;
 }
 
 bool GameSessionData::hasWeapon(Constants::WeaponType weapon) const {
@@ -24,7 +23,6 @@ void GameSessionData::addWeapon(Constants::WeaponType weapon) {
     ownedWeapons.insert(weapon);
 }
 
-// GameSessionData.h
 void GameSessionData::setSelectedWeapon(Constants::WeaponType weapon) {
     selectedWeapon = weapon;
     shouldUpdateWeapon = true;
@@ -40,4 +38,13 @@ void GameSessionData::setShouldUpdateWeapon(bool value) {
 
 bool GameSessionData::getShouldUpdateWeapon() const {
     return shouldUpdateWeapon;
+}
+
+int& GameSessionData::getEnemies()
+{
+    return m_enemies;
+}
+
+Constants::LevelID& GameSessionData::getLevelID(){
+	return m_levelID;
 }

@@ -21,7 +21,9 @@ void ChooseLevelScreen::init()
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.8f),
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
         std::make_unique<StartGameCommand>(Constants::LevelID::EasyMap),
-		Constants::TextureID::EASYMAP
+		Constants::TextureID::EASYMAP,
+		std::nullopt,
+		sf::Color::Green
     );
 
     m_generalButtons.emplace_back(
@@ -39,7 +41,9 @@ void ChooseLevelScreen::init()
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.7f, Constants::WINDOW_HEIGHT * 0.8f),
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
         std::make_unique<StartGameCommand>(Constants::LevelID::HardMap),
-        Constants::TextureID::HARDMAP
+        Constants::TextureID::HARDMAP,
+		std::nullopt,
+		sf::Color::Red
     );
 
     m_generalButtons.emplace_back(

@@ -1,0 +1,10 @@
+#include "CommandInc/StartMusicCommand.h"
+#include "CommandInc/StopMusicCommand.h"
+#include "ScreensInc/Button.h"
+#include "ScreensInc/Screen.h"
+
+void StartMusicCommand::execute() {
+	SoundManger::instance().unmute();
+	m_button.setTexture(Constants::TextureID::SOUNDON);
+	m_button.setCommand(std::make_unique<StopMusicCommand>(m_button));
+}

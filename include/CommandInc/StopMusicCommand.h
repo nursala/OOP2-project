@@ -2,9 +2,11 @@
 #include "CommandInc/Command.h"
 #include "ResourseInc/SoundManger.h"
 
+class Button;
 class StopMusicCommand : public Command {
 public:
-    void execute() override { 
-        SoundManger::instance().pause(Constants::SoundID::BackgroundMusic);
-    };
+	StopMusicCommand(Button& button) : m_button(button) {}
+	void execute() override;
+private:
+	Button& m_button;
 };

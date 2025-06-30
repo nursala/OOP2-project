@@ -22,6 +22,7 @@ Player::Player(World& world)
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 	if (m_state)
 		m_state->enter(*this);
+
 	m_weapon = std::make_unique<Shotgun>();
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
@@ -39,6 +40,10 @@ void Player::update(float deltaTime) {
             m_visionLight->setRange(m_originalVisionRange);
             m_visionBoostActive = false;
         }
+		if (m_health < 20)
+		{
+			SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
+		}
     }
 }
 void Player::takeDamage(int damage)
@@ -58,10 +63,6 @@ void Player::takeDamage(int damage)
 		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
 		std::cout << "Player has died." << std::endl;
     }
-	if (m_health < 20)
-	{
-		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
-	}
     //  Update the health bar (use Character's member)
     m_healthBar->setValue(m_health);
     m_armorBar->setValue(m_armor);

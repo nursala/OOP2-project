@@ -117,6 +117,10 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     character.setRotation(angle); // Implement this in your Character or Sprite wrapper
     m_lastPosition = enemyPos;
 
+    if (e) {
+        e->updateFootstepSound(distToTarget, deltaTime);
+    }
+
     return {
         2,
         dir.x >= 0,
