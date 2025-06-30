@@ -52,6 +52,8 @@ configure_file ("Sounds/enemy_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/player_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/playerdown.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/heartbeat_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/footsteps.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+
 
 #sound effects for weapons
 configure_file ("Sounds/pistol_shot.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
@@ -72,9 +74,10 @@ configure_file ("Sounds/button_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/game_begin.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/matchmaking_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/menu_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("Sounds/win_sound.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("background_music.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/background_game_play.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/coins-handling.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/gameover.wav" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/gamewin.wav" ${CMAKE_BINARY_DIR} COPYONLY)
 
 
 #light

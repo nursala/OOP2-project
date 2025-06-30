@@ -17,6 +17,7 @@ public:
     void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
     void setText(const std::string& text);
     void centerText();
+    sf::Color makeBrighter(const sf::Color& color, float factor);
     void centerText(const sf::Vector2f& position, const sf::Vector2f& size);
 private:
     sf::RectangleShape m_shape;

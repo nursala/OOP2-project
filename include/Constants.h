@@ -41,7 +41,7 @@ namespace Constants {
 	// sfml
 	// ----------------------------
 	const sf::Color HOVERD_COLOR = sf::Color(167, 167, 175);
-	const sf::Color DEFAUL_BUTTON_COLOR = sf::Color::Green;
+	const sf::Color DEFAUL_BUTTON_COLOR = sf::Color::White;
 	const float CHAR_SIZE = 0.03 * WINDOW_WIDTH;
 	// ----------------------------
 	// Physics
@@ -175,7 +175,8 @@ namespace Constants {
 		GAMEBEGIN,
 		ENEMYDEATH,
 		PLAYERDEATH,
-		COINS
+		COINS,
+		FOOTSTEP,
 	};
 	// ----------------------------
 	// Gift Types

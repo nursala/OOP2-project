@@ -1,5 +1,6 @@
 ﻿#include "GameObject/Enemy.h"
 #include "ResourseInc/TextureManager.h"
+#include "ResourseInc/SoundManger.h"
 #include "Factory.h"
 #include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 #include "StatesInc/WalkingState.h"
@@ -23,7 +24,6 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
     m_visable = false;
-
     //m_weapon->setFireCooldown(0.1f);
     m_weapon->setBulletSpeed(1);
 }
@@ -32,8 +32,6 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
 
 Character* Enemy::getClosestTarget()
 {
-
-
     if (this->getTarget()) {
         for (b2Fixture* fixture = this->getTarget()->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
             if (m_hitFixtures.find(fixture) != m_hitFixtures.end()) {
@@ -97,7 +95,6 @@ Character* Enemy::getClosestTarget()
         if (distSq < minDistSq) {
             if (closestCharacter && dynamic_cast<Player*>(closestCharacter) && !isSpy())
             {
-
             }
             else
             {
@@ -182,4 +179,29 @@ bool Enemy::isSpy() const {
 
 void Enemy::setSpyTimer(float seconds) {
     m_spyTimer = seconds;
+}
+
+
+void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
+    
+    static constexpr float footstepDistanceThreshold = 900.f;
+    static constexpr float maxInterval = 1.0f;
+    static constexpr float minInterval = 0.25f;
+    static constexpr float maxVolume = 100.f;
+    static constexpr float minVolume = 50.f;
+
+    float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
+    m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;
+
+    float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
+    SoundManger::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
+
+    m_footstepTimer += deltaTime;
+    if (m_footstepTimer >= m_footstepInterval) {
+        if (distanceToPlayer <= footstepDistanceThreshold &&
+            !SoundManger::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
+            SoundManger::instance().play(Constants::SoundID::FOOTSTEP);
+        }
+        m_footstepTimer = 0.f;
+    }
 }

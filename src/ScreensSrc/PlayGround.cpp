@@ -15,6 +15,7 @@ void PlayGround::init()
 	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
 	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
 	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
+	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 10.f);
 	auto [playIt, insertedPlay] = m_buttons.emplace(
 		Constants::ButtonID::Play,
 		Button({ Constants::WINDOW_WIDTH * 0.05, Constants::WINDOW_HEIGHT * 0.06 },
