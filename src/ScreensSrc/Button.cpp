@@ -39,7 +39,9 @@ void Button::setTexture(const Constants::TextureID texture) {
 
 void Button::updateHover(const sf::RenderWindow& window) {
 	if (m_shape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(window)))) {
-		m_shape.setFillColor(Constants::HOVERD_COLOR);
+		auto color = m_shape.getFillColor() * sf::Color(200,2500,255,200);
+		//m_shape.setFillColor(Constants::HOVERD_COLOR);
+		m_shape.setFillColor(color);
 	}
 
 	else {
@@ -89,4 +91,11 @@ void Button::centerText() {
 
 	m_text.setPosition(shapePos.x + shapeSize.x / 2.0f,
 		shapePos.y + shapeSize.y / 2.0f);
+}
+
+sf::Color Button:: makeBrighter(const sf::Color& color, float factor) {
+	sf::Uint8 r = std::min(255.0f, color.r * factor);
+	sf::Uint8 g = std::min(255.0f, color.g * factor);
+	sf::Uint8 b = std::min(255.0f, color.b * factor);
+	return sf::Color(r, g, b, color.a);
 }

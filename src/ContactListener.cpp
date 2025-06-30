@@ -24,17 +24,8 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
     // === Player Collisions ===
     if (auto player = dynamic_cast<Player*>(entityA)) {
-        if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
-            
-            if (player == bullet->getOwnerShared().get())
-            {
-                return;
-            }
-
-                player->takeDamage(bullet->getDamage());
-                bullet->setDestroyed(true);
-        }
-        else if (auto gift = dynamic_cast<Gift*>(entityB)) {
+        
+         if (auto gift = dynamic_cast<Gift*>(entityB)) {
             switch (gift->getType()) {
             case Constants::GiftType::ARMOR:
                 player->addArmor();
@@ -62,7 +53,6 @@ void ContactListener::BeginContact(b2Contact* contact) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
                         enemy->setSpyTimer(20.f);  //seconds of spy behavior
-						SoundManger::instance().play(Constants::SoundID::SPY);
                         break;
                     }
                 }
@@ -74,7 +64,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
             default:
                 throw std::runtime_error("Unknown Constants::GiftType");
             }
-            gift->des();
+            gift->setDestroyed(true);
         }
         else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
             // Optional: Player touches enemy
@@ -82,15 +72,15 @@ void ContactListener::BeginContact(b2Contact* contact) {
         }
     }
 
-    // === Enemy Collisions ===
-    else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
+    // === bullet Collisions ===
+     if (auto character = dynamic_cast<Character*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
 			
-            if (enemy == bullet->getOwnerShared().get())
+            if (character == bullet->getOwnerShared().get())
             {
                 return;
             }
-                enemy->takeDamage(bullet->getDamage());
+                character->takeDamage(bullet->getDamage());
                 bullet->setDestroyed(true);
         }
     }

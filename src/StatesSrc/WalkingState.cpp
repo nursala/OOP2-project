@@ -2,6 +2,7 @@
 #include "StatesInc/AttackingState.h"
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
+#include "ResourseInc/SoundManger.h"
 
 
 std::unique_ptr<State> WalkingState::handleInput(Character& character) {

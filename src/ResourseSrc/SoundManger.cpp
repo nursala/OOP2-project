@@ -56,6 +56,10 @@ void SoundManger::setVolume(Constants::SoundID id, float volume) {
 }
 
 bool SoundManger::isPlaying(Constants::SoundID id) const {
-	auto it = m_sounds.find(id);
-	return it != m_sounds.end() && it->second.getStatus() == sf::Sound::Playing;
+    auto it = m_sounds.find(id);
+    return it != m_sounds.end() && it->second.getStatus() == sf::Sound::Playing;
+}
+
+sf::Sound& SoundManger::getSound(Constants::SoundID id) {
+    return m_sounds.at(id);
 }
