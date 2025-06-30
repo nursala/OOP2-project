@@ -26,7 +26,8 @@ bool BaseResourceManager<ResourceType, IdentifierType>::load(const IdentifierTyp
 }
 
 template <typename ResourceType, typename IdentifierType>
-const ResourceType* BaseResourceManager<ResourceType, IdentifierType>::get(const IdentifierType& id) const {
+const ResourceType* BaseResourceManager<ResourceType, IdentifierType>::get(const IdentifierType& id) const 
+{
     auto it = m_resources.find(id);
     if (it != m_resources.end())
         return it->second.get();

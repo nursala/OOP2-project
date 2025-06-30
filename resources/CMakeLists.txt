@@ -10,6 +10,7 @@ configure_file ("help.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("market.JPG" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("homePage.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("coins_market.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("chooseMap.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #fonts
 configure_file ("myFont.otf" ${CMAKE_BINARY_DIR} COPYONLY)

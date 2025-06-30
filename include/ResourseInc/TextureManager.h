@@ -37,6 +37,8 @@ const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
 	{ Constants::TextureID::SHOTGUNMOVE, "shotgun_move.png" },
 	{ Constants::TextureID::RIFLEMOVE, "rifle_move.png" },
 	/*{ Constants::TextureID::SNIPERSHOOT, "SniperShoot.png" },*/
+	{ Constants::TextureID::COINS, "coins.png" },
+	{ Constants::TextureID::CHOOSEMAP, "chooseMap.png" }
 };
 
 class TextureManager : public BaseResourceManager<sf::Texture, Constants::TextureID> {

@@ -7,6 +7,7 @@
 #include "ScreensInc/Market.h"
 #include "ScreensInc/Help.h"
 #include "ResourseInc/SoundManger.h"
+#include "ScreensInc/Screen.h"
 
 HomeScreen::HomeScreen()
 {
@@ -16,45 +17,44 @@ HomeScreen::HomeScreen()
 
 void HomeScreen::init()
 {
+	m_generalButtons.clear();
 	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
-    m_buttonInfos.clear(); 
 
-    m_buttonInfos.emplace_back(
-        Constants::ButtonID::Play,
-        "Play",
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.2f),
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
-        std::make_unique<PushScreenCommand<ChooseLevelScreen>>()
+	m_generalButtons.emplace_back(
+		Constants::ButtonID::Play,
+		"Play",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.2f),
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+		std::make_unique<PushScreenCommand<ChooseLevelScreen>>()
+	);
 
-    );
+	m_generalButtons.emplace_back(
+		Constants::ButtonID::Market,
+		"Market",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.3f),
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+		std::make_unique<PushScreenCommand<Market>>()
+	);
 
-    m_buttonInfos.emplace_back(
-        Constants::ButtonID::Market,
-        "Market",
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.3f),
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
-        std::make_unique<PushScreenCommand<Market>>()
-    );
 
-    m_buttonInfos.emplace_back(
-        Constants::ButtonID::Help,
-        "Help",
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.4f),
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
-        std::make_unique<PushScreenCommand<Help>>()
-    );
+	m_generalButtons.emplace_back(
+		Constants::ButtonID::Help,
+		"Help",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.4f),
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+		std::make_unique<PushScreenCommand<Help>>()
+	);
 
-    m_buttonInfos.emplace_back(
-        Constants::ButtonID::Exit,
-        "Exit",
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.5f),
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
-        std::make_unique<ExitCommand>()
-    );
+	m_generalButtons.emplace_back(
+		Constants::ButtonID::Exit,
+		"Exit",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.5f),
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
+		std::make_unique<ExitCommand>()
+	);
 
-	setButtons();
+	setButtons(m_generalButtons);
 }
-
 
 Constants::ScreenID HomeScreen::getScreenID() const
 {

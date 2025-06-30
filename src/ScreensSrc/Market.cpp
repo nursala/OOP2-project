@@ -30,33 +30,45 @@ Constants::ScreenID Market::getScreenID() const
 
 void Market::init()
 {
-	m_weaponButtonInfo.clear();
-	m_buttonInfos.clear();
+	m_generalButtons.clear();
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::HandGun, Constants::ButtonID::BasicGun,
-		Constants::TextureID::BASICGUN,
+	m_weaponButtonInfo.emplace_back(Constants::ButtonID::BasicGun,
+		"",
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.506),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09),
+		std::make_unique<SmartWeaponCommand>(Constants::WeaponType::HandGun, *this),
+		Constants::TextureID::BASICGUN,
+		Constants::WeaponType::HandGun
 	);
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Shotgun, Constants::ButtonID::Shotgun,
-		Constants::TextureID::SHOTGUN,
+	m_weaponButtonInfo.emplace_back(Constants::ButtonID::Shotgun,
+		"",
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.69, Constants::WINDOW_HEIGHT * 0.506),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09),
+		std::make_unique<SmartWeaponCommand>(Constants::WeaponType::Shotgun, *this),
+		Constants::TextureID::SHOTGUN,
+		Constants::WeaponType::Shotgun
 	);
 
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Sniper, Constants::ButtonID::Sniper,
-		Constants::TextureID::SNIPER,
+	m_weaponButtonInfo.emplace_back(Constants::ButtonID::Sniper,
+		"",
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.861),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
-	);
-	m_weaponButtonInfo.emplace_back(Constants::WeaponType::Rifle, Constants::ButtonID::Rifle,
-		Constants::TextureID::RIFLE,
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.69, Constants::WINDOW_HEIGHT * 0.861),
-		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09)
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09),
+		std::make_unique<SmartWeaponCommand>(Constants::WeaponType::Sniper, *this),
+		Constants::TextureID::SNIPER,
+		Constants::WeaponType::Sniper
 	);
 
-	m_buttonInfos.emplace_back(
+	m_weaponButtonInfo.emplace_back(Constants::ButtonID::Rifle,
+		"",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.69, Constants::WINDOW_HEIGHT * 0.861),
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.15, Constants::WINDOW_HEIGHT * 0.09),
+		std::make_unique<SmartWeaponCommand>(Constants::WeaponType::Rifle, *this),
+		Constants::TextureID::RIFLE,
+		Constants::WeaponType::Rifle
+	);
+
+	m_weaponButtonInfo.emplace_back(
 		Constants::ButtonID::Back,
 		"Back",
 		sf::Vector2f(Constants::WINDOW_WIDTH * 0.1f, Constants::WINDOW_HEIGHT * 0.05f),
@@ -64,55 +76,33 @@ void Market::init()
 		std::make_unique<PopScreenCommand>()
 	);
 
-	setShapes();
-	setButtons();
+	setButtons<Constants::WeaponType>(m_weaponButtonInfo);
 	updateWeaponButtonLabels();
-}
-
-void Market::setShapes()
-{
-	for (const auto& info : m_weaponButtonInfo)
-	{
-		auto& btn = m_buttons.emplace(info.id, Button(info.size, info.position)).first->second;
-		btn.setCommand(std::make_unique<SmartWeaponCommand>(info.type, *this));
-
-		sf::RectangleShape shape(sf::Vector2f(Constants::WINDOW_WIDTH * 0.2, Constants::WINDOW_HEIGHT * 0.15));
-		sf::Vector2f pos = { info.position.x  ,info.position.y - 2*info.size.y - Constants::MARGIN};
-		shape.setTexture(TextureManager::instance().get(info.textureID));
-		shape.setPosition(pos);
-		m_weaponButtons.emplace(info.type, std::make_pair(shape, &btn));
-	}
 }
 
 void Market::updateWeaponButtonLabels()
 {
 	auto& session = GameSessionData::instance();
 
-	for (auto& [type, pair] : m_weaponButtons)
+	for (auto& type : m_weaponButtons)
 	{
-		if (!session.hasWeapon(type))
-			pair.second->setText("Buy -" + std::to_string(Constants::WeaponPrice[type]) + "$");
-		else if (session.getSelectedWeapon() == type)
-			pair.second->setText("Equipped");
+		if (!session.hasWeapon(type.first))
+			type.second->setText("Buy -" + std::to_string(Constants::WeaponPrice[type.first]) + "$");
+		else if (session.getSelectedWeapon() == type.first)
+			type.second->setText("Equipped");
 		else
-			pair.second->setText("Equip");
+			type.second->setText("Equip");
 	}
 }
 
 void Market::render(sf::RenderWindow& window)
 {
 	Screen::render(window);
-	for (auto& [type, pair] : m_weaponButtons)
+	for (auto& image : m_weaponImages)
 	{
-		window.draw(pair.first); 
+		window.draw(image);
 	}
-	//Screen::render(window);
-	//m_moneyText.setFont(Controller::getInstance().getFont());
-	//m_moneyText.setCharacterSize(24);
-	//m_moneyText.setFillColor(sf::Color::White);
-	//m_moneyText.setPosition(10.f, 10.f);
-	//m_moneyText.setString("Money: " + std::to_string(GameSessionData::instance().money));
-	//window.draw(m_moneyText);
+
 	m_money.second.setString(std::to_string(GameSessionData::instance().getMoney()));
 	window.draw(m_money.second);
 	window.draw(m_money.first);
@@ -122,10 +112,37 @@ void Market::render(sf::RenderWindow& window)
 void Market::setMessage(const std::string string)
 {
 	m_messageText.setString(string);
-    sf::FloatRect bounds = m_messageText.getLocalBounds();
+	sf::FloatRect bounds = m_messageText.getLocalBounds();
 
-    m_messageText.setOrigin(bounds.left + bounds.width / 2.f,
-        bounds.top + bounds.height / 2.f);
+	m_messageText.setOrigin(bounds.left + bounds.width / 2.f,
+		bounds.top + bounds.height / 2.f);
 
-    m_messageText.setPosition(Constants::WINDOW_WIDTH /2 , Constants::WINDOW_HEIGHT * 0.2);  
+	m_messageText.setPosition(Constants::WINDOW_WIDTH / 2, Constants::WINDOW_HEIGHT * 0.2);
+}
+
+
+void Market::handleExtraButtonInfo(Constants::ButtonID id)
+{
+	for (const auto& info : m_weaponButtonInfo)
+	{
+		if (info.id != id)
+			continue;
+
+		auto it = m_buttons.find(info.id);
+		if (it == m_buttons.end())
+			return;
+
+		sf::RectangleShape shape({ Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.15f });
+		shape.setTexture(TextureManager::instance().get(info.textureID.value()));
+		sf::Vector2f pos = {
+			info.position.x,
+			info.position.y - 2 * info.size.y - Constants::MARGIN
+		};
+		shape.setPosition(pos);
+		m_weaponImages.push_back(std::move(shape));
+
+		Button& btn = it->second;
+		m_weaponButtons.emplace(info.type.value(), &btn);
+		return;
+	}
 }
