@@ -41,6 +41,7 @@ void Player::update(float deltaTime) {
         }
     }
 }
+
 void Player::takeDamage(int damage)
 {
     if (m_armor > 0) {

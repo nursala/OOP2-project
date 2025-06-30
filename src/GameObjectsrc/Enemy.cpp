@@ -13,7 +13,7 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     : Character(world, TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
-    m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
+    m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map,/* rand() %*/ 10 /*+ 1*/);
     m_state = std::make_unique<WalkingState>();
     if (m_state)
         m_state->enter(*this);

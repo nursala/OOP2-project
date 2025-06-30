@@ -11,18 +11,15 @@
 #include "StatesInc/AttackingState.h"
 #include "ResourseInc/TextureManager.h"
 
-
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
     : Entity(world, texture, position, imageCount, switchTime), m_world(world)
 {
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
-	init(b2_dynamicBody, 1.5f);
+	init(b2_dynamicBody, 1);
 	m_visionLight->setScale(1.2f, 1.2f);
-
 }
-
 
 void Character::update(float deltaTime) {
 	this->updateTargets();
