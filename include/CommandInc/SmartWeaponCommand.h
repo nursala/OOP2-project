@@ -4,6 +4,7 @@
 #include "GameSessionData.h"
 #include "WeaponInc/Weapon.h"
 #include "ScreensInc/Market.h" 
+#include "ResourseInc/SoundManger.h"
 
 class SmartWeaponCommand : public Command {
 public:
@@ -20,6 +21,7 @@ public:
                 session.getMoney() -= price;
                 session.addWeapon(m_weapon);
                 m_market.setMessage("Weapon purchased!");
+				SoundManger::instance().play(Constants::SoundID::COINS);
             }
             else {
                 m_market.setMessage("You don't have enough money!");

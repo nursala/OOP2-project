@@ -1,6 +1,11 @@
 ﻿#include "WeaponInc/Weapon.h"
 #include "GameObject/Character.h"  // Needed for Character*
 #include "WorldInc/World.h"        // If not already included
+#include "WeaponInc/HandGun.h"
+#include "WeaponInc/Shotgun.h"
+#include "WeaponInc/Sniper.h"
+#include "ResourseInc/SoundManger.h"
+
 #include <iostream>
 
 Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
@@ -71,4 +76,9 @@ float Weapon::getDamage() const
 void Weapon::setDamage(float damage)
 {
 	m_damage = damage;
+}
+
+float Weapon::getFireTimer() const
+{
+	return m_fireTimer;
 }

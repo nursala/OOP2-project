@@ -7,7 +7,7 @@
 ChooseLevelScreen::ChooseLevelScreen()
 	: Screen()
 {
-	setBackGroundTexture(Constants::TextureID::Player);
+	setBackGroundTexture(Constants::TextureID::HOMEPAGE);
 	setSize();
 }
 

@@ -2,7 +2,7 @@
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
 #include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
-#include "StatesInc/ChasingState.h"
+#include "StatesInc/WalkingState.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include <cmath>
@@ -10,11 +10,11 @@
 #include <limits>
 
 Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
-    : Character(world, TextureManager::instance().get(Constants::TextureID::Enemy), { 150, 150 }, { 3, 7 }, 0.4f),
+    : Character(world, TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 150, 150 }, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
-    m_state = std::make_unique<ChasingState>();
+    m_state = std::make_unique<WalkingState>();
     if (m_state)
         m_state->enter(*this);
 
@@ -122,7 +122,7 @@ void Enemy::fireBullet(const sf::Vector2f&) {
 }
 
 void Enemy::takeDamage(int damage) {
-    damage += 50;
+
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;

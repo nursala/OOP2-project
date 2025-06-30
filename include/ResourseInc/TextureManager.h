@@ -3,8 +3,6 @@
 #include <SFML/Graphics.hpp>
 
 const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
-	{Constants::TextureID::Player, "Player_move.png"},
-	{Constants::TextureID::Enemy, "Player_move.png"},
 	{Constants::TextureID::HEALTH , "Health.png"},
 	{Constants::TextureID::ARMOR, "shield.png"},
 	{Constants::TextureID::BULLET, "game_bullet.png"},
@@ -32,6 +30,13 @@ const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
 	{ Constants::TextureID::COINSMARKET, "coins_market.png" },
 	{ Constants::TextureID::LEVELS, "Levels.png" },
 	{ Constants::TextureID::MARKET, "market.JPG" },
+	{ Constants::TextureID::HANDGUNSHOOT, "handGun_shoot.png" },
+	{ Constants::TextureID::SHOTGUNSHOOT, "shotgun_shoot.png" },
+	{ Constants::TextureID::RIFLESHOOT, "rifle_shoot.png" },
+	{ Constants::TextureID::HANDGUNMOVE, "handGun_Move.png" },
+	{ Constants::TextureID::SHOTGUNMOVE, "shotgun_move.png" },
+	{ Constants::TextureID::RIFLEMOVE, "rifle_move.png" },
+	/*{ Constants::TextureID::SNIPERSHOOT, "SniperShoot.png" },*/
 };
 
 class TextureManager : public BaseResourceManager<sf::Texture, Constants::TextureID> {

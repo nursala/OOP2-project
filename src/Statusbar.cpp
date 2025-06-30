@@ -20,6 +20,7 @@ void Statusbar::setLevel(std::string level) { m_level = level;}
 std::string Statusbar::getLevel() const { return m_level; }
 
 void Statusbar::render(sf::RenderWindow& window) {
+
 	auto viewSize = window.getView().getSize();
     auto pos = window.getView().getCenter();
 

@@ -34,6 +34,8 @@ public:
     float getDamage() const;
     void setDamage(float damage);
 
+    float getFireTimer() const;
+
 	void setFireCooldown(float cooldown) { m_fireCooldown = cooldown; }
     void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
 
