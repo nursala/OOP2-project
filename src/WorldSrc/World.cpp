@@ -48,8 +48,8 @@ void World::setMapTexture() {
 }
 
 void World::createPlayer() {
-    Factory::instance().registerType<Player>(Constants::TextureID::Player, std::ref(*this));
-    m_player = Factory::instance().createAs<Player>(Constants::TextureID::Player);
+    Factory::instance().registerType<Player>(Constants::TextureID::HANDGUNMOVE, std::ref(*this));
+    m_player = Factory::instance().createAs<Player>(Constants::TextureID::HANDGUNMOVE);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
 	m_player->setPosition(b2Vec2(pos.x, pos.y));
 }
@@ -83,7 +83,7 @@ void World::createEnemy()
 
 	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
     Factory::instance().registerType<Enemy>(
-        Constants::TextureID::Enemy,
+        Constants::TextureID::HANDGUNMOVE,
         std::ref(*this),
         std::cref(m_tileMap),
         std::cref(*m_player)
@@ -94,7 +94,7 @@ void World::createEnemy()
     {
         //int randomIQ = rand() % 10 + 1;
 
-        auto enemy = Factory::instance().createAs<Enemy>(Constants::TextureID::Enemy);
+        auto enemy = Factory::instance().createAs<Enemy>(Constants::TextureID::HANDGUNMOVE);
         enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
         m_enemies.push_back(std::move(enemy));
     }

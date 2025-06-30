@@ -17,8 +17,15 @@ configure_file ("pauseScreen.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("myFont.otf" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #entities
-configure_file ("Player_move.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("handGun_Move.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("rifle_move.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("shotgun_move.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("game_bullet.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("handGun_shoot.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("rifle_shoot.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("shotgun_shoot.png" ${CMAKE_BINARY_DIR} COPYONLY)
+#configure_file ("sniper_shoot.png" ${CMAKE_BINARY_DIR} COPYONLY)
+
 
 #gifts
 configure_file ("Health.png" ${CMAKE_BINARY_DIR} COPYONLY)

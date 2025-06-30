@@ -1,9 +1,15 @@
 ﻿#include "GameObject/Character.h"
 #include "WorldInc/World.h"
 #include "VisionLight.h"
-#include "StatesInc/AttackingStatePlayer.h"
 #include <iostream>
 #include "WeaponInc/Weapon.h"
+#include "WeaponInc/HandGun.h"
+#include "WeaponInc/Shotgun.h"
+#include "WeaponInc/Sniper.h"
+#include "ResourseInc/SoundManger.h"
+#include "StatesInc/WalkingState.h"
+#include "StatesInc/AttackingState.h"
+#include "ResourseInc/TextureManager.h"
 
 
 Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
@@ -12,7 +18,7 @@ Character::Character(World& world, const sf::Texture* texture, sf::Vector2f posi
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
-	init(b2_dynamicBody, 1.f);
+	init(b2_dynamicBody, 1.5f);
 	m_visionLight->setScale(1.2f, 1.2f);
 
 }
@@ -24,9 +30,52 @@ void Character::update(float deltaTime) {
 
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
-		if (newState) {
+		// why not check if m_state is the same as newState?
+		if (newState && m_state.get() != newState.get()) {
 			m_state = std::move(newState);
 			m_state->enter(*this);
+			if (dynamic_cast<WalkingState*>(m_state.get()))
+			{
+				switch (m_weapon->getType())
+				{
+				case Constants::WeaponType::HandGun:
+					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 3,7 }, 0.2f, deltaTime);
+					break;
+				case Constants::WeaponType::Shotgun:
+					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 3,7 }, 0.2f, deltaTime);
+					break;
+				case Constants::WeaponType::Sniper:
+					//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERMOVE), { 3,7 }, 0.2f, deltaTime);
+					break;
+				case Constants::WeaponType::Rifle:
+					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLEMOVE), { 3,7 }, 0.2f, deltaTime);
+					break;
+				}
+			}
+			//else if (dynamic_cast<AttackingState*>(m_state.get()))
+			//{
+			//	switch (m_weapon->getType())
+			//	{
+			//	case Constants::WeaponType::HandGun:
+			//		SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
+			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, deltaTime);
+			//		break;
+			//	case Constants::WeaponType::Shotgun:
+			//		SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
+			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, deltaTime);
+			//		break;
+			//	case Constants::WeaponType::Sniper:
+			//		SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
+			//		//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERSHOOT), { 3,1 }, 0.2f, deltaTime);
+			//		break;
+			//	case Constants::WeaponType::Rifle:
+			//		SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
+			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, deltaTime);
+			//		break;
+			//	default:
+			//		std::runtime_error("Unknown weapon type!");
+			//	}
+			//}
 		}
 		m_state->update(*this, deltaTime);
 	}
@@ -61,7 +110,8 @@ void Character::update(float deltaTime) {
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
-	
+	//m_animation.update(1, deltaTime);
+
 }
 
 void Character::render(sf::RenderWindow& window) {
@@ -120,9 +170,33 @@ Weapon* Character::getWeapon()
 
 void Character::shoot(float dt) {
 
-	if (m_attackStrategy)
+	if (m_attackStrategy && m_weapon->getFireTimer() <= 0.f)
 	{
-		m_attackStrategy->attack(*this, dt);
+		if (!m_attackStrategy->attack(*this, dt)) return;
+
+		
+		switch (m_weapon->getType())
+		{
+		case Constants::WeaponType::HandGun:
+			SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
+			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, dt);
+			break;
+		case Constants::WeaponType::Shotgun:
+			SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
+			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, dt);
+			break;
+		case Constants::WeaponType::Sniper:
+			SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
+			//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERSHOOT), { 3,1 }, 0.2f, dt);
+			break;
+		case Constants::WeaponType::Rifle:
+			SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
+			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, dt);
+			break;
+		default:
+			std::runtime_error("Unknown weapon type!");
+		}
+		
 	}
 }
 

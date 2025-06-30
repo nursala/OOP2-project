@@ -3,8 +3,7 @@
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
 #include "MoveStrategyAndInfoInc/KeyboardMoveStrategy.h"
-#include "StatesInc/IdleStatePlayer.h"
-#include "StatesInc/WalkingStatePlayer.h"
+#include "StatesInc/WalkingState.h"
 #include <iostream>
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
@@ -15,10 +14,10 @@
 #include "ResourseInc/SoundManger.h"
 
 Player::Player(World& world)
-	: Character(world, TextureManager::instance().get(Constants::TextureID::Player), { 10, 10 }, { 3,7 }, 0.4f)
+	: Character(world, TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 10, 10 }, { 3,7 }, 0.4f)
 {
 
-	m_state = std::make_unique<WalkingStatePlayer>();
+	m_state = std::make_unique<WalkingState>();
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 	if (m_state)

@@ -122,6 +122,13 @@ namespace Constants {
 		COINSMARKET,
 		KILLS,
 		LEVELS,
+		HANDGUNSHOOT,
+		SHOTGUNSHOOT,
+		SNIPERSHOOT,
+		RIFLESHOOT,
+		HANDGUNMOVE,
+		SHOTGUNMOVE,
+		RIFLEMOVE,
 		PAUSESCREEN,
 	};
 	// ----------------------------
