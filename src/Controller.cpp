@@ -48,10 +48,6 @@ void Controller::popToHome()
 	}
 }
 
-void Controller::removeScreen() {
-	popScreen();
-}
-
 // Main game loop
 void Controller::run() {
 	pushScreen(std::make_unique<HomeScreen>());
@@ -63,11 +59,26 @@ void Controller::run() {
 		processEvents();
 		update();
 		render();
+		if (m_shouldPop) {
+			popScreen();
+			m_shouldPop = false;
+		}
+
+		else if (m_shouldPopToHome)
+		{
+			popToHome();
+			m_shouldPopToHome = false;
+		}
 	}
 }
 
 void Controller::setPopFlag() {
 	m_shouldPop = true;
+}
+
+void Controller::setPopFlagToHome()
+{
+	m_shouldPopToHome = true;
 }
 
 // Handle input
@@ -85,10 +96,7 @@ void Controller::processEvents() {
 void Controller::update() {
 	float dt = m_clock.restart().asSeconds();
 	m_screens.top()->update(m_window, dt);
-	if (m_shouldPop) {
-		popScreen();
-		m_shouldPop = false;
-	}
+	
 }
 
 // Render current screen

@@ -9,6 +9,8 @@ class Button {
 public:
     Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text = "");
 
+    void setColor(sf::Color color);
+
     std::function<void()> m_callback;
     void setCommand(std::unique_ptr<Command> command);
     void setTexture(const Constants::TextureID textureID);
@@ -17,14 +19,11 @@ public:
     void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
     void setText(const std::string& text);
     void centerText();
-    sf::Color makeBrighter(const sf::Color& color, float factor);
-    void centerText(const sf::Vector2f& position, const sf::Vector2f& size);
 private:
     sf::RectangleShape m_shape;
 
     sf::Text m_text;
     std::unique_ptr<Command> m_command;
-    bool m_isHovered = false;
-
-
+    sf::Color m_changingColor;
+	bool m_isColored = false;
 };

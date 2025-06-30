@@ -4,7 +4,6 @@
 Screen::Screen()
 {
 	m_backGround.setPosition(0.0f, 0.0f);
-
 }
 
 void Screen::setSize(const sf::Vector2f& size)
@@ -49,4 +48,9 @@ void Screen::drawButtons(sf::RenderWindow& window)
 	{
 		button.render(window);
 	}
+}
+
+Button& Screen::getButton(Constants::ButtonID id)
+{
+	return m_buttons.at(id);
 }

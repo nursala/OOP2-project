@@ -2,8 +2,10 @@
 #include <iostream>
 #include "cmath"
 #include "CommandInc/PopScreenCommand.h"
-#include "CommandInc/ExitCommand.h"
+#include "CommandInc/StopMusicCommand.h"
 #include "ResourseInc/SoundManger.h"
+#include "CommandInc/PushScreenCommand.h"
+#include "ScreensInc/PauseScreen.h"
 
 PlayGround::PlayGround()
 {
@@ -12,25 +14,32 @@ PlayGround::PlayGround()
 
 void PlayGround::init()
 {
+	m_generalButtons.clear();
 	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
 	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
-	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
-	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 10.f);
-	auto [playIt, insertedPlay] = m_buttons.emplace(
-		Constants::ButtonID::Play,
-		Button({ Constants::WINDOW_WIDTH * 0.05, Constants::WINDOW_HEIGHT * 0.06 },
-			{ Constants::WINDOW_WIDTH * 0.9 , Constants::WINDOW_HEIGHT * 0.1 })
-	);
-	playIt->second.setTexture(Constants::TextureID::GOTOHOME);
-	playIt->second.setCommand(std::make_unique<PopScreenCommand>());
 
-	auto [exitIt, insertedExit] = m_buttons.emplace(
-		Constants::ButtonID::Exit,
-		Button({ Constants::WINDOW_WIDTH * 0.1, Constants::WINDOW_HEIGHT * 0.1 },
-			{ Constants::WINDOW_WIDTH * 0.85 - 100, Constants::WINDOW_HEIGHT * 0.1
-			}, "Exit")
+	m_generalButtons.emplace_back(
+		Constants::ButtonID::Pause,
+		"",
+		sf::Vector2f(Constants::WINDOW_WIDTH * 0.90, Constants::MARGIN),
+		sf::Vector2f(Constants::BUTTON_IN_STATUS_BAR, Constants::BUTTON_IN_STATUS_BAR),
+		std::make_unique<PushScreenCommand<PauseScreen>>()
 	);
-	exitIt->second.setCommand(std::make_unique<ExitCommand>());
+
+	setButtons(m_generalButtons);
+	m_buttons.at(Constants::ButtonID::Pause).setTexture(Constants::TextureID::PAUSE);
+	setSpecialButtons();
+}
+
+void PlayGround::setSpecialButtons()
+{
+	auto [stopSound, insertedStop] = m_buttons.emplace(
+		Constants::ButtonID::SoundOff,
+		Button({ Constants::BUTTON_IN_STATUS_BAR, Constants::BUTTON_IN_STATUS_BAR },
+			{ Constants::WINDOW_WIDTH * 0.95, Constants::MARGIN })
+	);
+	stopSound->second.setTexture(Constants::TextureID::SOUNDON);
+	stopSound->second.setCommand(std::make_unique<StopMusicCommand>(stopSound->second));
 }
 
 void PlayGround::update(sf::RenderWindow& window, float dt)
@@ -46,13 +55,14 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 	m_view.setCenter(center);
 	window.setView(m_view);
 
+	m_statusBar.update();
 	m_world.update(window, dt);
 }
 
 void PlayGround::render(sf::RenderWindow& window)
 {
 	DebugDraw d(&window);
-	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit; // أو فقط e_shapeBit
+	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
 
 	d.SetFlags(flags);
 	m_world.getWorld().SetDebugDraw(&d);
@@ -60,7 +70,6 @@ void PlayGround::render(sf::RenderWindow& window)
 	window.setView(window.getDefaultView());
 	Screen::drawButtons(window);
 	m_statusBar.render(window);
-
 }
 
 Constants::ScreenID PlayGround::getScreenID() const

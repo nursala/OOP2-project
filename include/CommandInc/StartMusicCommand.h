@@ -1,11 +1,14 @@
 #pragma once
+
 #include "CommandInc/Command.h"
 #include "ResourseInc/SoundManger.h"
 
 class Button;
-class StopMusicCommand : public Command {
+class StopMusicCommand;
+
+class StartMusicCommand : public Command {
 public:
-	StopMusicCommand(Button& button) : m_button(button) {}
+	StartMusicCommand(Button& button) : m_button(button) {}
 	void execute() override;
 private:
 	Button& m_button;

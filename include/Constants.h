@@ -17,6 +17,9 @@ namespace Constants {
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
 	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;
+	inline constexpr unsigned int NUM_OF_ITEMS_IN_STATUS_BAR = 3;
+	inline constexpr unsigned int TILE_IN_STATUS_BAR = WINDOW_WIDTH * 0.05;
+	inline constexpr unsigned int BUTTON_IN_STATUS_BAR = WINDOW_WIDTH * 0.03;
 	// ----------------------------
 	// Player Settings
 	// ----------------------------
@@ -59,6 +62,7 @@ namespace Constants {
 		Market,
 		Help,
 		ChooseLevel,
+		Pause,
 	};
 	// ----------------------------
 	//Button IDs
@@ -125,6 +129,7 @@ namespace Constants {
 		HANDGUNMOVE,
 		SHOTGUNMOVE,
 		RIFLEMOVE,
+		PAUSESCREEN,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -148,28 +153,29 @@ namespace Constants {
 		std::unique_ptr<Command> command;
 		std::optional<TextureID> textureID;
 		std::optional<T> type = std::nullopt;
+		std::optional<sf::Color> color;
 	};
 
 	// ----------------------------
 	// Sound IDs
 	// ----------------------------
 	enum class SoundID {
-		SHOOT, 
-		BACKGROUNDMUSIC, 
+		SHOOT,
+		BACKGROUNDMUSIC,
 		MENUMUSIC,
-		MATCHMAKINGMUSIC, 
+		MATCHMAKINGMUSIC,
 		GAMEOVERSOUND,
 		GAMEWINSOUND,
-		RIFLESOUND, 
-		SHOTGUNSOUND, 
-		PISTOLSOUND, 
+		RIFLESOUND,
+		SHOTGUNSOUND,
+		PISTOLSOUND,
 		SNIPERSOUND,
 		BUTTOUNEVENT,
-		HEARTBEAT, 
-		VISIONUPGRADE, 
-		SHIELDUPGRADE, 
+		HEARTBEAT,
+		VISIONUPGRADE,
+		SHIELDUPGRADE,
 		HEALTHUPGRADE,
-		SPEEDUPGRADE, 
+		SPEEDUPGRADE,
 		SPEEDDOWN,
 		SPY,
 		GAMEBEGIN,
@@ -199,8 +205,8 @@ namespace Constants {
 		MediumMap,
 		HardMap
 	};
-	
 
+	extern std::unordered_map<LevelID, std::pair<std::string, sf::Color>> LevelNames;
 	// ----------------------------  
 	// Weapon Price  
 	// ----------------------------  

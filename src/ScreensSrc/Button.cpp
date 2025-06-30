@@ -19,6 +19,13 @@ Button::Button(const sf::Vector2f& size, const sf::Vector2f& position, const std
 	centerText();
 }
 
+void Button::setColor(sf::Color color)
+{
+	m_shape.setFillColor(color);
+	m_isColored = true;
+	m_changingColor = color;
+}
+
 void Button::setCommand(std::unique_ptr<Command> command)
 {
 	m_command = std::move(command);
@@ -38,7 +45,10 @@ void Button::updateHover(const sf::RenderWindow& window) {
 	}
 
 	else {
-		m_shape.setFillColor(Constants::DEFAUL_BUTTON_COLOR);
+		if (!m_isColored)
+			m_shape.setFillColor(Constants::DEFAUL_BUTTON_COLOR);
+		else
+			m_shape.setFillColor(m_changingColor);
 	}
 }
 

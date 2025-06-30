@@ -30,8 +30,10 @@ public:
     bool isPlaying(Constants::SoundID id) const;
 	sf::Sound& getSound(Constants::SoundID id);
 	void stop(Constants::SoundID id);
-
+	void mute();    
+	void unmute();  
 private:
     SoundManger();
+	bool m_muted = false;
     std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
 };

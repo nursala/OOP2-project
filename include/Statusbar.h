@@ -3,23 +3,22 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <string>
+#include "Constants.h"
 
 class Statusbar {
 public:
     Statusbar();
-
-    void setKills(int kills);
-    int getKills() const;
-    void setCoins(int coins);
-    int getCoins() const;
-    void setLevel(std::string level);
-    std::string getLevel() const;
+    void update();
     void render(sf::RenderWindow& window);
-
 private:
-    void drawIconWithText(sf::RenderWindow& window, const sf::Texture* texture, const sf::Vector2f& pos, std::string value, sf::Color color = sf::Color::White);
+    void setNumOfEnemeies();
+    void initCoins();
+    void initializeText(sf::Text& text, float posX) const;
+    void initEnemies();
+	void initLevel();
+	void initializeTexture(sf::RectangleShape& shape, Constants::TextureID texture, float posX);
+    void setText(const std::string text, int index);
 
-    int m_kills = 0;
-    int m_coins = 0;
-    std::string m_level;
+    std::vector <sf::Text> m_text;
+    std::vector <sf::RectangleShape> m_shape;
 };
