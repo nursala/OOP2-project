@@ -29,8 +29,10 @@ public:
     void setVolume(Constants::SoundID id, float volume);
     bool isPlaying(Constants::SoundID id) const;
 	void stop(Constants::SoundID id);
-
+	void mute();    
+	void unmute();  
 private:
     SoundManger();
+	bool m_muted = false;
     std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
 };

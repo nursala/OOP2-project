@@ -8,17 +8,18 @@
 #include "LevelManager.h"
 #include "ResourseInc/TextureManager.h"
 #include "ResourseInc/SoundManger.h"
+#include "GameSessionData.h"
 
 World::World()
 	: m_world(b2Vec2(0.f, 0.f)),
 	m_tileMap(LevelManager::instance().getCurrentLevelPath())
 {
+	GameSessionData::instance().getLevelID() = LevelManager::instance().getCurrentLevel();
 	m_renderLayers = std::make_unique<RenderLayers>();
 	initWorld();
 }
 
 void World::initWorld() {
-	//m_tileMap.initMap(LevelManager::instance().getCurrentLevelPath());
     setMapTexture();
     m_world.SetContactListener(new ContactListener(*this));
     createPlayer();
@@ -30,8 +31,6 @@ void World::initWorld() {
 
 void World::setMapTexture() {
     
-
-    //unoederd map
     switch (LevelManager::instance().getCurrentLevel())
     {
     case Constants::LevelID::EasyMap:
@@ -82,12 +81,14 @@ void World::createEnemy()
 {
 	auto enemyPositions = m_tileMap.getEnemySpawns();
 
+	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
     Factory::instance().registerType<Enemy>(
         Constants::TextureID::Enemy,
         std::ref(*this),
         std::cref(m_tileMap),
         std::cref(*m_player)
     );
+
 	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
     for (int i = 0; i < enemyPositions.size(); ++i)
     {
@@ -149,8 +150,6 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 		else ++it;
 	}
 	//m_player->makeVisble(true);
-
-
 	m_renderLayers->setView(window.getView());
 
 }
@@ -169,7 +168,6 @@ void World::render(sf::RenderWindow& window) {
 
 	m_renderLayers->clear();
 	m_renderLayers->drawBackground(m_mapSprite);
-	//window.draw(m_mapSprite);
 	m_player->render(*m_renderLayers);
 
 	for (auto& enemy : m_enemies)
@@ -180,7 +178,6 @@ void World::render(sf::RenderWindow& window) {
 
 	for (auto& bullet : m_bullets)
 		bullet->render(*m_renderLayers);
-
 
 	m_renderLayers->display();
 	m_renderLayers->renderFinal(window);
@@ -266,7 +263,6 @@ void World::calcNearlyEdge(sf::RenderWindow& window)
 			m_closeEdges.push_back(edge);
 		}
 	}
-
 }
 
 void World::DebugEdge(sf::RenderWindow& window)

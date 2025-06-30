@@ -13,6 +13,7 @@ public:
 	virtual void update(sf::RenderWindow& window, float dt);
 	virtual void processEvent(sf::Event& event, sf::RenderWindow& window);
 	void drawButtons(sf::RenderWindow& window);
+	Button& getButton(Constants::ButtonID id);
 	virtual void customizeProcessEvent() {};
 	virtual Constants::ScreenID getScreenID() const = 0;
 	virtual void init() = 0;
@@ -20,14 +21,18 @@ public:
 						{ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT });
 
 protected:
-	//Constans::Constants::ScreenID m_screenID;
 	void setBackGroundTexture(const Constants::TextureID texture);
-	sf::RectangleShape m_backGround;
-	//std::vector <Constants::ButtonInfo> m_buttonInfos;
-	std::vector <Constants::GenericButton<std::monostate>> m_generalButtons;
-    template <typename T = std::monostate>  
-    void setButtons(std::vector<Constants::GenericButton<T>>& info);
+
+	template <typename T = std::monostate>
+	void setButtons(std::vector<Constants::GenericButton<T>>& info);
+
 	virtual void handleExtraButtonInfo(Constants::ButtonID id) {}
+
+	virtual void setSpecialButtons() {};
+
+	sf::RectangleShape m_backGround;
+	std::vector <Constants::GenericButton<std::monostate>> m_generalButtons;
+
 	std::unordered_map<Constants::ButtonID, Button> m_buttons;
 };
 
@@ -43,7 +48,12 @@ void Screen::setButtons(std::vector<Constants::GenericButton<T>>& buttons)
 
 		btn.setCommand(std::move(info.command));
 
-		if constexpr (!std::is_same_v<T, std::monostate>)
+		if (info.color.has_value())
+		{
+			btn.setColor(info.color.value());
+		}
+
+		if (!std::is_same_v<T, std::monostate>)
 		{
 			if (info.type.has_value())
 				handleExtraButtonInfo(info.id);

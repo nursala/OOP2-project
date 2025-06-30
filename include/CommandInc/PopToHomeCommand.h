@@ -5,6 +5,6 @@
 class PopToHomeCommand : public Command {
 public:
     void execute() override {
-        Controller::getInstance().popToHome();
+        Controller::getInstance().setPopFlagToHome();
     }
 };

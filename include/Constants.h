@@ -17,6 +17,9 @@ namespace Constants {
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
 	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;
+	inline constexpr unsigned int NUM_OF_ITEMS_IN_STATUS_BAR = 3;
+	inline constexpr unsigned int TILE_IN_STATUS_BAR = WINDOW_WIDTH * 0.05;
+	inline constexpr unsigned int BUTTON_IN_STATUS_BAR = WINDOW_WIDTH * 0.03;
 	// ----------------------------
 	// Player Settings
 	// ----------------------------
@@ -41,7 +44,7 @@ namespace Constants {
 	// sfml
 	// ----------------------------
 	const sf::Color HOVERD_COLOR = sf::Color(167, 167, 175);
-	const sf::Color DEFAUL_BUTTON_COLOR = sf::Color::Green;
+	const sf::Color DEFAUL_BUTTON_COLOR = sf::Color::Yellow;
 	const float CHAR_SIZE = 0.03 * WINDOW_WIDTH;
 	// ----------------------------
 	// Physics
@@ -59,6 +62,7 @@ namespace Constants {
 		Market,
 		Help,
 		ChooseLevel,
+		Pause,
 	};
 	// ----------------------------
 	//Button IDs
@@ -118,6 +122,7 @@ namespace Constants {
 		COINSMARKET,
 		KILLS,
 		LEVELS,
+		PAUSESCREEN,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -141,34 +146,35 @@ namespace Constants {
 		std::unique_ptr<Command> command;
 		std::optional<TextureID> textureID;
 		std::optional<T> type = std::nullopt;
+		std::optional<sf::Color> color;
 	};
 
 	// ----------------------------
 	// Sound IDs
 	// ----------------------------
 	enum class SoundID {
-		SHOOT, 
-		BACKGROUNDMUSIC, 
+		SHOOT,
+		BACKGROUNDMUSIC,
 		MENUMUSIC,
-		MATCHMAKINGMUSIC, 
+		MATCHMAKINGMUSIC,
 		GAMEOVERSOUND,
 		GAMEWINSOUND,
-		RIFLESOUND, 
-		SHOTGUNSOUND, 
-		PISTOLSOUND, 
+		RIFLESOUND,
+		SHOTGUNSOUND,
+		PISTOLSOUND,
 		SNIPERSOUND,
 		BUTTOUNEVENT,
-		HEARTBEAT, 
-		VISIONUPGRADE, 
-		SHIELDUPGRADE, 
+		HEARTBEAT,
+		VISIONUPGRADE,
+		SHIELDUPGRADE,
 		HEALTHUPGRADE,
-		SPEEDUPGRADE, 
+		SPEEDUPGRADE,
 		SPEEDDOWN,
 		SPY,
 		GAMEBEGIN,
 		ENEMYDEATH,
 		PLAYERDEATH,
-		COINS
+		COINS,
 	};
 	// ----------------------------
 	// Gift Types
@@ -191,8 +197,8 @@ namespace Constants {
 		MediumMap,
 		HardMap
 	};
-	
 
+	extern std::unordered_map<LevelID, std::pair<std::string, sf::Color>> LevelNames;
 	// ----------------------------  
 	// Weapon Price  
 	// ----------------------------  
