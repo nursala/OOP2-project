@@ -65,7 +65,6 @@ void World::createGifts()
 	for (const auto& pos : giftPositions)
 	{
         createGift(static_cast<Constants::GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
-        //createGift(Constants::GiftType::SPY, b2Vec2(pos.x, pos.y));
 	}
 }
 

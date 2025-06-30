@@ -31,6 +31,7 @@ private:
 template <typename T, typename... Args>
 void Factory::registerType(Constants::TextureID id, Args&&... args) {
     static_assert(std::is_base_of<Entity, T>::value, "T must inherit from Entity");
+    std::cout << typeid(T).name() << " register with ID: " << static_cast<int>(id) << std::endl;
 
     auto argsTuple = std::make_tuple(std::forward<Args>(args)...);
 

@@ -7,12 +7,12 @@
 #include "MoveStrategyAndInfoInc/MoveInfo.h"
 #include "Constants.h"
 
+
 class World;
 class RenderLayers; // Forward declaration
 class Entity {
 public:
-	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
-		sf::Vector2u imageCount, float switchTime);
+	Entity(World& world, b2Vec2& positionB2);
 	virtual ~Entity();
 
 	virtual void update(float deltaTime) = 0;
@@ -25,7 +25,7 @@ public:
 	void setVelocity(const b2Vec2& velocity);
 	b2Vec2 getVelocity() const;
 	b2Body* getBody() const;
-	Animation& getAnimation();
+	//Animation& getAnimation();
 	void adjustSpriteToFixtureSize();
 	World& getWorld();
 	bool isVisible() const { return m_visable; }
@@ -48,12 +48,11 @@ protected:
 	float m_bodyRadius = 0.f; // Used for circle bodies
 
 	sf::Sprite m_sprite;
-	Animation m_animation;
-	sf::Vector2f m_position;
-	sf::Vector2f m_initialPosition;
+	b2Vec2 m_position;
+	b2Vec2 m_initialPosition;
 	
 	virtual void customizeBodyDef(b2BodyDef&) {}
 	virtual void customizeFixtureDef(b2FixtureDef&) {}
-	virtual b2BodyType getBodyType() const { return b2_dynamicBody; }
+	virtual b2BodyType getBodyType() const { return m_body->GetType();}
 	static constexpr float SCALE = 30.f;
 };

@@ -3,18 +3,16 @@
 
 #include <iostream>
 
-Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
-	sf::Vector2u imageCount, float switchTime)
-	: m_animation(texture, imageCount, switchTime), m_world(world), m_position(position)
+Entity::Entity(World& world, b2Vec2& positionB2) : m_world(world), m_position(positionB2)
 {
-	if (texture)
-	{
-		m_sprite.setTexture(*texture);
-		m_sprite.setTextureRect(m_animation.getUvRect());
-		m_sprite.setPosition(position);
-	}
+	//if (texture)
+	//{
+	//	m_sprite.setTexture(*texture);
+	//	m_sprite.setTextureRect(m_animation.getUvRect());
+	//}
 
 	m_initialPosition = m_position;
+	m_sprite.setPosition(getPosition());
 	m_visable = true;
 }
 
@@ -103,9 +101,9 @@ b2Body* Entity::getBody() const {
 	return m_body;
 }
 
-Animation& Entity::getAnimation() {
-	return m_animation;
-}
+//Animation& Entity::getAnimation() {
+//	return m_animation;
+//}
 
 void Entity::adjustSpriteToFixtureSize()
 {
