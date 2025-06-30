@@ -116,10 +116,7 @@ Character* Enemy::getClosestTarget()
 
 
 
-void Enemy::fireBullet(const sf::Vector2f&) {
-    // if (m_weapon)
-    //     m_weapon->shoot(getPosition(), direction);
-}
+
 
 void Enemy::takeDamage(int damage) {
 
@@ -133,6 +130,20 @@ void Enemy::takeDamage(int damage) {
 
 
 void Enemy::update(float deltaTime) {
+
+    if (getTarget() || isSpy()) {
+        setVisible(true);         
+        m_hideDelayTimer = 0.5f;    
+    }
+    else {
+        if (m_hideDelayTimer > 0.f) {
+            m_hideDelayTimer -= deltaTime;
+            if (m_hideDelayTimer <= 0.f) {
+                setVisible(false); 
+            }
+        }
+    }
+
     Character::update(deltaTime);
     if (m_health <= 0.f) {
         setDestroyed(true);
@@ -147,11 +158,10 @@ void Enemy::update(float deltaTime) {
         }
     }
 
-    // Handle speed reset
     if (m_speedDownTimer > 0.f) {
         m_speedDownTimer -= deltaTime;
         if (m_speedDownTimer <= 0.f) {
-            m_speed = m_originalSpeed;  // reset to normal speed
+            m_speed = m_originalSpeed;  
         }
     }
     if (m_isSpy)

@@ -259,15 +259,7 @@ void Character::updateTargets()
 			}
 		}
 	}
-	if (auto player = dynamic_cast<Player*>(this))
-	{
-		for (auto* fixture : m_hitFixtures) {
-			b2Body* body = fixture->GetBody();
-			auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
-
-			character->setVisible(true);
-		}
-	}
+	
 }
 
 //void Character::updateTargets(sf::RenderWindow& window)

@@ -14,7 +14,6 @@ public:
     virtual ~Enemy() override = default;
 
     virtual Character* getClosestTarget();
-    void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
     void speedDown();
     void setSpeedDownTimer(float seconds); 
@@ -33,4 +32,5 @@ private:
 
     float m_speedDownTimer = 0.f; 
     float m_originalSpeed = 5.f;  
+	float m_hideDelayTimer = 0.f; // Time for which the enemy is visible
 };

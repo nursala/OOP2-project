@@ -53,6 +53,7 @@ void PlayGround::render(sf::RenderWindow& window)
 	DebugDraw d(&window);
 	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit; // أو فقط e_shapeBit
 
+	
 	d.SetFlags(flags);
 	m_world.getWorld().SetDebugDraw(&d);
 	m_world.render(window);
