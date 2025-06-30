@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include "GameObject/Entity.h"
 #include "ResourseInc/TextureManager.h"
+#include <iostream>
 
 class Factory {
 public:
@@ -46,6 +47,7 @@ std::unique_ptr<T> Factory::createAs(Constants::TextureID id) {
 
     auto it = m_creators.find(id);
     if (it != m_creators.end())
+		std::cout << typeid(T).name() << " created with ID: " << static_cast<int>(id) << std::endl;
         return std::unique_ptr<T>(static_cast<T*>(it->second().release()));
 
     throw std::runtime_error("Unknown Constants::TextureID in createAs");
