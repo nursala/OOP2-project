@@ -12,7 +12,7 @@ IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int i
 {
 }
 
-MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
+void IQChaseStrategy::move(Character& character, float deltaTime)
 {
     Character* target = character.getTarget().get();
     sf::Vector2f enemyPos = character.getPosition();
@@ -44,10 +44,6 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     if (m_behaviorLockTimer >= m_behaviorLockDuration) {
         m_behaviorLockTimer = 0.f;
         m_usingAStar = dist(rng) < chanceToUseAStar;
-        /*if (auto self = dynamic_cast<Enemy*>(&character)) {
-            if (self->isSpy())
-                m_usingAStar = false;
-        }*/
 
         if (m_usingAStar) {
             sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()), static_cast<int>(enemyPos.y / m_map.getTileHeight()));
@@ -74,6 +70,7 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
         if (distance(enemyPos, nextTileCenter) < 5.f)
             m_currentPath.erase(m_currentPath.begin());
     }
+
     else {
         m_randomDirTimer += deltaTime;
         if (m_randomDirTimer >= m_randomDirDuration) {
@@ -112,12 +109,6 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     if (e) {
         e->updateFootstepSound(distToTarget, deltaTime);
     }
-
-    return {
-        2,
-        dir.x >= 0,
-        dir
-    };
 }
 
 sf::Vector2f IQChaseStrategy::getPlayerPostion() const

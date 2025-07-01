@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Bar.h"
+#include "Bars/Bar.h"
 
 class HealthBar : public  Bar{
 public:

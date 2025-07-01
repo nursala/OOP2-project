@@ -83,10 +83,9 @@ void PlayGround::render(sf::RenderWindow& window)
 	d.SetFlags(flags);
 	m_world.getWorld().SetDebugDraw(&d);
 	m_world.render(window);
-	//window.setView(window.getDefaultView());
+	window.setView(window.getDefaultView());
 	Screen::drawButtons(window);
 	m_statusBar.render(window);
-	//m_world.getWorld().DebugDraw();
 }
 
 Constants::ScreenID PlayGround::getScreenID() const

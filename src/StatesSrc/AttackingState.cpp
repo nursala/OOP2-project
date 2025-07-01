@@ -4,14 +4,10 @@
 void AttackingState::update(Character& character, float dt) {
 	character.shoot(dt);
 	character.move(dt);
-	const MoveInfo& info = character.getLastMoveInfo();
-	character.getAnimation().update(info.row, dt);
+	character.getAnimation().update(dt);
 }
 
 std::unique_ptr<State> AttackingState::handleInput(Character& character)
 {
-	if (character.getTarget()) {
-		return nullptr;
-	}
-	return std::make_unique<WalkingState>();
+	return (character.getTarget()) ? nullptr : std::make_unique<WalkingState>();
 }

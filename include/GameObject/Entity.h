@@ -4,7 +4,6 @@
 #include <box2d/box2d.h>
 #include "AnimationInc/Animation.h"
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
-#include "MoveStrategyAndInfoInc/MoveInfo.h"
 #include "Constants.h"
 
 

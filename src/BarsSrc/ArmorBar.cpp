@@ -1,4 +1,4 @@
-#include "ArmorBar.h"
+#include "Bars/ArmorBar.h"
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <string>

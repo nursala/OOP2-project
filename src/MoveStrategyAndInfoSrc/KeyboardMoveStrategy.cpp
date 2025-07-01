@@ -4,32 +4,25 @@
 #include <box2d/box2d.h>
 #include "ResourseInc/SoundManger.h"
 
-MoveInfo KeyboardMoveStrategy::move(Character& character, float) {
+void KeyboardMoveStrategy::move(Character& character, float deltaTime) {
    
     auto* body = character.getBody();
-    if (!body) return {};
+    if (!body) return;
 	auto speed = character.getSpeed();
 
-    MoveInfo info;
-    info.row = 2;
-    info.faceRight = true;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         body->SetLinearVelocity(b2Vec2(speed, 0));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         body->SetLinearVelocity(b2Vec2(-speed, 0));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         body->SetLinearVelocity(b2Vec2(0, -speed));
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         body->SetLinearVelocity(b2Vec2(0, speed));
     }
     else {
         body->SetLinearVelocity(b2Vec2(0.f, 0));
-        info.row = 1;
     }
-
-    return info;
 }

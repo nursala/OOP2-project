@@ -1,4 +1,4 @@
-#include "HealthBar.h"
+#include "Bars/HealthBar.h"
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <string>

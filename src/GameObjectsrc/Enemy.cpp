@@ -36,20 +36,13 @@ Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& p
 
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
     m_state = std::make_unique<WalkingState>();
-    if (m_state)
-        m_state->enter(*this);
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
     m_weapon = std::make_unique<Shotgun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
-    m_armorBar = nullptr;
     m_visable = false;
-
     init(b2_dynamicBody, 1.5f);
-
 }
-
-
 
 Character* Enemy::getClosestTarget()
 {
@@ -62,7 +55,7 @@ Character* Enemy::getClosestTarget()
     }
     if (this->getTarget()) {
         sf::Vector2f targetPos = this->getTarget()->getPosition();
-        sf::Vector2f selfPos = getPosition(); // أو مصدر الضوء مثلاً
+        sf::Vector2f selfPos = getPosition(); 
 
         float dx = targetPos.x - selfPos.x;
         float dy = targetPos.y - selfPos.y;
@@ -78,8 +71,6 @@ Character* Enemy::getClosestTarget()
 		setTarget(nullptr); // Clear target if no fixtures hit
         return nullptr;
     }
-
-  
 
     Character* closestCharacter = nullptr;
     float minDistSq = std::numeric_limits<float>::max();
@@ -106,8 +97,7 @@ Character* Enemy::getClosestTarget()
 				continue; // Skip player if they are a spy
         }
        
-
-        
+   
         sf::Vector2f charPos = character->getPosition();
         float dx = charPos.x - lightPos.x;
         float dy = charPos.y - lightPos.y;
@@ -132,10 +122,6 @@ Character* Enemy::getClosestTarget()
     return closestCharacter;
 }
 
-
-
-
-
 void Enemy::takeDamage(int damage) {
     damage += 80;
     if (m_health > 0) {
@@ -144,8 +130,6 @@ void Enemy::takeDamage(int damage) {
     }
     m_healthBar->setValue(m_health);
 }
-
-
 
 void Enemy::update(float deltaTime) {
 
@@ -169,7 +153,8 @@ void Enemy::update(float deltaTime) {
     }
 
     // Handle spy timeout
-    if (m_isSpy) {
+    if (m_isSpy) 
+    {
         m_spyTimer -= deltaTime;
         if (m_spyTimer <= 0.f) {
             setSpy(false);
@@ -212,14 +197,13 @@ void Enemy::setSpyTimer(float seconds) {
     m_spyTimer = seconds;
 }
 
-
 void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
     
-    static constexpr float footstepDistanceThreshold = 900.f;
-    static constexpr float maxInterval = 1.0f;
-    static constexpr float minInterval = 0.25f;
-    static constexpr float maxVolume = 100.f;
-    static constexpr float minVolume = 50.f;
+    float footstepDistanceThreshold = 900.f;
+    float maxInterval = 1.0f;
+    float minInterval = 0.25f;
+    float maxVolume = 100.f;
+    float minVolume = 50.f;
 
     float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
     m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;

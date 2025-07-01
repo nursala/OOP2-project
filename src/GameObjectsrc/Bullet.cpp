@@ -59,7 +59,6 @@ void Bullet::update(float deltaTime)
     m_sprite.setPosition(pos.x * SCALE, pos.y * SCALE);
 	m_position = { pos.x * SCALE, pos.y * SCALE };
 
-    //m_lifetime += deltaTime;
     float dx = m_position.x - m_initialPosition.x;
     float dy = m_position.y - m_initialPosition.y;
     float distance = std::sqrt(dx * dx + dy * dy);
@@ -71,7 +70,6 @@ void Bullet::update(float deltaTime)
 std::shared_ptr<Character> Bullet::getOwnerShared() const {
     return m_owner.lock();
 }
-
 
 float Bullet::getDamage() const
 {

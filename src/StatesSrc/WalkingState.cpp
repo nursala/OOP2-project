@@ -4,22 +4,23 @@
 #include "GameObject/Enemy.h"
 #include "ResourseInc/SoundManger.h"
 
-
-std::unique_ptr<State> WalkingState::handleInput(Character& character) {
+std::unique_ptr<State> WalkingState::handleInput(Character& character) 
+{
 	if (auto player = dynamic_cast<Player*>(&character)) {
         if (character.getTarget()) {
             return std::make_unique<AttackingState>();
         }
         return nullptr;
 	}
+
 	else if (auto enemy = dynamic_cast<Enemy*>(&character)) {
 		return std::make_unique<AttackingState>();
 	}
+
 	return nullptr;
 }
 
 void WalkingState::update(Character& character, float dt) {
     character.move(dt);
-    const MoveInfo& info = character.getLastMoveInfo();
-    character.getAnimation().update(info.row, dt);
+    character.getAnimation().update(dt);
 }

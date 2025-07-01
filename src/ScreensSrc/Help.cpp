@@ -6,8 +6,8 @@ Help::Help()
 {
 	setBackGroundTexture(Constants::TextureID::HELP);
 	setSize({Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT_FOR_SCROLL});
-	m_view.setSize({ 1280.0, 720.0f });
-	m_view.setCenter(1280.0f / 2.0f, 720.0f / 2.0f);
+	m_view.setSize({ Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT });
+	m_view.setCenter(Constants::WINDOW_WIDTH / 2.0f, Constants::WINDOW_HEIGHT / 2.0f);
 }
 
 void Help::init()

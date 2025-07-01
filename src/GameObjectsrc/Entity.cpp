@@ -55,7 +55,7 @@ void Entity::render(RenderLayers& renderLayers) {
 	if (m_visable)
 		renderLayers.drawForeground(m_sprite);
 	else
-		renderLayers.drawBackground(m_sprite); 
+		renderLayers.drawBackground(m_sprite);
 }
 
 void Entity::setPosition(const b2Vec2& position)
@@ -76,7 +76,7 @@ b2Vec2 Entity::getPositionB2() const {
 sf::Vector2f Entity::getPosition() const {
 
 	auto pos = getPositionB2();
-	
+
 	return { pos.x * SCALE, pos.y * SCALE };
 
 	//return m_sprite.getPosition();
@@ -96,7 +96,6 @@ b2Body* Entity::getBody() const {
 	return m_body;
 }
 
-
 void Entity::adjustSpriteToFixtureSize()
 {
 	if (!m_body || !m_body->GetFixtureList())
@@ -110,7 +109,9 @@ void Entity::adjustSpriteToFixtureSize()
 		float diameter = radius * 2.f * SCALE;
 		desiredSize = { diameter, diameter };
 	}
-	else {
+
+	else 
+	{
 		return;
 	}
 

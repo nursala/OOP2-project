@@ -63,7 +63,6 @@ void World::createGifts()
 		b2Vec2 posB2(pos.x, pos.y);
 
 		Constants::GiftType type = static_cast<Constants::GiftType>(rand() % giftsTypeCount);
-		std::cout << "Creating Gift of type: " << static_cast<int>(type) << std::endl;
 		auto gift = Factory::instance().createAs<Gift>(
 			Constants::EntityType::Gift,
 			*this,
@@ -229,7 +228,6 @@ void World::buildAllEdges()
 		}
 	}
 }
-
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
 {

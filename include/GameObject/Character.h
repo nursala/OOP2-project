@@ -6,8 +6,8 @@
 #include "MoveStrategyAndInfoInc/MoveStrategy.h"
 #include "AttackingStrategyInc/AttakStrategy.h"
 #include "StatesInc/State.h"
-#include "HealthBar.h"
-#include "ArmorBar.h"
+#include "Bars/HealthBar.h"
+#include "Bars/ArmorBar.h"
 #include <box2d/b2_fixture.h>
 #include <unordered_set>
 
@@ -22,9 +22,7 @@ public:
 	virtual ~Character() override = default; 
 
     virtual void update(float );
-    void render(sf::RenderWindow& ) override;
     void render(RenderLayers& );
-    const MoveInfo& getLastMoveInfo();
     virtual b2BodyType getBodyType() const override;
     void move(float );
 
@@ -62,18 +60,13 @@ protected:
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
     std::unique_ptr <HealthBar> m_healthBar;
-    std::unique_ptr<ArmorBar> m_armorBar;
 	std::unique_ptr<Animation> m_animation; // Animation for the character
 
 	std::weak_ptr<Character> m_target; // Weak pointer to avoid circular references
 
     std::unique_ptr<VisionLight> m_visionLight;
 
-    MoveInfo m_lastMoveInfo;
-
-
     float m_health = 100.f;
-    float m_armor = 50.f;
 	float m_visableTime = 0.1f; // Time for which the character is visible
 
     std::unordered_set<b2Fixture*> m_hitFixtures;
