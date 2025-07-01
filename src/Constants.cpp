@@ -13,4 +13,13 @@ namespace Constants {
 		{ LevelID::MediumMap, {"Medium", sf::Color::Yellow} },
 		{ LevelID::HardMap, {"Hard", sf::Color::Red} }
 	};
+
+     std::unordered_map<Constants::WeaponType,TextureID> SelectedWeapons = {
+        {WeaponType::HandGun,TextureID::HANDGUNMOVE },
+        {WeaponType::Shotgun,TextureID::SHOTGUNMOVE },
+        {WeaponType::Rifle,TextureID::RIFLEMOVE }
+        /*{WeaponType::Sniper,TextureID::SNIPERMOVE },*/
+    };
+
+
 }

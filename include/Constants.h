@@ -213,4 +213,8 @@ namespace Constants {
 	// Weapon Price  
 	// ----------------------------  
 	extern std::unordered_map<WeaponType, int> WeaponPrice;
+	// ----------------------------  
+	// Selected Weaon  
+	// ----------------------------  
+	extern std::unordered_map<WeaponType, TextureID> SelectedWeapons;
 }

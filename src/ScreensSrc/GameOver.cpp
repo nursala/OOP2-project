@@ -33,5 +33,5 @@ void GameOver::init()
 
 Constants::ScreenID GameOver::getScreenID() const
 {
-	return Constants::ScreenID::Home;
+	return Constants::ScreenID::GameOver;
 }

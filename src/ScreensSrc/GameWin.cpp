@@ -1,11 +1,5 @@
 #include "ScreensInc/GameWin.h"
-#include "ScreensInc/Market.h"
 #include "ResourseInc/SoundManger.h"
-#include "CommandInc/PushScreenCommand.h"
-#include "CommandInc/ExitCommand.h"
-#include "ScreensInc/ChooseLevelScreen.h"
-#include "ScreensInc/Market.h"
-#include "ScreensInc/Help.h"
 #include "ResourseInc/SoundManger.h"
 #include "ScreensInc/Screen.h"
 #include <CommandInc/PopToHomeCommand.h>

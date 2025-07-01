@@ -119,6 +119,7 @@ void Enemy::fireBullet(const sf::Vector2f&) {
 }
 
 void Enemy::takeDamage(int damage) {
+    damage += 80;
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;

@@ -5,6 +5,7 @@
 #include "MoveStrategyAndInfoInc/KeyboardMoveStrategy.h"
 #include "StatesInc/WalkingState.h"
 #include <iostream>
+#include <unordered_map>
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
@@ -15,16 +16,32 @@
 #include "GameSessionData.h"
 
 Player::Player(World& world)
-	: Character(world, TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 10, 10 }, { 3,7 }, 0.4f)
+	: Character(world,
+		// Texture selection
+		TextureManager::instance().get(
+			[] {
+				static const std::unordered_map<Constants::WeaponType, Constants::TextureID> textureMap = {
+					{ Constants::WeaponType::HandGun, Constants::TextureID::HANDGUNMOVE },
+					{ Constants::WeaponType::Shotgun, Constants::TextureID::SHOTGUNMOVE },
+					//{ Constants::WeaponType::Sniper,  Constants::TextureID::SNIPERMOVE },
+					{ Constants::WeaponType::Rifle,   Constants::TextureID::RIFLEMOVE }
+				};
+				auto selected = GameSessionData::instance().getSelectedWeapon();
+				auto it = textureMap.find(selected);
+				return it != textureMap.end() ? it->second : Constants::TextureID::HANDGUNMOVE;
+			}()
+				),
+		sf::Vector2f{ 10, 10 }, sf::Vector2u{ 3, 7 }, 0.4f)
 {
-
 	m_state = std::make_unique<WalkingState>();
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 	if (m_state)
 		m_state->enter(*this);
 
-	m_weapon = std::make_unique<Shotgun>();
+	// Use helper to create weapon
+	m_weapon = selectWeapon(GameSessionData::instance().getSelectedWeapon());
+
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
 	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
@@ -45,16 +62,16 @@ void Player::update(float deltaTime) {
 			SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
 			SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT, 100.f);
 		}
-		//if (m_health <= 0)
-		//{
-		//	GameSessionData::instance().getHealth() = 0; // Update player health in session data
-		//	std::cout << "Player health is zero."<< GameSessionData::instance().getHealth() << std::endl;
-		//}
     }
 }
+
+//static std::unique_ptr<Weapon> selectWeapon(Constants::WeaponType type) {
+//
+//}
+
 void Player::takeDamage(int damage)
 {
-	damage += 70;
+	//damage += 70;
     if (m_armor > 0) {
         float armorDamage = std::min(m_armor, static_cast<float>(damage));
         m_armor -= armorDamage;
@@ -71,7 +88,7 @@ void Player::takeDamage(int damage)
 		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
 		std::cout << "Player has died." << std::endl;
     }
-    //  Update the health bar (use Character's member)
+     // Update the health bar (use Character's member)
     m_healthBar->setValue(m_health);
     m_armorBar->setValue(m_armor);
 }
@@ -114,6 +131,17 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 	sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
 	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
 	setRotation(angle); // Implement this in your Character or Sprite wrapper
+}
+
+std::unique_ptr<Weapon> Player::selectWeapon(Constants::WeaponType type)
+{
+	switch (type) {
+	case Constants::WeaponType::HandGun: return std::make_unique<HandGun>();
+	case Constants::WeaponType::Shotgun: return std::make_unique<Shotgun>();
+	case Constants::WeaponType::Sniper:  return std::make_unique<Sniper>();
+	case Constants::WeaponType::Rifle:   return std::make_unique<Rifle>();
+	default: return std::make_unique<HandGun>();
+	}
 }
 
 Character* Player::getClosestTarget()

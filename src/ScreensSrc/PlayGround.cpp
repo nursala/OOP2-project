@@ -55,10 +55,14 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 	if (GameSessionData::instance().getEnemies() <= 0)
 	{
 		Controller::getInstance().pushScreen(std::make_unique<GameWin>());
+		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
+		SoundManger::instance().play(Constants::SoundID::GAMEWINSOUND);
 	}
 	if (GameSessionData::instance().getHealth() <= 0)
 	{
 		Controller::getInstance().pushScreen(std::make_unique<GameOver>());
+		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
+		SoundManger::instance().play(Constants::SoundID::GAMEOVERSOUND);
 	}
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
 	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
