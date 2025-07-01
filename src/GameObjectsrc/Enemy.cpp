@@ -8,6 +8,7 @@
 #include "WorldInc/World.h"
 #include <cmath>
 #include "WeaponInc/HandGun.h"
+#include "WeaponInc/Shotgun.h"
 #include <limits>
 
 namespace {
@@ -39,7 +40,7 @@ Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& p
         m_state->enter(*this);
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<HandGun>();
+    m_weapon = std::make_unique<Shotgun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
     m_visable = false;

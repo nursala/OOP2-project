@@ -78,7 +78,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			{
 				return;
 			}
-			character->takeDamage(bullet->getDamage());
+			//character->takeDamage(bullet->getDamage());
 			bullet->setDestroyed(true);
 		}
 		else
@@ -95,7 +95,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			{
 				return;
 			}
-			character->takeDamage(bullet->getDamage());
+			//character->takeDamage(bullet->getDamage());
 			bullet->setDestroyed(true);
 		}
 		else
