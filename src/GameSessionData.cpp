@@ -6,7 +6,7 @@ GameSessionData& GameSessionData::instance() {
 }
 
 GameSessionData::GameSessionData()
-    : m_money(200), selectedWeapon(Constants::WeaponType::HandGun) {
+    : m_money(200),m_health(100),selectedWeapon(Constants::WeaponType::HandGun) {
     ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
@@ -47,4 +47,8 @@ int& GameSessionData::getEnemies()
 
 Constants::LevelID& GameSessionData::getLevelID(){
 	return m_levelID;
+}
+
+int& GameSessionData::getHealth () {
+	return m_health;
 }

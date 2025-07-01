@@ -59,6 +59,7 @@ namespace Constants {
 		Settings,
 		Game,
 		GameOver,
+		GameWin,
 		Market,
 		Help,
 		ChooseLevel,
@@ -85,7 +86,6 @@ namespace Constants {
 		Market,
 		SoundOn,
 		SoundOff,
-		GoToHome,
 		Pause,
 	};
 	// ----------------------------
@@ -130,6 +130,8 @@ namespace Constants {
 		SHOTGUNMOVE,
 		RIFLEMOVE,
 		PAUSESCREEN,
+		GAMEOVER,
+		GAMEWIN,
 	};
 	// ----------------------------
 	// Weapon IDs

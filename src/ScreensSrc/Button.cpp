@@ -92,10 +92,3 @@ void Button::centerText() {
 	m_text.setPosition(shapePos.x + shapeSize.x / 2.0f,
 		shapePos.y + shapeSize.y / 2.0f);
 }
-
-sf::Color Button:: makeBrighter(const sf::Color& color, float factor) {
-	sf::Uint8 r = std::min(255.0f, color.r * factor);
-	sf::Uint8 g = std::min(255.0f, color.g * factor);
-	sf::Uint8 b = std::min(255.0f, color.b * factor);
-	return sf::Color(r, g, b, color.a);
-}

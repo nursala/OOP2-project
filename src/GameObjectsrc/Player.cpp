@@ -12,6 +12,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include "ResourseInc/SoundManger.h"
+#include "GameSessionData.h"
 
 Player::Player(World& world)
 	: Character(world, TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 10, 10 }, { 3,7 }, 0.4f)
@@ -27,7 +28,6 @@ Player::Player(World& world)
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
 	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
-
 }
 
 void Player::update(float deltaTime) {
@@ -40,14 +40,21 @@ void Player::update(float deltaTime) {
             m_visionLight->setRange(m_originalVisionRange);
             m_visionBoostActive = false;
         }
-		if (m_health < 20)
+		if (m_health <= 20)
 		{
 			SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
+			SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT, 100.f);
 		}
+		//if (m_health <= 0)
+		//{
+		//	GameSessionData::instance().getHealth() = 0; // Update player health in session data
+		//	std::cout << "Player health is zero."<< GameSessionData::instance().getHealth() << std::endl;
+		//}
     }
 }
 void Player::takeDamage(int damage)
 {
+	damage += 70;
     if (m_armor > 0) {
         float armorDamage = std::min(m_armor, static_cast<float>(damage));
         m_armor -= armorDamage;
@@ -55,6 +62,7 @@ void Player::takeDamage(int damage)
     }
     if (damage > 0) {
         m_health -= damage;
+		GameSessionData::instance().getHealth() -= damage; // Update player health in session data
         if (m_health < 0.f) m_health = 0.f;
     }
     if (m_health <= 0.f) {
