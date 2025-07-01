@@ -13,11 +13,11 @@
 
 
 Character::Character(World& world, b2Vec2& positionB2)
-    : Entity(world , positionB2)
+	: Entity(world, positionB2)
 {
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
-	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
+	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f, 100);
 	m_visionLight->setScale(1.2f, 1.2f);
 }
 
@@ -30,7 +30,6 @@ void Character::update(float deltaTime) {
 		// why not check if m_state is the same as newState?
 		if (newState && m_state.get() != newState.get()) {
 			m_state = std::move(newState);
-			m_state->enter(*this);
 			if (dynamic_cast<WalkingState*>(m_state.get()))
 			{
 				switch (m_weapon->getType())
@@ -52,12 +51,11 @@ void Character::update(float deltaTime) {
 		}
 		m_state->update(*this, deltaTime);
 	}
-	
 
-    if (m_weapon)
-    {
-        m_weapon->update(getPosition(),this->getBody()->GetAngle(), deltaTime);
-    }
+	if (m_weapon)
+	{
+		m_weapon->update(getPosition(), this->getBody()->GetAngle(), deltaTime);
+	}
 
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation->getUvRect());
@@ -65,33 +63,21 @@ void Character::update(float deltaTime) {
 	sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 30 };
 	m_healthBar->setPosition(healthBarPos);
 	m_healthBar->setValue(m_health);
-    if (m_armorBar != nullptr)
-    {
-        sf::Vector2f armorBarPos = { getPosition().x , getPosition().y + 20 };
-        m_armorBar->setPosition(armorBarPos);
-        m_armorBar->setValue(m_armor);
-    }
+
+
 	if (m_visionLight)
 	{
 		m_visionLight->update(getPosition(), this->getBody()->GetAngle() / 30.f);
 	}
+
 	if (m_weapon->getWeaponLight() || m_visionLight)
 	{
-		auto& CloseEdges = m_world.getCloseEdges();
+		auto& CloseEdges = m_world.getCloseEdges(); ///////////////////////////////////////// fix tow updates
 		if (m_weapon->getWeaponLight())
 			m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
-	//m_animation.update(1, deltaTime);
-
-}
-
-void Character::render(sf::RenderWindow& window) {
-	window.draw(m_sprite);
-	m_healthBar->draw(window);
-	if (m_armorBar)
-		m_armorBar->draw(window);
 }
 
 void Character::render(RenderLayers& renderLayers) {
@@ -99,8 +85,6 @@ void Character::render(RenderLayers& renderLayers) {
 	{
 		renderLayers.drawForeground(m_sprite);
 		m_healthBar->draw(renderLayers);
-		if (m_armorBar)
-			m_armorBar->draw(renderLayers);
 
 		if (m_visionLight)
 		{
@@ -116,13 +100,6 @@ void Character::render(RenderLayers& renderLayers) {
 	}
 }
 
-	
-
-const MoveInfo& Character::getLastMoveInfo()
-{
-	return m_lastMoveInfo;
-}
-
 b2BodyType Character::getBodyType() const
 {
 	return b2_dynamicBody;
@@ -132,7 +109,7 @@ void Character::move(float dt)
 {
 	if (m_moveStrategy)
 	{
-		m_lastMoveInfo = m_moveStrategy->move(*this, dt);
+		m_moveStrategy->move(*this, dt);
 	}
 }
 
@@ -147,7 +124,7 @@ void Character::shoot(float dt) {
 	{
 		if (!m_attackStrategy->attack(*this, dt)) return;
 
-		
+
 		switch (m_weapon->getType())
 		{
 		case Constants::WeaponType::HandGun:
@@ -169,7 +146,6 @@ void Character::shoot(float dt) {
 		default:
 			std::runtime_error("Unknown weapon type!");
 		}
-		
 	}
 }
 
@@ -195,11 +171,8 @@ void Character::setRotation(float angle)
 	}
 }
 
-
-
 void Character::updateTargets()
 {
-	
 	m_hitFixtures.clear();
 	if (!m_visionLight)
 	{
@@ -213,7 +186,7 @@ void Character::updateTargets()
 	float angleStep = (endAngle - startAngle) / static_cast<float>(rayCount);
 
 	sf::Vector2f lightPos = m_visionLight->getPosition();
-	b2Vec2 origin(lightPos.x / 30.f, lightPos.y / 30.f);  // تحويل للمتر
+	b2Vec2 origin(lightPos.x / 30.f, lightPos.y / 30.f);
 
 	for (int i = 0; i <= rayCount; ++i) {
 		float angleDeg = startAngle + i * angleStep;
@@ -232,6 +205,5 @@ void Character::updateTargets()
 			}
 		}
 	}
-	
-}
 
+}

@@ -11,7 +11,16 @@ class BaseResourceManager
 {                                                                           
 public:
     bool load(const IdentifierType& id, const std::string& filename);
+	virtual ~BaseResourceManager() = default;
     const ResourceType* get(const IdentifierType& id) const;
+
+	static const sf::Font& getDefaultFont() {
+		static sf::Font defaultFont;
+		if (!defaultFont.loadFromFile("myFont.otf")) {
+			throw std::runtime_error("Failed to load default font");
+		}
+		return defaultFont;
+	}
 protected:
     std::unordered_map<IdentifierType, std::unique_ptr<ResourceType>> m_resources;
 };

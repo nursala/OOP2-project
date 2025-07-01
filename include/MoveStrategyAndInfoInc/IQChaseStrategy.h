@@ -11,7 +11,7 @@ class IQChaseStrategy : public MoveStrategy {
 public:
     IQChaseStrategy(const Player& player, const LoadMap& map, int iqLevel);
 
-    MoveInfo move(Character& character, float deltaTime) override;
+    void move(Character& character, float deltaTime) override;
     sf::Vector2f getPlayerPostion() const;
 
 private:

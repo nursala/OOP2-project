@@ -19,10 +19,6 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	Entity* entityA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
 	Entity* entityB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
 
-
-	//if (!entityA || !entityB )
-	//	return;
-
 	// === Player Collisions ===
 	if (auto player = dynamic_cast<Player*>(entityA)) {
 

@@ -28,15 +28,6 @@ bool SimpleShootStrategy::attack(Character& self, float) {
     self.getWorld().addBullets(weapon->fire(self.getWorld(), bulletPosB2, direction, self.shared_from_this()));
 
     return true;
-    ////  Play weapon sound
-    //if (dynamic_cast<HandGun*>(weapon))
-    //    SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
-    //else if (dynamic_cast<Shotgun*>(weapon))
-    //    SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
-    //else if (dynamic_cast<Sniper*>(weapon))
-    //    SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
-    //else
-    //    SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
 }
 
 

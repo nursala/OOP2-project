@@ -36,12 +36,12 @@ Constants::GiftType Gift::getType() const { return m_type; }
 
 void Gift::update(float dt)
 {
-	m_pulseTime += dt;  // تراكم داخلي
+	m_pulseTime += dt;  
 
 	m_radialLight.setPosition(getPosition());
 	m_radialLight.setColor(sf::Color::Green);
 
-	float pulse = std::sin(m_pulseTime * 2.f);  // تردد 2 Hz (غيّره حسب السرعة)
+	float pulse = std::sin(m_pulseTime * 2.f);  
 
 	float intensity = 0.3f + 0.2f * pulse;
 	m_radialLight.setIntensity(intensity);

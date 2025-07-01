@@ -30,7 +30,6 @@ private:
 	void createGifts();
     void setMapTexture();
     void createPlayer();
-    void createGift(Constants::GiftType type, b2Vec2 pos);
     void createEnemy();
     void setupMap();
     void updateBullets(float );

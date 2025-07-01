@@ -29,17 +29,12 @@ Player::Player(World& world, b2Vec2& position)
 		0.4f // frame time
 	);
 
-
 	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE));
 	m_sprite.setTextureRect(m_animation->getUvRect());
-
-
 
 	m_state = std::make_unique<WalkingState>();
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-	if (m_state)
-		m_state->enter(*this);
 
 	m_weapon = std::make_unique<Shotgun>();
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
@@ -52,17 +47,21 @@ Player::Player(World& world, b2Vec2& position)
 void Player::update(float deltaTime) {
 	Character::update(deltaTime);
 
-	// Handle vision boost timer
+	sf::Vector2f armorBarPos = { getPosition().x , getPosition().y + 20 };
+	m_armorBar->setPosition(armorBarPos);
+	m_armorBar->setValue(m_armor);
+
 	if (m_visionBoostActive) {
 		m_visionBoostTimer -= deltaTime;
 		if (m_visionBoostTimer <= 0.f && m_visionLight) {
 			m_visionLight->setRange(m_originalVisionRange);
 			m_visionBoostActive = false;
 		}
-		if (m_health < 20)
-		{
-			SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
-		}
+	}
+
+	if (m_health < 20)
+	{
+		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
 	}
 }
 
@@ -81,7 +80,6 @@ void Player::takeDamage(int damage)
 		setDestroyed(true);   // Mark the player as destroyed
 		m_alive = false;      // Optional: track status
 		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
-		std::cout << "Player has died." << std::endl;
 	}
 	//  Update the health bar (use Character's member)
 	m_healthBar->setValue(m_health);
@@ -106,7 +104,6 @@ void Player::addSpeed()
 {
 	m_speed += 0.5f; // Increase speed by 0.5
 	if (m_speed > 16.f) m_speed = 16.f; // Cap speed at 5
-	std::cout << "Player speed increased to: " << m_speed << std::endl;
 }
 
 void Player::increaseVisionTemporarily(float extraRange, float duration)
@@ -126,6 +123,12 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 	sf::Vector2f direction = worldPos - getPosition(); // getPosition() returns player center
 	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
 	setRotation(angle); // Implement this in your Character or Sprite wrapper
+}
+
+void Player::render(RenderLayers& layers)
+{
+	Character::render(layers);
+	m_armorBar->draw(layers);
 }
 
 Character* Player::getClosestTarget()
@@ -170,14 +173,4 @@ Character* Player::getClosestTarget()
 
 	setTarget(closestCharacter->shared_from_this()); // Update target reference
 	return closestCharacter;
-}
-
-void Player::makeVisble(bool visible)
-{
-	/*for (auto* fixture : m_hitFixtures) {
-		b2Body* body = fixture->GetBody();
-		auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
-
-		character->setVisible(visible);
-	}*/
 }

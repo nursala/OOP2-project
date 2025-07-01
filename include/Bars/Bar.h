@@ -9,7 +9,6 @@ public:
     void setMaxValue(float maxValue);
     void setValue(float value);
     void setPosition(const sf::Vector2f& pos);
-    void draw(sf::RenderWindow& window) const;
     void draw(RenderLayers& renderLayers) const;
     float getValue() const { return m_currentValue; }
     float getMaxValue() const { return m_maxValue; }

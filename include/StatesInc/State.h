@@ -7,9 +7,6 @@ class State {
 public:
     virtual ~State() = default;
 
-    // Called when entering the state
-    virtual void enter(Character& character) = 0;
-
     // Called every frame to update logic/animation
     virtual void update(Character& character, float deltaTime) = 0;
 
