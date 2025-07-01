@@ -8,6 +8,7 @@
 #include "WorldInc/World.h"
 #include <cmath>
 #include "WeaponInc/HandGun.h"
+#include "WeaponInc/Shotgun.h"
 #include <limits>
 
 namespace {
@@ -37,7 +38,7 @@ Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& p
     m_state = std::make_unique<WalkingState>();
 
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<HandGun>();
+    m_weapon = std::make_unique<Shotgun>();
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_visable = false;
     init(b2_dynamicBody, 1.5f);
@@ -122,7 +123,7 @@ Character* Enemy::getClosestTarget()
 }
 
 void Enemy::takeDamage(int damage) {
-
+    damage += 80;
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;

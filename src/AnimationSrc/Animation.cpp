@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 Animation::Animation(const sf::Texture* texture, sf::Vector2u imageCount, float switchTime)
-	: m_imageCount(imageCount), m_switchTime(switchTime), m_displayed(0) {
+	: m_imageCount(imageCount), m_switchTime(1.f / static_cast<float>(imageCount.x * imageCount.y)), m_displayed(0) {
 
 	m_totalTime = 0.0f;
 	m_currentImage.x = 0;
@@ -50,7 +50,7 @@ void Animation::update(float deltaTime)
 void Animation::setAll(const sf::Texture* texture,sf::Vector2u imageCount, float switchTime, float deltaTime)
 {
 
-	m_switchTime = switchTime;
+	m_switchTime = 1.f / static_cast<float>(imageCount.x * imageCount.y);
 	m_imageCount = imageCount;
 
 	m_totalTime = 0.0f;

@@ -70,6 +70,7 @@ namespace Constants {
 		Settings,
 		Game,
 		GameOver,
+		GameWin,
 		Market,
 		Help,
 		ChooseLevel,
@@ -96,7 +97,6 @@ namespace Constants {
 		Market,
 		SoundOn,
 		SoundOff,
-		GoToHome,
 		Pause,
 	};
 	// ----------------------------
@@ -141,6 +141,8 @@ namespace Constants {
 		SHOTGUNMOVE,
 		RIFLEMOVE,
 		PAUSESCREEN,
+		GAMEOVER,
+		GAMEWIN,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -224,6 +226,10 @@ namespace Constants {
 	// Weapon Price  
 	// ----------------------------  
 	extern std::unordered_map<WeaponType, int> WeaponPrice;
+	// ----------------------------  
+	// Selected Weaon  
+	// ----------------------------  
+	extern std::unordered_map<WeaponType, TextureID> SelectedWeapons;
 	// ----------------------------
 	// Gifts Textures
 	// ----------------------------

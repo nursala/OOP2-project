@@ -124,7 +124,6 @@ void Character::shoot(float dt) {
 	{
 		if (!m_attackStrategy->attack(*this, dt)) return;
 
-
 		switch (m_weapon->getType())
 		{
 		case Constants::WeaponType::HandGun:

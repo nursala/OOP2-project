@@ -39,8 +39,10 @@ void Button::setTexture(const Constants::TextureID texture) {
 
 void Button::updateHover(const sf::RenderWindow& window) {
 	if (m_shape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(window)))) {
+		auto color = m_shape.getFillColor();
+		color.a = 200; // Set alpha to 200 for hover effect
 		//auto color = m_shape.getFillColor() * sf::Color(200,2500,255,200);
-		m_shape.setFillColor(Constants::HOVERD_COLOR);
+		m_shape.setFillColor(color);
 		//m_shape.setFillColor(color);
 	}
 

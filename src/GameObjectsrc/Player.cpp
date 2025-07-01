@@ -5,6 +5,7 @@
 #include "MoveStrategyAndInfoInc/KeyboardMoveStrategy.h"
 #include "StatesInc/WalkingState.h"
 #include <iostream>
+#include <unordered_map>
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
@@ -12,6 +13,7 @@
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
 #include "ResourseInc/SoundManger.h"
+#include "GameSessionData.h"
 
 namespace {
 	bool registered = [] {
@@ -24,19 +26,22 @@ Player::Player(World& world, b2Vec2& position)
 	: Character(world, position)
 {
 	m_animation = std::make_unique<Animation>(
-		TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE),
+		TextureManager::instance().get(Constants::TextureID::RIFLEMOVE),
 		sf::Vector2u(3, 7), // 4 frames in the animation
-		0.4f // frame time
+		0.35f // frame time
 	);
 
-	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE));
+
+	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::RIFLEMOVE));
 	m_sprite.setTextureRect(m_animation->getUvRect());
 
 	m_state = std::make_unique<WalkingState>();
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 
-	m_weapon = std::make_unique<Shotgun>();
+	// Use helper to create weapon
+	m_weapon = std::make_unique<Rifle>();
+
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;
 	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
@@ -62,6 +67,7 @@ void Player::update(float deltaTime) {
 	if (m_health < 20)
 	{
 		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
+		SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT, 100.f);
 	}
 }
 
@@ -74,6 +80,7 @@ void Player::takeDamage(int damage)
 	}
 	if (damage > 0) {
 		m_health -= damage;
+		GameSessionData::instance().getHealth() -= damage; // Update player health in session data
 		if (m_health < 0.f) m_health = 0.f;
 	}
 	if (m_health <= 0.f) {
@@ -124,7 +131,16 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
 	setRotation(angle); // Implement this in your Character or Sprite wrapper
 }
-
+std::unique_ptr<Weapon> Player::selectWeapon(Constants::WeaponType type)
+{
+	switch (type) {
+	case Constants::WeaponType::HandGun: return std::make_unique<HandGun>();
+	case Constants::WeaponType::Shotgun: return std::make_unique<Shotgun>();
+	case Constants::WeaponType::Sniper:  return std::make_unique<Sniper>();
+	case Constants::WeaponType::Rifle:   return std::make_unique<Rifle>();
+	default: return std::make_unique<HandGun>();
+	}
+}
 void Player::render(RenderLayers& layers)
 {
 	Character::render(layers);

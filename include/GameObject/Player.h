@@ -24,6 +24,8 @@ public:
    void rotateTowardMouse(sf::RenderWindow& ) ;
    bool isAlive() const { return m_alive; }  // or use m_alive if you prefer
    void render(RenderLayers& layers) override;
+   static std::unique_ptr<Weapon> selectWeapon(Constants::WeaponType type);
+
 private:
 	bool m_alive = true; 
 	bool m_visionBoostActive = false;

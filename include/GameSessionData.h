@@ -18,6 +18,8 @@ public:
 
     Constants::LevelID& getLevelID();
 
+    int& getHealth();
+
     bool hasWeapon(Constants::WeaponType weapon) const;
     void addWeapon(Constants::WeaponType weapon);
 private:
@@ -26,6 +28,7 @@ private:
     GameSessionData& operator=(const GameSessionData&) = delete;
 
     int m_money;
+	int m_health;
     std::set<Constants::WeaponType> ownedWeapons;
     Constants::WeaponType selectedWeapon;
     bool shouldUpdateWeapon = false;

@@ -6,6 +6,9 @@
 #include "ResourseInc/SoundManger.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "ScreensInc/PauseScreen.h"
+#include "ScreensInc/GameWin.h"
+#include "ScreensInc/GameOver.h"
+#include "GameSessionData.h"
 
 PlayGround::PlayGround()
 {
@@ -17,7 +20,8 @@ void PlayGround::init()
 	m_generalButtons.clear();
 	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
 	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
-
+	SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
+	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 10.f);
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Pause,
 		"",
@@ -48,7 +52,18 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 
 	sf::Vector2f center = m_world.getPlayer().getPosition();
 	sf::Vector2f viewSize = m_view.getSize();
-
+	if (GameSessionData::instance().getEnemies() <= 0)
+	{
+		Controller::getInstance().pushScreen(std::make_unique<GameWin>());
+		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
+		SoundManger::instance().play(Constants::SoundID::GAMEWINSOUND);
+	}
+	if (GameSessionData::instance().getHealth() <= 0)
+	{
+		Controller::getInstance().pushScreen(std::make_unique<GameOver>());
+		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
+		SoundManger::instance().play(Constants::SoundID::GAMEOVERSOUND);
+	}
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
 	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
 

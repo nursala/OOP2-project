@@ -124,6 +124,8 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	{
 		if ((*enemy)->isDestroyed()) {
 			enemy = m_enemies.erase(enemy);
+			GameSessionData::instance().getEnemies()--;
+			GameSessionData::instance().getMoney() += 50; // Add money for enemy kill
 			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
