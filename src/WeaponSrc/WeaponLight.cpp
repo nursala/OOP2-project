@@ -10,7 +10,7 @@ WeaponLight::WeaponLight(float range, float beamAngle)
     : candle::RadialLight()
 {
     setRange(range);
-    setFade(true);
+    //setFade(true);
     setIntensity(1.0f);
     setBeamAngle(beamAngle);
     setColor(sf::Color(255, 255, 255, 200));

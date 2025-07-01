@@ -15,7 +15,7 @@ namespace Constants {
 	inline constexpr unsigned int WINDOW_WIDTH = 1280;
 	inline constexpr unsigned int WINDOW_HEIGHT = 720;
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
-	inline constexpr unsigned int FRAME_RATE = 60;
+	inline constexpr unsigned int FRAME_RATE = 240;
 	inline constexpr unsigned int MARGIN = 15;
 	inline constexpr unsigned int NUM_OF_ITEMS_IN_STATUS_BAR = 3;
 	inline constexpr unsigned int TILE_IN_STATUS_BAR = WINDOW_WIDTH * 0.05;
@@ -51,6 +51,17 @@ namespace Constants {
 	// ----------------------------
 	inline constexpr float SCALE = 30.f; // pixels per meter
 	inline const b2Vec2 GRAVITY(0.f, 0.f); // top-down game
+
+	//-----------------------------
+	// Entity Types
+	//-----------------------------
+	enum class EntityType
+	{
+		Player,
+		Enemy,
+		Bullet,
+		Gift,
+	};
 	// ----------------------------
 	//Screens
 	// ----------------------------
@@ -207,7 +218,9 @@ namespace Constants {
 		MediumMap,
 		HardMap
 	};
-
+	// ----------------------------
+	// Level Names and Colors
+	// ----------------------------
 	extern std::unordered_map<LevelID, std::pair<std::string, sf::Color>> LevelNames;
 	// ----------------------------  
 	// Weapon Price  
@@ -217,4 +230,9 @@ namespace Constants {
 	// Selected Weaon  
 	// ----------------------------  
 	extern std::unordered_map<WeaponType, TextureID> SelectedWeapons;
+	// ----------------------------
+	// Gifts Textures
+	// ----------------------------
+	extern std::unordered_map<GiftType, TextureID> GiftTextures;
+
 }

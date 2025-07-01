@@ -4,7 +4,7 @@ RenderLayers::RenderLayers()
 	: m_lightingArea(candle::LightingArea::FOG, { 0.f, 0.f }, { 1280.f, 720.f })
 {
 	m_lightingArea.setAreaColor(sf::Color::Black);
-	m_lightingArea.setAreaOpacity(0.85f);
+	m_lightingArea.setAreaOpacity(0.9f);
 	m_background.create(1280, 720);
 	m_foreground.create(1280, 720);
 	m_background.setSmooth(true);

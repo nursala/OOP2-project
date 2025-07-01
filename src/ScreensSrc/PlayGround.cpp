@@ -79,12 +79,14 @@ void PlayGround::render(sf::RenderWindow& window)
 	DebugDraw d(&window);
 	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
 
+	
 	d.SetFlags(flags);
 	m_world.getWorld().SetDebugDraw(&d);
 	m_world.render(window);
-	window.setView(window.getDefaultView());
+	//window.setView(window.getDefaultView());
 	Screen::drawButtons(window);
 	m_statusBar.render(window);
+	//m_world.getWorld().DebugDraw();
 }
 
 Constants::ScreenID PlayGround::getScreenID() const

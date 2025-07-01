@@ -9,12 +9,11 @@ class World;
 
 class Enemy : public Character {
 public:
-    Enemy(World& world, const LoadMap& map, const Player& player);
+    Enemy(World& world, b2Vec2& position ,const LoadMap& map, const Player& player);
 
     virtual ~Enemy() override = default;
 
     virtual Character* getClosestTarget();
-    void fireBullet(const sf::Vector2f& dir);
     void takeDamage(int damage) override;
     void speedDown();
     void setSpeedDownTimer(float seconds); 
@@ -24,8 +23,6 @@ public:
     void setSpy(bool value);
     bool isSpy() const;
     void setSpyTimer(float seconds);
-
-
 private:
     const Player& m_playerRef;
     bool m_isSpy = false;
@@ -34,4 +31,5 @@ private:
     float m_footstepInterval = 1.f;
     float m_speedDownTimer = 0.f; 
     float m_originalSpeed = 5.f;  
+	float m_hideDelayTimer = 0.f; // Time for which the enemy is visible
 };

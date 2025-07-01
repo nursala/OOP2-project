@@ -11,7 +11,7 @@
 class World;
 class Player : public Character {
 public:
-	Player(World&);
+	Player(World& , b2Vec2& position);
 	virtual ~Player() override = default;
      
    void update(float deltaTime);
@@ -25,7 +25,7 @@ public:
    static std::unique_ptr<Weapon> selectWeapon(Constants::WeaponType type);
 
 private:
-	bool m_alive = true; // Track if the player is alive
+	bool m_alive = true; 
 	bool m_visionBoostActive = false;
 	float m_visionBoostTimer = 0.f;
 	float m_originalVisionRange = 0.f;

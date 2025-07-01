@@ -6,9 +6,27 @@
 #include <iostream> 
 #include "Constants.h"
 
-Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
-m_world(world)
+namespace {
+	bool registered = [] {
+		Factory::instance().registerType<Gift, World&, b2Vec2& ,Constants::GiftType&>(
+			Constants::EntityType::Gift
+		);
+		return true;
+		}();
+}
+
+Gift::Gift(World& world, b2Vec2& position, Constants::GiftType& type) : Entity(world, position) , m_type(type)
 {
+	auto textureID = Constants::GiftTextures[type];
+
+	if (TextureManager::instance().get(textureID))
+	{
+		m_sprite.setTexture(*TextureManager::instance().get(textureID));
+		m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(textureID)->getSize().x,
+			TextureManager::instance().get(textureID)->getSize().y));
+	}
+	
+
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
 	m_radialLight.setFade(true);
@@ -32,15 +50,11 @@ void Gift::update(float dt)
 	m_radialLight.setRange(range);
 }
 
-
-
 void Gift::render(RenderLayers& renderLayers) {
 	renderLayers.drawLight(m_radialLight);
 	renderLayers.drawForeground(m_radialLight);
 	renderLayers.drawForeground(m_sprite);
 }
-
-
 
 void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
 {
@@ -51,5 +65,4 @@ void Gift::des()
 {
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
-
 }
