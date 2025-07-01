@@ -18,10 +18,9 @@ Character::Character(World& world, b2Vec2& positionB2)
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
-	init(b2_dynamicBody, 1.5f);
+	init(b2_dynamicBody, 1);
 	m_visionLight->setScale(1.2f, 1.2f);
 }
-
 
 void Character::update(float deltaTime) {
 	this->updateTargets();

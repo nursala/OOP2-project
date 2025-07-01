@@ -10,8 +10,17 @@
 #include "WeaponInc/HandGun.h"
 #include <limits>
 
+namespace {
+    bool registered = [] {
+        Factory::instance().registerType<Enemy, b2Vec2& ,  World&, const LoadMap&, const Player&>(
+            Constants::EntityType::Enemy
+        );
+        return true;
+        }();
+}
+
 Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& player)
-    : Character(world , position),
+    : Character(world, position),
     m_playerRef(player)
 {
     m_animation = std::make_unique<Animation>(

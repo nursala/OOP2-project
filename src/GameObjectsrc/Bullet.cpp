@@ -4,22 +4,34 @@
 #include "ResourseInc/TextureManager.h"
 #include <cmath>
 #include <iostream>
+#include "Factory.h"
 
-Bullet::Bullet(World& world, b2Vec2& position, const sf::Vector2f& direction, std::shared_ptr<Character>owner, float damage, float range)
-    : Entity(world, position),
+namespace {
+    bool registered = [] {
+        Factory::instance().registerType<Bullet,
+            World&,
+            b2Vec2&,
+            sf::Vector2f&,
+            std::shared_ptr<Character>&,
+            float&,
+            float&>(Constants::EntityType::Bullet);
+        return true;
+        }();
+}
+
+Bullet::Bullet(World& world, b2Vec2& positionB2, sf::Vector2f& direction, std::shared_ptr<Character>& owner, float& damage, float& range)
+    : Entity(world, positionB2),
     m_direction(direction), m_owner(owner)
 {
 	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::BULLET));
     m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().x,
         TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().y));
 
-    m_visable = true;
     m_speed = 15;
     m_damage = damage;
-	m_range = range + 10.f;
+    m_range = range + 10.f;
     init(b2_kinematicBody, 0.3f);
 }
-
 
 void Bullet::customizeBodyDef(b2BodyDef& bodyDef)
 {

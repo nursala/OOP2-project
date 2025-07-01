@@ -7,7 +7,7 @@ class Character;  // Forward declaration to avoid circular dependency
 
 class Bullet : public Entity {
 public:
-    Bullet(World& world, b2Vec2& position, const sf::Vector2f& direction, std::shared_ptr<Character> owner, float damage, float range);
+    Bullet(World& world, b2Vec2& position, sf::Vector2f& direction, std::shared_ptr<Character>& owner, float& damage, float& range);
     virtual ~Bullet() override = default;
     void customizeBodyDef(b2BodyDef& bodyDef) override;
     void update(float deltaTime) override;
@@ -21,8 +21,7 @@ private:
     void customizeFixtureDef(b2FixtureDef& fixtureDef) override;
     sf::Vector2f m_direction;
     float m_speed;
-    float m_lifetime = 0.f;
-    const float MAX_LIFETIME = 0.5f;
+
     bool m_destroy = false;
     float m_damage;
     float m_range;

@@ -5,11 +5,7 @@
 
 Entity::Entity(World& world, b2Vec2& positionB2) : m_world(world), m_position(positionB2)
 {
-	//if (texture)
-	//{
-	//	m_sprite.setTexture(*texture);
-	//	m_sprite.setTextureRect(m_animation.getUvRect());
-	//}
+
 
 	m_initialPosition = m_position;
 	m_sprite.setPosition(getPosition());
@@ -30,7 +26,7 @@ void Entity::init(b2BodyType type, float radius)
 	bodyDef.position.Set(m_position.x / SCALE, m_position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
 
-	customizeBodyDef(bodyDef); 
+	customizeBodyDef(bodyDef);
 
 	m_body = m_world.getWorld().CreateBody(&bodyDef);
 
@@ -48,10 +44,8 @@ void Entity::init(b2BodyType type, float radius)
 	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
-	this->adjustSpriteToFixtureSize(); // Adjust sprite size based on fixture size
+	this->adjustSpriteToFixtureSize();
 }
-
-
 
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)

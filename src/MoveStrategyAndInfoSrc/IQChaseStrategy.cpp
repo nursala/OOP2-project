@@ -99,12 +99,11 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     sf::Vector2f distanceToTargetVec = targetPos - enemyPos;
     float distanceSq = distanceToTargetVec.x * distanceToTargetVec.x + distanceToTargetVec.y * distanceToTargetVec.y;
 
-    
-
     if (auto* body = character.getBody()) {
         float speed = character.getSpeed();
         body->SetLinearVelocity(b2Vec2(dir.x * speed, dir.y * speed));
     }
+
     sf::Vector2f direction = targetPos - m_lastPosition; // getPosition() returns player center
     float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
     character.setRotation(angle); // Implement this in your Character or Sprite wrapper

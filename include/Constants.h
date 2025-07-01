@@ -51,6 +51,17 @@ namespace Constants {
 	// ----------------------------
 	inline constexpr float SCALE = 30.f; // pixels per meter
 	inline const b2Vec2 GRAVITY(0.f, 0.f); // top-down game
+
+	//-----------------------------
+	// Entity Types
+	//-----------------------------
+	enum class EntityType
+	{
+		Player,
+		Enemy,
+		Bullet,
+		Gift,
+	};
 	// ----------------------------
 	//Screens
 	// ----------------------------
@@ -205,10 +216,17 @@ namespace Constants {
 		MediumMap,
 		HardMap
 	};
-
+	// ----------------------------
+	// Level Names and Colors
+	// ----------------------------
 	extern std::unordered_map<LevelID, std::pair<std::string, sf::Color>> LevelNames;
 	// ----------------------------  
 	// Weapon Price  
 	// ----------------------------  
 	extern std::unordered_map<WeaponType, int> WeaponPrice;
+	// ----------------------------
+	// Gifts Textures
+	// ----------------------------
+	extern std::unordered_map<GiftType, TextureID> GiftTextures;
+
 }

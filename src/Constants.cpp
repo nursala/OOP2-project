@@ -13,4 +13,13 @@ namespace Constants {
 		{ LevelID::MediumMap, {"Medium", sf::Color::Yellow} },
 		{ LevelID::HardMap, {"Hard", sf::Color::Red} }
 	};
+
+	std::unordered_map<GiftType, TextureID> GiftTextures = {
+		{ GiftType::ARMOR, TextureID::ARMOR },
+		{ GiftType::HEALTH, TextureID::HEALTH },
+		{ GiftType::ENEMYSPEEDDOWN, TextureID::ENEMYSPEEDDOWN },
+		{ GiftType::SPEEDUP, TextureID::SPEEDUP },
+		{ GiftType::SPY, TextureID::SPY },
+		{ GiftType::VISIONUP, TextureID::VISIONUP }
+	};
 }

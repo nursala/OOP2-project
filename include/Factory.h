@@ -3,53 +3,55 @@
 #include <unordered_map>
 #include <functional>
 #include <memory>
+#include <tuple>
+#include <type_traits>
 #include <stdexcept>
-#include "GameObject/Entity.h"
-#include "ResourseInc/TextureManager.h"
-#include <iostream>
+#include "Constants.h"        
+#include "GameObject/Entity.h" 
+#include "iostream"
 
 class Factory {
 public:
-    using CreatorFunc = std::function<std::unique_ptr<Entity>()>;
+    using CreatorFunc = std::function<std::unique_ptr<Entity>(void*)>;
 
     static Factory& instance();
 
     template <typename T, typename... Args>
-    void registerType(Constants::TextureID id, Args&&... args);
+    void registerType(Constants::EntityType id);
 
-    template<typename T>
-    std::unique_ptr<T> createAs(Constants::TextureID id);
+    template <typename T, typename... Args>
+    std::unique_ptr<T> createAs(Constants::EntityType id, Args&&... args);
 
 private:
     Factory() = default;
-    Factory(const Factory&) = delete;
-    Factory& operator=(const Factory&) = delete;
+	Factory(const Factory&) = delete;
+	Factory& operator=(const Factory&) = delete;
 
-    std::unordered_map<Constants::TextureID, CreatorFunc> m_creators;
+    std::unordered_map<Constants::EntityType, CreatorFunc> m_creators;
 };
 
 template <typename T, typename... Args>
-void Factory::registerType(Constants::TextureID id, Args&&... args) {
-    static_assert(std::is_base_of<Entity, T>::value, "T must inherit from Entity");
-    std::cout << typeid(T).name() << " register with ID: " << static_cast<int>(id) << std::endl;
+void Factory::registerType(Constants::EntityType id) {
+    using TupleType = std::tuple<Args...>;  // نحتفظ بالمراجع كما هي
 
-    auto argsTuple = std::make_tuple(std::forward<Args>(args)...);
-
-    m_creators[id] = [argsTuple = std::move(argsTuple)]() -> std::unique_ptr<Entity> {
+    m_creators[id] = [](void* args) -> std::unique_ptr<Entity> {
+        auto* tuple = static_cast<TupleType*>(args);
         return std::apply([](auto&&... unpackedArgs) {
             return std::make_unique<T>(std::forward<decltype(unpackedArgs)>(unpackedArgs)...);
-            }, argsTuple);
+            }, *tuple);
         };
 }
 
-template<typename T>
-std::unique_ptr<T> Factory::createAs(Constants::TextureID id) {
-    static_assert(std::is_base_of<Entity, T>::value, "T must inherit from Entity");
+template <typename T, typename... Args>
+std::unique_ptr<T> Factory::createAs(Constants::EntityType id, Args&&... args) 
+{
+    using TupleType = std::tuple<Args&&...>;
 
     auto it = m_creators.find(id);
-    if (it != m_creators.end())
-		std::cout << typeid(T).name() << " created with ID: " << static_cast<int>(id) << std::endl;
-        return std::unique_ptr<T>(static_cast<T*>(it->second().release()));
+    if (it == m_creators.end())
+        throw std::runtime_error("Type not registered in Factory");
 
-    throw std::runtime_error("Unknown Constants::TextureID in createAs");
+    TupleType tuple(std::forward<Args>(args)...);
+    std::unique_ptr<Entity> base = it->second(static_cast<void*>(&tuple));
+    return std::unique_ptr<T>(static_cast<T*>(base.release()));
 }

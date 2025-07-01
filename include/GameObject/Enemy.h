@@ -23,8 +23,6 @@ public:
     void setSpy(bool value);
     bool isSpy() const;
     void setSpyTimer(float seconds);
-
-
 private:
     const Player& m_playerRef;
     bool m_isSpy = false;

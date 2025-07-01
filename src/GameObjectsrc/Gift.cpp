@@ -6,7 +6,16 @@
 #include <iostream> 
 #include "Constants.h"
 
-Gift::Gift(World& world , b2Vec2& position  , Constants::TextureID type) : Entity(world , position)
+namespace {
+	bool registered = [] {
+		Factory::instance().registerType<Gift, World&, sf::Texture*, Constants::GiftType&, sf::Vector2f&>(
+			Constants::EntityType::Gift
+		);
+		return true;
+		}();
+}
+
+Gift::Gift(World& world, b2Vec2& position, Constants::GiftType& type) : Entity(world, position) , m_type(type)
 {
 	if (TextureManager::instance().get(type))
 	{
@@ -38,15 +47,11 @@ void Gift::update(float dt)
 	m_radialLight.setRange(range);
 }
 
-
-
 void Gift::render(RenderLayers& renderLayers) {
 	renderLayers.drawLight(m_radialLight);
 	renderLayers.drawForeground(m_radialLight);
 	renderLayers.drawForeground(m_sprite);
 }
-
-
 
 void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
 {
@@ -57,5 +62,4 @@ void Gift::des()
 {
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
-
 }

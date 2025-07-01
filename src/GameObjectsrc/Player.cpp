@@ -13,6 +13,13 @@
 #include "WorldInc/World.h"
 #include "ResourseInc/SoundManger.h"
 
+namespace {
+	bool registered = [] {
+		Factory::instance().registerType<Player, World&, sf::Vector2f&>(Constants::EntityType::Player);
+		return true;
+		}();
+}
+
 Player::Player(World& world, b2Vec2& position)
 	: Character(world, position)
 {
@@ -58,6 +65,7 @@ void Player::update(float deltaTime) {
 		}
 	}
 }
+
 void Player::takeDamage(int damage)
 {
 	if (m_armor > 0) {
