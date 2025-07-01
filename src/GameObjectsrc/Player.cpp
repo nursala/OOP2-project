@@ -28,7 +28,7 @@ Player::Player(World& world, b2Vec2& position)
 	m_animation = std::make_unique<Animation>(
 		TextureManager::instance().get(Constants::TextureID::RIFLEMOVE),
 		sf::Vector2u(3, 7), // 4 frames in the animation
-		0.35f // frame time
+		0.4f // frame time
 	);
 
 

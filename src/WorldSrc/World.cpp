@@ -130,7 +130,7 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
-			(*enemy)->update(deltaTime);
+			//(*enemy)->update(deltaTime);
 			++enemy;
 		}
 	}

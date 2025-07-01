@@ -151,11 +151,11 @@ void Character::shoot(float dt) {
 		{
 		case Constants::WeaponType::HandGun:
 			SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 1,9 }, 0.3f, dt);
 			break;
 		case Constants::WeaponType::Shotgun:
 			SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.3f, dt);
 			break;
 		case Constants::WeaponType::Sniper:
 			SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
@@ -163,7 +163,7 @@ void Character::shoot(float dt) {
 			break;
 		case Constants::WeaponType::Rifle:
 			SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 1,9 }, 0.2f, dt);
 			break;
 		default:
 			std::runtime_error("Unknown weapon type!");
