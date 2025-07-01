@@ -12,7 +12,7 @@
 
 namespace {
     bool registered = [] {
-        Factory::instance().registerType<Enemy, b2Vec2& ,  World&, const LoadMap&, const Player&>(
+        Factory::instance().registerType<Enemy, World& , b2Vec2& , const LoadMap&, const Player&>(
             Constants::EntityType::Enemy
         );
         return true;

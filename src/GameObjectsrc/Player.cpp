@@ -15,7 +15,7 @@
 
 namespace {
 	bool registered = [] {
-		Factory::instance().registerType<Player, World&, sf::Vector2f&>(Constants::EntityType::Player);
+		Factory::instance().registerType<Player, World&, b2Vec2&>(Constants::EntityType::Player);
 		return true;
 		}();
 }

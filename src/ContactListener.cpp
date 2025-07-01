@@ -19,8 +19,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	Entity* entityA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
 	Entity* entityB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
 
-	if (!entityA || !entityB || !entityA->isVisible() || !entityB->isVisible())
-		return;
+
+	//if (!entityA || !entityB )
+	//	return;
 
 	// === Player Collisions ===
 	if (auto player = dynamic_cast<Player*>(entityA)) {
@@ -66,15 +67,29 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			}
 			gift->setDestroyed(true);
 		}
-		else if (auto enemy = dynamic_cast<Enemy*>(entityB)) {
-			// Optional: Player touches enemy
-			// player->takeDamage(10);
-		}
 	}
 
 	// === bullet Collisions ===
 	if (auto bullet = dynamic_cast<Bullet*>(entityA)) {
 		if (auto character = dynamic_cast<Character*>(entityB)) {
+
+
+			if (character == bullet->getOwnerShared().get())
+			{
+				return;
+			}
+			character->takeDamage(bullet->getDamage());
+			bullet->setDestroyed(true);
+		}
+		else
+		{
+			bullet->setDestroyed(true);
+		}
+	}
+
+	if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
+		if (auto character = dynamic_cast<Character*>(entityA)) {
+
 
 			if (character == bullet->getOwnerShared().get())
 			{

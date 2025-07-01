@@ -18,7 +18,6 @@ Character::Character(World& world, b2Vec2& positionB2)
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
-	init(b2_dynamicBody, 1);
 	m_visionLight->setScale(1.2f, 1.2f);
 }
 
@@ -50,30 +49,6 @@ void Character::update(float deltaTime) {
 					break;
 				}
 			}
-			//else if (dynamic_cast<AttackingState*>(m_state.get()))
-			//{
-			//	switch (m_weapon->getType())
-			//	{
-			//	case Constants::WeaponType::HandGun:
-			//		SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
-			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, deltaTime);
-			//		break;
-			//	case Constants::WeaponType::Shotgun:
-			//		SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
-			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, deltaTime);
-			//		break;
-			//	case Constants::WeaponType::Sniper:
-			//		SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
-			//		//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERSHOOT), { 3,1 }, 0.2f, deltaTime);
-			//		break;
-			//	case Constants::WeaponType::Rifle:
-			//		SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
-			//		m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, deltaTime);
-			//		break;
-			//	default:
-			//		std::runtime_error("Unknown weapon type!");
-			//	}
-			//}
 		}
 		m_state->update(*this, deltaTime);
 	}

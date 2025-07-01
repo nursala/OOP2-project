@@ -45,7 +45,7 @@ void Bullet::customizeFixtureDef(b2FixtureDef& fixtureDef)
 
 b2BodyType Bullet::getBodyType() const
 {
-    return b2_kinematicBody; 
+    return b2_kinematicBody;
 }
 
 void Bullet::update(float deltaTime)

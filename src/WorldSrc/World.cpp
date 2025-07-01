@@ -49,7 +49,8 @@ void World::setMapTexture() {
 
 void World::createPlayer() {
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
-	m_player = Factory::instance().createAs<Player>(Constants::EntityType::Player, *this, pos);
+	b2Vec2 posB2(pos.x, pos.y);
+	m_player = Factory::instance().createAs<Player>(Constants::EntityType::Player, *this, posB2);
 }
 
 void World::createGifts()
@@ -59,15 +60,15 @@ void World::createGifts()
 
 	for (const auto& pos : giftPositions)
 	{
+		b2Vec2 posB2(pos.x, pos.y);
+
 		Constants::GiftType type = static_cast<Constants::GiftType>(rand() % giftsTypeCount);
-		auto& tex = *TextureManager::instance().get(Constants::GiftTextures.at(type));
 		std::cout << "Creating Gift of type: " << static_cast<int>(type) << std::endl;
 		auto gift = Factory::instance().createAs<Gift>(
 			Constants::EntityType::Gift,
 			*this,
-			tex,
-			type,
-			pos);
+			pos,
+			type);
 		m_gifts.push_back(std::move(gift));
 	}
 }
@@ -82,14 +83,14 @@ void World::createEnemy()
 
 	for (const auto& pos : enemyPositions)
 	{
+		b2Vec2 posB2(pos.x, pos.y);
 		auto enemy = Factory::instance().createAs<Enemy>(
 			Constants::EntityType::Enemy,
 			*this,
+			pos,
 			m_tileMap,
-			*m_player,
-			pos
+			*m_player
 		);
-
 		m_enemies.push_back(std::move(enemy));
 	}
 }

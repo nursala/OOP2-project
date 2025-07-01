@@ -5,10 +5,9 @@
 
 Entity::Entity(World& world, b2Vec2& positionB2) : m_world(world), m_position(positionB2)
 {
-
-
 	m_initialPosition = m_position;
-	m_sprite.setPosition(getPosition());
+	setPosition(positionB2);
+	m_sprite.setPosition(sf::Vector2f(positionB2.x, positionB2.y));
 	m_visable = true;
 }
 
@@ -61,7 +60,6 @@ void Entity::render(RenderLayers& renderLayers) {
 
 void Entity::setPosition(const b2Vec2& position)
 {
-	m_position = {position.x, position.y};
 	if (m_body) {
 		m_body->SetTransform({ position.x / SCALE, position.y / SCALE }, m_body->GetAngle());
 		m_sprite.setPosition(position.x, position.y);
@@ -76,11 +74,12 @@ b2Vec2 Entity::getPositionB2() const {
 }
 
 sf::Vector2f Entity::getPosition() const {
-	/*if (!m_body) return { 0.f, 0.f };
-	b2Vec2 pos = m_body->GetPosition();
-	return { pos.x * SCALE, pos.y * SCALE };*/
 
-	return m_sprite.getPosition();
+	auto pos = getPositionB2();
+	
+	return { pos.x * SCALE, pos.y * SCALE };
+
+	//return m_sprite.getPosition();
 }
 
 void Entity::setVelocity(const b2Vec2& velocity) {

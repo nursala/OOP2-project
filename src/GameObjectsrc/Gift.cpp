@@ -8,7 +8,7 @@
 
 namespace {
 	bool registered = [] {
-		Factory::instance().registerType<Gift, World&, sf::Texture*, Constants::GiftType&, sf::Vector2f&>(
+		Factory::instance().registerType<Gift, World&, b2Vec2& ,Constants::GiftType&>(
 			Constants::EntityType::Gift
 		);
 		return true;
@@ -17,12 +17,15 @@ namespace {
 
 Gift::Gift(World& world, b2Vec2& position, Constants::GiftType& type) : Entity(world, position) , m_type(type)
 {
-	if (TextureManager::instance().get(type))
+	auto textureID = Constants::GiftTextures[type];
+
+	if (TextureManager::instance().get(textureID))
 	{
-		m_sprite.setTexture(*TextureManager::instance().get(type));
-		m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(type)->getSize().x,
-			TextureManager::instance().get(type)->getSize().y));
+		m_sprite.setTexture(*TextureManager::instance().get(textureID));
+		m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(textureID)->getSize().x,
+			TextureManager::instance().get(textureID)->getSize().y));
 	}
+	
 
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
