@@ -48,7 +48,13 @@ void World::setMapTexture() {
 }
 
 void World::createPlayer() {
-    Factory::instance().registerType<Player>(Constants::TextureID::HANDGUNMOVE, std::ref(*this));
+	b2Vec2 posb2(100,100);
+	Factory::instance().registerType<Player>(
+		Constants::TextureID::HANDGUNMOVE,
+		std::ref(*this),
+		std::ref(posb2)
+	);
+
     m_player = Factory::instance().createAs<Player>(Constants::TextureID::HANDGUNMOVE);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
 	m_player->setPosition(b2Vec2(pos.x, pos.y));
@@ -56,11 +62,13 @@ void World::createPlayer() {
 
 void World::createGifts()
 {
+	b2Vec2 posb2 = b2Vec2_zero;
+
     int begin = static_cast<int>(Constants::TextureID::ARMOR);
     for (int i = begin; i < static_cast<int>(Constants::TextureID::SIZE); i++) {
-        Factory::instance().registerType<Gift>(Constants::TextureID(i), std::ref(*this), TextureManager::instance().get(Constants::TextureID(i)));
+        Factory::instance().registerType<Gift>(Constants::TextureID(i), std::ref(*this),  std::ref(posb2) , Constants::TextureID(i));
     }
-	auto giftPositions = m_tileMap.getGiftSpawns();
+	auto& giftPositions = m_tileMap.getGiftSpawns();
 	int giftsTypeCount = static_cast<int>(Constants::GiftType::SIZE);
 	for (const auto& pos : giftPositions)
 	{
@@ -78,17 +86,22 @@ void World::createGift(Constants::GiftType type,b2Vec2 pos)
 
 void World::createEnemy()
 {
-	auto enemyPositions = m_tileMap.getEnemySpawns();
+	b2Vec2 posb2 = b2Vec2_zero;
+
+	auto& enemyPositions = m_tileMap.getEnemySpawns();
 
 	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
+
     Factory::instance().registerType<Enemy>(
         Constants::TextureID::HANDGUNMOVE,
         std::ref(*this),
+		std::ref(posb2),
         std::cref(m_tileMap),
         std::cref(*m_player)
     );
 
 	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
+
     for (int i = 0; i < enemyPositions.size(); ++i)
     {
         //int randomIQ = rand() % 10 + 1;
@@ -231,6 +244,7 @@ void World::buildAllEdges()
 		}
 	}
 }
+
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
 {

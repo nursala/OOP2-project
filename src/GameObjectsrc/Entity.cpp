@@ -82,9 +82,11 @@ b2Vec2 Entity::getPositionB2() const {
 }
 
 sf::Vector2f Entity::getPosition() const {
-	if (!m_body) return { 0.f, 0.f };
+	/*if (!m_body) return { 0.f, 0.f };
 	b2Vec2 pos = m_body->GetPosition();
-	return { pos.x * SCALE, pos.y * SCALE };
+	return { pos.x * SCALE, pos.y * SCALE };*/
+
+	return m_sprite.getPosition();
 }
 
 void Entity::setVelocity(const b2Vec2& velocity) {
@@ -101,9 +103,6 @@ b2Body* Entity::getBody() const {
 	return m_body;
 }
 
-//Animation& Entity::getAnimation() {
-//	return m_animation;
-//}
 
 void Entity::adjustSpriteToFixtureSize()
 {

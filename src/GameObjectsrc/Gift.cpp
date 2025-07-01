@@ -6,9 +6,15 @@
 #include <iostream> 
 #include "Constants.h"
 
-Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
-m_world(world)
+Gift::Gift(World& world , b2Vec2& position  , Constants::TextureID type) : Entity(world , position)
 {
+	if (TextureManager::instance().get(type))
+	{
+		m_sprite.setTexture(*TextureManager::instance().get(type));
+		m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(type)->getSize().x,
+			TextureManager::instance().get(type)->getSize().y));
+	}
+
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
 	m_radialLight.setFade(true);

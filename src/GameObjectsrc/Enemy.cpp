@@ -10,10 +10,20 @@
 #include "WeaponInc/HandGun.h"
 #include <limits>
 
-Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
-    : Character(world, TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 150, 150 }, { 3, 7 }, 0.4f),
+Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& player)
+    : Character(world , position),
     m_playerRef(player)
 {
+    m_animation = std::make_unique<Animation>(
+        TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE),
+        sf::Vector2u(3, 7), // 4 frames in the animation
+        0.4f // frame time
+    );
+
+    m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE));
+    m_sprite.setTextureRect(m_animation->getUvRect());
+
+
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
     m_state = std::make_unique<WalkingState>();
     if (m_state)
@@ -24,8 +34,9 @@ Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
     m_speed = m_originalSpeed = 5.f;  // store original speed
     m_armorBar = nullptr;
     m_visable = false;
-    //m_weapon->setFireCooldown(0.1f);
-    m_weapon->setBulletSpeed(1);
+
+    init(b2_dynamicBody, 1.5f);
+
 }
 
 
@@ -68,7 +79,7 @@ Character* Enemy::getClosestTarget()
         b2Body* body = fixture->GetBody();
         auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
-        if (!character || !character->isVisible()) continue;
+        if (!character) continue;
 
        
 		auto* enemy = dynamic_cast<Enemy*>(character);
@@ -130,7 +141,7 @@ void Enemy::update(float deltaTime) {
 
     if (getTarget() || isSpy()) {
         setVisible(true);         
-        m_hideDelayTimer = 0.5f;    
+        m_hideDelayTimer = 0.2f;    
     }
     else {
         if (m_hideDelayTimer > 0.f) {

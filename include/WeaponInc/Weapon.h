@@ -16,7 +16,7 @@ class Weapon
 {
 public:
 
-    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, const sf::Vector2f& position,
+    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, b2Vec2& position,
         const sf::Vector2f& direction, std::shared_ptr<Character> owner);
 
     

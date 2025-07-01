@@ -11,15 +11,13 @@
 #include <box2d/b2_fixture.h>
 #include <unordered_set>
 
-class World;
 class Weapon;
-class RenderLayers;
 class VisionLight;
 
 class Character : public Entity, public std::enable_shared_from_this<Character>
 {
 public:
-    Character(World& , const sf::Texture* , sf::Vector2f , sf::Vector2u , float );
+    Character(World& world, b2Vec2& positionB2);
    
 	virtual ~Character() override = default; 
 
@@ -37,7 +35,9 @@ public:
     void setShootingRange(float );
 	void setRotation(float );
 	void updateTargets();
-    void updateTargets(sf::RenderWindow& window);
+    Animation& getAnimation() const {
+        return *m_animation;
+    }
 
 	void setTarget(std::shared_ptr<Character> target) {
 		m_target = target;
@@ -55,22 +55,20 @@ public:
 
 protected:
     
-    World& m_world;
-
     float m_speed = 0.f;
 
     std::unique_ptr<State> m_state;
     std::unique_ptr<AttackStrategy> m_attackStrategy;
     std::unique_ptr<MoveStrategy> m_moveStrategy;
     std::unique_ptr<Weapon> m_weapon;
-    //std::unique_ptr<VisionLight> m_visionLight;
     std::unique_ptr <HealthBar> m_healthBar;
     std::unique_ptr<ArmorBar> m_armorBar;
-
+	std::unique_ptr<Animation> m_animation; // Animation for the character
 
 	std::weak_ptr<Character> m_target; // Weak pointer to avoid circular references
 
-    std::shared_ptr<VisionLight> m_visionLight;
+    std::unique_ptr<VisionLight> m_visionLight;
+
     MoveInfo m_lastMoveInfo;
 
 

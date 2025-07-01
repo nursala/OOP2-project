@@ -4,7 +4,7 @@
 
 class Gift : public Entity {  
 public:  
-	Gift(World& world, const sf::Texture* texture);
+	Gift(World& world, b2Vec2& position, Constants::TextureID type);
 	Constants::GiftType getType() const;
 	void setType(Constants::GiftType type) { m_type = type; }
 
@@ -17,7 +17,6 @@ public:
 
 protected:
 	Constants::GiftType m_type;
-	World& m_world;
 	candle::RadialLight m_radialLight;
 	float m_pulseTime = 0.f;
 

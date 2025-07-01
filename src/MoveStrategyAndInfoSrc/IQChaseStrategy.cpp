@@ -99,14 +99,7 @@ MoveInfo IQChaseStrategy::move(Character& character, float deltaTime)
     sf::Vector2f distanceToTargetVec = targetPos - enemyPos;
     float distanceSq = distanceToTargetVec.x * distanceToTargetVec.x + distanceToTargetVec.y * distanceToTargetVec.y;
 
-    if (distanceSq <  100.f)
-    {
-        m_randomDirection = generateRandomDirection(character, deltaTime);
-        m_randomDirTimer = 0.f;
-        m_stuckTimer = 0.f;
-        dir = m_randomDirection;
-
-    }
+    
 
     if (auto* body = character.getBody()) {
         float speed = character.getSpeed();

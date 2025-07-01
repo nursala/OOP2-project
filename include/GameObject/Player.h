@@ -11,7 +11,7 @@
 class World;
 class Player : public Character {
 public:
-	Player(World&);
+	Player(World& , b2Vec2& position);
 	virtual ~Player() override = default;
      
    void update(float deltaTime);

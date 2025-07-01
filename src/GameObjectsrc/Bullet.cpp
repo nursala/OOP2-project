@@ -5,10 +5,14 @@
 #include <cmath>
 #include <iostream>
 
-Bullet::Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, std::shared_ptr<Character>owner, float damage, float range)
-    : Entity(world, TextureManager::instance().get(Constants::TextureID::BULLET), position, { 1, 1 }, 0.1f),
+Bullet::Bullet(World& world, b2Vec2& position, const sf::Vector2f& direction, std::shared_ptr<Character>owner, float damage, float range)
+    : Entity(world, position),
     m_direction(direction), m_owner(owner)
 {
+	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::BULLET));
+    m_sprite.setTextureRect(sf::IntRect(0, 0, TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().x,
+        TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().y));
+
     m_visable = true;
     m_speed = 15;
     m_damage = damage;

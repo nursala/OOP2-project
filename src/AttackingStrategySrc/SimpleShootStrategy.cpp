@@ -23,8 +23,9 @@ bool SimpleShootStrategy::attack(Character& self, float) {
     direction /= length;
     float muzzleOffset = 50.f;
     sf::Vector2f bulletPos = self.getPosition() + direction * muzzleOffset;
+    auto bulletPosB2 = b2Vec2(bulletPos.x, bulletPos.y);
 
-    self.getWorld().addBullets(weapon->fire(self.getWorld(), bulletPos, direction, self.shared_from_this()));
+    self.getWorld().addBullets(weapon->fire(self.getWorld(), bulletPosB2, direction, self.shared_from_this()));
 
     return true;
     ////  Play weapon sound

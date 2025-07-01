@@ -12,7 +12,7 @@ class World;
 class RenderLayers; // Forward declaration
 class Entity {
 public:
-	Entity(World& world, b2Vec2& positionB2);
+	Entity(World& world, b2Vec2& positionB2 );
 	virtual ~Entity();
 
 	virtual void update(float deltaTime) = 0;
@@ -25,7 +25,6 @@ public:
 	void setVelocity(const b2Vec2& velocity);
 	b2Vec2 getVelocity() const;
 	b2Body* getBody() const;
-	//Animation& getAnimation();
 	void adjustSpriteToFixtureSize();
 	World& getWorld();
 	bool isVisible() const { return m_visable; }

@@ -30,9 +30,7 @@ void Animation::update(int row, float deltaTime)
 	{
 		m_totalTime -= m_switchTime;
 		m_displayed++;
-		std::cout << "displayed: " << m_displayed << "totalImages: " << m_totalImages << std::endl;
-		std::cout << "rows: " << m_currentImage.y << std::endl;
-		std::cout << "columns: " << m_currentImage.x << std::endl;
+		
 
 
 		if (m_currentImage.x + 1 >= m_imageCount.x)

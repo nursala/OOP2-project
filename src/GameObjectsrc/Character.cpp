@@ -12,15 +12,14 @@
 #include "ResourseInc/TextureManager.h"
 
 
-Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
-    : Entity(world, texture, position, imageCount, switchTime), m_world(world)
+Character::Character(World& world, b2Vec2& positionB2)
+    : Entity(world , positionB2)
 {
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
 	m_visionLight->setIntensity(0.1f); // Set default intensity for the weapon light
 	m_healthBar = std::make_unique<HealthBar>(50.f, 5.f,100);
 	init(b2_dynamicBody, 1.5f);
 	m_visionLight->setScale(1.2f, 1.2f);
-
 }
 
 
@@ -39,16 +38,16 @@ void Character::update(float deltaTime) {
 				switch (m_weapon->getType())
 				{
 				case Constants::WeaponType::HandGun:
-					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 3,7 }, 0.2f, deltaTime);
+					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 3,7 }, 0.2f, deltaTime);
 					break;
 				case Constants::WeaponType::Shotgun:
-					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 3,7 }, 0.2f, deltaTime);
+					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 3,7 }, 0.2f, deltaTime);
 					break;
 				case Constants::WeaponType::Sniper:
 					//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERMOVE), { 3,7 }, 0.2f, deltaTime);
 					break;
 				case Constants::WeaponType::Rifle:
-					m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLEMOVE), { 3,7 }, 0.2f, deltaTime);
+					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLEMOVE), { 3,7 }, 0.2f, deltaTime);
 					break;
 				}
 			}
@@ -87,7 +86,7 @@ void Character::update(float deltaTime) {
     }
 
 	m_sprite.setPosition(getPosition());
-	m_sprite.setTextureRect(m_animation.getUvRect());
+	m_sprite.setTextureRect(m_animation->getUvRect());
 
 	sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 30 };
 	m_healthBar->setPosition(healthBarPos);
@@ -179,11 +178,11 @@ void Character::shoot(float dt) {
 		{
 		case Constants::WeaponType::HandGun:
 			SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
-			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 3,1 }, 0.2f, dt);
 			break;
 		case Constants::WeaponType::Shotgun:
 			SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
-			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.2f, dt);
 			break;
 		case Constants::WeaponType::Sniper:
 			SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
@@ -191,7 +190,7 @@ void Character::shoot(float dt) {
 			break;
 		case Constants::WeaponType::Rifle:
 			SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
-			m_animation.setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, dt);
+			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 3,1 }, 0.2f, dt);
 			break;
 		default:
 			std::runtime_error("Unknown weapon type!");
@@ -261,59 +260,4 @@ void Character::updateTargets()
 	}
 	
 }
-
-//void Character::updateTargets(sf::RenderWindow& window)
-//{
-
-	//m_hitFixtures.clear();
-	//if (!m_visionLight)
-	//{
-	//	return;
-	//}
-
-	//float startAngle = m_visionLight->getRotation() - m_visionLight->getBeamAngle() / 2.f;
-	//float endAngle = m_visionLight->getRotation() + m_visionLight->getBeamAngle() / 2.f;
-
-	//const int rayCount = 5;
-	//float angleStep = (endAngle - startAngle) / static_cast<float>(rayCount);
-
-	//sf::Vector2f lightPos = m_visionLight->getPosition();
-	//b2Vec2 origin(lightPos.x / 30.f, lightPos.y / 30.f);  // تحويل للمتر
-
-	//for (int i = 0; i <= rayCount; ++i) {
-	//	float angleDeg = startAngle + i * angleStep;
-	//	float angleRad = angleDeg * b2_pi / 180.f;
-	//	b2Vec2 direction(std::cos(angleRad), std::sin(angleRad));
-	//	b2Vec2 endPoint = origin + (m_visionLight->getRange() / 30.f) * direction;
-
-	//	RayCastClosest callback;
-	//	m_world.getWorld().RayCast(&callback, origin, endPoint);
-
-	//	if (callback.hit() && callback.getFixture()) {
-	//		b2Body* body = callback.getFixture()->GetBody();
-	//		if (body->GetType() == b2_dynamicBody && body != m_body) {
-	//			m_hitFixtures.insert(callback.getFixture());
-	//		}
-	//	}
-	//	if (callback.hit()) {
-	//		b2Vec2 hitPoint = callback.getPoint();
-	//		sf::Vertex rayLine[] = {
-	//			sf::Vertex(sf::Vector2f(origin.x * RATIO, origin.y * RATIO), sf::Color::Yellow),
-	//			sf::Vertex(sf::Vector2f(hitPoint.x * RATIO, hitPoint.y * RATIO), sf::Color::Red)
-	//		};
-	//		window.draw(rayLine, 2, sf::Lines);
-	//	}
-	//	else {
-	//		// لم يتم الاصطدام
-	//		sf::Vertex rayLine[] = {
-	//			sf::Vertex(sf::Vector2f(origin.x * RATIO, origin.y * RATIO), sf::Color::Green),
-	//			sf::Vertex(sf::Vector2f(endPoint.x * RATIO, endPoint.y * RATIO), sf::Color::Green)
-	//		};
-	//		window.draw(rayLine, 2, sf::Lines);
-	//	}
-
-	//}
-
-//}
-
 
