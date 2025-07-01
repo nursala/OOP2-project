@@ -6,9 +6,22 @@
 #include <iostream> 
 #include "Constants.h"
 
-Gift::Gift(World& world, const sf::Texture* texture) : Entity(world, texture,  {100, 100}, {1, 1}, 0.4f),
+namespace {
+	bool registered = [] {
+		Factory::instance().registerType<Gift, World&, sf::Texture*, Constants::GiftType&, sf::Vector2f&>(
+			Constants::EntityType::Gift
+		);
+		return true;
+		}();
+}
+
+Gift::Gift(World& world, sf::Texture* texture, Constants::GiftType& type, sf::Vector2f& pos) : 
+	Entity(world, texture, pos, {1, 1}, 0.4f),
 m_world(world)
 {
+	m_type = type;
+	std::cout << "Creating Gift of type: " << static_cast<int>(m_type) << std::endl;
+	m_sprite.setTexture(*texture);
 	init(b2_staticBody, 0.6f);
 	m_radialLight.setRange(50.f);
 	m_radialLight.setFade(true);
@@ -32,15 +45,11 @@ void Gift::update(float dt)
 	m_radialLight.setRange(range);
 }
 
-
-
 void Gift::render(RenderLayers& renderLayers) {
 	renderLayers.drawLight(m_radialLight);
 	renderLayers.drawForeground(m_radialLight);
 	renderLayers.drawForeground(m_sprite);
 }
-
-
 
 void Gift::customizeFixtureDef(b2FixtureDef& fixtureDef)
 {
@@ -51,5 +60,4 @@ void Gift::des()
 {
 	m_visable = false; // Hide the gift after destruction
 	setDestroyed(true); // Mark the gift as destroyed
-
 }

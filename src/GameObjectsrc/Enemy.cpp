@@ -10,8 +10,17 @@
 #include "WeaponInc/HandGun.h"
 #include <limits>
 
-Enemy::Enemy(World& world, const LoadMap& map, const Player& player)
-    : Character(world, TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 150, 150 }, { 3, 7 }, 0.4f),
+namespace {
+    bool registered = [] {
+        Factory::instance().registerType<Enemy, World&, const LoadMap&, const Player&, sf::Vector2f&>(
+            Constants::EntityType::Enemy
+        );
+        return true;
+        }();
+}
+
+Enemy::Enemy(World& world, const LoadMap& map, const Player& player, sf::Vector2f& pos)
+    : Character(world, TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), pos, { 3, 7 }, 0.4f),
     m_playerRef(player)
 {
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map,/* rand() %*/ 10 /*+ 1*/);

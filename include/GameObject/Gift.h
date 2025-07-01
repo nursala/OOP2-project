@@ -4,11 +4,9 @@
 
 class Gift : public Entity {  
 public:  
-	Gift(World& world, const sf::Texture* texture);
+	Gift(World& world, sf::Texture* texture, Constants::GiftType& type, sf::Vector2f& pos);
 	Constants::GiftType getType() const;
-	void setType(Constants::GiftType type) { m_type = type; }
 
-	//virtual void apply(Player& player) = 0; // Applies the effect to the player  
 	void update(float deltaTime) override;
 	void render(RenderLayers& renderLayers);
 	b2BodyType getBodyType() const override { return b2_staticBody; };

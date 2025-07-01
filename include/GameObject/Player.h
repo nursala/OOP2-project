@@ -11,7 +11,7 @@
 class World;
 class Player : public Character {
 public:
-	Player(World&);
+	Player(World&, sf::Vector2f& pos);
 	virtual ~Player() override = default;
      
    void update(float deltaTime);
@@ -24,7 +24,7 @@ public:
    bool isAlive() const { return m_alive; }  // or use m_alive if you prefer
 
 private:
-	bool m_alive = true; // Track if the player is alive
+	bool m_alive = true; 
 	bool m_visionBoostActive = false;
 	float m_visionBoostTimer = 0.f;
 	float m_originalVisionRange = 0.f;

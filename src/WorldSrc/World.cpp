@@ -20,61 +20,56 @@ World::World()
 }
 
 void World::initWorld() {
-    setMapTexture();
-    m_world.SetContactListener(new ContactListener(*this));
-    createPlayer();
-    createEnemy();
-    createGifts();
-    setupMap();
-    buildAllEdges();
+	setMapTexture();
+	m_world.SetContactListener(new ContactListener(*this));
+	createPlayer();
+	createEnemy();
+	createGifts();
+	setupMap();
+	buildAllEdges();
 }
 
 void World::setMapTexture() {
-    
-    switch (LevelManager::instance().getCurrentLevel())
-    {
-    case Constants::LevelID::EasyMap:
+
+	switch (LevelManager::instance().getCurrentLevel())
+	{
+	case Constants::LevelID::EasyMap:
 		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::EASYMAP));
-        break;
-    case Constants::LevelID::MediumMap:
+		break;
+	case Constants::LevelID::MediumMap:
 		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::MEDIUMMAP));
-        break;
-    case Constants::LevelID::HardMap:
+		break;
+	case Constants::LevelID::HardMap:
 		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::HARDMAP));
-        break;
-    default:
-        break;
-    }
+		break;
+	default:
+		break;
+	}
 }
 
 void World::createPlayer() {
-    Factory::instance().registerType<Player>(Constants::TextureID::HANDGUNMOVE, std::ref(*this));
-    m_player = Factory::instance().createAs<Player>(Constants::TextureID::HANDGUNMOVE);
 	sf::Vector2f pos = m_tileMap.getPlayerSpawns();
-	m_player->setPosition(b2Vec2(pos.x, pos.y));
+	m_player = Factory::instance().createAs<Player>(Constants::EntityType::Player, *this, pos);
 }
 
 void World::createGifts()
 {
-    int begin = static_cast<int>(Constants::TextureID::ARMOR);
-    for (int i = begin; i < static_cast<int>(Constants::TextureID::SIZE); i++) {
-        Factory::instance().registerType<Gift>(Constants::TextureID(i), std::ref(*this), TextureManager::instance().get(Constants::TextureID(i)));
-    }
 	auto giftPositions = m_tileMap.getGiftSpawns();
 	int giftsTypeCount = static_cast<int>(Constants::GiftType::SIZE);
+
 	for (const auto& pos : giftPositions)
 	{
-        createGift(static_cast<Constants::GiftType>(rand() % giftsTypeCount), b2Vec2(pos.x, pos.y));
-        //createGift(Constants::GiftType::SPY, b2Vec2(pos.x, pos.y));
+		Constants::GiftType type = static_cast<Constants::GiftType>(rand() % giftsTypeCount);
+		auto& tex = *TextureManager::instance().get(Constants::GiftTextures.at(type));
+		std::cout << "Creating Gift of type: " << static_cast<int>(type) << std::endl;
+		auto gift = Factory::instance().createAs<Gift>(
+			Constants::EntityType::Gift,
+			*this,
+			tex,
+			type,
+			pos);
+		m_gifts.push_back(std::move(gift));
 	}
-}
-
-void World::createGift(Constants::GiftType type,b2Vec2 pos)
-{
-    auto textureId = static_cast<Constants::TextureID>(static_cast<int>(type)+2);
-    m_gifts.push_back(Factory::instance().createAs<Gift>(textureId));
-    m_gifts.back()->setType(type);
-    m_gifts.back()->setPosition(pos);
 }
 
 void World::createEnemy()
@@ -82,22 +77,19 @@ void World::createEnemy()
 	auto enemyPositions = m_tileMap.getEnemySpawns();
 
 	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
-    Factory::instance().registerType<Enemy>(
-        Constants::TextureID::HANDGUNMOVE,
-        std::ref(*this),
-        std::cref(m_tileMap),
-        std::cref(*m_player)
-    );
 
-	//std::cout << "Enemies size: " << enemyPositions.size() << std::endl;
-    for (int i = 0; i < enemyPositions.size(); ++i)
-    {
-        //int randomIQ = rand() % 10 + 1;
+	for (const auto& pos : enemyPositions)
+	{
+		auto enemy = Factory::instance().createAs<Enemy>(
+			Constants::EntityType::Enemy,
+			*this,
+			m_tileMap,
+			*m_player,
+			pos
+		);
 
-        auto enemy = Factory::instance().createAs<Enemy>(Constants::TextureID::HANDGUNMOVE);
-        enemy->setPosition(b2Vec2(enemyPositions[i].x, enemyPositions[i].y));
-        m_enemies.push_back(std::move(enemy));
-    }
+		m_enemies.push_back(std::move(enemy));
+	}
 }
 
 void World::setupMap() {
@@ -106,7 +98,7 @@ void World::setupMap() {
 
 void World::update(sf::RenderWindow& window, float deltaTime) {
 	calcNearlyEdge(window);
-	
+
 
 	// Step physics
 	m_world.Step(deltaTime, 8, 3);
@@ -174,7 +166,7 @@ void World::render(sf::RenderWindow& window) {
 		enemy->render(*m_renderLayers);
 
 	for (auto& gift : m_gifts)
-		 gift->render(*m_renderLayers);
+		gift->render(*m_renderLayers);
 
 	for (auto& bullet : m_bullets)
 		bullet->render(*m_renderLayers);
@@ -195,12 +187,12 @@ void World::addBullets(std::vector<std::unique_ptr<Bullet>> bullets) {
 }
 
 const sf::Vector2f World::getMapTextureSize() const {
-    const sf::Texture* texture = m_mapSprite.getTexture();
-    if (!texture)
-        return sf::Vector2f(0.f, 0.f);
+	const sf::Texture* texture = m_mapSprite.getTexture();
+	if (!texture)
+		return sf::Vector2f(0.f, 0.f);
 
-    sf::Vector2u size = texture->getSize();
-    return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
+	sf::Vector2u size = texture->getSize();
+	return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
 }
 
 const Player& World::getPlayer() const {
@@ -235,8 +227,8 @@ void World::buildAllEdges()
 
 void World::calcNearlyEdge(sf::RenderWindow& window)
 {
-    sf::Vector2f viewCenter = window.getView().getCenter(); 
-    sf::Vector2f viewSize = window.getView().getSize();      
+	sf::Vector2f viewCenter = window.getView().getCenter();
+	sf::Vector2f viewSize = window.getView().getSize();
 
 	sf::Vector2f lightPos = viewCenter;
 	float radius = std::max(viewSize.x, viewSize.y) * 0.6f;

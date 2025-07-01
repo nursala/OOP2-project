@@ -7,7 +7,8 @@ class Character;  // Forward declaration to avoid circular dependency
 
 class Bullet : public Entity {
 public:
-    Bullet(World& world, const sf::Vector2f& position, const sf::Vector2f& direction, std::shared_ptr<Character> owner, float damage, float range);
+    Bullet(World& world, sf::Vector2f& position, sf::Vector2f& direction,
+            std::shared_ptr<Character>& owner, float& damage, float& range);
     virtual ~Bullet() override = default;
     void customizeBodyDef(b2BodyDef& bodyDef) override;
     void update(float deltaTime) override;

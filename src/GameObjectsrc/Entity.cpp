@@ -3,17 +3,19 @@
 
 #include <iostream>
 
-Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
+Entity::Entity(World& world, const sf::Texture* texture, sf::Vector2f& position,
 	sf::Vector2u imageCount, float switchTime)
 	: m_animation(texture, imageCount, switchTime), m_world(world), m_position(position)
 {
 	if (texture)
 	{
+		std::cout << "The entity is: " << typeid(Gift).name() << std::endl;
 		m_sprite.setTexture(*texture);
 		m_sprite.setTextureRect(m_animation.getUvRect());
 		m_sprite.setPosition(position);
 	}
 
+	setPosition({m_position.x, m_position.y});
 	m_initialPosition = m_position;
 	m_visable = true;
 }
@@ -32,7 +34,7 @@ void Entity::init(b2BodyType type, float radius)
 	bodyDef.position.Set(m_position.x / SCALE, m_position.y / SCALE);
 	bodyDef.gravityScale = 0.f;
 
-	customizeBodyDef(bodyDef); 
+	customizeBodyDef(bodyDef);
 
 	m_body = m_world.getWorld().CreateBody(&bodyDef);
 
@@ -50,10 +52,8 @@ void Entity::init(b2BodyType type, float radius)
 	fixture->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 	m_body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
-	this->adjustSpriteToFixtureSize(); // Adjust sprite size based on fixture size
+	this->adjustSpriteToFixtureSize();
 }
-
-
 
 void Entity::render(sf::RenderWindow& window) {
 	if (m_visable)

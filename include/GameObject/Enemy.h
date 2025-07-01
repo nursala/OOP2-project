@@ -9,7 +9,7 @@ class World;
 
 class Enemy : public Character {
 public:
-    Enemy(World& world, const LoadMap& map, const Player& player);
+    Enemy(World& world, const LoadMap& map, const Player& player, sf::Vector2f& pos);
 
     virtual ~Enemy() override = default;
 
@@ -23,8 +23,6 @@ public:
     void setSpy(bool value);
     bool isSpy() const;
     void setSpyTimer(float seconds);
-
-
 private:
     const Player& m_playerRef;
     bool m_isSpy = false;

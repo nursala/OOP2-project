@@ -19,7 +19,7 @@ class VisionLight;
 class Character : public Entity, public std::enable_shared_from_this<Character>
 {
 public:
-    Character(World& , const sf::Texture* , sf::Vector2f , sf::Vector2u , float );
+    Character(World& , const sf::Texture* , sf::Vector2f& , sf::Vector2u , float );
    
 	virtual ~Character() override = default; 
 

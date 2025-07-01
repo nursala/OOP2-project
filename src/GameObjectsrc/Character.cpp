@@ -11,7 +11,7 @@
 #include "StatesInc/AttackingState.h"
 #include "ResourseInc/TextureManager.h"
 
-Character::Character(World& world, const sf::Texture* texture, sf::Vector2f position, sf::Vector2u imageCount, float switchTime)
+Character::Character(World& world, const sf::Texture* texture, sf::Vector2f& position, sf::Vector2u imageCount, float switchTime)
     : Entity(world, texture, position, imageCount, switchTime), m_world(world)
 {
 	m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle

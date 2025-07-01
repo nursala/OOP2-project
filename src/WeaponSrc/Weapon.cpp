@@ -5,7 +5,7 @@
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
 #include "ResourseInc/SoundManger.h"
-
+#include "Factory.h"
 #include <iostream>
 
 Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
@@ -15,14 +15,26 @@ Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, fl
 	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
 }
 
-std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const sf::Vector2f& position, const sf::Vector2f& direction, std::shared_ptr<Character> owner)
+std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world, const sf::Vector2f& position,
+					const sf::Vector2f& direction, std::shared_ptr<Character> owner)
 {
-	std::vector<std::unique_ptr<Bullet>> bullets ;
+	std::vector<std::unique_ptr<Bullet>> bullets;
 	if (m_fireTimer > 0.f)
 		return bullets;
 
 	m_fireTimer = m_fireCooldown;
-	bullets.push_back(std::make_unique<Bullet>(world, position, direction, owner, m_damage, m_weaponLight->getRange()));
+
+	auto bullet = Factory::instance().createAs<Bullet>(
+		Constants::EntityType::Bullet,
+		world,
+		position,
+		direction,
+		owner,
+		m_damage,
+		m_weaponLight->getRange()
+	);
+
+	bullets.push_back(std::move(bullet));
 	return bullets;
 }
 

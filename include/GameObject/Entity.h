@@ -11,7 +11,7 @@ class World;
 class RenderLayers; // Forward declaration
 class Entity {
 public:
-	Entity(World& world, const sf::Texture* texture, sf::Vector2f position,
+	Entity(World& world, const sf::Texture* texture, sf::Vector2f& position,
 		sf::Vector2u imageCount, float switchTime);
 	virtual ~Entity();
 

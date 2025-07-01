@@ -13,8 +13,15 @@
 #include "WorldInc/World.h"
 #include "ResourseInc/SoundManger.h"
 
-Player::Player(World& world)
-	: Character(world, TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 10, 10 }, { 3,7 }, 0.4f)
+namespace {
+	bool registered = [] {
+		Factory::instance().registerType<Player, World&, sf::Vector2f&>(Constants::EntityType::Player);
+		return true;
+		}();
+}
+
+Player::Player(World& world, sf::Vector2f& pos)
+	: Character(world, TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), pos, { 3,7 }, 0.4f)
 {
 
 	m_state = std::make_unique<WalkingState>();
