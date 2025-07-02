@@ -42,9 +42,9 @@ Player::Player(World& world, b2Vec2& position)
 
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 
-	m_speed = 10.f;
+	m_speed = 9.f;
 
-	init(b2_dynamicBody, 1.5f);
+	init(b2_dynamicBody, 1.f);
 }
 
 void Player::update(float deltaTime) {
