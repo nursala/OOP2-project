@@ -26,13 +26,13 @@ Player::Player(World& world, b2Vec2& position)
 	: Character(world, position)
 {
 	m_animation = std::make_unique<Animation>(
-		TextureManager::instance().get(Constants::TextureID::RIFLEMOVE),
+		TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE),
 		sf::Vector2u(3, 7), // 4 frames in the animation
 		0.4f // frame time
 	);
 
 
-	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::RIFLEMOVE));
+	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE));
 	m_sprite.setTextureRect(m_animation->getUvRect());
 
 	m_state = std::make_unique<WalkingState>();
@@ -40,7 +40,7 @@ Player::Player(World& world, b2Vec2& position)
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 
 	// Use helper to create weapon
-	m_weapon = std::make_unique<Rifle>();
+	m_weapon = std::make_unique<HandGun>();
 
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
 	m_speed = 10.f;

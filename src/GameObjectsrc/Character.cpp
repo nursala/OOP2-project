@@ -78,6 +78,7 @@ void Character::update(float deltaTime) {
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
+	m_animation->update(deltaTime);
 }
 
 void Character::render(RenderLayers& renderLayers) {
