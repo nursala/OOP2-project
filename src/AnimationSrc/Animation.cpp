@@ -47,7 +47,7 @@ void Animation::update(float deltaTime)
 	m_uvRect.top = m_currentImage.y * m_uvRect.height;
 }
 
-void Animation::setAll(const sf::Texture* texture,sf::Vector2u imageCount, float switchTime, float deltaTime)
+void Animation::setAll(const sf::Texture* texture,sf::Vector2u imageCount, float switchTime)
 {
 
 	m_switchTime = 2.f / static_cast<float>(imageCount.x * imageCount.y);

@@ -6,7 +6,9 @@
 #include <optional>
 #include <memory>
 #include <string>
+#include <functional>
 
+class Weapon;
 namespace Constants {
 
 	// ----------------------------
@@ -151,7 +153,8 @@ namespace Constants {
 		HandGun,
 		Shotgun,
 		Sniper,
-		Rifle
+		Rifle,
+		Size 
 	};
 
 	// ----------------------------
@@ -218,6 +221,25 @@ namespace Constants {
 		MediumMap,
 		HardMap
 	};
+	//------------------------------
+	// Animation Info Structure
+	//------------------------------
+	struct AnimationInfo {
+		TextureID textureID;
+		sf::Vector2u frameSize;
+		float speed;
+	};
+
+	// ----------------------------
+	// Weapon Data Structure
+	// ----------------------------
+	struct WeaponData {
+		std::function<std::unique_ptr<Weapon>()> weaponFactory;
+		AnimationInfo moveAnim;
+		AnimationInfo shootAnim;
+		SoundID shootSound;
+	};
+
 	// ----------------------------
 	// Level Names and Colors
 	// ----------------------------
@@ -226,13 +248,13 @@ namespace Constants {
 	// Weapon Price  
 	// ----------------------------  
 	extern std::unordered_map<WeaponType, int> WeaponPrice;
-	// ----------------------------  
-	// Selected Weaon  
-	// ----------------------------  
-	extern std::unordered_map<WeaponType, TextureID> SelectedWeapons;
 	// ----------------------------
 	// Gifts Textures
 	// ----------------------------
 	extern std::unordered_map<GiftType, TextureID> GiftTextures;
+	// ----------------------------
+	// Weapon Data Map
+	// ----------------------------
+	extern std::unordered_map<WeaponType, WeaponData> WeaponDataMap;
 
 }

@@ -9,7 +9,7 @@ class World;
 
 class Enemy : public Character {
 public:
-    Enemy(World& world, b2Vec2& position ,const LoadMap& map, const Player& player);
+    Enemy(World& world, b2Vec2& position ,const LoadMap& map, const Player& player, Constants::WeaponType& type);
 
     virtual ~Enemy() override = default;
 

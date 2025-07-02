@@ -13,33 +13,34 @@
 
 namespace {
     bool registered = [] {
-        Factory::instance().registerType<Enemy, World& , b2Vec2& , const LoadMap&, const Player&>(
+        Factory::instance().registerType<Enemy, World& , b2Vec2& , const LoadMap&, const Player&, Constants::WeaponType&>(
             Constants::EntityType::Enemy
         );
         return true;
         }();
 }
 
-Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& player)
+Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& player, Constants::WeaponType& type)
     : Character(world, position),
     m_playerRef(player)
 {
+	auto& weaponData = Constants::WeaponDataMap.at(type);
     m_animation = std::make_unique<Animation>(
-        TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE),
-        sf::Vector2u(3, 7), // 4 frames in the animation
-        0.4f // frame time
+		TextureManager::instance().get(weaponData.moveAnim.textureID),
+		weaponData.moveAnim.frameSize,
+		weaponData.moveAnim.speed
     );
+    m_weapon = weaponData.weaponFactory();
 
-    m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE));
+    m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
     m_sprite.setTextureRect(m_animation->getUvRect());
 
 
     m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
     m_state = std::make_unique<WalkingState>();
-
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
-    m_weapon = std::make_unique<Shotgun>();
-    m_speed = m_originalSpeed = 5.f;  // store original speed
+
+    m_speed = m_originalSpeed = 5.f;
     m_visable = false;
     init(b2_dynamicBody, 1.5f);
 }

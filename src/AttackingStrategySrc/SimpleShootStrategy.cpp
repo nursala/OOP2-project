@@ -4,6 +4,7 @@
 #include "GameObject/Entity.h"
 #include "WorldInc/World.h"
 #include <iostream>
+#include "ResourseInc/TextureManager.h"
 
 bool SimpleShootStrategy::attack(Character& self, float) {
     auto* weapon = self.getWeapon();
