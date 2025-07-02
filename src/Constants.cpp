@@ -33,7 +33,7 @@ namespace Constants {
             WeaponType::HandGun,
             {
                 [] { return std::make_unique<HandGun>(); },
-                AnimationInfo(TextureID::HANDGUNMOVE, {3, 7}, 0.1f),
+                AnimationInfo(TextureID::HANDGUNMOVE, {7, 3}, 0.1f),
                 AnimationInfo(TextureID::HANDGUNSHOOT, {1, 9}, 0.1f),
 				SoundID::PISTOLSOUND
             }

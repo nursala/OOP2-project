@@ -40,7 +40,7 @@ Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& p
     m_state = std::make_unique<WalkingState>();
     m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 
-    m_speed = m_originalSpeed = 5.f;
+    m_speed = m_originalSpeed = 7.f;
     m_visable = false;
     init(b2_dynamicBody, 1.5f);
 }
@@ -175,7 +175,7 @@ void Enemy::update(float deltaTime) {
 }
 
 void Enemy::speedDown() {
-    m_speed -= 0.5f;
+    m_speed -= 0.2f;
     if (m_speed < 1.f) m_speed = 1.f;
 }
 
@@ -200,6 +200,10 @@ void Enemy::setSpyTimer(float seconds) {
 
 void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
     
+    if (isSpy())
+    {
+        return;
+    }
     float footstepDistanceThreshold = 1050.f;
     float maxInterval = 1.0f;
     float minInterval = 0.25f;
@@ -217,6 +221,7 @@ void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
             SoundManger::instance().play(Constants::SoundID::FOOTSTEP);
             float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
             SoundManger::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
+
         }
         m_footstepTimer = 0.f;
     }

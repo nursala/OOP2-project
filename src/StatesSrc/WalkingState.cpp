@@ -21,14 +21,5 @@ std::unique_ptr<State> WalkingState::handleInput(Character& character)
 
 void WalkingState::update(Character& character, float dt) {
 	character.move(dt);
-
-	auto& weaponData = Constants::WeaponDataMap.at(character.getWeapon()->getType());
-
-	character.getAnimation().setAll(
-		TextureManager::instance().get(weaponData.moveAnim.textureID),
-		weaponData.moveAnim.frameSize,
-		weaponData.moveAnim.speed
-	);
-	character.getSprite().setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
 	character.getAnimation().update(dt);
 }
