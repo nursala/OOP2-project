@@ -32,6 +32,9 @@ public:
 	void stop(Constants::SoundID id);
 	void mute();    
 	void unmute();  
+
+	sf::Time getPlayingOffset(Constants::SoundID id);
+
 private:
     SoundManger();
 	bool m_muted = false;

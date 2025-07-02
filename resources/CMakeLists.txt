@@ -98,3 +98,6 @@ configure_file ("basicGun.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("sniper.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("shotGun.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("rifle.png" ${CMAKE_BINARY_DIR} COPYONLY)
+
+
+configure_file ("Sounds/ElevenLabs_Text_to_Speech_audio.ogg" ${CMAKE_BINARY_DIR} COPYONLY)

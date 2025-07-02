@@ -5,6 +5,7 @@
 #include "ScreensInc/Help.h"
 #include "ScreensInc/ChooseLevelScreen.h"
 #include "Constants.h"
+#include <ScreensInc/SplashScreen.h>
 
 Controller& Controller::getInstance() {
 	static Controller instance;
@@ -50,7 +51,7 @@ void Controller::popToHome()
 
 // Main game loop
 void Controller::run() {
-	pushScreen(std::make_unique<HomeScreen>());
+	pushScreen(std::make_unique<SplashScreen>());
 	while (m_window.isOpen()) {
 		if (m_screens.empty()) {
 			m_window.close();
