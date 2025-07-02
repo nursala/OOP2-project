@@ -12,16 +12,16 @@ public:
     void setShouldUpdateWeapon(bool value);
     bool getShouldUpdateWeapon() const;
 
-    int& getEnemies();
+    void setEnemies(int enemies);
+	void setHealth(int health);
+    void setMoney(int money);
+    int getEnemies() const;
 
-    int& getMoney();
+    int getMoney() const;
 
     Constants::LevelID& getLevelID();
 
-    int& getHealth();
-
-
-    void setHealth(int health) { m_health = health; };
+    int getHealth() const ;
 
     bool hasWeapon(Constants::WeaponType weapon) const;
     void addWeapon(Constants::WeaponType weapon);

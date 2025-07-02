@@ -24,6 +24,7 @@ public:
     const sf::Font& getFont();
     void setPopFlag();
     void setPopFlagToHome();
+    void popScreen();
 private:
     Controller();
     Controller(const Controller&) = delete;
@@ -33,7 +34,6 @@ private:
     void processEvents();
     void update();
     void render();
-    void popScreen();
     void popToHome();
 	bool m_shouldPopToHome = false;
     bool m_shouldPop = false;

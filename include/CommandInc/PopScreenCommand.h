@@ -5,6 +5,6 @@
 class PopScreenCommand : public Command {
 public:
     void execute() override {
-        Controller::getInstance().setPopFlag();
+        Controller::getInstance().popScreen();
     }
 };

@@ -86,7 +86,7 @@ void Player::takeDamage(int damage)
 	}
 	if (damage > 0) {
 		m_health -= damage;
-		GameSessionData::instance().getHealth() -= damage; // Update player health in session data
+		GameSessionData::instance().setHealth(GameSessionData::instance().getHealth() - damage) ; // Update player health in session data
 		if (m_health < 0.f) m_health = 0.f;
 	}
 	if (m_health <= 0.f) {

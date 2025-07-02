@@ -1,5 +1,5 @@
-﻿
-#pragma once
+﻿#pragma once
+
 #include "CommandInc/Command.h"
 #include "GameSessionData.h"
 #include "WeaponInc/Weapon.h"
@@ -18,7 +18,7 @@ public:
 
         if (!session.hasWeapon(m_weapon)) {
             if (session.getMoney() >= price) {
-                session.getMoney() -= price;
+                session.setMoney(session.getMoney() - price);
                 session.addWeapon(m_weapon);
                 m_market.setMessage("Weapon purchased!");
 				SoundManger::instance().play(Constants::SoundID::COINS);

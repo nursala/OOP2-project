@@ -78,7 +78,7 @@ void World::createEnemy()
 
 	auto& enemyPositions = m_tileMap.getEnemySpawns();
 
-	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
+	GameSessionData::instance().setEnemies(static_cast<int>(enemyPositions.size()));
 
 	int weaponsCount = static_cast<int>(Constants::WeaponType::Size);
 
@@ -128,8 +128,8 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 	{
 		if ((*enemy)->isDestroyed()) {
 			enemy = m_enemies.erase(enemy);
-			GameSessionData::instance().getEnemies()--;
-			GameSessionData::instance().getMoney() += 50; 
+			GameSessionData::instance().setEnemies(GameSessionData::instance().getEnemies() - 1);
+			GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 50);
 			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {

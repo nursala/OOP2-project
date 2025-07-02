@@ -6,12 +6,14 @@ GameSessionData& GameSessionData::instance() {
 }
 
 GameSessionData::GameSessionData()
-    : m_money(1000),m_health(100),selectedWeapon(Constants::WeaponType::HandGun) {
+    : m_money(100),m_health(100),selectedWeapon(Constants::WeaponType::HandGun) {
     ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
-
-int& GameSessionData::getMoney()
+void GameSessionData::setMoney(int money) {
+	m_money = money;
+}
+int GameSessionData::getMoney()const
 {
     return m_money;
 }
@@ -41,15 +43,25 @@ bool GameSessionData::getShouldUpdateWeapon() const {
     return shouldUpdateWeapon;
 }
 
-int& GameSessionData::getEnemies()
+void GameSessionData::setEnemies(int enemies)
+{
+	m_enemies = enemies;
+}
+
+int GameSessionData::getEnemies() const
 {
     return m_enemies;
 }
+
 
 Constants::LevelID& GameSessionData::getLevelID(){
 	return m_levelID;
 }
 
-int& GameSessionData::getHealth () {
+void GameSessionData::setHealth(int health) {
+	m_health = health;
+}
+
+int GameSessionData::getHealth () const{
 	return m_health;
 }

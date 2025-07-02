@@ -8,6 +8,8 @@ public:
 	LoadGame();
 	virtual ~LoadGame() = default;
 	void init() override;
+	void update(sf::RenderWindow& window, float dt) override;
 	Constants::ScreenID getScreenID() const override;
 private:
+	float m_timer;
 };
