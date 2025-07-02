@@ -47,6 +47,7 @@ public:
 
     virtual Character* getClosestTarget() = 0;
 
+	sf::Sprite& getSprite() { return m_sprite; }
     Weapon* getWeapon();
 	float getSpeed() const { return m_speed; }
     virtual void rotateTowardMouse(sf::RenderWindow&) {};

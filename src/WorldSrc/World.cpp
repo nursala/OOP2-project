@@ -80,15 +80,19 @@ void World::createEnemy()
 
 	GameSessionData::instance().getEnemies() = static_cast<int>(enemyPositions.size());
 
+	int weaponsCount = static_cast<int>(Constants::WeaponType::Size);
+
 	for (const auto& pos : enemyPositions)
 	{
+		Constants::WeaponType weaponType = static_cast<Constants::WeaponType>(rand() % weaponsCount);
 		b2Vec2 posB2(pos.x, pos.y);
 		auto enemy = Factory::instance().createAs<Enemy>(
 			Constants::EntityType::Enemy,
 			*this,
 			pos,
 			m_tileMap,
-			*m_player
+			*m_player,
+			weaponType
 		);
 		m_enemies.push_back(std::move(enemy));
 	}
@@ -125,16 +129,15 @@ void World::update(sf::RenderWindow& window, float deltaTime) {
 		if ((*enemy)->isDestroyed()) {
 			enemy = m_enemies.erase(enemy);
 			GameSessionData::instance().getEnemies()--;
-			GameSessionData::instance().getMoney() += 50; // Add money for enemy kill
+			GameSessionData::instance().getMoney() += 50; 
 			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
-			//(*enemy)->update(deltaTime);
+			(*enemy)->update(deltaTime);
 			++enemy;
 		}
 	}
 
-	// Update bullets
 
 
 	// Update gifts

@@ -8,7 +8,8 @@
 #include "Factory.h"
 #include <iostream>
 
-Weapon::Weapon(Constants::WeaponType type, float shootingRange, float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
+Weapon::Weapon(Constants::WeaponType type, float shootingRange, 
+			float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
 {
 	m_weaponLight = std::make_unique<WeaponLight>(shootingRange, angle); // Correct type for m_weaponLight
 	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light

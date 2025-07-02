@@ -5,7 +5,7 @@ class Animation {
 public:
     Animation(const sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
     void update(float deltaTime);
-    void setAll(const sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float deltaTime);
+    void setAll(const sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
     const sf::IntRect& getUvRect() const;
 private:
     sf::Vector2u m_imageCount;    

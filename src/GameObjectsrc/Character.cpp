@@ -21,33 +21,16 @@ Character::Character(World& world, b2Vec2& positionB2)
 	m_visionLight->setScale(1.2f, 1.2f);
 }
 
-void Character::update(float deltaTime) {
+void Character::update(float deltaTime) 
+{
 	this->updateTargets();
 	getClosestTarget();
 
 	if (m_state) {
 		auto newState = m_state->handleInput(*this);
-		// why not check if m_state is the same as newState?
+
 		if (newState && m_state.get() != newState.get()) {
 			m_state = std::move(newState);
-			if (dynamic_cast<WalkingState*>(m_state.get()))
-			{
-				switch (m_weapon->getType())
-				{
-				case Constants::WeaponType::HandGun:
-					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNMOVE), { 3,7 }, 0.2f, deltaTime);
-					break;
-				case Constants::WeaponType::Shotgun:
-					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNMOVE), { 3,7 }, 0.2f, deltaTime);
-					break;
-				case Constants::WeaponType::Sniper:
-					//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERMOVE), { 3,7 }, 0.2f, deltaTime);
-					break;
-				case Constants::WeaponType::Rifle:
-					m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLEMOVE), { 3,7 }, 0.2f, deltaTime);
-					break;
-				}
-			}
 		}
 		m_state->update(*this, deltaTime);
 	}
@@ -72,7 +55,7 @@ void Character::update(float deltaTime) {
 
 	if (m_weapon->getWeaponLight() || m_visionLight)
 	{
-		auto& CloseEdges = m_world.getCloseEdges(); ///////////////////////////////////////// fix tow updates
+		auto& CloseEdges = m_world.getCloseEdges();
 		if (m_weapon->getWeaponLight())
 			m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
 		if (m_visionLight)
@@ -123,28 +106,7 @@ void Character::shoot(float dt) {
 	if (m_attackStrategy && m_weapon->getFireTimer() <= 0.f)
 	{
 		if (!m_attackStrategy->attack(*this, dt)) return;
-
-		switch (m_weapon->getType())
-		{
-		case Constants::WeaponType::HandGun:
-			SoundManger::instance().play(Constants::SoundID::PISTOLSOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::HANDGUNSHOOT), { 1,9 }, 0.3f, dt);
-			break;
-		case Constants::WeaponType::Shotgun:
-			SoundManger::instance().play(Constants::SoundID::SHOTGUNSOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::SHOTGUNSHOOT), { 1,9 }, 0.3f, dt);
-			break;
-		case Constants::WeaponType::Sniper:
-			SoundManger::instance().play(Constants::SoundID::SNIPERSOUND);
-			//m_animation.setAll(TextureManager::instance().get(Constants::TextureID::SNIPERSHOOT), { 3,1 }, 0.2f, dt);
-			break;
-		case Constants::WeaponType::Rifle:
-			SoundManger::instance().play(Constants::SoundID::RIFLESOUND);
-			m_animation->setAll(TextureManager::instance().get(Constants::TextureID::RIFLESHOOT), { 1,9 }, 0.2f, dt);
-			break;
-		default:
-			std::runtime_error("Unknown weapon type!");
-		}
+		SoundManger::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
 	}
 }
 

@@ -25,31 +25,36 @@ namespace {
 Player::Player(World& world, b2Vec2& position)
 	: Character(world, position)
 {
-	m_animation = std::make_unique<Animation>(
-		TextureManager::instance().get(Constants::TextureID::RIFLEMOVE),
-		sf::Vector2u(3, 7), // 4 frames in the animation
-		0.4f // frame time
-	);
+	auto& weaponData = Constants::WeaponDataMap.at(GameSessionData::instance().getSelectedWeapon());
 
+	m_animation = std::make_unique<Animation>(TextureManager::instance().get(weaponData.moveAnim.textureID), 
+											weaponData.moveAnim.frameSize, weaponData.moveAnim.speed);
 
-	m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::RIFLEMOVE));
+	m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
 	m_sprite.setTextureRect(m_animation->getUvRect());
+
+	m_weapon = weaponData.weaponFactory();
+	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 
 	m_state = std::make_unique<WalkingState>();
 	m_moveStrategy = std::make_unique<KeyboardMoveStrategy>();
 	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 
-	// Use helper to create weapon
-	m_weapon = std::make_unique<Rifle>();
-
 	m_armorBar = std::make_unique<ArmorBar>(50.f, 5.f, 50);
+
 	m_speed = 10.f;
-	m_weapon->getWeaponLight()->setColor(sf::Color::Green);
 
 	init(b2_dynamicBody, 1.5f);
 }
 
 void Player::update(float deltaTime) {
+	if(GameSessionData::instance().getShouldUpdateWeapon())
+	{
+		m_weapon = std::move(Constants::WeaponDataMap.at(GameSessionData::instance().getSelectedWeapon()).weaponFactory());
+		m_weapon->getWeaponLight()->setColor(sf::Color::Green);
+		GameSessionData::instance().setShouldUpdateWeapon(false);
+	}
+
 	Character::update(deltaTime);
 
 	sf::Vector2f armorBarPos = { getPosition().x , getPosition().y + 20 };
@@ -131,16 +136,7 @@ void Player::rotateTowardMouse(sf::RenderWindow& window)
 	float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
 	setRotation(angle); // Implement this in your Character or Sprite wrapper
 }
-std::unique_ptr<Weapon> Player::selectWeapon(Constants::WeaponType type)
-{
-	switch (type) {
-	case Constants::WeaponType::HandGun: return std::make_unique<HandGun>();
-	case Constants::WeaponType::Shotgun: return std::make_unique<Shotgun>();
-	case Constants::WeaponType::Sniper:  return std::make_unique<Sniper>();
-	case Constants::WeaponType::Rifle:   return std::make_unique<Rifle>();
-	default: return std::make_unique<HandGun>();
-	}
-}
+
 void Player::render(RenderLayers& layers)
 {
 	Character::render(layers);
