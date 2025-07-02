@@ -10,6 +10,7 @@ GameSessionData::GameSessionData()
     ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
+
 int& GameSessionData::getMoney()
 {
     return m_money;

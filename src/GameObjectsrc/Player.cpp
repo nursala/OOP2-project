@@ -48,6 +48,7 @@ Player::Player(World& world, b2Vec2& position)
 }
 
 void Player::update(float deltaTime) {
+
 	if(GameSessionData::instance().getShouldUpdateWeapon())
 	{
 		m_weapon = std::move(Constants::WeaponDataMap.at(GameSessionData::instance().getSelectedWeapon()).weaponFactory());

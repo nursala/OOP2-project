@@ -200,23 +200,23 @@ void Enemy::setSpyTimer(float seconds) {
 
 void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
     
-    float footstepDistanceThreshold = 900.f;
+    float footstepDistanceThreshold = 1050.f;
     float maxInterval = 1.0f;
     float minInterval = 0.25f;
     float maxVolume = 100.f;
-    float minVolume = 50.f;
+    float minVolume = 40.f;
 
     float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
     m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;
 
-    float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
-    SoundManger::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
 
     m_footstepTimer += deltaTime;
     if (m_footstepTimer >= m_footstepInterval) {
         if (distanceToPlayer <= footstepDistanceThreshold &&
             !SoundManger::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
             SoundManger::instance().play(Constants::SoundID::FOOTSTEP);
+            float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
+            SoundManger::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
         }
         m_footstepTimer = 0.f;
     }

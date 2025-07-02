@@ -13,15 +13,17 @@
 PlayGround::PlayGround()
 {
 	m_view.setSize(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
+	GameSessionData::instance().setHealth(100); // Reset health at the start of the game
 }
 
 void PlayGround::init()
 {
 	m_generalButtons.clear();
 	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().setVolume(Constants::SoundID::MENUMUSIC, 40.f);
 	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
 	SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
-	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 10.f);
+	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 15.f);
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Pause,
 		"",

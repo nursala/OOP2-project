@@ -20,6 +20,9 @@ public:
 
     int& getHealth();
 
+
+    void setHealth(int health) { m_health = health; };
+
     bool hasWeapon(Constants::WeaponType weapon) const;
     void addWeapon(Constants::WeaponType weapon);
 private:

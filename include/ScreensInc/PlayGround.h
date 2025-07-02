@@ -22,8 +22,4 @@ private:
     sf::View m_view;
     World m_world;
     Statusbar m_statusBar;
-
-    sf::Sprite m_winSprite;            // To hold the GAMEWIN texture
-    bool m_showWinScreen = false;      // To track when to show it
-    bool m_winSoundPlayed = false;     // To ensure sound plays once
 };
