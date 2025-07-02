@@ -95,3 +95,11 @@ void Button::centerText() {
 		shapePos.y + shapeSize.y / 2.0f);
 }
 
+
+void Button::execute()
+{
+	if (m_command) {
+		m_command->execute();
+		SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
+	}
+}

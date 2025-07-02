@@ -10,3 +10,12 @@ public:
         Controller::getInstance().pushScreen(std::make_unique<ScreenType>());
     }
 };
+
+template<typename ScreenType>
+class PopPushScreenCommand : public Command {
+public:
+    void execute() override {
+        Controller::getInstance().setPopFlag();
+        Controller::getInstance().pushScreen(std::make_unique<ScreenType>());
+    }
+};

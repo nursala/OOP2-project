@@ -77,6 +77,7 @@ namespace Constants {
 		Help,
 		ChooseLevel,
 		Pause,
+		SplashScreen
 	};
 	// ----------------------------
 	//Button IDs

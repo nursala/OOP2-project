@@ -19,6 +19,7 @@ public:
     void handleEvent(const sf::Event& event, const sf::RenderWindow& window);
     void setText(const std::string& text);
     void centerText();
+    void execute();
 private:
     sf::RectangleShape m_shape;
 
