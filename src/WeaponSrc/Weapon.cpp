@@ -48,12 +48,6 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	}
 }
 
-void Weapon::draw(sf::RenderWindow&)
-{
-	// You may restore this if you want to visualize weapon light
-	// if (m_weaponLight)
-	//     window.draw(*m_weaponLight);
-}
 void Weapon::draw(RenderLayers& renderLayers)
 {
 	if (m_weaponLight)
@@ -62,13 +56,6 @@ void Weapon::draw(RenderLayers& renderLayers)
 		renderLayers.drawForeground(*m_weaponLight);
 	}
 }
-
-//void Weapon::setLight(std::shared_ptr<WeaponLight>& weaponLight)
-//{
-//	m_weaponLight = weaponLight;
-//	m_weaponLight->setRange(m_shootingRange);
-//}
-
 
 float Weapon::getShootingRange() const
 {

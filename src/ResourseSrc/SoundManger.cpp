@@ -56,6 +56,9 @@ void SoundManger::mute()
 	}
 }
 
+void SoundManger::loop(Constants::SoundID id, bool loop) {
+	m_sounds.at(id).setLoop(loop);
+}
 void SoundManger::pause(Constants::SoundID id) {
 	m_sounds.at(id).pause();
 }

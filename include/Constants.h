@@ -77,7 +77,8 @@ namespace Constants {
 		Help,
 		ChooseLevel,
 		Pause,
-		SplashScreen
+		SplashScreen,
+		LoadGame
 	};
 	// ----------------------------
 	//Button IDs
@@ -146,6 +147,7 @@ namespace Constants {
 		PAUSESCREEN,
 		GAMEOVER,
 		GAMEWIN,
+		LOADGAME,
 	};
 	// ----------------------------
 	// Weapon IDs
@@ -200,6 +202,7 @@ namespace Constants {
 		PLAYERDEATH,
 		COINS,
 		FOOTSTEP,
+		SENARIO,
 	};
 	// ----------------------------
 	// Gift Types

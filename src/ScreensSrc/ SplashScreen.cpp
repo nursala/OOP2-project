@@ -4,6 +4,7 @@
 #include "ScreensInc/HomeScreen.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "Controller.h"
+#include "ResourseInc/SoundManger.h"
 
 
 
@@ -12,17 +13,7 @@ SplashScreen::SplashScreen() {
     //setBackGroundTexture(Constants::TextureID::GAMEOVER);
     setSize();
     m_backGround.setFillColor(sf::Color::Black);
-
-    if (!m_soundBuffer.loadFromFile("ElevenLabs_Text_to_Speech_audio.ogg")) {
-        std::cerr << "Failed to load sound\n";
-    }
-    m_sound.setBuffer(m_soundBuffer);
-    m_sound.play();
-}
-
-SplashScreen::~SplashScreen()
-{
-    m_sound.stop();
+	SoundManger::instance().play(Constants::SoundID::SENARIO);
 }
 
 void SplashScreen::init()
@@ -92,7 +83,6 @@ void SplashScreen::render(sf::RenderWindow& window) {
             y += 40.f;
         }
     }
-
     if (currentTime >= m_script.back().timeInSeconds + 3.f) {
         auto it = m_buttons.begin();
         if (it != m_buttons.end()) {

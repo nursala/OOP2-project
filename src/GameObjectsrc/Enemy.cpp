@@ -42,7 +42,7 @@ Enemy::Enemy(World& world, b2Vec2& position, const LoadMap& map, const Player& p
 
     m_speed = m_originalSpeed = 7.f;
     m_visable = false;
-    init(b2_dynamicBody, 1.5f);
+    init(b2_dynamicBody, 1.3f);
 }
 
 Character* Enemy::getClosestTarget()
@@ -176,7 +176,7 @@ void Enemy::update(float deltaTime) {
 
 void Enemy::speedDown() {
     m_speed -= 0.2f;
-    if (m_speed < 1.f) m_speed = 1.f;
+    if (m_speed < 4.f) m_speed = 4.f;
 }
 
 void Enemy::setSpeedDownTimer(float seconds) {
@@ -207,8 +207,8 @@ void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
     float footstepDistanceThreshold = 1050.f;
     float maxInterval = 1.0f;
     float minInterval = 0.25f;
-    float maxVolume = 100.f;
-    float minVolume = 40.f;
+    float maxVolume = 110.f;
+    float minVolume = 60.f;
 
     float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
     m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;

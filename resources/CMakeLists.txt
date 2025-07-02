@@ -14,6 +14,7 @@ configure_file ("chooseMap.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("pauseScreen.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("game_over.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("game_win.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Load_Game.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #fonts
 configure_file ("myFont.otf" ${CMAKE_BINARY_DIR} COPYONLY)
@@ -31,7 +32,6 @@ configure_file ("shotgun_shoot.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #gifts
 configure_file ("Health.png" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("ammo.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("DamageDownGift.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("EnemySpeedDownGift.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("SpeedUpGift.png" ${CMAKE_BINARY_DIR} COPYONLY)
@@ -79,6 +79,8 @@ configure_file ("Sounds/background_game_play.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/coins-handling.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/gameover.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Sounds/gamewin.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Sounds/senario.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
+
 
 
 #light
@@ -97,5 +99,3 @@ configure_file ("sniper.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("shotGun.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("rifle.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
-
-configure_file ("Sounds/ElevenLabs_Text_to_Speech_audio.ogg" ${CMAKE_BINARY_DIR} COPYONLY)

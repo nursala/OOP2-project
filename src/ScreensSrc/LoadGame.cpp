@@ -11,14 +11,16 @@
 LoadGame::LoadGame()
 {
 	m_timer = 5.f;
-	setBackGroundTexture(Constants::TextureID::GAMEWIN);
+	setBackGroundTexture(Constants::TextureID::LOADGAME);
 	setSize();
 }
 
 void LoadGame::init()
 {
 	m_generalButtons.clear();
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().play(Constants::SoundID::MATCHMAKINGMUSIC);
+	SoundManger::instance().setVolume(Constants::SoundID::MATCHMAKINGMUSIC,40.f);
 }
 
 void LoadGame::update(sf::RenderWindow& window, float dt)
@@ -28,14 +30,13 @@ void LoadGame::update(sf::RenderWindow& window, float dt)
 	if (m_timer <= 0.f)
 	{
 		auto command = PushScreenCommand<PlayGround>();
-		auto popcommand = PopScreenCommand();
-		popcommand.execute();
+		//auto popcommand = PopScreenCommand();
+		//popcommand.execute();
 		command.execute();
-
 	}
 }
 
 Constants::ScreenID LoadGame::getScreenID() const
 {
-	return Constants::ScreenID::GameWin;
+	return Constants::ScreenID::LoadGame;
 }

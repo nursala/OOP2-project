@@ -16,8 +16,9 @@ const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 	, {Constants::SoundID::HEALTHUPGRADE, "hp_sound.ogg"}			    , {Constants::SoundID::SPEEDUPGRADE, "speedup.ogg"}
 	, {Constants::SoundID::SPEEDDOWN, "speeddown.ogg"}                  , {Constants::SoundID::SPY, "spy.ogg"}
 	, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                 , {Constants::SoundID::ENEMYDEATH, "charcter_death.ogg"}
-	, {Constants::SoundID::PLAYERDEATH, "charcter_death.ogg"}               , {Constants::SoundID::GAMEWINSOUND, "gamewin.ogg"}
+	, {Constants::SoundID::PLAYERDEATH, "charcter_death.ogg"}           , {Constants::SoundID::GAMEWINSOUND, "gamewin.ogg"}
 	, {Constants::SoundID::COINS, "coins-handling.ogg"}                 , {Constants::SoundID::FOOTSTEP, "footsteps.ogg"}
+	, {Constants::SoundID::SENARIO, "senario.ogg"}                    
 };
 
 class SoundManger : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
@@ -25,7 +26,8 @@ public:
     static SoundManger& instance();
 
     void play(Constants::SoundID id);
-    void pause(Constants::SoundID id);
+	void loop(Constants::SoundID id, bool loop);
+	void pause(Constants::SoundID id);
     void setVolume(Constants::SoundID id, float volume);
     bool isPlaying(Constants::SoundID id) const;
 	sf::Sound& getSound(Constants::SoundID id);

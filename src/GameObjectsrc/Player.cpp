@@ -44,7 +44,7 @@ Player::Player(World& world, b2Vec2& position)
 
 	m_speed = 9.f;
 
-	init(b2_dynamicBody, 1.f);
+	init(b2_dynamicBody, 1.3f);
 }
 
 void Player::update(float deltaTime) {

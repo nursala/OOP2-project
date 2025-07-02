@@ -18,7 +18,7 @@ public:
 
     };
     SplashScreen();
-    ~SplashScreen();
+    ~SplashScreen() = default;
 
     Constants::ScreenID getScreenID() const override;
 
