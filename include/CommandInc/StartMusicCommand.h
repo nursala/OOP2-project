@@ -4,12 +4,15 @@
 #include "ResourseInc/SoundManger.h"
 
 class Button;
-class StopMusicCommand;
 
+// -----------------------------
+// StartMusicCommand - starts playing background music
+// -----------------------------
 class StartMusicCommand : public Command {
 public:
-	StartMusicCommand(Button& button) : m_button(button) {}
-	void execute() override;
+    StartMusicCommand(Button& button);
+    void execute() override;
+
 private:
-	Button& m_button;
+    Button& m_button;
 };

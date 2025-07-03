@@ -6,7 +6,7 @@
 #include <iostream>
 #include "ResourseInc/TextureManager.h"
 
-bool SimpleShootStrategy::attack(Character& self, float) {
+bool SimpleShootStrategy::attack(Character& self) {
     auto* weapon = self.getWeapon();
     if (!weapon)
         return false;

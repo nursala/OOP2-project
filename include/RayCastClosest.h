@@ -7,7 +7,7 @@ public:
     RayCastClosest();
 
     float ReportFixture(b2Fixture* fixture, const b2Vec2& point,
-        const b2Vec2& normal, float fraction) override;
+        const b2Vec2& normal, const float fraction) override;
 
     b2Fixture* getFixture() const;
     b2Body* getBody() const;

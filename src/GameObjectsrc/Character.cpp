@@ -11,7 +11,6 @@
 #include "StatesInc/AttackingState.h"
 #include "ResourseInc/TextureManager.h"
 
-
 Character::Character(World& world, b2Vec2& positionB2)
 	: Entity(world, positionB2)
 {
@@ -31,17 +30,6 @@ void Character::update(float deltaTime)
 
 		if (newState && m_state.get() != newState.get()) {
 			m_state = std::move(newState);
-			if (auto attackingState = dynamic_cast<WalkingState*>(m_state.get()))
-			{
-				auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
-
-				m_animation->setAll(
-					TextureManager::instance().get(weaponData.moveAnim.textureID),
-					weaponData.moveAnim.frameSize,
-					weaponData.moveAnim.speed
-				);
-				m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
-			}
 		}
 		m_state->update(*this, deltaTime);
 	}
@@ -72,7 +60,6 @@ void Character::update(float deltaTime)
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
-	m_animation->update(deltaTime);
 }
 
 void Character::render(RenderLayers& renderLayers) {
@@ -117,17 +104,9 @@ void Character::shoot(float dt) {
 
 	if (m_attackStrategy && m_weapon->getFireTimer() <= 0.f)
 	{
-		if (!m_attackStrategy->attack(*this, dt)) return;
+		if (!m_attackStrategy->attack(*this)) return;
 		SoundManger::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
 		SoundManger::instance().setVolume(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound, 80.f);
-		auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
-
-			m_animation->setAll(
-			TextureManager::instance().get(weaponData.shootAnim.textureID),
-			weaponData.shootAnim.frameSize,
-			weaponData.shootAnim.speed
-		);
-		m_sprite.setTexture(*TextureManager::instance().get(weaponData.shootAnim.textureID));
 	}
 }
 

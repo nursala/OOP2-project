@@ -3,8 +3,9 @@
 #include "WorldInc/World.h"
 #include "Factory.h"
 
-Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 150.f, 7.f, 60.f)
+Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 150.f, 8.f, 60.f)
 {
+	m_fireCooldown = 1.f; // Set the cooldown for firing
 }
 
 std::vector<std::unique_ptr<Bullet>> Shotgun::fire(World& world, b2Vec2& position, const sf::Vector2f& direction, std::shared_ptr<Character> owner)

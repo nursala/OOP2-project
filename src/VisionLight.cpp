@@ -3,18 +3,20 @@
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 
-// البناء
-VisionLight::VisionLight(float range, float beamAngle)
+//------------------------------
+// VisionLight Ctor
+VisionLight::VisionLight(const float range, const float beamAngle)
     : candle::RadialLight() {
     setRange(range);
-	setFade(true); // تفعيل التلاشي
-	setIntensity(1.0f); // تعيين شدة الضوء
+	setFade(true);
+	setIntensity(1.0f); 
     setBeamAngle(beamAngle);
-    setColor(sf::Color(255, 255, 255, 200)); // لون شفاف للرؤية
+    setColor(sf::Color(255, 255, 255, 200)); 
 }
 
-// تحديث موقع وزاوية الضوء
-void VisionLight::update(const sf::Vector2f& position, float rotation) {
+//------------------------------
+// Update the light's position and rotation based on the character's position and rotation
+void VisionLight::update(const sf::Vector2f& position, const float rotation) {
     setPosition(position);
     setRotation(rotation);
 }

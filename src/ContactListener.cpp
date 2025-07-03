@@ -1,4 +1,4 @@
-﻿#include "GameObject/ContactListener.h"
+﻿#include "ContactListener.h"
 #include "GameObject/Entity.h"
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
@@ -12,6 +12,8 @@ ContactListener::ContactListener(World& world)
 	: m_world(world) {
 }
 
+//---------------------------------------
+// Called when two fixtures begin to touch
 void ContactListener::BeginContact(b2Contact* contact) {
 	b2Body* bodyA = contact->GetFixtureA()->GetBody();
 	b2Body* bodyB = contact->GetFixtureB()->GetBody();

@@ -1,16 +1,20 @@
 ﻿#include "RenderLayers.h"
+#include "Constants.h"
 
+//-------------------------------------
+// RenderLayers Constructor
 RenderLayers::RenderLayers()
-	: m_lightingArea(candle::LightingArea::FOG, { 0.f, 0.f }, { 1280.f, 720.f })
+	: m_lightingArea(candle::LightingArea::FOG, { 0.f, 0.f }, { Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT})
 {
 	m_lightingArea.setAreaColor(sf::Color::Black);
 	m_lightingArea.setAreaOpacity(0.9f);
-	m_background.create(1280, 720);
-	m_foreground.create(1280, 720);
+	m_background.create(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
+	m_foreground.create(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
 	m_background.setSmooth(true);
 	m_foreground.setSmooth(true);
 }
 
+//-------------------------------------
 void RenderLayers::setView(const sf::View& view)
 {
 	m_view = view;
@@ -19,8 +23,7 @@ void RenderLayers::setView(const sf::View& view)
 	m_lightingArea.setPosition(view.getCenter() - view.getSize()/2.f);
 }
 
-
-
+//-------------------------------------
 void RenderLayers::clear()
 {
 	m_background.clear(sf::Color::Transparent);
@@ -28,16 +31,19 @@ void RenderLayers::clear()
 	m_foreground.clear(sf::Color::Transparent);
 }
 
-void RenderLayers::drawBackground(const sf::Drawable& drawable , sf::BlendMode mode)
+//-------------------------------------
+void RenderLayers::drawBackground(const sf::Drawable& drawable , const sf::BlendMode mode)
 {
 	m_background.draw(drawable, mode);
 }
 
-void RenderLayers::drawForeground(const sf::Drawable& drawable , sf::BlendMode mode)
+//-------------------------------------
+void RenderLayers::drawForeground(const sf::Drawable& drawable , const sf::BlendMode mode)
 {
 	m_foreground.draw(drawable , mode);
 }
 
+//-------------------------------------
 void RenderLayers::drawLight(candle::LightSource& light)
 {
 	auto& oldScale = light.getScale();
@@ -49,6 +55,7 @@ void RenderLayers::drawLight(candle::LightSource& light)
 	light.setIntensity(oldIntensity); // Restore the original intensity
 }
 
+//-------------------------------------
 void RenderLayers::display()
 {
 	m_background.display();
@@ -56,6 +63,7 @@ void RenderLayers::display()
 	m_lightingArea.display();
 }
 
+//-------------------------------------
 void RenderLayers::renderFinal(sf::RenderTarget& target) const
 {
 	sf::Sprite bg(m_background.getTexture());

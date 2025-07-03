@@ -6,5 +6,5 @@ class AttackStrategy {
 public:
     virtual ~AttackStrategy() = default;
 
-    virtual bool attack(Character& character, float deltaTime) = 0;
+    virtual bool attack(Character& character) = 0;
 };

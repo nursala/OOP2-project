@@ -11,6 +11,8 @@
 #include "GameSessionData.h"
 #include "Constants.h"
 
+//-------------------------------------
+// Statusbar Ctor
 Statusbar::Statusbar() {
 	m_text.resize(Constants::NUM_OF_ITEMS_IN_STATUS_BAR);
 	m_shape.resize(Constants::NUM_OF_ITEMS_IN_STATUS_BAR);
@@ -20,6 +22,8 @@ Statusbar::Statusbar() {
 	initLevel();
 }
 
+//-------------------------------------
+// Init Enemies
 void Statusbar::initEnemies()
 {
 	initializeTexture(m_shape[0], Constants::TextureID::KILLS, Constants::MARGIN);
@@ -34,6 +38,8 @@ void Statusbar::setNumOfEnemeies()
 	setText(text, 0);
 }
 
+//-------------------------------------
+// Initialize Coins
 void Statusbar::initCoins()
 {
 	initializeTexture(m_shape[1], Constants::TextureID::COINS, Constants::MARGIN + Constants::WINDOW_WIDTH * 0.4);
@@ -42,6 +48,8 @@ void Statusbar::initCoins()
 	setText(moneyText, 1);
 }
 
+//-------------------------------------
+// Initialize Level
 void Statusbar::initLevel()
 {
 	initializeTexture(m_shape[2], Constants::TextureID::LEVELS, Constants::MARGIN + Constants::WINDOW_WIDTH * 0.7);
@@ -51,6 +59,7 @@ void Statusbar::initLevel()
 	setText(levelText, 2);
 }
 
+//-------------------------------------
 void Statusbar::update()
 {
 	setNumOfEnemeies();
@@ -58,7 +67,8 @@ void Statusbar::update()
 	setText(moneyText, 1);
 }
 
-void Statusbar::render(sf::RenderWindow& window) 
+//-------------------------------------
+void Statusbar::render(sf::RenderWindow& window) const
 {
 	for (size_t i = 0; i < m_shape.size(); ++i) 
 	{
@@ -67,7 +77,9 @@ void Statusbar::render(sf::RenderWindow& window)
 	}
 }
 
-void Statusbar::initializeText(sf::Text& text, float posX) const
+//-------------------------------------
+// Initialize Text and Texture
+void Statusbar::initializeText(sf::Text& text, const float posX) const
 {
 	text.setFont(Controller::getInstance().getFont());
 	text.setCharacterSize(Constants::CHAR_SIZE);
@@ -75,14 +87,16 @@ void Statusbar::initializeText(sf::Text& text, float posX) const
 	text.setPosition(posX, Constants::MARGIN);
 }
 
-void Statusbar::initializeTexture(sf::RectangleShape& shape, Constants::TextureID texture, float posX)
+void Statusbar::initializeTexture(sf::RectangleShape& shape, const Constants::TextureID texture, const float posX)
 {
 	shape.setTexture(TextureManager::instance().get(texture));
 	shape.setPosition(posX, Constants::MARGIN);
 	shape.setSize(sf::Vector2f(Constants::WINDOW_WIDTH*0.05, Constants::WINDOW_WIDTH * 0.05));
 }
 
-void Statusbar::setText(const std::string text, int index)
+//-------------------------------------
+// Set Text for Statusbar
+void Statusbar::setText(const std::string text, const int index)
 {
 	m_text[index].setString(text);
 }

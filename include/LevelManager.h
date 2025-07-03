@@ -6,15 +6,17 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "Constants.h"
+#include "ResourseInc/BaseResourceManager.h"
 
-class LevelManager {
+class LevelManager : public BaseResourceManager<std::string, Constants::LevelID>
+{
 public:
 
     static LevelManager& instance();
 
-    bool loadLevel(Constants::LevelID levelID);
+    bool loadLevel(const Constants::LevelID levelID);
     const std::string& getCurrentLevelPath() const;
-    Constants::LevelID getCurrentLevel() const;
+    const Constants::LevelID getCurrentLevel() const;
 
 private:
     LevelManager();

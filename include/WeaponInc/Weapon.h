@@ -43,8 +43,7 @@ protected:
     std::unique_ptr<WeaponLight> m_weaponLight;
 
     float m_shootingRange;
-    float m_fireCooldown = 1.f;
+    float m_fireCooldown;
     float m_fireTimer = 0.f;
     float m_damage;
-
 };

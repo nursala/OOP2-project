@@ -7,12 +7,15 @@
 #include "Constants.h"
 #include <ScreensInc/SplashScreen.h>
 
+//----------------------------------
+// Controller Singleton Implementation
 Controller& Controller::getInstance() {
 	static Controller instance;
 	return instance;
 }
 
-// Constructor
+//----------------------------------
+// Constructor initializes the window
 Controller::Controller()
 	: m_window(sf::VideoMode(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT), "Game Window")
 {
@@ -27,12 +30,14 @@ const sf::Font& Controller::getFont() {
 	return m_font;
 }
 
+//----------------------------------
 // Push a new screen onto the stack
 void Controller::pushScreen(std::unique_ptr<Screen> screen) {
 	m_screens.push(std::move(screen));
 	m_screens.top()->init();
 }
 
+//----------------------------------
 // Pop the top screen from the stack
 void Controller::popScreen() {
 	if (!m_screens.empty()) {
@@ -40,6 +45,8 @@ void Controller::popScreen() {
 	}
 }
 
+//----------------------------------
+// Pop screens until we reach the Home screen
 void Controller::popToHome()
 {
 	while (!m_screens.empty()) {
@@ -49,6 +56,7 @@ void Controller::popToHome()
 	}
 }
 
+//----------------------------------
 // Main game loop
 void Controller::run() {
 	pushScreen(std::make_unique<SplashScreen>());
@@ -73,15 +81,20 @@ void Controller::run() {
 	}
 }
 
+//----------------------------------
+// Set flags to pop screens
 void Controller::setPopFlag() {
 	m_shouldPop = true;
 }
 
+//----------------------------------
+// Set flag to pop screens until we reach the Home screen
 void Controller::setPopFlagToHome()
 {
 	m_shouldPopToHome = true;
 }
 
+//----------------------------------
 // Handle input
 void Controller::processEvents() {
 	sf::Event event;
@@ -93,6 +106,7 @@ void Controller::processEvents() {
 	}
 }
 
+//----------------------------------
 // Update current screen
 void Controller::update() {
 	float dt = m_clock.restart().asSeconds();
@@ -100,6 +114,7 @@ void Controller::update() {
 	
 }
 
+//----------------------------------
 // Render current screen
 void Controller::render() {
 	m_window.clear();
