@@ -9,15 +9,15 @@ class Statusbar {
 public:
     Statusbar();
     void update();
-    void render(sf::RenderWindow& window);
+    void render(sf::RenderWindow& window) const;
 private:
     void setNumOfEnemeies();
     void initCoins();
-    void initializeText(sf::Text& text, float posX) const;
+    void initializeText(sf::Text& text, const float posX) const;
     void initEnemies();
 	void initLevel();
-	void initializeTexture(sf::RectangleShape& shape, Constants::TextureID texture, float posX);
-    void setText(const std::string text, int index);
+	void initializeTexture(sf::RectangleShape& shape, const Constants::TextureID texture, const float posX);
+    void setText(const std::string text, const int index);
 
     std::vector <sf::Text> m_text;
     std::vector <sf::RectangleShape> m_shape;

@@ -6,25 +6,24 @@ class GameSessionData {
 public:
     static GameSessionData& instance();
 
+    bool hasWeapon(Constants::WeaponType weapon) const;
+    void addWeapon(Constants::WeaponType weapon);
     void setSelectedWeapon(Constants::WeaponType weapon);
     Constants::WeaponType getSelectedWeapon() const;
-
     void setShouldUpdateWeapon(bool value);
     bool getShouldUpdateWeapon() const;
 
     void setEnemies(int enemies);
-	void setHealth(int health);
-    void setMoney(int money);
     int getEnemies() const;
 
+	void setHealth(int health);
+    int getHealth() const;
+
+    void setMoney(int money);
     int getMoney() const;
 
-    Constants::LevelID& getLevelID();
-
-    int getHealth() const ;
-
-    bool hasWeapon(Constants::WeaponType weapon) const;
-    void addWeapon(Constants::WeaponType weapon);
+    Constants::LevelID getLevelID();
+    void setLevelID(Constants::LevelID levelID);
 private:
     GameSessionData();
     GameSessionData(const GameSessionData&) = delete;

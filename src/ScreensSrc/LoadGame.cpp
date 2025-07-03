@@ -8,6 +8,9 @@
 #include <CommandInc/PopScreenCommand.h>
 #include <memory>
 
+// -----------------------------
+// LoadGame - implementation of loading screen logic
+// -----------------------------
 
 LoadGame::LoadGame()
 {
@@ -21,14 +24,16 @@ LoadGame::LoadGame()
 	m_sprite.setScale(0.5f, 0.5f);
 }
 
+// Initializes the screen (stops menu music and plays loading music)
 void LoadGame::init()
 {
-	m_generalButtons.clear();
-	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
-	SoundManger::instance().play(Constants::SoundID::MATCHMAKINGMUSIC);
-	SoundManger::instance().setVolume(Constants::SoundID::MATCHMAKINGMUSIC,40.f);
+    m_generalButtons.clear();
+    SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+    SoundManger::instance().play(Constants::SoundID::MATCHMAKINGMUSIC);
+    SoundManger::instance().setVolume(Constants::SoundID::MATCHMAKINGMUSIC, 40.f);
 }
 
+// Updates countdown timer and transitions to PlayGround screen
 void LoadGame::update(sf::RenderWindow& window, float dt)
 {
 	Screen::update(window, dt);
@@ -46,6 +51,7 @@ void LoadGame::update(sf::RenderWindow& window, float dt)
 	}
 }
 
+// Returns screen ID for LoadGame
 Constants::ScreenID LoadGame::getScreenID() const
 {
 	return Constants::ScreenID::LoadGame;

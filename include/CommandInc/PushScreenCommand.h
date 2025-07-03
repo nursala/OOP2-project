@@ -3,19 +3,13 @@
 #include "Controller.h"
 #include <memory>
 
+// -----------------------------
+// PushScreenCommand - pushes a new screen of a specific type
+// -----------------------------
 template<typename ScreenType>
 class PushScreenCommand : public Command {
 public:
     void execute() override {
-        Controller::getInstance().pushScreen(std::make_unique<ScreenType>());
-    }
-};
-
-template<typename ScreenType>
-class PopPushScreenCommand : public Command {
-public:
-    void execute() override {
-        Controller::getInstance().setPopFlag();
         Controller::getInstance().pushScreen(std::make_unique<ScreenType>());
     }
 };

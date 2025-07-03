@@ -1,56 +1,62 @@
 ﻿#include "ScreensInc/Screen.h"
 #include "ResourseInc/TextureManager.h"
 
-Screen::Screen()
-{
-	m_backGround.setPosition(0.0f, 0.0f);
+//-------------------------------------
+// Screen constructor
+Screen::Screen() {
+    m_backGround.setPosition(0.0f, 0.0f);
 }
 
-void Screen::setSize(const sf::Vector2f& size)
-{
-	m_backGround.setSize(size);
+//-------------------------------------
+// Set background size
+void Screen::setSize(const sf::Vector2f& size) {
+    m_backGround.setSize(size);
 }
 
-void Screen::setBackGroundTexture(const Constants::TextureID texture)
-{
-	auto tex = TextureManager::instance().get(texture);
-	m_backGround.setTexture(tex);
-	m_backGround.setTextureRect(sf::IntRect(0, 0, tex->getSize().x, tex->getSize().y));
+//-------------------------------------
+// Set background texture
+void Screen::setBackGroundTexture(const Constants::TextureID texture) {
+    auto tex = TextureManager::instance().get(texture);
+    m_backGround.setTexture(tex);
+    m_backGround.setTextureRect(sf::IntRect(0, 0, tex->getSize().x, tex->getSize().y));
 }
 
-void Screen::render(sf::RenderWindow& window)
-{
-	window.draw(m_backGround);
-	window.setView(window.getDefaultView());
-	drawButtons(window);
+//-------------------------------------
+// Render background and all buttons
+void Screen::render(sf::RenderWindow& window) {
+    window.draw(m_backGround);
+    window.setView(window.getDefaultView());
+    drawButtons(window);
 }
 
-void Screen::update(sf::RenderWindow& window, float dt)
-{
-	(void)dt; // Placeholder for delta time, if needed in future
-	for (auto& [id, button] : m_buttons)
-	{
-		button.updateHover(window);
-	}
+//-------------------------------------
+// Update all button hover states
+void Screen::update(sf::RenderWindow& window, float dt) {
+    (void)dt;
+    for (auto& [id, button] : m_buttons) {
+        button.updateHover(window);
+    }
 }
 
-void Screen::processEvent(sf::Event& event, sf::RenderWindow& window)
-{
-	for (auto& [id, button] : m_buttons)
-	{
-		button.handleEvent(event, window);
-	}
+//-------------------------------------
+// Handle input events for all buttons
+void Screen::processEvent(sf::Event& event, sf::RenderWindow& window) {
+    for (auto& [id, button] : m_buttons) {
+        button.handleEvent(event, window);
+    }
 }
 
-void Screen::drawButtons(sf::RenderWindow& window)
+//-------------------------------------
+// Draw each button
+void Screen::drawButtons(sf::RenderWindow& window) 
 {
-	for (auto& [id, button] : m_buttons)
-	{
-		button.render(window);
-	}
+    for (auto& [id, button] : m_buttons) {
+        button.render(window);
+    }
 }
 
-Button& Screen::getButton(Constants::ButtonID id)
-{
-	return m_buttons.at(id);
+//-------------------------------------
+// Return reference to button by ID
+Button& Screen::getButton(const Constants::ButtonID id) {
+    return m_buttons.at(id);
 }

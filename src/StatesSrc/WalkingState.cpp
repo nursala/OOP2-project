@@ -3,19 +3,21 @@
 #include "GameObject/Player.h"
 #include "GameObject/Enemy.h"
 #include "ResourseInc/TextureManager.h"
+#include "iostream"
+
 std::unique_ptr<State> WalkingState::handleInput(Character& character)
 {
-	if (auto player = dynamic_cast<Player*>(&character)) {
-		if (character.getTarget()) {
-			return std::make_unique<AttackingState>();
-		}
-		return nullptr;
-	}
+	if (character.getTarget()) {
+		auto& weaponData = Constants::WeaponDataMap.at(character.getWeapon()->getType());
 
-	else if (auto enemy = dynamic_cast<Enemy*>(&character)) {
+		character.getAnimation().setAll(
+			TextureManager::instance().get(weaponData.shootAnim.textureID),
+			weaponData.shootAnim.frameSize,
+			weaponData.shootAnim.speed
+		);
+		character.getSprite().setTexture(*TextureManager::instance().get(weaponData.shootAnim.textureID));
 		return std::make_unique<AttackingState>();
 	}
-
 	return nullptr;
 }
 

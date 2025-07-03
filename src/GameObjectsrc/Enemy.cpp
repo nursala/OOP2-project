@@ -82,7 +82,6 @@ Character* Enemy::getClosestTarget()
         auto* character = reinterpret_cast<Character*>(body->GetUserData().pointer);
 
         if (!character) continue;
-
        
 		auto* enemy = dynamic_cast<Enemy*>(character);
         if (enemy)
@@ -98,7 +97,6 @@ Character* Enemy::getClosestTarget()
 				continue; // Skip player if they are a spy
         }
        
-   
         sf::Vector2f charPos = character->getPosition();
         float dx = charPos.x - lightPos.x;
         float dy = charPos.y - lightPos.y;
@@ -119,12 +117,12 @@ Character* Enemy::getClosestTarget()
 		setTarget(nullptr); // Clear target if no closest character found
 		return nullptr;
 	}
+
 	setTarget(closestCharacter->shared_from_this()); // Update target reference
     return closestCharacter;
 }
 
 void Enemy::takeDamage(int damage) {
-    damage += 80;
     if (m_health > 0) {
         m_health -= damage;
         if (m_health < 0.f) m_health = 0.f;

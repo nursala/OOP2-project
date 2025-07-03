@@ -1,16 +1,19 @@
 ﻿#include "ScreensInc/PlayGround.h"
 #include <iostream>
-#include "cmath"
+#include <cmath>
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/StopMusicCommand.h"
-#include "ResourseInc/SoundManger.h"
 #include "CommandInc/PushScreenCommand.h"
+#include "ResourseInc/SoundManger.h"
 #include "ScreensInc/PauseScreen.h"
 #include "ScreensInc/GameWin.h"
 #include "ScreensInc/GameOver.h"
 #include "GameSessionData.h"
 #include "Constants.h"
+#include "Controller.h"
 
+//-------------------------------------
+// PlayGround constructor
 PlayGround::PlayGround()
 {
 	m_view.setSize(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
@@ -29,25 +32,29 @@ void PlayGround::init()
 		std::make_unique<PushScreenCommand<PauseScreen>>()
 	);
 
-	setButtons(m_generalButtons);
-	m_buttons.at(Constants::ButtonID::Pause).setTexture(Constants::TextureID::PAUSE);
-	setSpecialButtons();
+    setButtons(m_generalButtons);
+    m_buttons.at(Constants::ButtonID::Pause).setTexture(Constants::TextureID::PAUSE);
+
+    setSpecialButtons();
 }
 
-void PlayGround::setSpecialButtons()
-{
-	auto [stopSound, insertedStop] = m_buttons.emplace(
-		Constants::ButtonID::SoundOff,
-		Button({ Constants::BUTTON_IN_STATUS_BAR, Constants::BUTTON_IN_STATUS_BAR },
-			{ Constants::WINDOW_WIDTH * 0.95, Constants::MARGIN })
-	);
-	stopSound->second.setTexture(Constants::TextureID::SOUNDON);
-	stopSound->second.setCommand(std::make_unique<StopMusicCommand>(stopSound->second));
+//-------------------------------------
+// Set special buttons like Sound Off
+void PlayGround::setSpecialButtons() {
+    auto [stopSound, inserted] = m_buttons.emplace(
+        Constants::ButtonID::SoundOff,
+        Button({ Constants::BUTTON_IN_STATUS_BAR, Constants::BUTTON_IN_STATUS_BAR },
+            { Constants::WINDOW_WIDTH * 0.95f, Constants::MARGIN })
+    );
+
+    stopSound->second.setTexture(Constants::TextureID::SOUNDON);
+    stopSound->second.setCommand(std::make_unique<StopMusicCommand>(stopSound->second));
 }
 
-void PlayGround::update(sf::RenderWindow& window, float dt)
-{
-	Screen::update(window, dt);
+//-------------------------------------
+// Update the game logic and camera
+void PlayGround::update(sf::RenderWindow& window, float dt) {
+    Screen::update(window, dt);
 
 	sf::Vector2f center = m_world.getPlayer().getPosition();
 	sf::Vector2f viewSize = m_view.getSize();
@@ -78,22 +85,23 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 	m_view.setCenter(center);
 	window.setView(m_view);
 
-	m_statusBar.update();
-	m_world.update(window, dt);
+    m_statusBar.update();
+    m_world.update(window, dt);
 }
 
-void PlayGround::render(sf::RenderWindow& window)
-{
-	DebugDraw d(&window);
-	uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
+//-------------------------------------
+// Render world and HUD
+void PlayGround::render(sf::RenderWindow& window) {
+    DebugDraw debugDraw(&window);
+    const uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
+    debugDraw.SetFlags(flags);
 
-	
-	d.SetFlags(flags);
-	m_world.getWorld().SetDebugDraw(&d);
-	m_world.render(window);
-	window.setView(window.getDefaultView());
-	Screen::drawButtons(window);
-	m_statusBar.render(window);
+    m_world.getWorld().SetDebugDraw(&debugDraw);
+    m_world.render(window);
+
+    window.setView(window.getDefaultView());
+    Screen::drawButtons(window);
+    m_statusBar.render(window);
 }
 
 Constants::ScreenID PlayGround::getScreenID() const

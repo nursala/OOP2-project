@@ -53,6 +53,14 @@ void Player::update(float deltaTime) {
 	{
 		m_weapon = std::move(Constants::WeaponDataMap.at(GameSessionData::instance().getSelectedWeapon()).weaponFactory());
 		m_weapon->getWeaponLight()->setColor(sf::Color::Green);
+		auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
+
+			m_animation->setAll(
+			TextureManager::instance().get(weaponData.moveAnim.textureID),
+			weaponData.moveAnim.frameSize,
+			weaponData.moveAnim.speed
+		);
+		m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
 		GameSessionData::instance().setShouldUpdateWeapon(false);
 	}
 
@@ -85,11 +93,11 @@ void Player::takeDamage(int damage)
 		if (m_health < 0.f) m_health = 0.f;
 	}
 	if (m_health <= 0.f) {
-		setDestroyed(true);   // Mark the player as destroyed
-		m_alive = false;      // Optional: track status
+		setDestroyed(true);  
+		m_alive = false;    
 		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
 	}
-	//  Update the health bar (use Character's member)
+
 	m_healthBar->setValue(m_health);
 	m_armorBar->setValue(m_armor);
 }

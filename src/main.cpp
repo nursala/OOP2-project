@@ -2,7 +2,15 @@
 #include <iostream>
 
 int main() {
-	srand(static_cast<unsigned int>(time(nullptr))); 
-	Controller::getInstance().run();
+	try
+	{
+		srand(static_cast<unsigned int>(time(nullptr)));
+		Controller::getInstance().run();
+	}
+	catch (...)
+	{
+		std::cerr << "Unknown exception occurred." << std::endl;
+		return 1;
+	}
 	return 0;
 }

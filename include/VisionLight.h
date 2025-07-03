@@ -10,9 +10,9 @@
 
 class VisionLight : public candle::RadialLight {
 public:
-    VisionLight(float range, float beamAngle);
+    VisionLight(const float range, const float beamAngle);
 
-    void update(const sf::Vector2f& position, float rotation);
+    void update(const sf::Vector2f& position, const float rotation);
 
 private:
 	std::unordered_set<b2Fixture*> m_hitFixtures; 

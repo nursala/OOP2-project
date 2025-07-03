@@ -6,6 +6,8 @@
 using json = nlohmann::json;
 constexpr float SCALE = 30;
 
+//-------------------------------------
+// LoadMap Constructor
 LoadMap::LoadMap(const std::string& jsonPath)
 {
     std::ifstream file(jsonPath);
@@ -33,6 +35,7 @@ LoadMap::LoadMap(const std::string& jsonPath)
     }
 }
 
+//-------------------------------------
 // Creates collision objects for a specified layer
 void LoadMap::createCollisionObjects(b2World& world, const std::string& layerName) 
 {
@@ -88,8 +91,9 @@ void LoadMap::createCollisionObjects(b2World& world, const std::string& layerNam
     }
 }
 
+//-------------------------------------
 // Creates a single static collision box in the world
-void LoadMap::createBox(b2World& world, int startX, int startY, int countX, int countY) const {
+void LoadMap::createBox(b2World& world, const int startX, const int startY, const int countX, const int countY) const {
     b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(
@@ -105,8 +109,9 @@ void LoadMap::createBox(b2World& world, int startX, int startY, int countX, int 
     body->CreateFixture(&shape, 0.0f);
 }
 
+//-------------------------------------
 // Parses a spawn layer and collects spawn positions for different entity types
-void LoadMap::parseSpawnLayer(const std::string& layerName, int playerTile, int enemyTile, int giftTile) {
+void LoadMap::parseSpawnLayer(const std::string& layerName, const int playerTile, const int enemyTile, const int giftTile) {
     for (const auto& layer : m_layers) {
         if (layer.name == layerName) {
             for (int y = 0; y < m_height; ++y) {
@@ -131,26 +136,33 @@ void LoadMap::parseSpawnLayer(const std::string& layerName, int playerTile, int 
     }
 }
 
+//-------------------------------------
 // Returns the spawn positions of players
 const sf::Vector2f LoadMap::getPlayerSpawns() const {
     return m_playerSpawn;
 }
 
+//  -------------------------------------
 // Returns the spawn positions of enemies
 const std::vector<sf::Vector2f>& LoadMap::getEnemySpawns() const {
     return m_enemySpawns;
 }
 
+//-------------------------------------
 // Returns the spawn positions of gifts
 const std::vector<sf::Vector2f>& LoadMap::getGiftSpawns() const {
     return m_giftSpawns;
 }
 
+//-------------------------------------
+// Adds a new layer to the map
 void LoadMap::addLayer(const std::string& name, const std::vector<int>& data) {
     m_layers.push_back({ name, data });
 }
 
-bool LoadMap::isWalkable(int x, int y) const {
+//-------------------------------------
+// Checks if a tile at the specified coordinates is walkable
+bool LoadMap::isWalkable(const int x, const int y) const {
     for (const auto& layer : m_layers) {
         if (layer.name == "walls") {
             int index = y * m_width + x;

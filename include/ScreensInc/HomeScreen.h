@@ -1,14 +1,21 @@
 #pragma once
+
 #include "ScreensInc/Screen.h"
 #include "ScreensInc/Button.h"
 #include "ResourseInc/TextureManager.h"
 
+//==================================================
+// HomeScreen - Main menu screen of the game.
+// Displays buttons for Play, Market, Help, and Exit.
+//==================================================
 class HomeScreen : public Screen {
 public:
-	HomeScreen();
-	virtual ~HomeScreen() = default;
-	void init() override;
-	Constants::ScreenID getScreenID() const override;
-	void setInitSound();
-private:
+    HomeScreen();
+    ~HomeScreen() override = default;
+
+    // Initialize the screen: buttons, music, etc.
+    void init() override;
+    void setInitSound();
+    // Return the screen ID (Home)
+    Constants::ScreenID getScreenID() const override;
 };

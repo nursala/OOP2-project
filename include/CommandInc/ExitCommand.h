@@ -1,9 +1,10 @@
 #pragma once
 #include "CommandInc/Command.h"
 
+// -----------------------------
+// ExitCommand - exits the application
+// -----------------------------
 class ExitCommand : public Command {
 public:
-    void execute() override {
-        std::exit(0);
-    };
+    void execute() override;
 };

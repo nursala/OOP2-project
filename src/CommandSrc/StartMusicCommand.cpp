@@ -3,6 +3,10 @@
 #include "ScreensInc/Button.h"
 #include "ScreensInc/Screen.h"
 
+StartMusicCommand::StartMusicCommand(Button& button) : m_button(button)
+{
+}
+
 void StartMusicCommand::execute() {
 	SoundManger::instance().unmute(true, false);
 	m_button.setTexture(Constants::TextureID::SOUNDON);

@@ -30,6 +30,8 @@ private:
     std::unordered_map<Constants::EntityType, CreatorFunc> m_creators;
 };
 
+//-------------------------------------
+// Factory Registration 
 template <typename T, typename... Args>
 void Factory::registerType(Constants::EntityType id) {
     using TupleType = std::tuple<Args...>;  // نحتفظ بالمراجع كما هي
@@ -42,6 +44,8 @@ void Factory::registerType(Constants::EntityType id) {
         };
 }
 
+//-------------------------------------
+// Factory Creation
 template <typename T, typename... Args>
 std::unique_ptr<T> Factory::createAs(Constants::EntityType id, Args&&... args) 
 {

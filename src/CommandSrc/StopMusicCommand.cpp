@@ -2,6 +2,10 @@
 #include "CommandInc/StartMusicCommand.h"
 #include "ScreensInc/Button.h"
 
+StopMusicCommand::StopMusicCommand(Button& button) : m_button(button)
+{
+}
+
 void StopMusicCommand::execute() {
 	SoundManger::instance().mute(true, false);
 	m_button.setTexture(Constants::TextureID::SOUNDOFF);
