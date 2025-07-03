@@ -31,17 +31,6 @@ void Character::update(float deltaTime)
 
 		if (newState && m_state.get() != newState.get()) {
 			m_state = std::move(newState);
-			if (auto attackingState = dynamic_cast<WalkingState*>(m_state.get()))
-			{
-				auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
-
-				m_animation->setAll(
-					TextureManager::instance().get(weaponData.moveAnim.textureID),
-					weaponData.moveAnim.frameSize,
-					weaponData.moveAnim.speed
-				);
-				m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
-			}
 		}
 		m_state->update(*this, deltaTime);
 	}
@@ -72,7 +61,6 @@ void Character::update(float deltaTime)
 		if (m_visionLight)
 			m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 	}
-	m_animation->update(deltaTime);
 }
 
 void Character::render(RenderLayers& renderLayers) {
@@ -105,6 +93,14 @@ void Character::move(float dt)
 	if (m_moveStrategy)
 	{
 		m_moveStrategy->move(*this, dt);
+		auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
+
+		m_animation->setAll(
+			TextureManager::instance().get(weaponData.moveAnim.textureID),
+			weaponData.moveAnim.frameSize,
+			weaponData.moveAnim.speed
+		);
+		m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
 	}
 }
 

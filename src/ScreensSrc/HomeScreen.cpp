@@ -18,11 +18,8 @@ HomeScreen::HomeScreen()
 void HomeScreen::init()
 {
 	m_generalButtons.clear();
-	SoundManger::instance().stop(Constants::SoundID::SENARIO);
-	SoundManger::instance().stop(Constants::SoundID::GAMEWINSOUND);
-	SoundManger::instance().stop(Constants::SoundID::GAMEOVERSOUND);
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
-	SoundManger::instance().setVolume(Constants::SoundID::MENUMUSIC,50.f);
+	
+	setInitSound();
 
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Play,
@@ -63,4 +60,13 @@ void HomeScreen::init()
 Constants::ScreenID HomeScreen::getScreenID() const
 {
 	return Constants::ScreenID::Home;
+}
+
+void HomeScreen::setInitSound()
+{
+	SoundManger::instance().stop(Constants::SoundID::SCENARIO);
+	SoundManger::instance().stop(Constants::SoundID::GAMEWINSOUND);
+	SoundManger::instance().stop(Constants::SoundID::GAMEOVERSOUND);
+	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().setVolume(Constants::SoundID::MENUMUSIC, 50.f);
 }

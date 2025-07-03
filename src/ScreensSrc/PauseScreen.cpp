@@ -19,7 +19,8 @@ Constants::ScreenID PauseScreen::getScreenID() const
 
 void PauseScreen::init()
 {
-	SoundManger::instance().pause(Constants::SoundID::BACKGROUNDMUSIC);
+	SoundManger::instance().mute(false, true);
+	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
 	m_generalButtons.clear();
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Back,

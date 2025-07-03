@@ -14,6 +14,10 @@ public:
     void render(sf::RenderWindow& window) override;
     Constants::ScreenID getScreenID() const override;
 
+    void setIniSound();
+
+    void setSound(Constants::SoundID sound, float volume);
+
 protected:
     void setSpecialButtons() override;
     void init() override;

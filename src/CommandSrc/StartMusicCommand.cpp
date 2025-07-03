@@ -4,7 +4,7 @@
 #include "ScreensInc/Screen.h"
 
 void StartMusicCommand::execute() {
-	SoundManger::instance().unmute();
+	SoundManger::instance().unmute(true, false);
 	m_button.setTexture(Constants::TextureID::SOUNDON);
 	m_button.setCommand(std::make_unique<StopMusicCommand>(m_button));
 }

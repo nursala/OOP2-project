@@ -9,21 +9,18 @@
 #include "ScreensInc/GameWin.h"
 #include "ScreensInc/GameOver.h"
 #include "GameSessionData.h"
+#include "Constants.h"
 
 PlayGround::PlayGround()
 {
 	m_view.setSize(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT);
-	GameSessionData::instance().setHealth(100); // Reset health at the start of the game
+	GameSessionData::instance().setHealth(Constants::PLAYER_MAX_HEALTH); // Reset health at the start of the game
 }
 
 void PlayGround::init()
 {
 	m_generalButtons.clear();
-	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
-	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
-	SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
-	SoundManger::instance().loop(Constants::SoundID::BACKGROUNDMUSIC,true);
-	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
+	setIniSound();
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Pause,
 		"",
@@ -68,6 +65,13 @@ void PlayGround::update(sf::RenderWindow& window, float dt)
 		SoundManger::instance().play(Constants::SoundID::GAMEOVERSOUND);
 		SoundManger::instance().setVolume(Constants::SoundID::GAMEOVERSOUND, 30.f);
 	}
+	if (GameSessionData::instance().getHealth() <= 20)
+	{
+		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
+		SoundManger::instance().loop(Constants::SoundID::HEARTBEAT, true);
+		SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT,6000.f);
+		//SoundManger::instance().loop(Constants::SoundID::HEARTBEAT, true);
+	}
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
 	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
 
@@ -95,4 +99,13 @@ void PlayGround::render(sf::RenderWindow& window)
 Constants::ScreenID PlayGround::getScreenID() const
 {
 	return Constants::ScreenID::Game;
+}
+
+void PlayGround::setIniSound()
+{
+	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
+	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
+	//SoundManger::instance().loop(Constants::SoundID::BACKGROUNDMUSIC, true);
+	//SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
 }

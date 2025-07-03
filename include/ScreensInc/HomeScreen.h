@@ -9,5 +9,6 @@ public:
 	virtual ~HomeScreen() = default;
 	void init() override;
 	Constants::ScreenID getScreenID() const override;
+	void setInitSound();
 private:
 };

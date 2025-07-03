@@ -70,11 +70,6 @@ void Player::update(float deltaTime) {
 		}
 	}
 
-	if (m_health < 20)
-	{
-		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
-		SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT, 100.f);
-	}
 }
 
 void Player::takeDamage(int damage)

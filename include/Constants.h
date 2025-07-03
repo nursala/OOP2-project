@@ -27,7 +27,7 @@ namespace Constants {
 	// ----------------------------
 	inline constexpr float PLAYER_RADIUS = 20.f;
 	inline constexpr float PLAYER_SPEED = 3.0f;
-	inline constexpr float PLAYER_MAX_HEALTH = 100.f;
+	inline constexpr int PLAYER_MAX_HEALTH = 100.f;
 
 	// ----------------------------
 	// Enemy Settings
@@ -202,7 +202,7 @@ namespace Constants {
 		PLAYERDEATH,
 		COINS,
 		FOOTSTEP,
-		SENARIO,
+		SCENARIO,
 	};
 	// ----------------------------
 	// Gift Types

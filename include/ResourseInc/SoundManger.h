@@ -18,7 +18,7 @@ const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 	, {Constants::SoundID::GAMEBEGIN, "game_begin.ogg"}                 , {Constants::SoundID::ENEMYDEATH, "charcter_death.ogg"}
 	, {Constants::SoundID::PLAYERDEATH, "charcter_death.ogg"}           , {Constants::SoundID::GAMEWINSOUND, "gamewin.ogg"}
 	, {Constants::SoundID::COINS, "coins-handling.ogg"}                 , {Constants::SoundID::FOOTSTEP, "footsteps.ogg"}
-	, {Constants::SoundID::SENARIO, "senario.ogg"}                    
+	, {Constants::SoundID::SCENARIO, "senario.ogg"}                    
 };
 
 class SoundManger : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
@@ -32,13 +32,14 @@ public:
     bool isPlaying(Constants::SoundID id) const;
 	sf::Sound& getSound(Constants::SoundID id);
 	void stop(Constants::SoundID id);
-	void mute();    
-	void unmute();  
+	void mute(bool mute, bool pause);    
+	void unmute(bool mute, bool pause);
 
 	sf::Time getPlayingOffset(Constants::SoundID id);
 
 private:
     SoundManger();
 	bool m_muted = false;
+	bool m_paused = false;
     std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
 };

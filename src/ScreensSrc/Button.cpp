@@ -68,6 +68,11 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
 			if (m_command) {
 				m_command->execute();
 				SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
+				if (m_text.getString() == "Continue")
+				{
+					SoundManger::instance().unmute(true, true);
+					SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+				}
 			}
 			else {
 				std::cerr << "Error: Command not set for this button!" << std::endl;
@@ -95,11 +100,8 @@ void Button::centerText() {
 		shapePos.y + shapeSize.y / 2.0f);
 }
 
-
 void Button::execute()
 {
-	if (m_command) {
-		m_command->execute();
-		SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
-	}
+	m_command->execute();
 }
+

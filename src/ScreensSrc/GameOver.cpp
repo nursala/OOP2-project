@@ -19,6 +19,7 @@ GameOver::GameOver()
 void GameOver::init()
 {
 	m_generalButtons.clear();
+	SoundManger::instance().stop(Constants::SoundID::GAMEOVERSOUND);
 	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
 
 	m_generalButtons.emplace_back(

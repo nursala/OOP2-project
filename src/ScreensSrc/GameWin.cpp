@@ -13,6 +13,7 @@ GameWin::GameWin()
 void GameWin::init()
 {
 	m_generalButtons.clear();
+	SoundManger::instance().stop(Constants::SoundID::GAMEWINSOUND);
 	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
 
 	m_generalButtons.emplace_back(

@@ -7,13 +7,9 @@
 #include "ResourseInc/SoundManger.h"
 
 
-
-
 SplashScreen::SplashScreen() {
-    //setBackGroundTexture(Constants::TextureID::GAMEOVER);
     setSize();
     m_backGround.setFillColor(sf::Color::Black);
-	SoundManger::instance().play(Constants::SoundID::SENARIO);
 }
 
 void SplashScreen::init()
@@ -32,21 +28,22 @@ void SplashScreen::init()
     m_script = {
         {"The city… is gone.", 1.f},
         {"No lights. No power. Just shadows.", 8.f},
-        {"The streets… don’t speak anymore.", 15.f},
+        {"The streets… don't speak anymore.", 15.f},
         {"Only the dead… make noise now.", 20.f},
         {"You…", 32.f},
         {"You are alone in the dark.", 33.f},
         {"Every move… might be your last.", 44.f},
         {"They're watching. Waiting.", 51.f},
-        {"Your flashlight… is your only friend. Until it isn’t.", 62.f},
+        {"Your flashlight… is your only friend. Until it isn't.", 62.f},
         {"Pick your weapon…  Hold it tight…", 72.f},
-        {"Don’t trust the light.", 75.f},
-        {"Don’t trust anyone.", 77.f},
+        {"Don't trust the light.", 75.f},
+        {"Don't trust anyone.", 77.f},
         {"This war…", 86.f},
-        {"isn’t on the surface.", 87.5f},
+        {"isn't on the surface.", 87.5f},
         {"This is not a mission —", 91.f},
         {"This… is survival.", 95.f}
     };
+	SoundManger::instance().play(Constants::SoundID::SCENARIO);
 }
 
 Constants::ScreenID SplashScreen::getScreenID() const {
@@ -56,7 +53,7 @@ Constants::ScreenID SplashScreen::getScreenID() const {
 void SplashScreen::render(sf::RenderWindow& window) {
     Screen::render(window);
 
-    float currentTime = m_sound.getPlayingOffset().asSeconds();
+    float currentTime = SoundManger::instance().getPlayingOffset(Constants::SoundID::SCENARIO).asSeconds();
     float y = Constants::WINDOW_HEIGHT * 0.1f;
 
     for (const auto& line : m_script) {
@@ -77,13 +74,13 @@ void SplashScreen::render(sf::RenderWindow& window) {
             text.setString(partialText);
             text.setCharacterSize(24);
             text.setFillColor(color);
-            text.setPosition(Constants::WINDOW_WIDTH * 0.1f, y);
+            text.setPosition(Constants::WINDOW_WIDTH * 0.4f, y);
 
             window.draw(text);
             y += 40.f;
         }
     }
-    if (currentTime >= m_script.back().timeInSeconds + 3.f) {
+    if (currentTime >= m_script.back().timeInSeconds + 4.f) {
         auto it = m_buttons.begin();
         if (it != m_buttons.end()) {
             it->second.execute();

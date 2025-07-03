@@ -14,7 +14,7 @@ SoundManger& SoundManger::instance() {
 }
 
 void SoundManger::play(Constants::SoundID id) {
-	if (!m_muted)
+	if (!m_muted || m_paused)
 		m_sounds.at(id).play();
 }
 
@@ -23,9 +23,10 @@ void SoundManger::stop(Constants::SoundID id) {
 		m_sounds.at(id).stop();
 }
 
-void SoundManger::unmute()
+void SoundManger::unmute(bool mute, bool pause)
 {
-	m_muted = false;
+	m_muted = mute ? false : true;
+	m_paused = pause ? false : true;
 	for (auto& [id, sound] : m_sounds)
 	{
 		if (sound.getStatus() == sf::Sound::Paused)
@@ -44,9 +45,10 @@ sf::Time SoundManger::getPlayingOffset(Constants::SoundID id)
 	return sf::Time(); // ?? ??? ?? ??? ????? ?????
 }
 
-void SoundManger::mute()
+void SoundManger::mute(bool mute, bool pause)
 {
-	m_muted = true;
+	m_muted = mute ? true : false;
+	m_paused = pause ? true : false;
 	for (auto& [id, sound] : m_sounds)
 	{
 		if (sound.getStatus() == sf::Sound::Playing)
