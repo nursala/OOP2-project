@@ -1,21 +1,37 @@
-﻿#pragma once  
-#include "GameObject/Entity.h" 
+﻿#pragma once
+
+#include "GameObject/Entity.h"
 #include "candle/RadialLight.hpp"
+#include "Constants.h"
 
-class Gift : public Entity {  
-public:  
-	Gift(World& world, b2Vec2& position, Constants::GiftType& type);
-	Constants::GiftType getType() const;
+// Description: Represents a static gift entity that glows with pulsing light
+//              and interacts with the player to apply powerups.
 
-	void update(float deltaTime) override;
-	void render(RenderLayers& renderLayers);
-	b2BodyType getBodyType() const override { return b2_staticBody; };
-	void customizeFixtureDef(b2FixtureDef& fixtureDef);
-	void des();
+class Gift : public Entity {
+public:
+    // Constructor
+    Gift(World& world, const b2Vec2& position, const Constants::GiftType& type);
 
-protected:
-	Constants::GiftType m_type;
-	candle::RadialLight m_radialLight;
-	float m_pulseTime = 0.f;
+    // Return the type of the gift
+    Constants::GiftType getType() const;
 
+    // Update pulse and light state
+    void update(const float deltaTime) override;
+
+    // Render light and sprite
+    void render(RenderLayers& renderLayers);
+
+    // Mark the gift as destroyed
+    void des();
+
+private:
+    Constants::GiftType m_type;          // Type of gift (e.g., health, armor, etc.)
+    candle::RadialLight m_radialLight;  // Light effect for the gift
+    float m_pulseTime = 0.f;             // Internal timer for pulsing light
+
+    // Customize fixture to act as sensor only
+    void customizeFixtureDef(b2FixtureDef& fixtureDef) override;
+
+    // Return static body type
+    virtual b2BodyType getBodyType() const override { return b2_staticBody; }
 };

@@ -6,6 +6,7 @@
 
 void KeyboardMoveStrategy::move(Character& character, float deltaTime) {
    
+    (void) deltaTime;
     auto* body = character.getBody();
     if (!body) return;
 	auto speed = character.getSpeed();

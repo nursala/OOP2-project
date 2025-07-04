@@ -24,7 +24,7 @@ public:
     World();
 
     // Update the entire game world per frame
-    void update(sf::RenderWindow& window, float deltaTime);
+    void update(sf::RenderWindow& window, const float deltaTime);
 
     // Render everything to the window
     void render(sf::RenderWindow& window);
@@ -60,7 +60,7 @@ private:
     void createEnemy();
     void createGifts();
 
-    // Modular update functions
+    // update functions
     void updateBullets(float deltaTime);
     void updateEnemies(float deltaTime);
     void updateGifts(float deltaTime);

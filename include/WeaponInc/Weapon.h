@@ -15,7 +15,7 @@ class RenderLayers;
 class Weapon
 {
 public:
-    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, b2Vec2& position,
+    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, const b2Vec2& position,
         const sf::Vector2f& direction, std::shared_ptr<Character> owner);
 
 
@@ -27,9 +27,6 @@ public:
 	Constants::WeaponType getType() const { return m_type; }
 
     WeaponLight* getWeaponLight();
-
-    float getDamage() const;
-    void setDamage(float damage);
 
     float getFireTimer() const;
 

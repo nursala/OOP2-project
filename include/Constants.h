@@ -260,5 +260,9 @@ namespace Constants {
 	// Weapon Data Map
 	// ----------------------------
 	extern std::unordered_map<WeaponType, WeaponData> WeaponDataMap;
+	//-----------------------------
+	//Map Level And Textuer
+	//-----------------------------
+	extern std::unordered_map<LevelID, TextureID> LevelTexture;
 
 }

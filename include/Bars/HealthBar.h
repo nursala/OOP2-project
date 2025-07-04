@@ -1,9 +1,16 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include "Bars/Bar.h"
 
-class HealthBar : public  Bar{
+//======================================================
+// HealthBar: visual bar showing player's current health.
+// Inherits from the abstract base class Bar.
+//======================================================
+class HealthBar : public Bar {
 public:
     HealthBar(float width, float height, float maxHealth);
-	void updateColor() override;
+
+    // Updates the color of the health bar based on the current value.
+    void updateColor() override;
 };

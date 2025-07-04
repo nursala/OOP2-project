@@ -6,12 +6,12 @@
 #include "ResourseInc/TextureManager.h"
 
 namespace Constants {
-    std::unordered_map<WeaponType, int> WeaponPrice = {
-        { WeaponType::HandGun, 0 },
-        { WeaponType::Rifle, 200 },
-        { WeaponType::Shotgun, 300 },
-        { WeaponType::Sniper, 400 }
-    };
+	std::unordered_map<WeaponType, int> WeaponPrice = {
+		{ WeaponType::HandGun, 0 },
+		{ WeaponType::Rifle, 200 },
+		{ WeaponType::Shotgun, 300 },
+		{ WeaponType::Sniper, 400 }
+	};
 
 	std::unordered_map<LevelID, std::pair<std::string, sf::Color>> LevelNames = {
 		{ LevelID::EasyMap, {"Easy", sf::Color::Green} },
@@ -28,42 +28,48 @@ namespace Constants {
 		{ GiftType::VISIONUP, TextureID::VISIONUP }
 	};
 
-    std::unordered_map<WeaponType, WeaponData> WeaponDataMap = {
-        {
-            WeaponType::HandGun,
-            {
-                [] { return std::make_unique<HandGun>(); },
-                AnimationInfo(TextureID::HANDGUNMOVE, {7, 3}, 0.1f),
-                AnimationInfo(TextureID::HANDGUNSHOOT, {1, 9}, 0.1f),
+	std::unordered_map<WeaponType, WeaponData> WeaponDataMap = {
+		{
+			WeaponType::HandGun,
+			{
+				[] { return std::make_unique<HandGun>(); },
+				AnimationInfo(TextureID::HANDGUNMOVE, {7, 3}, 0.1f),
+				AnimationInfo(TextureID::HANDGUNSHOOT, {1, 9}, 0.1f),
 				SoundID::PISTOLSOUND
-            }
-        },
-        {
-            WeaponType::Rifle,
-            {
-                [] { return std::make_unique<Rifle>(); },
-                AnimationInfo(TextureID::RIFLEMOVE, {3, 7}, 0.1f),
-                AnimationInfo(TextureID::RIFLESHOOT, {1, 9}, 0.1f),
+			}
+		},
+		{
+			WeaponType::Rifle,
+			{
+				[] { return std::make_unique<Rifle>(); },
+				AnimationInfo(TextureID::RIFLEMOVE, {3, 7}, 0.1f),
+				AnimationInfo(TextureID::RIFLESHOOT, {1, 9}, 0.1f),
 				SoundID::RIFLESOUND
-            }
-        },
-        {
-            WeaponType::Shotgun,
-            {
-                [] { return std::make_unique<Shotgun>(); },
-                AnimationInfo(TextureID::SHOTGUNMOVE, {3, 7}, 0.1f),
-                AnimationInfo(TextureID::SHOTGUNSHOOT, {1, 9}, 0.1f),
+			}
+		},
+		{
+			WeaponType::Shotgun,
+			{
+				[] { return std::make_unique<Shotgun>(); },
+				AnimationInfo(TextureID::SHOTGUNMOVE, {3, 7}, 0.1f),
+				AnimationInfo(TextureID::SHOTGUNSHOOT, {1, 9}, 0.1f),
 				SoundID::SHOTGUNSOUND
-            }
-        },
-        {
-            WeaponType::Sniper,
-            {
-                [] { return std::make_unique<Sniper>(); },
-                AnimationInfo(TextureID::RIFLEMOVE, {3, 7}, 0.1f),
-                AnimationInfo(TextureID::RIFLESHOOT, {1, 9}, 0.1f),
+			}
+		},
+		{
+			WeaponType::Sniper,
+			{
+				[] { return std::make_unique<Sniper>(); },
+				AnimationInfo(TextureID::RIFLEMOVE, {3, 7}, 0.1f),
+				AnimationInfo(TextureID::RIFLESHOOT, {1, 9}, 0.1f),
 				SoundID::SNIPERSOUND
-            }
-        }
-    };
+			}
+		}
+	};
+
+	std::unordered_map <LevelID, TextureID> LevelTexture = {
+		{LevelID::EasyMap, TextureID::EASYMAP },
+		{ LevelID::MediumMap, TextureID::MEDIUMMAP },
+		{ LevelID::HardMap, TextureID::HARDMAP}
+	};
 }

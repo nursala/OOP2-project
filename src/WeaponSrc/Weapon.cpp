@@ -16,7 +16,7 @@ Weapon::Weapon(Constants::WeaponType type, float shootingRange,
 	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
 }
 
-std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	b2Vec2& position,
+std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const b2Vec2& position,
 					const sf::Vector2f& direction, std::shared_ptr<Character> owner)
 {
 	std::vector<std::unique_ptr<Bullet>> bullets;
@@ -66,16 +66,6 @@ float Weapon::getShootingRange() const
 WeaponLight* Weapon::getWeaponLight()
 {
 	return m_weaponLight.get();
-}
-
-float Weapon::getDamage() const
-{
-	return m_damage;
-}
-
-void Weapon::setDamage(float damage)
-{
-	m_damage = damage;
 }
 
 float Weapon::getFireTimer() const

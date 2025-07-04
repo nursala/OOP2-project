@@ -60,6 +60,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f viewSize = m_view.getSize();
 	if (GameSessionData::instance().getEnemies() <= 0)
 	{
+		GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 100);
 		Controller::getInstance().pushScreen(std::make_unique<GameWin>());
 		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
 		SoundManger::instance().play(Constants::SoundID::GAMEWINSOUND);

@@ -8,7 +8,8 @@ Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 150.f, 8.f, 60.f)
 	m_fireCooldown = 1.f; // Set the cooldown for firing
 }
 
-std::vector<std::unique_ptr<Bullet>> Shotgun::fire(World& world, b2Vec2& position, const sf::Vector2f& direction, std::shared_ptr<Character> owner)
+std::vector<std::unique_ptr<Bullet>> Shotgun::fire(World& world, const b2Vec2& position, 
+                            const sf::Vector2f& direction, std::shared_ptr<Character> owner)
 {
     std::vector<std::unique_ptr<Bullet>> bullets;
     if (m_fireTimer > 0.f)

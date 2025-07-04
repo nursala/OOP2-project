@@ -36,20 +36,8 @@ void World::initWorld() {
 //-------------------------------------
 // Set map texture based on the selected level
 void World::setMapTexture() {
-	switch (LevelManager::instance().getCurrentLevel())
-	{
-	case Constants::LevelID::EasyMap:
-		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::EASYMAP));
-		break;
-	case Constants::LevelID::MediumMap:
-		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::MEDIUMMAP));
-		break;
-	case Constants::LevelID::HardMap:
-		m_mapSprite.setTexture(*TextureManager::instance().get(Constants::TextureID::HARDMAP));
-		break;
-	default:
-		break;
-	}
+	TextureManager::instance().get(
+		Constants::LevelTexture.at(LevelManager::instance().getCurrentLevel()));
 }
 
 //-------------------------------------
@@ -97,7 +85,7 @@ void World::setupMap() {
 
 //-------------------------------------
 // Update the game world each frame
-void World::update(sf::RenderWindow& window, float deltaTime) {
+void World::update(sf::RenderWindow& window, const float deltaTime) {
 	calcNearlyEdge(window);
 	m_world.Step(deltaTime, 8, 3);
 
@@ -124,7 +112,7 @@ void World::updateBullets(float deltaTime) {
 
 //-------------------------------------
 // Update all enemies and handle their destruction
-void World::updateEnemies(float deltaTime) {
+void World::updateEnemies(const float deltaTime) {
 	for (auto it = m_enemies.begin(); it != m_enemies.end(); ) {
 		if ((*it)->isDestroyed()) {
 			it = m_enemies.erase(it);
@@ -141,7 +129,7 @@ void World::updateEnemies(float deltaTime) {
 
 //-------------------------------------
 // Update all gifts and remove collected ones
-void World::updateGifts(float deltaTime) {
+void World::updateGifts(const float deltaTime) {
 	for (auto it = m_gifts.begin(); it != m_gifts.end(); ) {
 		(*it)->update(deltaTime);
 		if ((*it)->isDestroyed())

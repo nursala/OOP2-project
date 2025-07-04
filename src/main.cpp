@@ -9,7 +9,7 @@ int main() {
 	}
 	catch (...)
 	{
-		std::cerr << "Unknown exception occurred." << std::endl;
+		std::cout << "An error occurred during execution." << std::endl;
 		return 1;
 	}
 	return 0;

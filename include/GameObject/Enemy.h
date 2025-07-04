@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿//=========================================================
+// Description: Represents an enemy character in the game.
+//              Inherits from Character and implements AI logic
+//=========================================================
+
+#pragma once
 
 #include "GameObject/Character.h"
 #include "GameObject/Player.h"
@@ -7,29 +12,59 @@
 class LoadMap;
 class World;
 
-class Enemy : public Character {
+class Enemy : public Character
+{
 public:
-    Enemy(World& world, b2Vec2& position ,const LoadMap& map, const Player& player, Constants::WeaponType& type);
+	//==========================
+	// Constructor / Destructor
+	//==========================
+	Enemy(World& world, const b2Vec2& position, const LoadMap& map,
+		const Player& player, const Constants::WeaponType& type);
+	virtual ~Enemy() override = default;
 
-    virtual ~Enemy() override = default;
+	//==========================
+	// Override Character methods
+	//==========================
+	void takeDamage(const int damage) override;
+	void update(const float deltaTime) override;
 
-    virtual Character* getClosestTarget();
-    void takeDamage(int damage) override;
-    void speedDown();
-    void setSpeedDownTimer(float seconds); 
-    void update(float deltaTime) override;
+	//==========================
+	// Spy Mechanism
+	//==========================
+	void setSpy(const bool value);
+	bool isSpy() const;
+	void setSpyTimer(const float seconds);
 
-    void updateFootstepSound(float distanceToPlayer, float deltaTime);
-    void setSpy(bool value);
-    bool isSpy() const;
-    void setSpyTimer(float seconds);
+	//==========================
+	// Speed Control
+	//==========================
+	void speedDown();
+	void setSpeedDownTimer(const float seconds);
+
+	//==========================
+	// Footstep Sound
+	//==========================
+	void updateFootstepSound(const float distanceToPlayer, const float deltaTime);
+
 private:
-    const Player& m_playerRef;
-    bool m_isSpy = false;
-    float m_spyTimer = 0.f;
-    float m_footstepTimer = 0.f;
-    float m_footstepInterval = 1.f;
-    float m_speedDownTimer = 0.f; 
-    float m_originalSpeed = 5.f;  
-	float m_hideDelayTimer = 0.f; // Time for which the enemy is visible
+	//==========================
+	// References
+	//==========================
+	const Player& m_playerRef;
+
+	//==========================
+	// State Flags & Timers
+	//==========================
+	bool m_isSpy = false;
+	float m_spyTimer = 0.f;
+	float m_speedDownTimer = 0.f;
+	float m_footstepTimer = 0.f;
+	float m_footstepInterval = 1.f;
+	float m_originalSpeed = 5.f;
+	float m_hideDelayTimer = 0.f;
+
+	//==========================
+	// Override Character methods
+	//==========================
+	virtual Character* getClosestTarget() override;
 };

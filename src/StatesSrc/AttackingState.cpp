@@ -7,7 +7,7 @@
 
 void AttackingState::update(Character& character, float dt) 
 {
-	character.shoot(dt);
+	character.shoot();
 	character.move(dt);
 	character.getAnimation().update(dt);
 }

@@ -2,6 +2,9 @@
 
 class Character;
 
+//======================================================
+// Description:This class defines an interface for attack strategies,
+//======================================================
 class AttackStrategy {
 public:
     virtual ~AttackStrategy() = default;
