@@ -50,7 +50,6 @@ void Bar::draw(RenderLayers& renderLayers) const {
     renderLayers.drawForeground(text);
 }
 
-
 void Bar::updateBar() {
     float ratio = (m_maxValue > 0) ? (m_currentValue / m_maxValue) : 0.f;
     float width = m_border.getSize().x;
