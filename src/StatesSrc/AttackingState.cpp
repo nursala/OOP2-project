@@ -1,7 +1,7 @@
 #include "StatesInc/AttackingState.h"
 #include "StatesInc/WalkingState.h"
 #include "ResourseInc/TextureManager.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "GameObject/Character.h"
 #include "WeaponInc/Weapon.h"
 

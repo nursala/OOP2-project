@@ -7,7 +7,7 @@
 #include "Factory.h"
 #include "LevelManager.h"
 #include "ResourseInc/TextureManager.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "GameSessionData.h"
 
 //-------------------------------------
@@ -68,7 +68,8 @@ void World::createGifts() {
 
 	for (const auto& pos : giftPositions) {
 		const b2Vec2 posB2(pos.x, pos.y);
-		const Constants::GiftType type = static_cast<Constants::GiftType>(rand() % giftsTypeCount);
+		const Constants::GiftType type = Constants::GiftType::SPY;
+			//static_cast<Constants::GiftType>(rand() % giftsTypeCount);
 		auto gift = Factory::instance().createAs<Gift>(Constants::EntityType::Gift, *this, pos, type);
 		m_gifts.push_back(std::move(gift));
 	}
@@ -130,7 +131,7 @@ void World::updateEnemies(float deltaTime) {
 			it = m_enemies.erase(it);
 			GameSessionData::instance().setEnemies(GameSessionData::instance().getEnemies() - 1);
 			GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 50);
-			SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
+			SoundManager::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
 			(*it)->update(deltaTime);

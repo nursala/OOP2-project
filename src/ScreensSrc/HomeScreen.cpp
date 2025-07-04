@@ -2,7 +2,7 @@
 #include "ScreensInc/ChooseLevelScreen.h"
 #include "ScreensInc/Market.h"
 #include "ScreensInc/Help.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "CommandInc/ExitCommand.h"
 
@@ -73,9 +73,9 @@ Constants::ScreenID HomeScreen::getScreenID() const
 
 void HomeScreen::setInitSound()
 {
-	SoundManger::instance().stop(Constants::SoundID::SCENARIO);
-	SoundManger::instance().stop(Constants::SoundID::GAMEWINSOUND);
-	SoundManger::instance().stop(Constants::SoundID::GAMEOVERSOUND);
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
-	SoundManger::instance().setVolume(Constants::SoundID::MENUMUSIC, 50.f);
+	SoundManager::instance().stop(Constants::SoundID::SCENARIO);
+	SoundManager::instance().stop(Constants::SoundID::GAMEWINSOUND);
+	SoundManager::instance().stop(Constants::SoundID::GAMEOVERSOUND);
+	SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManager::instance().setVolume(Constants::SoundID::MENUMUSIC, 50.f);
 }

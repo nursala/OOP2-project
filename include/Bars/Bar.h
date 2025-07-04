@@ -9,7 +9,7 @@ public:
     void setMaxValue(float maxValue);
     void setValue(float value);
     void setPosition(const sf::Vector2f& pos);
-    void draw(RenderLayers& renderLayers) const;
+    void draw(RenderLayers& renderLayers) ;
     float getValue() const { return m_currentValue; }
     float getMaxValue() const { return m_maxValue; }
     const sf::RectangleShape& getBorder() const { return m_border; }
@@ -22,4 +22,5 @@ protected:
 
 private:
     void updateBar();
+	float m_angle = 0.f; // Rotation angle in degrees
 };

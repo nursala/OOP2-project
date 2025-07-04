@@ -33,9 +33,9 @@ const std::unordered_map<Constants::SoundID, std::string> SoundFileMap = {
 };
 
 // Singleton sound manager that plays, stops, and controls game sounds
-class SoundManger : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
+class SoundManager : public BaseResourceManager<sf::SoundBuffer, Constants::SoundID> {
 public:
-    static SoundManger& instance();
+    static SoundManager& instance();
 
     void play(Constants::SoundID id);
 	void loop(Constants::SoundID id, bool loop);
@@ -50,8 +50,10 @@ public:
 	sf::Time getPlayingOffset(Constants::SoundID id);
 
 private:
-    SoundManger();
+    SoundManager();
 	bool m_muted = false;
 	bool m_paused = false;
     std::unordered_map<Constants::SoundID, sf::Sound> m_sounds;
+    SoundManager(const SoundManager&) = delete;
+    SoundManager& operator=(const SoundManager&) = delete;
 };

@@ -5,7 +5,7 @@
 #include "GameObject/Gift.h"
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include <iostream>
 
 ContactListener::ContactListener(World& world)
@@ -27,20 +27,20 @@ void ContactListener::BeginContact(b2Contact* contact) {
             switch (gift->getType()) {
             case Constants::GiftType::ARMOR:
                 player->addArmor();
-                SoundManger::instance().play(Constants::SoundID::SHIELDUPGRADE);
+                SoundManager::instance().play(Constants::SoundID::SHIELDUPGRADE);
                 break;
             case Constants::GiftType::HEALTH:
                 player->addHealth();
-                SoundManger::instance().play(Constants::SoundID::HEALTHUPGRADE);
+                SoundManager::instance().play(Constants::SoundID::HEALTHUPGRADE);
                 break;
             case Constants::GiftType::SPEEDUP:
                 player->addSpeed();
-                SoundManger::instance().play(Constants::SoundID::SPEEDUPGRADE);
+                SoundManager::instance().play(Constants::SoundID::SPEEDUPGRADE);
                 break;
             case Constants::GiftType::ENEMYSPEEDDOWN:
                 for (auto enemy : m_world.getEnemies()) {
                     enemy->speedDown();
-                    SoundManger::instance().play(Constants::SoundID::SPEEDDOWN);
+                    SoundManager::instance().play(Constants::SoundID::SPEEDDOWN);
                     enemy->setSpeedDownTimer(10.f);
                 }
                 break;
@@ -48,7 +48,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 for (auto enemy : m_world.getEnemies()) {
                     if (!enemy->isSpy()) {
                         enemy->setSpy(true);
-                        SoundManger::instance().play(Constants::SoundID::SPY);
+                        SoundManager::instance().play(Constants::SoundID::SPY);
                         enemy->setSpyTimer(20.f);
                         break;
                     }
@@ -56,14 +56,13 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 break;
             case Constants::GiftType::VISIONUP:
                 player->increaseVisionTemporarily(100.f, 10.f);
-                SoundManger::instance().play(Constants::SoundID::VISIONUPGRADE);
+                SoundManager::instance().play(Constants::SoundID::VISIONUPGRADE);
                 break;
             default:
                 throw std::runtime_error("Unknown Constants::GiftType");
             }
             gift->setDestroyed(true);
         }
-
         else if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
             auto shooter = bullet->getOwnerShared().get();
             if (shooter == player)
@@ -89,15 +88,12 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (!enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                   
                 }
             }
-
             else if (auto shooterEnemy = dynamic_cast<Enemy*>(shooter)) {
-                if (shooterEnemy->isSpy() && !enemy->isSpy()) {
+                if (shooterEnemy != enemy && shooterEnemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                   
                 }
             }
         }
@@ -129,15 +125,12 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (!enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                    
                 }
             }
-
             else if (auto shooterEnemy = dynamic_cast<Enemy*>(shooter)) {
-                if (shooterEnemy->isSpy() && !enemy->isSpy()) {
+                if (shooterEnemy != enemy && shooterEnemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                
                 }
             }
         }

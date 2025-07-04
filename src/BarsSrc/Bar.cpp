@@ -34,7 +34,7 @@ void Bar::setPosition(const sf::Vector2f& pos) {
     m_inner.setPosition(pos);
 }
 
-void Bar::draw(RenderLayers& renderLayers) const {
+void Bar::draw(RenderLayers& renderLayers)  {
     renderLayers.drawForeground(m_inner);
     renderLayers.drawForeground(m_border);
 
@@ -49,7 +49,6 @@ void Bar::draw(RenderLayers& renderLayers) const {
     text.setPosition(m_border.getPosition().x - 10.f, m_border.getPosition().y - 3.f);
     renderLayers.drawForeground(text);
 }
-
 
 void Bar::updateBar() {
     float ratio = (m_maxValue > 0) ? (m_currentValue / m_maxValue) : 0.f;

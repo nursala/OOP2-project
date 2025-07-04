@@ -12,7 +12,7 @@
 #include "WeaponInc/Rifle.h"
 #include "AttackingStrategyInc/SimpleShootStrategy.h"
 #include "WorldInc/World.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "GameSessionData.h"
 
 namespace {
@@ -66,7 +66,7 @@ void Player::update(float deltaTime) {
 
 	Character::update(deltaTime);
 
-	sf::Vector2f armorBarPos = { getPosition().x , getPosition().y + 20 };
+	sf::Vector2f armorBarPos = { getPosition().x , getPosition().y + 30 };
 	m_armorBar->setPosition(armorBarPos);
 	m_armorBar->setValue(m_armor);
 
@@ -95,7 +95,7 @@ void Player::takeDamage(int damage)
 	if (m_health <= 0.f) {
 		setDestroyed(true);  
 		m_alive = false;    
-		SoundManger::instance().play(Constants::SoundID::PLAYERDEATH);
+		SoundManager::instance().play(Constants::SoundID::PLAYERDEATH);
 	}
 
 	m_healthBar->setValue(m_health);

@@ -4,7 +4,7 @@
 #include "GameSessionData.h"
 #include "WeaponInc/Weapon.h"
 #include "ScreensInc/Market.h" 
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 
 // -----------------------------
 // SmartWeaponCommand - buy/equip a weapon in market screen

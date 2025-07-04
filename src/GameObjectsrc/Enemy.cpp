@@ -1,6 +1,6 @@
 ﻿#include "GameObject/Enemy.h"
 #include "ResourseInc/TextureManager.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "Factory.h"
 #include "MoveStrategyAndInfoInc/IQChaseStrategy.h"
 #include "StatesInc/WalkingState.h"
@@ -215,10 +215,10 @@ void Enemy::updateFootstepSound(float distanceToPlayer, float deltaTime) {
     m_footstepTimer += deltaTime;
     if (m_footstepTimer >= m_footstepInterval) {
         if (distanceToPlayer <= footstepDistanceThreshold &&
-            !SoundManger::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
-            SoundManger::instance().play(Constants::SoundID::FOOTSTEP);
+            !SoundManager::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
+            SoundManager::instance().play(Constants::SoundID::FOOTSTEP);
             float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
-            SoundManger::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
+            SoundManager::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
 
         }
         m_footstepTimer = 0.f;

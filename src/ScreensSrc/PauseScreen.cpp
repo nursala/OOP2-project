@@ -4,7 +4,7 @@
 #include "CommandInc/PushScreenCommand.h"
 #include "ScreensInc/Market.h"
 #include "ScreensInc/Help.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "Constants.h"
 
 //-------------------------------------
@@ -23,8 +23,8 @@ Constants::ScreenID PauseScreen::getScreenID() const {
 // Initialize buttons and pause music
 void PauseScreen::init()
 {
-	SoundManger::instance().mute(false, true);
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManager::instance().mute(false, true);
+	SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
 	m_generalButtons.clear();
 	m_generalButtons.emplace_back(
 		Constants::ButtonID::Back,

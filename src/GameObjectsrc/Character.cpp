@@ -6,7 +6,7 @@
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "StatesInc/WalkingState.h"
 #include "StatesInc/AttackingState.h"
 #include "ResourseInc/TextureManager.h"
@@ -42,7 +42,7 @@ void Character::update(float deltaTime)
 	m_sprite.setPosition(getPosition());
 	m_sprite.setTextureRect(m_animation->getUvRect());
 
-	sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 30 };
+	sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 40 };
 	m_healthBar->setPosition(healthBarPos);
 	m_healthBar->setValue(m_health);
 
@@ -113,8 +113,8 @@ void Character::shoot(float dt) {
 	if (m_attackStrategy && m_weapon->getFireTimer() <= 0.f)
 	{
 		if (!m_attackStrategy->attack(*this)) return;
-		SoundManger::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
-		SoundManger::instance().setVolume(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound, 80.f);
+		SoundManager::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
+		SoundManager::instance().setVolume(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound, 80.f);
 	}
 }
 
@@ -174,5 +174,4 @@ void Character::updateTargets()
 			}
 		}
 	}
-
 }
