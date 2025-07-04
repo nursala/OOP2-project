@@ -113,7 +113,7 @@ void PlayGround::setIniSound()
 {
 	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
 	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
-	//SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
-	//SoundManger::instance().loop(Constants::SoundID::BACKGROUNDMUSIC, true);
-	//SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
+	SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
+	SoundManger::instance().loop(Constants::SoundID::BACKGROUNDMUSIC, true);
+	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
 }

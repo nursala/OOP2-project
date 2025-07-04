@@ -39,15 +39,6 @@ void SoundManger::unmute(bool mute, bool pause)
 	}
 }
 
-sf::Time SoundManger::getPlayingOffset(Constants::SoundID id)
-{
-	auto it = m_sounds.find(id);
-	if (it != m_sounds.end()) {
-		return it->second.getPlayingOffset(); // ? ??? ?? ??????? ??????
-	}
-	return sf::Time(); // ?? ??? ?? ??? ????? ?????
-}
-
 void SoundManger::mute(bool mute, bool pause)
 {
 	m_muted = mute ? true : false;

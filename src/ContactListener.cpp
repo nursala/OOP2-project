@@ -89,7 +89,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (!enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                    SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
+                   
                 }
             }
 
@@ -97,7 +97,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (shooterEnemy->isSpy() && !enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                    SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
+                   
                 }
             }
         }
@@ -129,7 +129,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (!enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                    SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
+                    
                 }
             }
 
@@ -137,7 +137,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (shooterEnemy->isSpy() && !enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                    SoundManger::instance().play(Constants::SoundID::ENEMYDEATH);
+                
                 }
             }
         }
