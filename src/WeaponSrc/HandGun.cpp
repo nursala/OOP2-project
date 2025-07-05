@@ -2,7 +2,7 @@
 #include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 
-HandGun::HandGun() : Weapon(Constants::WeaponType::HandGun, 200.f, 5.f, 30.f)
+HandGun::HandGun() : Weapon(Constants::WeaponType::HandGun, 200.f, 10.f, 30.f)
 {
-	m_fireCooldown = 0.8f; // Set the cooldown for firing
+	m_fireCooldown = 0.7f; // Set the cooldown for firing
 }

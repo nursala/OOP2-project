@@ -4,6 +4,7 @@ configure_file ("medium_map.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("hard_map.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("medium_map.json" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("easy_map.json" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("hard_map.json" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #screens
 configure_file ("help.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
@@ -43,12 +44,6 @@ configure_file ("vision_up.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("kills.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("coins.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Levels.png" ${CMAKE_BINARY_DIR} COPYONLY)
-
-
-
-
-
-
 
 #sound_effects
 configure_file ("Sounds/charcter_death.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
