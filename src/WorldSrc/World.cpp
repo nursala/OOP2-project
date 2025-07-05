@@ -36,8 +36,8 @@ void World::initWorld() {
 //-------------------------------------
 // Set map texture based on the selected level
 void World::setMapTexture() {
-	TextureManager::instance().get(
-		Constants::LevelTexture.at(LevelManager::instance().getCurrentLevel()));
+	m_mapSprite.setTexture(*TextureManager::instance().get(
+		Constants::LevelTexture.at(LevelManager::instance().getCurrentLevel())));
 }
 
 //-------------------------------------

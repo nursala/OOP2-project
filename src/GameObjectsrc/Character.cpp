@@ -150,8 +150,8 @@ void Character::shoot()
     {
         if (!m_attackStrategy->attack(*this)) return;
 
-        SoundManger::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
-        SoundManger::instance().setVolume(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound, 80.f);
+        SoundManager::instance().play(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound);
+        SoundManager::instance().setVolume(Constants::WeaponDataMap.at(m_weapon->getType()).shootSound, 80.f);
     }
 }
 

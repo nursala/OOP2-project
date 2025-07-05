@@ -15,42 +15,42 @@
 // Factory registration
 //=========================================================
 namespace {
-    bool registered = [] {
-        Factory::instance().registerType<Enemy, World&, const b2Vec2&, const LoadMap&,
-            const Player&, const Constants::WeaponType&>(
-                Constants::EntityType::Enemy);
-        return true;
-        }();
+	bool registered = [] {
+		Factory::instance().registerType<Enemy, World&, const b2Vec2&, const LoadMap&,
+			const Player&, const Constants::WeaponType&>(
+				Constants::EntityType::Enemy);
+		return true;
+		}();
 }
 
 //=========================================================
 // Constructor
 //=========================================================
 Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
-    const Player& player, const Constants::WeaponType& type)
-    : Character(world, position), m_playerRef(player)
+	const Player& player, const Constants::WeaponType& type)
+	: Character(world, position), m_playerRef(player)
 {
-    auto& weaponData = Constants::WeaponDataMap.at(type);
+	auto& weaponData = Constants::WeaponDataMap.at(type);
 
-    m_animation = std::make_unique<Animation>(
-        TextureManager::instance().get(weaponData.moveAnim.textureID),
-        weaponData.moveAnim.frameSize,
-        weaponData.moveAnim.speed
-    );
+	m_animation = std::make_unique<Animation>(
+		TextureManager::instance().get(weaponData.moveAnim.textureID),
+		weaponData.moveAnim.frameSize,
+		weaponData.moveAnim.speed
+	);
 
-    m_weapon = weaponData.weaponFactory();
+	m_weapon = weaponData.weaponFactory();
 
-    m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
-    m_sprite.setTextureRect(m_animation->getUvRect());
+	m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
+	m_sprite.setTextureRect(m_animation->getUvRect());
 
-    m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
-    m_state = std::make_unique<WalkingState>();
-    m_attackStrategy = std::make_unique<SimpleShootStrategy>();
+	m_moveStrategy = std::make_unique<IQChaseStrategy>(player, map, rand() % 10 + 1);
+	m_state = std::make_unique<WalkingState>();
+	m_attackStrategy = std::make_unique<SimpleShootStrategy>();
 
-    m_speed = m_originalSpeed = 7.f;
-    m_visable = false;
+	m_speed = m_originalSpeed = 7.f;
+	m_visable = false;
 
-    init(b2_dynamicBody, 1.3f);
+	init(b2_dynamicBody, 1.3f);
 }
 
 //=========================================================
@@ -58,57 +58,57 @@ Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
 //=========================================================
 Character* Enemy::getClosestTarget()
 {
-    if (auto currentTarget = getTarget()) {
-        for (b2Fixture* fixture = currentTarget->getBody()->GetFixtureList();
-            fixture; fixture = fixture->GetNext()) {
-            if (m_hitFixtures.find(fixture) != m_hitFixtures.end())
-                return currentTarget.get();
-        }
+	if (auto currentTarget = getTarget()) {
+		for (b2Fixture* fixture = currentTarget->getBody()->GetFixtureList();
+			fixture; fixture = fixture->GetNext()) {
+			if (m_hitFixtures.find(fixture) != m_hitFixtures.end())
+				return currentTarget.get();
+		}
 
-        // Check if within light radius
-        sf::Vector2f targetPos = currentTarget->getPosition();
-        float distSq = std::pow(targetPos.x - getPosition().x, 2) +
-            std::pow(targetPos.y - getPosition().y, 2);
-        float radius = currentTarget->getWeapon()->getWeaponLight()->getRange();
-        if (distSq <= radius * radius)
-            return currentTarget.get();
-    }
+		// Check if within light radius
+		sf::Vector2f targetPos = currentTarget->getPosition();
+		float distSq = std::pow(targetPos.x - getPosition().x, 2) +
+			std::pow(targetPos.y - getPosition().y, 2);
+		float radius = currentTarget->getWeapon()->getWeaponLight()->getRange();
+		if (distSq <= radius * radius)
+			return currentTarget.get();
+	}
 
-    if (m_hitFixtures.empty()) {
-        setTarget(nullptr);
-        return nullptr;
-    }
+	if (m_hitFixtures.empty()) {
+		setTarget(nullptr);
+		return nullptr;
+	}
 
-    Character* closest = nullptr;
-    float minDist = std::numeric_limits<float>::max();
-    sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
+	Character* closest = nullptr;
+	float minDist = std::numeric_limits<float>::max();
+	sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
 
-    for (auto* fixture : m_hitFixtures) {
-        auto* character = reinterpret_cast<Character*>(fixture->GetBody()->GetUserData().pointer);
-        if (!character) continue;
+	for (auto* fixture : m_hitFixtures) {
+		auto* character = reinterpret_cast<Character*>(fixture->GetBody()->GetUserData().pointer);
+		if (!character) continue;
 
-        if (auto* enemy = dynamic_cast<Enemy*>(character)) {
-            if ((isSpy() && enemy->isSpy()) || (!isSpy() && !enemy->isSpy()))
-                continue;
-        }
+		if (auto* enemy = dynamic_cast<Enemy*>(character)) {
+			if ((isSpy() && enemy->isSpy()) || (!isSpy() && !enemy->isSpy()))
+				continue;
+		}
 
-        if (dynamic_cast<Player*>(character) && isSpy())
-            continue;
+		if (dynamic_cast<Player*>(character) && isSpy())
+			continue;
 
-        float dist = std::hypot(character->getPosition().x - lightPos.x,
-            character->getPosition().y - lightPos.y);
+		float dist = std::hypot(character->getPosition().x - lightPos.x,
+			character->getPosition().y - lightPos.y);
 
-        if (dist < minDist) {
-            if (closest && dynamic_cast<Player*>(closest) && !isSpy()) {
-                continue;
-            }
-            minDist = dist;
-            closest = character;
-        }
-    }
+		if (dist < minDist) {
+			if (closest && dynamic_cast<Player*>(closest) && !isSpy()) {
+				continue;
+			}
+			minDist = dist;
+			closest = character;
+		}
+	}
 
-    setTarget(closest ? closest->shared_from_this() : nullptr);
-    return closest;
+	setTarget(closest ? closest->shared_from_this() : nullptr);
+	return closest;
 }
 
 //=========================================================
@@ -116,10 +116,10 @@ Character* Enemy::getClosestTarget()
 //=========================================================
 void Enemy::takeDamage(const int damage)
 {
-    if (m_health > 0) {
-        m_health = std::max(m_health - damage, 0.f);
-        m_healthBar->setValue(m_health);
-    }
+	if (m_health > 0) {
+		m_health = std::max(m_health - damage, 0.f);
+		m_healthBar->setValue(m_health);
+	}
 }
 
 //=========================================================
@@ -127,36 +127,36 @@ void Enemy::takeDamage(const int damage)
 //=========================================================
 void Enemy::update(const float deltaTime)
 {
-    if (getTarget() || isSpy()) {
-        setVisible(true);
-        m_hideDelayTimer = 0.2f;
-    }
-    else if (m_hideDelayTimer > 0.f) {
-        m_hideDelayTimer -= deltaTime;
-        if (m_hideDelayTimer <= 0.f)
-            setVisible(false);
-    }
+	if (getTarget() || isSpy()) {
+		setVisible(true);
+		m_hideDelayTimer = 0.2f;
+	}
+	else if (m_hideDelayTimer > 0.f) {
+		m_hideDelayTimer -= deltaTime;
+		if (m_hideDelayTimer <= 0.f)
+			setVisible(false);
+	}
 
-    Character::update(deltaTime);
+	Character::update(deltaTime);
 
-    if (m_health <= 0.f) {
-        setDestroyed(true);
-        return;
-    }
+	if (m_health <= 0.f) {
+		setDestroyed(true);
+		return;
+	}
 
-    if (m_isSpy) {
-        m_spyTimer -= deltaTime;
-        if (m_spyTimer <= 0.f)
-            setSpy(false);
-    }
+	if (m_isSpy) {
+		m_spyTimer -= deltaTime;
+		if (m_spyTimer <= 0.f)
+			setSpy(false);
+	}
 
-    if (m_speedDownTimer > 0.f) {
-        m_speedDownTimer -= deltaTime;
-        if (m_speedDownTimer <= 0.f)
-            m_speed = m_originalSpeed;
-    }
+	if (m_speedDownTimer > 0.f) {
+		m_speedDownTimer -= deltaTime;
+		if (m_speedDownTimer <= 0.f)
+			m_speed = m_originalSpeed;
+	}
 
-    m_weapon->getWeaponLight()->setColor(m_isSpy ? sf::Color::Blue : sf::Color::Red);
+	m_weapon->getWeaponLight()->setColor(m_isSpy ? sf::Color::Blue : sf::Color::Red);
 }
 
 //=========================================================
@@ -164,7 +164,7 @@ void Enemy::update(const float deltaTime)
 //=========================================================
 void Enemy::speedDown()
 {
-    m_speed = std::max(m_speed - 0.2f, 4.f);
+	m_speed = std::max(m_speed - 0.2f, 4.f);
 }
 
 //=========================================================
@@ -172,8 +172,8 @@ void Enemy::speedDown()
 //=========================================================
 void Enemy::setSpeedDownTimer(const float seconds)
 {
-    speedDown();
-    m_speedDownTimer = seconds;
+	speedDown();
+	m_speedDownTimer = seconds;
 }
 
 //=========================================================
@@ -181,9 +181,9 @@ void Enemy::setSpeedDownTimer(const float seconds)
 //=========================================================
 void Enemy::setSpy(const bool value)
 {
-    m_isSpy = value;
-    m_visable = value;
-    setTarget(nullptr);
+	m_isSpy = value;
+	m_visable = value;
+	setTarget(nullptr);
 }
 
 //=========================================================
@@ -191,7 +191,7 @@ void Enemy::setSpy(const bool value)
 //=========================================================
 bool Enemy::isSpy() const
 {
-    return m_isSpy;
+	return m_isSpy;
 }
 
 //=========================================================
@@ -199,7 +199,7 @@ bool Enemy::isSpy() const
 //=========================================================
 void Enemy::setSpyTimer(const float seconds)
 {
-    m_spyTimer = seconds;
+	m_spyTimer = seconds;
 }
 
 //=========================================================
@@ -207,26 +207,27 @@ void Enemy::setSpyTimer(const float seconds)
 //=========================================================
 void Enemy::updateFootstepSound(const float distanceToPlayer, const float deltaTime)
 {
-    if (isSpy())
-        return;
+	if (isSpy())
+		return;
 
-    const float footstepDistanceThreshold = 1050.f;
-    const float maxInterval = 1.0f;
-    const float minInterval = 0.25f;
-    const float maxVolume = 110.f;
-    const float minVolume = 60.f;
+	const float footstepDistanceThreshold = 1050.f;
+	const float maxInterval = 1.0f;
+	const float minInterval = 0.25f;
+	const float maxVolume = 110.f;
+	const float minVolume = 60.f;
 
-    float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
-    m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;
+	float normalizedDist = std::clamp(distanceToPlayer / footstepDistanceThreshold, 0.f, 1.f);
+	m_footstepInterval = minInterval + (maxInterval - minInterval) * normalizedDist;
 
-    m_footstepTimer += deltaTime;
-    if (m_footstepTimer >= m_footstepInterval) {
-        if (distanceToPlayer <= footstepDistanceThreshold &&
-            !SoundManager::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
-            SoundManager::instance().play(Constants::SoundID::FOOTSTEP);
-            float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
-            SoundManager::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
+	m_footstepTimer += deltaTime;
+	if (m_footstepTimer >= m_footstepInterval) {
+		if (distanceToPlayer <= footstepDistanceThreshold &&
+			!SoundManager::instance().isPlaying(Constants::SoundID::FOOTSTEP)) {
+			SoundManager::instance().play(Constants::SoundID::FOOTSTEP);
+			float volume = maxVolume - (maxVolume - minVolume) * normalizedDist;
+			SoundManager::instance().setVolume(Constants::SoundID::FOOTSTEP, volume);
 
-        m_footstepTimer = 0.f;
-    }
+			m_footstepTimer = 0.f;
+		}
+	}
 }
