@@ -14,7 +14,7 @@ void SmartWeaponCommand::execute() {
             session.setMoney(session.getMoney() - price);
             session.addWeapon(m_weapon);
             m_market.setMessage("Weapon purchased!");
-            SoundManger::instance().play(Constants::SoundID::COINS);
+            SoundManager::instance().play(Constants::SoundID::COINS);
         }
         else {
             m_market.setMessage("You don't have enough money!");

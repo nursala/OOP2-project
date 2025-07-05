@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommandInc/Command.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 
 class Button;
 

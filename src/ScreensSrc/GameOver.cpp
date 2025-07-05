@@ -1,6 +1,6 @@
 #include "ScreensInc/GameOver.h"
 #include "CommandInc/PopToHomeCommand.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 
 //-------------------------------------
 // Constructor - set background and size
@@ -17,8 +17,8 @@ GameOver::GameOver()
 void GameOver::init()
 {
 	m_generalButtons.clear();
-	SoundManger::instance().stop(Constants::SoundID::GAMEOVERSOUND);
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManager::instance().stop(Constants::SoundID::GAMEOVERSOUND);
+	SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
 
     m_generalButtons.emplace_back(
         Constants::ButtonID::BackToHome,

@@ -13,7 +13,7 @@
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "StatesInc/WalkingState.h"
 #include "StatesInc/AttackingState.h"
 #include "ResourseInc/TextureManager.h"
@@ -61,7 +61,7 @@ void Character::update(float deltaTime)
     m_sprite.setTextureRect(m_animation->getUvRect());
 
     // Update health bar
-    sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 30 };
+    sf::Vector2f healthBarPos = { getPosition().x , getPosition().y + 40 };
     m_healthBar->setPosition(healthBarPos);
     m_healthBar->setValue(m_health);
 

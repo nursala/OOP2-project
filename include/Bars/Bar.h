@@ -51,4 +51,5 @@ protected:
 private:
     // Updates the size of the filled inner bar based on the current value.
     void updateBar();
+	float m_angle = 0.f; // Rotation angle in degrees
 };

@@ -4,7 +4,7 @@
 #include "CommandInc/PopScreenCommand.h"
 #include "CommandInc/StopMusicCommand.h"
 #include "CommandInc/PushScreenCommand.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "ScreensInc/PauseScreen.h"
 #include "ScreensInc/GameWin.h"
 #include "ScreensInc/GameOver.h"
@@ -62,22 +62,22 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 	{
 		GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 100);
 		Controller::getInstance().pushScreen(std::make_unique<GameWin>());
-		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
-		SoundManger::instance().play(Constants::SoundID::GAMEWINSOUND);
-		SoundManger::instance().setVolume(Constants::SoundID::GAMEWINSOUND, 30.f);
+		SoundManager::instance().mute(true, true); // Mute all sounds
+		SoundManager::instance().play(Constants::SoundID::GAMEWINSOUND);
+		SoundManager::instance().setVolume(Constants::SoundID::GAMEWINSOUND, 30.f);
 	}
 	if (GameSessionData::instance().getHealth() <= 0)
 	{
 		Controller::getInstance().pushScreen(std::make_unique<GameOver>());
-		SoundManger::instance().stop(Constants::SoundID::BACKGROUNDMUSIC);
-		SoundManger::instance().play(Constants::SoundID::GAMEOVERSOUND);
-		SoundManger::instance().setVolume(Constants::SoundID::GAMEOVERSOUND, 30.f);
+		SoundManager::instance().mute(true, true); // Mute all sounds
+		SoundManager::instance().play(Constants::SoundID::GAMEOVERSOUND);
+		SoundManager::instance().setVolume(Constants::SoundID::GAMEOVERSOUND, 30.f);
 	}
 	if (GameSessionData::instance().getHealth() <= 20)
 	{
-		SoundManger::instance().play(Constants::SoundID::HEARTBEAT);
-		SoundManger::instance().loop(Constants::SoundID::HEARTBEAT, true);
-		SoundManger::instance().setVolume(Constants::SoundID::HEARTBEAT,6000.f);
+		SoundManager::instance().play(Constants::SoundID::HEARTBEAT);
+		SoundManager::instance().loop(Constants::SoundID::HEARTBEAT, true);
+		SoundManager::instance().setVolume(Constants::SoundID::HEARTBEAT,6000.f);
 		//SoundManger::instance().loop(Constants::SoundID::HEARTBEAT, true);
 	}
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
@@ -92,6 +92,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 
 //-------------------------------------
 // Render world and HUD
+//-------------------------------------
 void PlayGround::render(sf::RenderWindow& window) {
     DebugDraw debugDraw(&window);
     const uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
@@ -112,9 +113,9 @@ Constants::ScreenID PlayGround::getScreenID() const
 
 void PlayGround::setIniSound()
 {
-	SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
-	SoundManger::instance().play(Constants::SoundID::GAMEBEGIN);
-	SoundManger::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
-	SoundManger::instance().loop(Constants::SoundID::BACKGROUNDMUSIC, true);
-	SoundManger::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
+	SoundManager::instance().stop(Constants::SoundID::MENUMUSIC);
+	SoundManager::instance().play(Constants::SoundID::GAMEBEGIN);
+	SoundManager::instance().play(Constants::SoundID::BACKGROUNDMUSIC);
+	SoundManager::instance().loop(Constants::SoundID::BACKGROUNDMUSIC, true);
+	SoundManager::instance().setVolume(Constants::SoundID::BACKGROUNDMUSIC, 20.f);
 }

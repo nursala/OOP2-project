@@ -4,7 +4,7 @@
 #include "ScreensInc/HomeScreen.h"
 #include "CommandInc/PushScreenCommand.h"
 #include "Controller.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 
 
 SplashScreen::SplashScreen() {
@@ -43,7 +43,7 @@ void SplashScreen::init()
         {"This is not a mission —", 91.f},
         {"This… is survival.", 95.f}
     };
-	SoundManger::instance().play(Constants::SoundID::SCENARIO);
+	SoundManager::instance().play(Constants::SoundID::SCENARIO);
 }
 
 Constants::ScreenID SplashScreen::getScreenID() const {
@@ -53,7 +53,7 @@ Constants::ScreenID SplashScreen::getScreenID() const {
 void SplashScreen::render(sf::RenderWindow& window) {
     Screen::render(window);
 
-    float currentTime = SoundManger::instance().getPlayingOffset(Constants::SoundID::SCENARIO).asSeconds();
+    float currentTime = SoundManager::instance().getPlayingOffset(Constants::SoundID::SCENARIO).asSeconds();
     float y = Constants::WINDOW_HEIGHT * 0.1f;
 
     for (const auto& line : m_script) {

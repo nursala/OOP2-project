@@ -2,7 +2,7 @@
 #include "GameObject/Character.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <box2d/box2d.h>
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 
 void KeyboardMoveStrategy::move(Character& character, float deltaTime) {
    

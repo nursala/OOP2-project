@@ -1,5 +1,5 @@
 #include "ScreensInc/GameWin.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include "CommandInc/PopToHomeCommand.h"
 
 //-------------------------------------
@@ -17,8 +17,8 @@ GameWin::GameWin()
 void GameWin::init()
 {
 	m_generalButtons.clear();
-	SoundManger::instance().stop(Constants::SoundID::GAMEWINSOUND);
-	SoundManger::instance().play(Constants::SoundID::MENUMUSIC);
+	SoundManager::instance().stop(Constants::SoundID::GAMEWINSOUND);
+	SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
 
     m_generalButtons.emplace_back(
         Constants::ButtonID::BackToHome,

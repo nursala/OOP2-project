@@ -2,7 +2,7 @@
 #include "Controller.h"
 #include "Constants.h"
 #include "ResourseInc/BaseResourceManager.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
 #include <iostream>
 
 //----------------------------------------
@@ -93,12 +93,17 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
             if (m_command)
             {
                 m_command->execute();
-                SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
+                SoundManager::instance().play(Constants::SoundID::BUTTOUNEVENT);
                 if (m_text.getString() == "Continue")
                 {
-                    SoundManger::instance().unmute(true, true);
-                    SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
+                    SoundManager::instance().unmute(true, true);
+                    SoundManager::instance().stop(Constants::SoundID::MENUMUSIC);
                 }
+				if (m_text.getString() == "Back to Home")
+				{
+					SoundManager::instance().mute(true, true);
+					SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
+				}
             }
             else
             {
@@ -142,7 +147,7 @@ void Button::execute()
     if (m_command)
     {
         m_command->execute();
-        SoundManger::instance().play(Constants::SoundID::BUTTOUNEVENT);
+        SoundManager::instance().play(Constants::SoundID::BUTTOUNEVENT);
     }
 }
 

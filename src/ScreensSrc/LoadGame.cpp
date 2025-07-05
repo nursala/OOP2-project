@@ -1,7 +1,7 @@
 #include "ScreensInc/LoadGame.h"
 #include "ScreensInc/PlayGround.h"
-#include "ResourseInc/SoundManger.h"
-#include "ResourseInc/SoundManger.h"
+#include "ResourseInc/SoundManager.h"
+#include "ResourseInc/SoundManager.h"
 #include "ScreensInc/Screen.h"
 #include <CommandInc/PopToHomeCommand.h>
 #include <CommandInc/PushScreenCommand.h>
@@ -28,9 +28,9 @@ LoadGame::LoadGame()
 void LoadGame::init()
 {
     m_generalButtons.clear();
-    SoundManger::instance().stop(Constants::SoundID::MENUMUSIC);
-    SoundManger::instance().play(Constants::SoundID::MATCHMAKINGMUSIC);
-    SoundManger::instance().setVolume(Constants::SoundID::MATCHMAKINGMUSIC, 40.f);
+    SoundManager::instance().stop(Constants::SoundID::MENUMUSIC);
+    SoundManager::instance().play(Constants::SoundID::MATCHMAKINGMUSIC);
+    SoundManager::instance().setVolume(Constants::SoundID::MATCHMAKINGMUSIC, 40.f);
 }
 
 // Updates countdown timer and transitions to PlayGround screen
