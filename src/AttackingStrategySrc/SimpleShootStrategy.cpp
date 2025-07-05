@@ -37,9 +37,7 @@ bool SimpleShootStrategy::attack(Character& self) {
     const b2Vec2 bulletPosB2(bulletPos.x, bulletPos.y);
 
     // Fire the weapon and pass the bullet(s) to the world.
-    self.getWorld().addBullets(
-        weapon->fire(self.getWorld(), bulletPosB2, direction, self.shared_from_this())
-    );
+    self.getWorld().addBullets(weapon->fire(self.getWorld(), bulletPosB2, direction, self.shared_from_this()));
 
     return true;
 }

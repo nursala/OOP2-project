@@ -59,8 +59,7 @@ Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
 Character* Enemy::getClosestTarget()
 {
 	if (auto currentTarget = getTarget()) {
-		for (b2Fixture* fixture = currentTarget->getBody()->GetFixtureList();
-			fixture; fixture = fixture->GetNext()) {
+		for (b2Fixture* fixture = currentTarget->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
 			if (m_hitFixtures.find(fixture) != m_hitFixtures.end())
 				return currentTarget.get();
 		}
@@ -96,7 +95,7 @@ Character* Enemy::getClosestTarget()
 			continue;
 
 		float dist = std::hypot(character->getPosition().x - lightPos.x,
-			character->getPosition().y - lightPos.y);
+								character->getPosition().y - lightPos.y);
 
 		if (dist < minDist) {
 			if (closest && dynamic_cast<Player*>(closest) && !isSpy()) {
@@ -127,6 +126,16 @@ void Enemy::takeDamage(const int damage)
 //=========================================================
 void Enemy::update(const float deltaTime)
 {
+	if (auto enemy = dynamic_cast<Enemy*>(getTarget().get()))
+	{
+		if (isSpy() && enemy->isSpy()) {
+			getClosestTarget();
+		}
+		else if (!isSpy() && !enemy->isSpy()) {
+			setTarget(nullptr);
+		}
+	}
+
 	if (getTarget() || isSpy()) {
 		setVisible(true);
 		m_hideDelayTimer = 0.2f;

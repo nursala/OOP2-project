@@ -5,6 +5,9 @@
 #include "GameObject/Character.h"
 #include "WeaponInc/Weapon.h"
 
+//---------------------------------------------
+// AttackingState - handles character behavior when attacking
+//---------------------------------------------
 void AttackingState::update(Character& character, float dt) 
 {
 	character.shoot();
@@ -12,6 +15,9 @@ void AttackingState::update(Character& character, float dt)
 	character.getAnimation().update(dt);
 }
 
+//---------------------------------------------
+// handleInput - checks if the character has a target, if not, switches to WalkingState
+//---------------------------------------------
 std::unique_ptr<State> AttackingState::handleInput(Character& character)
 {
 	if (character.getTarget())

@@ -53,7 +53,7 @@ void Statusbar::initCoins()
 void Statusbar::initLevel()
 {
 	initializeTexture(m_shape[2], Constants::TextureID::LEVELS, Constants::MARGIN + Constants::WINDOW_WIDTH * 0.7);
-	std::string levelText = " :" + Constants::LevelNames[GameSessionData::instance().getLevelID()].first;
+	std::string levelText = ": " + Constants::LevelNames[GameSessionData::instance().getLevelID()].first;
 	initializeText(m_text[2], Constants::TILE_IN_STATUS_BAR + Constants::MARGIN + Constants::WINDOW_WIDTH * 0.7);
 	m_text[2].setFillColor(Constants::LevelNames[GameSessionData::instance().getLevelID()].second);
 	setText(levelText, 2);

@@ -8,6 +8,9 @@
 #include "Factory.h"
 #include <iostream>
 
+//-------------------------------------
+// Weapon Constructor : initializes the weapon with specific parameters
+//-------------------------------------
 Weapon::Weapon(Constants::WeaponType type, float shootingRange, 
 			float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
 {
@@ -16,6 +19,9 @@ Weapon::Weapon(Constants::WeaponType type, float shootingRange,
 	m_weaponLight->setColor(sf::Color::Red); // Set default color for the weapon light
 }
 
+//-------------------------------------
+// Creates and returns bullets fired from the weapon
+//-------------------------------------
 std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const b2Vec2& position,
 					const sf::Vector2f& direction, std::shared_ptr<Character> owner)
 {
@@ -39,6 +45,9 @@ std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const b2Vec2& po
 	return bullets;
 }
 
+//-------------------------------------
+// Set the shooting range of the weapon
+//-------------------------------------
 void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 {
 	m_fireTimer -= dt;
@@ -49,6 +58,9 @@ void Weapon::update(sf::Vector2f playerPos, float angle, float dt)
 	}
 }
 
+//-------------------------------------
+// Set the shooting range of the weapon
+//-------------------------------------
 void Weapon::draw(RenderLayers& renderLayers)
 {
 	if (m_weaponLight)
@@ -60,7 +72,7 @@ void Weapon::draw(RenderLayers& renderLayers)
 
 float Weapon::getShootingRange() const
 {
-	return m_weaponLight->getRange();
+	return m_weaponLight->getRange() - 10.f;
 }
 
 WeaponLight* Weapon::getWeaponLight()

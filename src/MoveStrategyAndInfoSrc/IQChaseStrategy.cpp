@@ -6,14 +6,21 @@
 #include <random>
 #include <iostream>
 
+//---------------------------------------------
+// Constructor : Initializes player, map, and IQ level
+//---------------------------------------------
 IQChaseStrategy::IQChaseStrategy(const Player& player, const LoadMap& map, int iqLevel)
     : m_player(player), m_map(map), m_iqLevel(iqLevel), m_pathUpdateTimer(0.f), m_randomDirTimer(0.f),
     m_lastPosition(0.f, 0.f), m_stuckTimer(0.f)
 {
 }
 
+//---------------------------------------------
+// Move method: Handles enemy movement logic based on IQ level and pathfinding
+//---------------------------------------------
 void IQChaseStrategy::move(Character& character, float deltaTime)
 {
+	// Check if the character has a target or is a spy
     Character* target = character.getTarget().get();
     sf::Vector2f enemyPos = character.getPosition();
     sf::Vector2f targetPos;
@@ -24,7 +31,7 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
     else {
         targetPos = m_player.getPosition();
     }
-
+	// Check if the enemy is a spy and adjust IQ level based on distance to target
     auto e = dynamic_cast<Enemy*>(&character);
     float distToTarget = distance(enemyPos, targetPos);
     if (distToTarget < 350.f && m_iqLevel < 10) ++m_iqLevel;
@@ -35,6 +42,7 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
     float chanceToUseAStar = m_iqLevel / 10.f;
     sf::Vector2f dir;
 
+	// Randomly decide whether to use A* pathfinding based on IQ level
     static std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<float> dist(0.f, 1.f);
 
@@ -45,6 +53,7 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
         m_behaviorLockTimer = 0.f;
         m_usingAStar = dist(rng) < chanceToUseAStar;
 
+		// If using A* pathfinding, find the path from enemy to target
         if (m_usingAStar) {
             sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()), static_cast<int>(enemyPos.y / m_map.getTileHeight()));
             sf::Vector2i goal(static_cast<int>(targetPos.x / m_map.getTileWidth()), static_cast<int>(targetPos.y / m_map.getTileHeight()));
@@ -116,7 +125,9 @@ sf::Vector2f IQChaseStrategy::getPlayerPostion() const
     return m_player.getPosition();
 }
 
-
+//---------------------------------------------
+// Generate a random direction for the enemy to move in
+//---------------------------------------------
 sf::Vector2f IQChaseStrategy::generateRandomDirection(const Character& enemy, float) {
 	float speed = enemy.getSpeed();
     std::vector<sf::Vector2f> dirs = { {speed,0}, {-speed,0}, {0,speed}, {0,-speed} };
@@ -126,6 +137,9 @@ sf::Vector2f IQChaseStrategy::generateRandomDirection(const Character& enemy, fl
     return normalize(dirs.front());
 }
 
+//---------------------------------------------
+// Normalize a vector to unit length
+//---------------------------------------------
 sf::Vector2f IQChaseStrategy::normalize(const sf::Vector2f& v) {
     float length = std::hypot(v.x, v.y);
     return (length == 0.f) ? sf::Vector2f(0.f, 0.f) : sf::Vector2f(v.x / length, v.y / length);

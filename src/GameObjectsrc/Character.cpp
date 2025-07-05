@@ -1,7 +1,4 @@
 ﻿//==============================================
-// Author: YourName
-// ID: YourID
-// Login: yourLogin
 // File: Character.cpp
 // Description: Implementation of the base Character class.
 //==============================================
@@ -40,7 +37,7 @@ Character::Character(World& world, const b2Vec2& positionB2)
 //=============================
 void Character::update(float deltaTime)
 {
-    this->updateTargets();
+    updateTargets();
     getClosestTarget(); // to be implemented by derived class
 
     // Handle state logic
@@ -192,14 +189,14 @@ void Character::setRotation(const float angle)
 void Character::updateTargets()
 {
     m_hitFixtures.clear();
-    if (!m_visionLight) return;
+    if (!m_weapon->getWeaponLight()) return;
 
-    float startAngle = m_visionLight->getRotation() - m_visionLight->getBeamAngle() / 2.f;
-    float endAngle = m_visionLight->getRotation() + m_visionLight->getBeamAngle() / 2.f;
+    float startAngle = m_weapon->getWeaponLight()->getRotation() - m_weapon->getWeaponLight()->getBeamAngle() / 2.f;
+    float endAngle = m_weapon->getWeaponLight()->getRotation() + m_weapon->getWeaponLight()->getBeamAngle() / 2.f;
     const int rayCount = 36;
     float angleStep = (endAngle - startAngle) / static_cast<float>(rayCount);
 
-    sf::Vector2f lightPos = m_visionLight->getPosition();
+    sf::Vector2f lightPos = m_weapon->getWeaponLight()->getPosition();
     b2Vec2 origin(lightPos.x / 30.f, lightPos.y / 30.f);
 
     for (int i = 0; i <= rayCount; ++i)
@@ -207,7 +204,7 @@ void Character::updateTargets()
         float angleDeg = startAngle + i * angleStep;
         float angleRad = angleDeg * b2_pi / 180.f;
         b2Vec2 direction(std::cos(angleRad), std::sin(angleRad));
-        b2Vec2 endPoint = origin + (m_visionLight->getRange() / 30.f) * direction;
+        b2Vec2 endPoint = origin + (m_weapon->getWeaponLight()->getRange() / 30.f) * direction;
 
         RayCastClosest callback;
         m_world.getWorld().RayCast(&callback, origin, endPoint);

@@ -4,6 +4,9 @@
 #include <box2d/box2d.h>
 #include "ResourseInc/SoundManager.h"
 
+// ---------------------------------------------
+// KeyboardMoveStrategy - handles character movement based on keyboard input
+// ---------------------------------------------
 void KeyboardMoveStrategy::move(Character& character, float deltaTime) {
    
     (void) deltaTime;

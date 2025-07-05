@@ -3,11 +3,17 @@
 #include "WorldInc/World.h"
 #include "Factory.h"
 
+//-------------------------------------
+// Shotgun Constructor : initializes the weapon with specific parameters
+//-------------------------------------
 Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 150.f, 8.f, 60.f)
 {
 	m_fireCooldown = 1.f; // Set the cooldown for firing
 }
 
+//-------------------------------------
+//Creates and returns bullets fired from the shotgun
+//-------------------------------------
 std::vector<std::unique_ptr<Bullet>> Shotgun::fire(World& world, const b2Vec2& position, 
                             const sf::Vector2f& direction, std::shared_ptr<Character> owner)
 {
