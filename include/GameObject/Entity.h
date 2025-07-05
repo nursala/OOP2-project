@@ -31,6 +31,7 @@ public:
     b2Vec2 getVelocity() const;
     b2Body* getBody() const;
     World& getWorld();
+	Constants::EntityType getEntityType() const { return m_entityType; }
 
     void setSpriteRadius(const float radius);
     sf::Vector2f getSpriteRadius() const { return m_sprite.getScale(); }
@@ -55,6 +56,7 @@ protected:
 
     b2Vec2 m_position;
     b2Vec2 m_initialPosition;
+	Constants::EntityType m_entityType;
 
     //========================= Body Customization =========================//
     virtual void customizeBodyDef(b2BodyDef&) {}

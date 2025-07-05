@@ -32,6 +32,7 @@ Bullet::Bullet(World& world, const b2Vec2& positionB2, const sf::Vector2f& direc
      const std::shared_ptr<Character>& owner, const float& damage, const float& range)
     : Entity(world, positionB2), m_direction(direction), m_owner(owner)
 {
+	m_entityType = Constants::EntityType::Bullet;
     m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::BULLET));
     m_sprite.setTextureRect(sf::IntRect(0, 0,
         TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().x,

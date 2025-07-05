@@ -21,6 +21,7 @@ namespace {
 Gift::Gift(World& world, const b2Vec2& position, const Constants::GiftType& type)
     : Entity(world, position), m_type(type)
 {
+	m_entityType = Constants::EntityType::Gift;
     auto textureID = Constants::GiftTextures[type];
 
     // Set sprite texture

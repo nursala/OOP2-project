@@ -60,7 +60,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f viewSize = m_view.getSize();
 	if (GameSessionData::instance().getEnemies() <= 0)
 	{
-		GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 100);
+		GameSessionData::instance().setMoney(GameSessionData::instance().getMoney() + 50);
 		Controller::getInstance().pushScreen(std::make_unique<GameWin>());
 		SoundManager::instance().mute(true, true); // Mute all sounds
 		SoundManager::instance().play(Constants::SoundID::GAMEWINSOUND);
@@ -68,6 +68,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 	}
 	if (GameSessionData::instance().getHealth() <= 0)
 	{
+		GameSessionData::instance().setMoney(100);
 		Controller::getInstance().pushScreen(std::make_unique<GameOver>());
 		SoundManager::instance().mute(true, true); // Mute all sounds
 		SoundManager::instance().play(Constants::SoundID::GAMEOVERSOUND);

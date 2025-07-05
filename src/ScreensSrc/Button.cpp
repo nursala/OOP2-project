@@ -99,9 +99,10 @@ void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window)
                     SoundManager::instance().unmute(true, true);
                     SoundManager::instance().stop(Constants::SoundID::MENUMUSIC);
                 }
-				if (m_text.getString() == "Back to Home")
+				else if (m_text.getString() == "Back to Home")
 				{
-					SoundManager::instance().mute(true, true);
+					SoundManager::instance().stop(Constants::SoundID::GAMEOVERSOUND);
+					SoundManager::instance().stop(Constants::SoundID::GAMEWINSOUND);
 					SoundManager::instance().play(Constants::SoundID::MENUMUSIC);
 				}
             }

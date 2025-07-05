@@ -30,6 +30,7 @@ Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
 	const Player& player, const Constants::WeaponType& type)
 	: Character(world, position), m_playerRef(player)
 {
+	m_entityType = Constants::EntityType::Enemy;
 	auto& weaponData = Constants::WeaponDataMap.at(type);
 
 	m_animation = std::make_unique<Animation>(
@@ -190,6 +191,7 @@ void Enemy::setSpeedDownTimer(const float seconds)
 //=========================================================
 void Enemy::setSpy(const bool value)
 {
+	m_entityType = value ? Constants::EntityType::Spy : Constants::EntityType::Enemy;
 	m_isSpy = value;
 	m_visable = value;
 	setTarget(nullptr);

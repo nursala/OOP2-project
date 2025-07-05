@@ -63,6 +63,7 @@ namespace Constants {
 		Enemy,
 		Bullet,
 		Gift,
+		Spy
 	};
 	// ----------------------------
 	//Screens

@@ -14,6 +14,7 @@ ContactListener::ContactListener(World& world)
 
 //---------------------------------------
 // Called when two fixtures begin to touch
+//----------------------------------------
 void ContactListener::BeginContact(b2Contact* contact) {
     b2Body* bodyA = contact->GetFixtureA()->GetBody();
     b2Body* bodyB = contact->GetFixtureB()->GetBody();
@@ -31,6 +32,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 break;
             case Constants::GiftType::HEALTH:
                 player->addHealth();
+             
                 SoundManager::instance().play(Constants::SoundID::HEALTHUPGRADE);
                 break;
             case Constants::GiftType::SPEEDUP:
@@ -65,14 +67,12 @@ void ContactListener::BeginContact(b2Contact* contact) {
         }
         else if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
             auto shooter = bullet->getOwnerShared().get();
-            if (shooter == player)
+            if (shooter == player || shooter == nullptr)
                 return;
 
-            if (auto enemyShooter = dynamic_cast<Enemy*>(shooter)) {
-                if (!enemyShooter->isSpy()) {
-                    player->takeDamage(bullet->getDamage());
-                    bullet->setDestroyed(true);
-                }
+            if (shooter->getEntityType() == Constants::EntityType::Enemy) {
+                player->takeDamage(bullet->getDamage());
+                bullet->setDestroyed(true);
             }
         }
     }
@@ -81,26 +81,20 @@ void ContactListener::BeginContact(b2Contact* contact) {
     else if (auto enemy = dynamic_cast<Enemy*>(entityA)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityB)) {
             auto shooter = bullet->getOwnerShared().get();
-            if (shooter == enemy)
+            if (shooter == enemy || shooter == nullptr)
                 return;
 
-            if (dynamic_cast<Player*>(shooter)) {
-                if (!enemy->isSpy()) {
+            bool isShooterPlayer = shooter->getEntityType() == Constants::EntityType::Player;
+			bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
+            if ((isShooterPlayer || isShooterSpy) && !enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
-                }
-            }
-            else if (auto shooterEnemy = dynamic_cast<Enemy*>(shooter)) {
-                if (shooterEnemy != enemy && shooterEnemy->isSpy()) {
-                    enemy->takeDamage(bullet->getDamage());
-                    bullet->setDestroyed(true);
-                }
             }
         }
     }
 
     // === Symmetric Cases ===
-    else if (auto player = dynamic_cast<Player*>(entityB)) {
+   /* else if (auto player = dynamic_cast<Player*>(entityB)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityA)) {
             auto shooter = bullet->getOwnerShared().get();
             if (shooter == player)
@@ -134,5 +128,5 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 }
             }
         }
-    }
+    }*/
 }

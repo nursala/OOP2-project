@@ -34,6 +34,7 @@ namespace {
 Player::Player(World& world, const b2Vec2& position)
 	: Character(world, position)
 {
+	m_entityType = Constants::EntityType::Player;
 	auto& weaponData = Constants::WeaponDataMap.at(GameSessionData::instance().getSelectedWeapon());
 
 	m_animation = std::make_unique<Animation>(
@@ -108,7 +109,7 @@ void Player::takeDamage(int damage)
 	}
 	if (damage > 0) {
 		m_health -= damage;
-		GameSessionData::instance().setHealth(GameSessionData::instance().getHealth() - damage);
+		GameSessionData::instance().setHealth(m_health);
 		if (m_health < 0.f) m_health = 0.f;
 	}
 
@@ -130,6 +131,7 @@ void Player::addHealth()
 	m_health += 30.f;
 	if (m_health > 100.f) m_health = 100.f;
 	m_healthBar->setValue(m_health);
+	GameSessionData::instance().setHealth(m_health);
 }
 
 //---------------------------------------------
