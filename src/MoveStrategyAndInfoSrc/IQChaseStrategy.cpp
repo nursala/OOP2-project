@@ -55,8 +55,10 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
 
 		// If using A* pathfinding, find the path from enemy to target
         if (m_usingAStar) {
-            sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()), static_cast<int>(enemyPos.y / m_map.getTileHeight()));
-            sf::Vector2i goal(static_cast<int>(targetPos.x / m_map.getTileWidth()), static_cast<int>(targetPos.y / m_map.getTileHeight()));
+            sf::Vector2i start(static_cast<int>(enemyPos.x / m_map.getTileWidth()),
+                static_cast<int>(enemyPos.y / m_map.getTileHeight()));
+            sf::Vector2i goal(static_cast<int>(targetPos.x / m_map.getTileWidth()),
+                static_cast<int>(targetPos.y / m_map.getTileHeight()));
 
             auto path = AStarPathfinder::findPath(m_map, start, goal);
             if (!path.empty()) {
