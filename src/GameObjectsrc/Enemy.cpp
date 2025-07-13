@@ -51,7 +51,7 @@ Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
 	m_speed = m_originalSpeed = 7.f;
 	m_visable = false;
 
-	init(b2_dynamicBody, 1.3f);
+	init(b2_dynamicBody, 1.f);
 }
 
 //=========================================================

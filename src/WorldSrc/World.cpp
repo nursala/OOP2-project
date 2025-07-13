@@ -63,6 +63,7 @@ void World::createGifts() {
 		else if (chance < 60) {
 			type = Constants::GiftType::HEALTH;
 		}
+
 		else {
 			std::vector<Constants::GiftType> otherTypes;
 
