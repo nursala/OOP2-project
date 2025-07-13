@@ -23,7 +23,6 @@ void Animation::update(float deltaTime)
 {
     m_currentImage.y = static_cast<int>(std::floor(m_displayed / m_imageCount.x));
     m_totalTime += deltaTime;
-
     if (m_totalTime >= m_switchTime)
     {
         m_totalTime -= m_switchTime;
@@ -36,7 +35,7 @@ void Animation::update(float deltaTime)
             m_currentImage = { 0, 0 };
         }
 
-        m_currentImage.x = (m_currentImage.x + 1) % m_imageCount.x;
+        m_currentImage.x = (m_currentImage.x) % m_imageCount.x;
         m_currentImage.y = (m_displayed / m_imageCount.x) % m_imageCount.y;
     }
 

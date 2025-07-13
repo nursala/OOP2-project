@@ -94,7 +94,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
     }
 
     // === Symmetric Cases ===
-   /* else if (auto player = dynamic_cast<Player*>(entityB)) {
+    else if (auto player = dynamic_cast<Player*>(entityB)) {
         if (auto bullet = dynamic_cast<Bullet*>(entityA)) {
             auto shooter = bullet->getOwnerShared().get();
             if (shooter == player)
@@ -128,5 +128,5 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 }
             }
         }
-    }*/
+    }
 }

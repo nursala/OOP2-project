@@ -118,14 +118,7 @@ void Character::move(float dt)
     {
         m_moveStrategy->move(*this, dt);
 
-        auto& weaponData = Constants::WeaponDataMap.at(m_weapon->getType());
-        m_animation->setAll(
-            TextureManager::instance().get(weaponData.moveAnim.textureID),
-            weaponData.moveAnim.frameSize,
-            weaponData.moveAnim.speed
-        );
-
-        m_sprite.setTexture(*TextureManager::instance().get(weaponData.moveAnim.textureID));
+        
     }
 }
 
