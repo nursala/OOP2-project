@@ -27,6 +27,7 @@ template <typename ResourceType, typename IdentifierType>
 bool BaseResourceManager<ResourceType, IdentifierType>::load(const IdentifierType& id, const std::string& filename) {
     auto res = std::make_unique<ResourceType>();
     if (!res->loadFromFile(filename))
+
         return false;
     m_resources[id] = std::move(res);
     return true;

@@ -44,6 +44,7 @@ public:
     bool isPlaying(Constants::SoundID id) const;
 	sf::Sound& getSound(Constants::SoundID id);
 	void stop(Constants::SoundID id);
+    sf::Time getSoundDuration(Constants::SoundID id);
 	void mute(bool mute, bool pause);    
 	void unmute(bool mute, bool pause);
 

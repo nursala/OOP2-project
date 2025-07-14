@@ -19,7 +19,7 @@ void SplashScreen::init()
     m_generalButtons.emplace_back(
         Constants::ButtonID::Play,
         "Skip",
-        sf::Vector2f(Constants::WINDOW_WIDTH * 0.8f, Constants::WINDOW_HEIGHT * 0.9f),
+        sf::Vector2f(Constants::WINDOW_WIDTH * 0.7f, Constants::WINDOW_HEIGHT * 0.8f),
         sf::Vector2f(Constants::WINDOW_WIDTH * 0.2f, Constants::WINDOW_HEIGHT * 0.1f),
         std::make_unique<PushScreenCommand<HomeScreen>>()
     );
@@ -53,7 +53,10 @@ Constants::ScreenID SplashScreen::getScreenID() const {
 void SplashScreen::render(sf::RenderWindow& window) {
     Screen::render(window);
 
-    float currentTime = SoundManager::instance().getPlayingOffset(Constants::SoundID::SCENARIO).asSeconds();
+    auto& soundManager = SoundManager::instance();
+    float currentTime = soundManager.getPlayingOffset(Constants::SoundID::SCENARIO).asSeconds();
+    float duration = soundManager.getSoundDuration(Constants::SoundID::SCENARIO).asSeconds();
+
     float y = Constants::WINDOW_HEIGHT * 0.1f;
 
     for (const auto& line : m_script) {
@@ -74,16 +77,16 @@ void SplashScreen::render(sf::RenderWindow& window) {
             text.setString(partialText);
             text.setCharacterSize(24);
             text.setFillColor(color);
-            text.setPosition(Constants::WINDOW_WIDTH * 0.4f, y);
+            text.setPosition(Constants::WINDOW_WIDTH * 0.1f, y);
 
             window.draw(text);
             y += 40.f;
         }
     }
-    if (currentTime >= m_script.back().timeInSeconds + 4.f) {
-        auto it = m_buttons.begin();
-        if (it != m_buttons.end()) {
-            it->second.execute();
-        }
+
+
+    if (std::abs(currentTime - duration) < 0.1f) {
+        auto command = std::make_unique<PushScreenCommand<HomeScreen>>();
+        command->execute();
     }
 }
