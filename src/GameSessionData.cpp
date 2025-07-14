@@ -10,7 +10,7 @@ GameSessionData& GameSessionData::instance() {
 //-------------------------------------
 // Constructor
 GameSessionData::GameSessionData()
-    : m_money(1000),m_health(100),selectedWeapon(Constants::WeaponType::HandGun) {
+    : m_money(100),m_health(100),selectedWeapon(Constants::WeaponType::HandGun) {
     ownedWeapons.insert(Constants::WeaponType::HandGun);
 }
 
