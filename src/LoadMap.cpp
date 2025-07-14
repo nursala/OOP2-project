@@ -11,6 +11,9 @@ constexpr float SCALE = 30;
 LoadMap::LoadMap(const std::string& jsonPath)
 {
     std::ifstream file(jsonPath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open map file: " + jsonPath);
+    }
 
     json j;
     file >> j;

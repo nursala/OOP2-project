@@ -84,7 +84,7 @@ void World::createGifts() {
 		}
 
 		const b2Vec2 posB2(pos.x, pos.y);
-		auto gift = Factory::instance().createAs<Gift>(Constants::EntityType::Gift, *this, pos, type);
+		auto gift = Factory::instance().createAs<Gift>(Constants::EntityType::Gift, *this, pos, Constants::GiftType::SPY);
 		m_gifts.push_back(std::move(gift));
 	}
 }
@@ -161,7 +161,7 @@ void World::updateEnemies(const float deltaTime) {
 			SoundManager::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
-			//(*it)->update(deltaTime);
+			(*it)->update(deltaTime);
 			++it;
 		}
 	}

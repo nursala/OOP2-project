@@ -25,6 +25,10 @@ void SoundManager::stop(Constants::SoundID id) {
     if (isPlaying(id))
         m_sounds.at(id).stop();
 }
+sf::Time SoundManager::getSoundDuration(Constants::SoundID id) {
+	auto it = m_sounds.find(id);
+	return (it != m_sounds.end()) ? it->second.getBuffer()->getDuration() : sf::Time();
+}
 
 void SoundManager::unmute(bool mute, bool pause)
 {

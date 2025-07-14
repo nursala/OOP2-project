@@ -89,6 +89,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
             if ((isShooterPlayer || isShooterSpy) && !enemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
+                    enemy->setTarget(shooter->shared_from_this());
             }
         }
     }
@@ -125,6 +126,8 @@ void ContactListener::BeginContact(b2Contact* contact) {
                 if (shooterEnemy != enemy && shooterEnemy->isSpy()) {
                     enemy->takeDamage(bullet->getDamage());
                     bullet->setDestroyed(true);
+                    enemy->setTarget(bullet->getOwnerShared());
+                    shooterEnemy->setTarget(enemy->shared_from_this());
                 }
             }
         }
