@@ -131,8 +131,6 @@ void Bullet::onCollideWith(Enemy& enemy)
     bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
 
     if ((isShooterPlayer || isShooterSpy) && !enemy.isSpy()) {
-        //enemy.takeDamage(m_damage);
         setDestroyed(true);
-        //enemy.setTarget(shooter);
     }
 }

@@ -18,9 +18,8 @@ public:
     virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, const b2Vec2& position,
         const sf::Vector2f& direction, std::shared_ptr<Character> owner);
 
-
+	virtual ~Weapon() = default;
     void update(sf::Vector2f playerPos, float angle, float dt);
-    void draw(sf::RenderWindow& window);
     void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
 	void setShootingRange(float range) { m_shootingRange = range; }
@@ -34,7 +33,7 @@ public:
     void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
 
 protected:
-    Weapon(Constants::WeaponType, float shootingRange, float damage, float angle);
+    Weapon(Constants::WeaponType, const float shootingRange, const float damage, const float angle);
     Constants::WeaponType m_type;
     float m_bulletSpeed;
     std::unique_ptr<WeaponLight> m_weaponLight;

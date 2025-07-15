@@ -289,7 +289,6 @@ void Player::onCollideWith(Gift& gift) {
 	auto it = m_giftHandlers.find(gift.getType());
 	if (it != m_giftHandlers.end()) {
 		it->second(gift);
-		gift.setDestroyed(true);
 	}
 }
 
@@ -302,7 +301,6 @@ void Player::onCollideWith(Bullet& bullet) {
 		return;
 
 	if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-		//takeDamage(bullet.getDamage());
-		setDestroyed(true);
+		takeDamage(bullet.getDamage());
 	}
 }
