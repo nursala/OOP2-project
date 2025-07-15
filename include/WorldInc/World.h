@@ -10,7 +10,6 @@
 #include "GameObject/Gift.h"
 #include "GameObject/Bullet.h"
 #include "LoadMap.h"
-#include "DebugDraw.h"
 #include "Statusbar.h"
 #include "RenderLayers.h"
 

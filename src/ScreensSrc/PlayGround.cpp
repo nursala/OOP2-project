@@ -68,19 +68,17 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 	}
 	if (GameSessionData::instance().getHealth() <= 0)
 	{
-		GameSessionData::instance().setMoney(100);
 		Controller::getInstance().pushScreen(std::make_unique<GameOver>());
 		SoundManager::instance().mute(true, true); // Mute all sounds
 		SoundManager::instance().play(Constants::SoundID::GAMEOVERSOUND);
 		SoundManager::instance().setVolume(Constants::SoundID::GAMEOVERSOUND, 30.f);
 	}
-	if (GameSessionData::instance().getHealth() <= 20)
-	{
-		SoundManager::instance().play(Constants::SoundID::HEARTBEAT);
-		SoundManager::instance().loop(Constants::SoundID::HEARTBEAT, true);
-		SoundManager::instance().setVolume(Constants::SoundID::HEARTBEAT,6000.f);
-		//SoundManger::instance().loop(Constants::SoundID::HEARTBEAT, true);
-	}
+	//if (GameSessionData::instance().getHealth() >= 20)
+	//{
+	//	SoundManager::instance().play(Constants::SoundID::HEARTBEAT);
+	//	SoundManager::instance().loop(Constants::SoundID::HEARTBEAT, true);
+	//	SoundManager::instance().setVolume(Constants::SoundID::HEARTBEAT,100.f);
+	//}
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
 	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
 
@@ -95,11 +93,8 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 // Render world and HUD
 //-------------------------------------
 void PlayGround::render(sf::RenderWindow& window) {
-    DebugDraw debugDraw(&window);
-    const uint32 flags = b2Draw::e_shapeBit | b2Draw::e_jointBit | b2Draw::e_centerOfMassBit;
-    debugDraw.SetFlags(flags);
+    
 
-    m_world.getWorld().SetDebugDraw(&debugDraw);
     m_world.render(window);
 
     window.setView(window.getDefaultView());

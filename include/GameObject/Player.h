@@ -1,9 +1,3 @@
-// Player.h
-// Authors: [Your Name]
-// ID: [Your ID]
-// Login: [Your Login]
-// Description: Player class derived from Character. Handles player-specific logic like input, damage, upgrades.
-
 #pragma once
 
 #include "GameObject/Character.h"

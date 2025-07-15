@@ -45,8 +45,6 @@ void LoadGame::update(sf::RenderWindow& window, float dt)
 	if (m_timer <= 0.f)
 	{
 		auto command = PushScreenCommand<PlayGround>();
-		//auto popcommand = PopScreenCommand();
-		//popcommand.execute();
 		command.execute();
 	}
 }

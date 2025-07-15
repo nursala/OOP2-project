@@ -1,7 +1,7 @@
 #include "Bars/Bar.h"
 #include "Controller.h"
 #include <algorithm>
-
+#include "ResourseInc/SoundManager.h"
 //======================================================
 // Constructor: initializes the bar with size, color, and max value.
 //======================================================

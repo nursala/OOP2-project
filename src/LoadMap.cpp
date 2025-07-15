@@ -4,7 +4,7 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
-constexpr float SCALE = 30;
+constexpr float SCALE = 30.f;
 
 //-------------------------------------
 // LoadMap Constructor

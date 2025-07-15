@@ -27,7 +27,6 @@ Character::Character(World& world, const b2Vec2& positionB2)
 }
 
 //=============================
-// update()
 // Handles AI, movement, weapon, animation, health bar, and light
 //=============================
 void Character::update(float deltaTime)
@@ -64,14 +63,15 @@ void Character::update(float deltaTime)
     // Cast lights
     auto& CloseEdges = m_world.getCloseEdges();
     if (m_weapon && m_weapon->getWeaponLight() && m_visable)
+    if (m_weapon && m_weapon->getWeaponLight() && isVisible())
         m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
 
     if (m_visionLight && m_visable)
+    if (m_visionLight && isVisible())
         m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 }
 
 //=============================
-// render()
 // Renders sprite, health bar, lights, and weapon
 //=============================
 void Character::render(RenderLayers& renderLayers)
@@ -95,7 +95,6 @@ void Character::render(RenderLayers& renderLayers)
 }
 
 //=============================
-// getBodyType()
 // Returns Box2D body type for character
 //=============================
 b2BodyType Character::getBodyType() const
@@ -104,7 +103,6 @@ b2BodyType Character::getBodyType() const
 }
 
 //=============================
-// move()
 // Applies movement strategy and sets animation accordingly
 //=============================
 void Character::move(float dt)
@@ -118,7 +116,6 @@ void Character::move(float dt)
 }
 
 //=============================
-// getWeapon()
 //=============================
 Weapon* Character::getWeapon()
 {
@@ -126,7 +123,6 @@ Weapon* Character::getWeapon()
 }
 
 //=============================
-// shoot()
 // Triggers attack strategy and sound
 //=============================
 void Character::shoot()
@@ -138,7 +134,6 @@ void Character::shoot()
 }
 
 //=============================
-// getShootingRange()
 //=============================
 float Character::getShootingRange() const
 {
@@ -146,7 +141,6 @@ float Character::getShootingRange() const
 }
 
 //=============================
-// setShootingRange()
 //=============================
 void Character::setShootingRange(const float range)
 {
@@ -155,7 +149,6 @@ void Character::setShootingRange(const float range)
 }
 
 //=============================
-// setRotation()
 // Sets rotation of body and sprite
 //=============================
 void Character::setRotation(const float angle)
@@ -168,7 +161,6 @@ void Character::setRotation(const float angle)
 }
 
 //=============================
-// updateTargets()
 // Casts rays in vision cone and collects fixtures
 //=============================
 void Character::updateTargets()
