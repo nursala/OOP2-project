@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <iostream>
 
-//-------------------------------------
 struct Node {
     sf::Vector2i position;
     float gCost; 

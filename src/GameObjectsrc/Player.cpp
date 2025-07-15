@@ -81,6 +81,17 @@ void Player::update(const float deltaTime)
 	m_armorBar->setPosition(armorBarPos);
 	m_armorBar->setValue(m_armor);
 
+	if (m_health >= 50)
+	{
+		SoundManager::instance().stop(Constants::SoundID::HEARTBEAT);
+	}
+
+	else if (m_health < 50 && m_health > 0) {
+		SoundManager::instance().play(Constants::SoundID::HEARTBEAT);
+		SoundManager::instance().loop(Constants::SoundID::HEARTBEAT, true);
+		SoundManager::instance().setVolume(Constants::SoundID::HEARTBEAT, 100.f);
+	}
+
 	// Handle temporary vision boost
 	if (m_visionBoostActive) {
 		m_visionBoostTimer -= deltaTime;

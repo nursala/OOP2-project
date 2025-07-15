@@ -13,8 +13,8 @@ public:
     struct TimedLine {
         std::string text;
         float timeInSeconds;
-        float fadeDuration = 1.f; // مدة التدرج (1 ثانية)
-        float charDelay = 0.1f; // وقت بين كل حرف
+        float fadeDuration = 1.f; 
+        float charDelay = 0.1f;
 
     };
     SplashScreen();

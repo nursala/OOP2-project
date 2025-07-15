@@ -34,7 +34,7 @@ private:
 // Factory Registration 
 template <typename T, typename... Args>
 void Factory::registerType(Constants::EntityType id) {
-    using TupleType = std::tuple<Args...>;  // نحتفظ بالمراجع كما هي
+    using TupleType = std::tuple<Args...>; 
 
     m_creators[id] = [](void* args) -> std::unique_ptr<Entity> {
         auto* tuple = static_cast<TupleType*>(args);
