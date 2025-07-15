@@ -73,5 +73,4 @@ private:
 	// Override Character methods
 	//==========================
 	virtual void getClosestTarget() override;
-	bool isValidTarget(Character* character) const;
 };

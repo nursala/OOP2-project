@@ -286,35 +286,3 @@ void World::calcNearlyEdge(sf::RenderWindow& window) {
 		}
 	}
 }
-
-//-------------------------------------
-// Debug: Draw all edges and close edges in different colors
-void World::DebugEdge(sf::RenderWindow& window) {
-	for (const auto& edge : m_allEdges) {
-		const sf::Vector2f p1 = edge.m_origin;
-		const sf::Vector2f p2 = edge.point(1.f);
-		const sf::Vector2f direction = p2 - p1;
-		const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-		sf::RectangleShape rect;
-		rect.setSize({ length, 2.f });
-		rect.setFillColor(sf::Color::Red);
-		rect.setPosition(p1);
-		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
-		window.draw(rect);
-	}
-
-	for (const auto& edge : m_closeEdges) {
-		const sf::Vector2f p1 = edge.m_origin;
-		const sf::Vector2f p2 = edge.point(1.f);
-		const sf::Vector2f direction = p2 - p1;
-		const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-		sf::RectangleShape rect;
-		rect.setSize({ length, 3.f });
-		rect.setFillColor(sf::Color::Green);
-		rect.setPosition(p1);
-		rect.setRotation(std::atan2(direction.y, direction.x) * 180 / 3.14159f);
-		window.draw(rect);
-	}
-}

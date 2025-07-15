@@ -16,7 +16,7 @@ namespace Constants {
 	// ----------------------------
 	inline constexpr unsigned int WINDOW_WIDTH = 1280;
 	inline constexpr unsigned int WINDOW_HEIGHT = 720;
-	inline constexpr float int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
+	inline constexpr float WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
 	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;
 	inline constexpr unsigned int NUM_OF_ITEMS_IN_STATUS_BAR = 3;

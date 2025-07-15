@@ -73,12 +73,7 @@ void PlayGround::update(sf::RenderWindow& window, float dt) {
 		SoundManager::instance().play(Constants::SoundID::GAMEOVERSOUND);
 		SoundManager::instance().setVolume(Constants::SoundID::GAMEOVERSOUND, 30.f);
 	}
-	//if (GameSessionData::instance().getHealth() >= 20)
-	//{
-	//	SoundManager::instance().play(Constants::SoundID::HEARTBEAT);
-	//	SoundManager::instance().loop(Constants::SoundID::HEARTBEAT, true);
-	//	SoundManager::instance().setVolume(Constants::SoundID::HEARTBEAT,100.f);
-	//}
+
 	center.x = std::clamp(center.x, viewSize.x / 2.f, m_world.getMapTextureSize().x - viewSize.x / 2.f);
 	center.y = std::clamp(center.y, viewSize.y / 2.f, m_world.getMapTextureSize().y - viewSize.y / 2.f);
 
