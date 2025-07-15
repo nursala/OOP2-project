@@ -37,9 +37,7 @@ public:
     // ==================== Double Dispatch ====================
     virtual Constants::EntityType getEntityType() const override { return m_entityType; }
     void onCollide(Entity& other) override;
-    void onCollideWith(Player& player) override;
-    void onCollideWith(Enemy& enemy) override;
-  
+
 
 private:
     // Customize Box2D body definition

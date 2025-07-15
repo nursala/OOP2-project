@@ -300,6 +300,6 @@ void Player::onCollideWith(Bullet& bullet) {
 		return;
 
 	if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-		//takeDamage(bullet.getDamage());
+		takeDamage(bullet.getDamage());
 	}
 }

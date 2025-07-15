@@ -249,10 +249,8 @@ void Enemy::onCollideWith(Bullet& bullet) {
 	if (!shooter || shooter == this)
 		return;
 
-	bool isShooterPlayer = shooter->getEntityType() == Constants::EntityType::Player;
-	bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
-
-	if ((isShooterPlayer || isShooterSpy) && !isSpy()) {
+	if (getEntityType() != shooter->getEntityType())
+	{
 		takeDamage(bullet.getDamage());
 	}
 }

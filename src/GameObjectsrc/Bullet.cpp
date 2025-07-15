@@ -108,29 +108,12 @@ float Bullet::getDamage() const
 //==================================================
 void Bullet::onCollide(Entity& other)
 {
+    auto shooter = getOwnerShared();
+    if (!shooter || shooter.get() == &other) return;
+    if (shooter->getEntityType() != other.getEntityType())
+    {
+        setDestroyed(true);
+    }
     other.onCollideWith(*this);
 }
 
-void Bullet::onCollideWith(Player& player)
-{
-    auto shooter = getOwnerShared();
-    if (!shooter || shooter.get() == &player) return;
-
-    if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-        /*player.takeDamage(m_damage);*/
-        setDestroyed(true);
-    }
-}
-
-void Bullet::onCollideWith(Enemy& enemy)
-{
-    auto shooter = getOwnerShared();
-    if (!shooter || shooter.get() == &enemy) return;
-
-    bool isShooterPlayer = shooter->getEntityType() == Constants::EntityType::Player;
-    bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
-
-    if ((isShooterPlayer || isShooterSpy) && !enemy.isSpy()) {
-        setDestroyed(true);
-    }
-}
