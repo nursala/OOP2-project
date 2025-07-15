@@ -20,7 +20,6 @@ public:
 
 
     void update(sf::Vector2f playerPos, float angle, float dt);
-    void draw(sf::RenderWindow& window);
     void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
 	void setShootingRange(float range) { m_shootingRange = range; }

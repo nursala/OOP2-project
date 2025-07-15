@@ -1,10 +1,4 @@
-﻿// Bullet.cpp
-// Author: [Your Name]
-// ID: [Your ID]
-// Login: [Your Login]
-// Description: Implementation of the Bullet class, handling setup and update logic.
-
-#include "GameObject/Bullet.h"
+﻿#include "GameObject/Bullet.h"
 #include "WorldInc/World.h"
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
@@ -39,7 +33,7 @@ Bullet::Bullet(World& world, const b2Vec2& positionB2, const sf::Vector2f& direc
         TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().y));
 
     m_damage = damage;
-    m_range = range + 10.f; // Small buffer
+    m_range = range;
     init(b2_kinematicBody, 0.3f); // Radius of 0.3f
 }
 
@@ -88,7 +82,7 @@ void Bullet::update(float deltaTime)
     float dy = m_position.y - m_initialPosition.y;
     float distance = std::sqrt(dx * dx + dy * dy);
     if (distance > m_range)
-        m_destroyed = true;
+		setDestroyed(true);
 }
 
 //---------------------------------------------
