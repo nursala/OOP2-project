@@ -3,8 +3,12 @@
 #include "GameObject/Entity.h"
 #include <memory>
 
-class World;      // Forward declaration
-class Character;  // Forward declaration to avoid circular dependency
+// Forward declarations
+class World;
+class Character;
+class Player;
+class Enemy;
+class Gift;
 
 // Description: Represents a bullet shot by a character in the world.
 //              Handles movement, damage, range, and destruction.
@@ -29,6 +33,13 @@ public:
 
     // Returns the bullet's damage
     float getDamage() const;
+
+    // ==================== Double Dispatch ====================
+    virtual Constants::EntityType getEntityType() const override { return m_entityType; }
+    void onCollide(Entity& other) override;
+    void onCollideWith(Player& player) override;
+    void onCollideWith(Enemy& enemy) override;
+  
 
 private:
     // Customize Box2D body definition

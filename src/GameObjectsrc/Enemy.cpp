@@ -189,11 +189,12 @@ void Enemy::setSpeedDownTimer(const float seconds)
 //=========================================================
 // Enable/disable spy mode
 //=========================================================
-void Enemy::setSpy(const bool value)
+void Enemy::setSpy(const bool value, const float seconds)
 {
 	m_entityType = value ? Constants::EntityType::Spy : Constants::EntityType::Enemy;
 	m_isSpy = value;
 	m_visable = value;
+	m_spyTimer = seconds;
 	setTarget(nullptr);
 }
 
@@ -208,10 +209,10 @@ bool Enemy::isSpy() const
 //=========================================================
 // Set spy timer duration
 //=========================================================
-void Enemy::setSpyTimer(const float seconds)
-{
-	m_spyTimer = seconds;
-}
+//void Enemy::setSpyTimer(const float seconds)
+//{
+//	m_spyTimer = seconds;
+//}
 
 //=========================================================
 // Play footstep sound based on distance to player
@@ -240,5 +241,30 @@ void Enemy::updateFootstepSound(const float distanceToPlayer, const float deltaT
 
 			m_footstepTimer = 0.f;
 		}
+	}
+}
+
+//---------------------------------------------
+// onCollide: First dispatch entry point
+//---------------------------------------------
+void Enemy::onCollide(Entity& other) {
+	other.onCollideWith(*this);
+}
+
+//---------------------------------------------
+// onCollideWith(Bullet): Take damage from Player or Spy bullets
+//---------------------------------------------
+void Enemy::onCollideWith(Bullet& bullet) {
+	auto* shooter = bullet.getOwnerShared().get();
+	if (!shooter || shooter == this)
+		return;
+
+	bool isShooterPlayer = shooter->getEntityType() == Constants::EntityType::Player;
+	bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
+
+	if ((isShooterPlayer || isShooterSpy) && !isSpy()) {
+		takeDamage(bullet.getDamage());
+		bullet.setDestroyed(true);
+		setTarget(shooter->shared_from_this());
 	}
 }

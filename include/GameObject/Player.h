@@ -14,11 +14,13 @@
 #include "WeaponInc/Weapon.h"
 #include "VisionLight.h"
 
-class World;
+#include <unordered_map>
+#include <functional>
 
-//-----------------------------------------------
-// Player class that represents the main user-controlled character.
-//------------------------------------------------
+class World;
+class Gift;
+class Bullet;
+
 class Player : public Character {
 public:
     // Constructor: Initializes the player with position and world context
@@ -54,9 +56,16 @@ public:
     // Checks if the player is still alive
     bool isAlive() const { return m_alive; }
 
+    //==================== Collision Dispatch Support ====================//
+    Constants::EntityType getEntityType() const override { return Constants::EntityType::Player; }
+    void onCollide(Entity& other) override;
+    void onCollideWith(Gift& gift) override;
+    void onCollideWith(Bullet& bullet) override;
+
 private:
     // Returns the closest target visible to the player
     Character* getClosestTarget() override;
+
 
     // Armor bar UI element
     std::unique_ptr<ArmorBar> m_armorBar;
@@ -75,4 +84,9 @@ private:
 
     // Stores the original vision range before boosting
     float m_originalVisionRange = 0.f;
+
+    //==================== Collision Gift Handling ====================//
+    using GiftHandler = std::function<void(Gift&)>;
+    std::unordered_map<Constants::GiftType, GiftHandler> m_giftHandlers;
+    void initGiftHandlers();
 };

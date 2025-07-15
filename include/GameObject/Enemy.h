@@ -31,9 +31,9 @@ public:
 	//==========================
 	// Spy Mechanism
 	//==========================
-	void setSpy(const bool value);
+	//void setSpy(const bool value);
 	bool isSpy() const;
-	void setSpyTimer(const float seconds);
+	//void setSpyTimer(const float seconds);
 
 	//==========================
 	// Speed Control
@@ -41,10 +41,18 @@ public:
 	void speedDown();
 	void setSpeedDownTimer(const float seconds);
 
+	void setSpy(const bool value, const float seconds = 0);
+
 	//==========================
 	// Footstep Sound
 	//==========================
 	void updateFootstepSound(const float distanceToPlayer, const float deltaTime);
+	//==========================
+	// Collision Handling
+	//==========================
+	virtual Constants::EntityType getEntityType() const override { return m_entityType; }
+	virtual void onCollide(Entity& other) override;
+	virtual void onCollideWith(Bullet& bullet) override;
 
 private:
 	//==========================

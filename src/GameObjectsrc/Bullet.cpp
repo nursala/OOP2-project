@@ -1,10 +1,6 @@
-﻿// Bullet.cpp
-// Author: [Your Name]
-// ID: [Your ID]
-// Login: [Your Login]
-// Description: Implementation of the Bullet class, handling setup and update logic.
-
-#include "GameObject/Bullet.h"
+﻿#include "GameObject/Bullet.h"
+#include "GameObject/Player.h"
+#include "GameObject/Enemy.h"
 #include "WorldInc/World.h"
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
@@ -29,10 +25,11 @@ namespace {
 // Constructor: Initializes texture, direction, damage, range, and body
 //---------------------------------------------
 Bullet::Bullet(World& world, const b2Vec2& positionB2, const sf::Vector2f& direction,
-     const std::shared_ptr<Character>& owner, const float& damage, const float& range)
+    const std::shared_ptr<Character>& owner, const float& damage, const float& range)
     : Entity(world, positionB2), m_direction(direction), m_owner(owner)
 {
-	m_entityType = Constants::EntityType::Bullet;
+    m_entityType = Constants::EntityType::Bullet;
+
     m_sprite.setTexture(*TextureManager::instance().get(Constants::TextureID::BULLET));
     m_sprite.setTextureRect(sf::IntRect(0, 0,
         TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().x,
@@ -104,4 +101,38 @@ std::shared_ptr<Character> Bullet::getOwnerShared() const {
 float Bullet::getDamage() const
 {
     return m_damage;
+}
+
+//==================================================
+// Double Dispatch Handlers
+//==================================================
+void Bullet::onCollide(Entity& other)
+{
+    other.onCollideWith(*this);
+}
+
+void Bullet::onCollideWith(Player& player)
+{
+    auto shooter = getOwnerShared();
+    if (!shooter || shooter.get() == &player) return;
+
+    if (shooter->getEntityType() == Constants::EntityType::Enemy) {
+        player.takeDamage(m_damage);
+        setDestroyed(true);
+    }
+}
+
+void Bullet::onCollideWith(Enemy& enemy)
+{
+    auto shooter = getOwnerShared();
+    if (!shooter || shooter.get() == &enemy) return;
+
+    bool isShooterPlayer = shooter->getEntityType() == Constants::EntityType::Player;
+    bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
+
+    if ((isShooterPlayer || isShooterSpy) && !enemy.isSpy()) {
+        enemy.takeDamage(m_damage);
+        setDestroyed(true);
+        enemy.setTarget(shooter);
+    }
 }
