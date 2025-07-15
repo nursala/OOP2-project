@@ -205,15 +205,6 @@ bool Enemy::isSpy() const
 {
 	return m_isSpy;
 }
-
-//=========================================================
-// Set spy timer duration
-//=========================================================
-//void Enemy::setSpyTimer(const float seconds)
-//{
-//	m_spyTimer = seconds;
-//}
-
 //=========================================================
 // Play footstep sound based on distance to player
 //=========================================================
@@ -264,7 +255,6 @@ void Enemy::onCollideWith(Bullet& bullet) {
 
 	if ((isShooterPlayer || isShooterSpy) && !isSpy()) {
 		takeDamage(bullet.getDamage());
-		bullet.setDestroyed(true);
 		setTarget(shooter->shared_from_this());
 	}
 }

@@ -302,7 +302,7 @@ void Player::onCollideWith(Bullet& bullet) {
 		return;
 
 	if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-		takeDamage(bullet.getDamage());
-		bullet.setDestroyed(true);
+		//takeDamage(bullet.getDamage());
+		setDestroyed(true);
 	}
 }
