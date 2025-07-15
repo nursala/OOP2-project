@@ -4,6 +4,12 @@
 #include "candle/RadialLight.hpp"
 #include "Constants.h"
 
+// Forward declarations
+class Player;
+class Enemy;
+class Bullet;
+class Gift;
+
 // Description: Represents a static gift entity that glows with pulsing light
 //              and interacts with the player to apply powerups.
 
@@ -23,6 +29,14 @@ public:
 
     // Mark the gift as destroyed
     void des();
+
+    // ==================== Double Dispatch ====================
+    virtual Constants::EntityType getEntityType() const override { return m_entityType; }
+    void onCollide(Entity& other) override;
+    void onCollideWith(Player& player) override;
+    void onCollideWith(Enemy&) override {}
+    void onCollideWith(Bullet&) override {}
+    void onCollideWith(Gift&) override {}
 
 private:
     Constants::GiftType m_type;          // Type of gift (e.g., health, armor, etc.)

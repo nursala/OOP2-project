@@ -9,7 +9,7 @@ configure_file ("hard_map.json" ${CMAKE_BINARY_DIR} COPYONLY)
 #screens
 configure_file ("help.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("market.JPG" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("homePage.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Homepage.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("coins_market.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("chooseMap.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("pauseScreen.png" ${CMAKE_BINARY_DIR} COPYONLY)

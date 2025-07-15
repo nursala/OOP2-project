@@ -1,4 +1,5 @@
 ﻿#include "GameObject/Gift.h"
+#include "GameObject/Player.h"
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
 #include "WorldInc/World.h"
@@ -21,7 +22,7 @@ namespace {
 Gift::Gift(World& world, const b2Vec2& position, const Constants::GiftType& type)
     : Entity(world, position), m_type(type)
 {
-	m_entityType = Constants::EntityType::Gift;
+    m_entityType = Constants::EntityType::Gift;
     auto textureID = Constants::GiftTextures[type];
 
     // Set sprite texture
@@ -91,4 +92,17 @@ void Gift::des()
 {
     m_visable = false;
     setDestroyed(true);
+}
+
+//==================================================
+// Double Dispatch Handlers
+//==================================================
+void Gift::onCollide(Entity& other)
+{
+    other.onCollideWith(*this);
+}
+
+void Gift::onCollideWith(Player& player)
+{
+   des();
 }

@@ -1,10 +1,4 @@
-﻿// Player.cpp
-// Author: [Your Name]
-// ID: [Your ID]
-// Login: [Your Login]
-// Description: Implements the logic of the Player class including input handling, upgrades, damage logic, and target detection.
-
-#include "GameObject/Player.h"
+﻿#include "GameObject/Player.h"
 #include <SFML/Window/Keyboard.hpp>
 #include "ResourseInc/TextureManager.h"
 #include "Factory.h"
@@ -231,4 +225,84 @@ Character* Player::getClosestTarget()
 
 	setTarget(closestCharacter->shared_from_this());
 	return closestCharacter;
+}
+
+
+//---------------------------------------------
+// Initializes handlers for each GiftType (unordered_map based)
+//---------------------------------------------
+void Player::initGiftHandlers() {
+	m_giftHandlers[Constants::GiftType::ARMOR] = [this](Gift&) {
+		addArmor();
+		SoundManager::instance().play(Constants::SoundID::SHIELDUPGRADE);
+		};
+
+	m_giftHandlers[Constants::GiftType::HEALTH] = [this](Gift&) {
+		addHealth();
+		SoundManager::instance().play(Constants::SoundID::HEALTHUPGRADE);
+		};
+
+	m_giftHandlers[Constants::GiftType::SPEEDUP] = [this](Gift&) {
+		addSpeed();
+		SoundManager::instance().play(Constants::SoundID::SPEEDUPGRADE);
+		};
+
+	m_giftHandlers[Constants::GiftType::VISIONUP] = [this](Gift&) {
+		increaseVisionTemporarily(100.f, 10.f);
+		SoundManager::instance().play(Constants::SoundID::VISIONUPGRADE);
+		};
+
+	m_giftHandlers[Constants::GiftType::ENEMYSPEEDDOWN] = [this](Gift&) {
+		for (auto enemy : m_world.getEnemies()) {
+			enemy->speedDown();
+			enemy->setSpeedDownTimer(10.f);
+			SoundManager::instance().play(Constants::SoundID::SPEEDDOWN);
+		}
+		};
+
+	m_giftHandlers[Constants::GiftType::SPY] = [this](Gift&) {
+		for (auto enemy : m_world.getEnemies()) {
+			if (!enemy->isSpy()) {
+				enemy->setSpy(true,20);
+				//enemy->setSpyTimer(20.f);
+				SoundManager::instance().play(Constants::SoundID::SPY);
+				break;
+			}
+		}
+		};
+}
+
+//---------------------------------------------
+// onCollide: First dispatch entry point
+//---------------------------------------------
+void Player::onCollide(Entity& other) {
+	other.onCollideWith(*this);
+}
+
+//---------------------------------------------
+// onCollideWith(Gift): Handles gift effects
+//---------------------------------------------
+void Player::onCollideWith(Gift& gift) {
+	if (m_giftHandlers.empty())
+		initGiftHandlers();
+
+	auto it = m_giftHandlers.find(gift.getType());
+	if (it != m_giftHandlers.end()) {
+		it->second(gift);
+		gift.setDestroyed(true);
+	}
+}
+
+//---------------------------------------------
+// onCollideWith(Bullet): Take damage if shot by enemy
+//---------------------------------------------
+void Player::onCollideWith(Bullet& bullet) {
+	auto* shooter = bullet.getOwnerShared().get();
+	if (!shooter || shooter == this)
+		return;
+
+	if (shooter->getEntityType() == Constants::EntityType::Enemy) {
+		takeDamage(bullet.getDamage());
+		bullet.setDestroyed(true);
+	}
 }

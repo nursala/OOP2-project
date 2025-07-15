@@ -21,7 +21,7 @@ const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
     {Constants::TextureID::SOUNDOFF, "soundoff.png"},
     {Constants::TextureID::GOTOHOME, "home.png"},
     {Constants::TextureID::PAUSE, "pause.png"},
-    {Constants::TextureID::HOMEPAGE, "homePage.png"},
+    {Constants::TextureID::HOMEPAGE, "Homepage.png"},
     {Constants::TextureID::BASICGUN, "basicGun.png"},
     {Constants::TextureID::SHOTGUN, "shotgun.png"},
     {Constants::TextureID::SNIPER, "sniper.png"},

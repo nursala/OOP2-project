@@ -1,9 +1,4 @@
-﻿//==============================================
-// File: Character.cpp
-// Description: Implementation of the base Character class.
-//==============================================
-
-#include "GameObject/Character.h"
+﻿#include "GameObject/Character.h"
 #include "WorldInc/World.h"
 #include "VisionLight.h"
 #include "WeaponInc/Weapon.h"
