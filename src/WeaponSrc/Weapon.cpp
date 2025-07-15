@@ -1,6 +1,6 @@
 ﻿#include "WeaponInc/Weapon.h"
-#include "GameObject/Character.h"  // Needed for Character*
-#include "WorldInc/World.h"        // If not already included
+#include "GameObject/Character.h"  
+#include "WorldInc/World.h"        
 #include "WeaponInc/HandGun.h"
 #include "WeaponInc/Shotgun.h"
 #include "WeaponInc/Sniper.h"

@@ -116,4 +116,3 @@ void Bullet::onCollide(Entity& other)
     }
     other.onCollideWith(*this);
 }
-

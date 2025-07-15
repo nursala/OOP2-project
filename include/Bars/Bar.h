@@ -1,13 +1,5 @@
 #pragma once
 
-//======================================================
-// Author:        [Your Name]
-// ID:            [Your ID]
-// Login:         [Your Login]
-// Description:   Base class for all status bars (health, armor, etc.),
-//                with update and rendering logic.
-//======================================================
-
 #include <SFML/Graphics.hpp>
 #include <RenderLayers.h>
 

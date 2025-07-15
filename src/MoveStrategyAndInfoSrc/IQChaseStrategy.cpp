@@ -113,7 +113,7 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
     }
 
     sf::Vector2f direction = targetPos - m_lastPosition; // getPosition() returns player center
-    float angle = std::atan2(direction.y, direction.x) * 180.f / 3.14159265f;
+    float angle = std::atan2(direction.y, direction.x) * 180.f / b2_pi;
     character.setRotation(angle); // Implement this in your Character or Sprite wrapper
     m_lastPosition = enemyPos;
 
