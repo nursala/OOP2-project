@@ -16,7 +16,7 @@ class Gift;
 class Gift : public Entity {
 public:
     // Constructor
-    Gift(World& world, const b2Vec2& position, const Constants::GiftType& type);
+    Gift(World& world, const b2Vec2& position);
 
     // Return the type of the gift
     Constants::GiftType getType() const;
@@ -48,4 +48,5 @@ private:
 
     // Return static body type
     virtual b2BodyType getBodyType() const override { return b2_staticBody; }
+    Constants::GiftType genrateType();
 };

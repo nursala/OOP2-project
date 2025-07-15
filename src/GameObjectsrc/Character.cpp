@@ -63,10 +63,10 @@ void Character::update(float deltaTime)
 
     // Cast lights
     auto& CloseEdges = m_world.getCloseEdges();
-    if (m_weapon && m_weapon->getWeaponLight())
+    if (m_weapon && m_weapon->getWeaponLight() && m_visable)
         m_weapon->getWeaponLight()->castLight(CloseEdges.begin(), CloseEdges.end());
 
-    if (m_visionLight)
+    if (m_visionLight && m_visable)
         m_visionLight->castLight(CloseEdges.begin(), CloseEdges.end());
 }
 

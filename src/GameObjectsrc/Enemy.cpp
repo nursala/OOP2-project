@@ -17,8 +17,8 @@
 namespace {
 	bool registered = [] {
 		Factory::instance().registerType<Enemy, World&, const b2Vec2&, const LoadMap&,
-			const Player&, const Constants::WeaponType&>(
-				Constants::EntityType::Enemy);
+			const Player&>
+			(Constants::EntityType::Enemy);
 		return true;
 		}();
 }
@@ -27,11 +27,12 @@ namespace {
 // Constructor
 //=========================================================
 Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
-	const Player& player, const Constants::WeaponType& type)
+	const Player& player)
 	: Character(world, position), m_playerRef(player)
 {
+	
 	m_entityType = Constants::EntityType::Enemy;
-	auto& weaponData = Constants::WeaponDataMap.at(type);
+	auto& weaponData = Constants::WeaponDataMap.at(genrateType());
 
 	m_animation = std::make_unique<Animation>(
 		TextureManager::instance().get(weaponData.moveAnim.textureID),
@@ -69,9 +70,9 @@ void Enemy::getClosestTarget()
 		sf::Vector2f targetPos = currentTarget->getPosition();
 		float distSq = std::pow(targetPos.x - getPosition().x, 2) +
 			std::pow(targetPos.y - getPosition().y, 2);
-		float radius = 50.f; // Assuming a fixed radius for simplicity, can be adjusted
+		float radius = getWeapon()->getWeaponLight()->getRange(); // Assuming a fixed radius for simplicity, can be adjusted
 		if (distSq <= radius * radius)
-			return ;
+			return;
 	}
 
 	if (m_hitFixtures.empty()) {
@@ -96,7 +97,7 @@ void Enemy::getClosestTarget()
 			continue;
 
 		float dist = std::hypot(character->getPosition().x - lightPos.x,
-								character->getPosition().y - lightPos.y);
+			character->getPosition().y - lightPos.y);
 
 		if (dist < minDist) {
 			if (closest && dynamic_cast<Player*>(closest) && !isSpy()) {
@@ -126,15 +127,15 @@ void Enemy::takeDamage(const int damage)
 //=========================================================
 void Enemy::update(const float deltaTime)
 {
-	if (auto enemy = dynamic_cast<Enemy*>(getTarget().get()))
+	if (getTarget())
 	{
-		if (isSpy() && enemy->isSpy()) {
-			getClosestTarget();
-		}
-		else if (!isSpy() && !enemy->isSpy()) {
+		if (getTarget()->getEntityType() == getEntityType())
 			setTarget(nullptr);
-		}
 	}
+
+	Character::update(deltaTime);
+
+	
 
 	if (getTarget() || isSpy()) {
 		setVisible(true);
@@ -145,8 +146,6 @@ void Enemy::update(const float deltaTime)
 		if (m_hideDelayTimer <= 0.f)
 			setVisible(false);
 	}
-
-	Character::update(deltaTime);
 
 	if (m_health <= 0.f) {
 		setDestroyed(true);
@@ -252,5 +251,26 @@ void Enemy::onCollideWith(Bullet& bullet) {
 	if (getEntityType() != shooter->getEntityType())
 	{
 		takeDamage(bullet.getDamage());
+		if (getTarget().get() != shooter)
+			setTarget(shooter->shared_from_this());
 	}
+}
+
+
+Constants::WeaponType Enemy::genrateType() {
+	const int weaponsCount = static_cast<int>(Constants::WeaponType::Size);
+
+	Constants::WeaponType weaponType;
+	if (rand() % 100 < 70) {
+		// 70% chance to get a HandGun
+		weaponType = Constants::WeaponType::HandGun;
+	}
+	else {
+		// 30% chance to get a random weapon (excluding handgun)
+		int otherWeaponCount = weaponsCount - 1;
+		int randomIndex = rand() % otherWeaponCount;
+		weaponType = static_cast<Constants::WeaponType>(randomIndex >= static_cast<int>(Constants::WeaponType::HandGun)
+			? randomIndex + 1 : randomIndex);
+	}
+	return weaponType;
 }

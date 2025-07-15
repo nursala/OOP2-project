@@ -9,7 +9,7 @@
 namespace {
     // Register the Gift with the factory
     bool registered = [] {
-        Factory::instance().registerType<Gift, World&, const b2Vec2&, const Constants::GiftType&>(
+        Factory::instance().registerType<Gift, World&, const b2Vec2&>(
             Constants::EntityType::Gift
         );
         return true;
@@ -19,11 +19,11 @@ namespace {
 //---------------------------------------------
 // Constructor: sets up sprite, light, and body
 //---------------------------------------------
-Gift::Gift(World& world, const b2Vec2& position, const Constants::GiftType& type)
-    : Entity(world, position), m_type(type)
+Gift::Gift(World& world, const b2Vec2& position)
+    : Entity(world, position), m_type(genrateType())
 {
     m_entityType = Constants::EntityType::Gift;
-    auto textureID = Constants::GiftTextures[type];
+    auto textureID = Constants::GiftTextures[m_type];
 
     // Set sprite texture
     if (TextureManager::instance().get(textureID))
@@ -105,4 +105,36 @@ void Gift::onCollide(Entity& other)
 void Gift::onCollideWith(Player& player)
 {
    des();
+}
+
+Constants::GiftType Gift::genrateType() {
+    Constants::GiftType type;
+
+    int chance = rand() % 100;
+    if (chance < 30) {
+        type = Constants::GiftType::ARMOR;
+    }
+    else if (chance < 60) {
+        type = Constants::GiftType::HEALTH;
+    }
+
+    else {
+        std::vector<Constants::GiftType> otherTypes;
+
+        const int giftTypeCount = static_cast<int>(Constants::GiftType::SIZE);
+        for (int i = 0; i < giftTypeCount; ++i) {
+            auto gift = static_cast<Constants::GiftType>(i);
+            if (gift != Constants::GiftType::ARMOR && gift != Constants::GiftType::HEALTH) {
+                otherTypes.push_back(gift);
+            }
+        }
+
+        if (!otherTypes.empty()) {
+            type = otherTypes[rand() % otherTypes.size()];
+        }
+        else {
+            type = Constants::GiftType::ARMOR;
+        }
+    }
+    return type;
 }

@@ -19,7 +19,7 @@ public:
 	// Constructor / Destructor
 	//==========================
 	Enemy(World& world, const b2Vec2& position, const LoadMap& map,
-		const Player& player, const Constants::WeaponType& type);
+		const Player& player);
 	virtual ~Enemy() override = default;
 
 	//==========================
@@ -74,4 +74,5 @@ private:
 	//==========================
 	virtual void getClosestTarget() override;
 	bool isValidTarget(Character* character) const;
+	Constants::WeaponType genrateType();
 };

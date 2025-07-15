@@ -17,11 +17,11 @@ namespace Constants {
 	inline constexpr unsigned int WINDOW_WIDTH = 1280;
 	inline constexpr unsigned int WINDOW_HEIGHT = 720;
 	inline constexpr unsigned int WINDOW_HEIGHT_FOR_SCROLL = WINDOW_WIDTH * 1.78125;
-	inline constexpr unsigned int FRAME_RATE = 240;
+	inline constexpr unsigned int FRAME_RATE = 60;
 	inline constexpr unsigned int MARGIN = 15;
 	inline constexpr unsigned int NUM_OF_ITEMS_IN_STATUS_BAR = 3;
-	inline constexpr unsigned int TILE_IN_STATUS_BAR = WINDOW_WIDTH * 0.05;
-	inline constexpr unsigned int BUTTON_IN_STATUS_BAR = WINDOW_WIDTH * 0.03;
+	inline constexpr unsigned int TILE_IN_STATUS_BAR = WINDOW_WIDTH * 0.05f;
+	inline constexpr unsigned int BUTTON_IN_STATUS_BAR = WINDOW_WIDTH * 0.03f;
 	// ----------------------------
 	// Player Settings
 	// ----------------------------
@@ -47,7 +47,7 @@ namespace Constants {
 	// ----------------------------
 	const sf::Color HOVERD_COLOR = sf::Color(167, 167, 175);
 	const sf::Color DEFAUL_BUTTON_COLOR = sf::Color::White;
-	const float CHAR_SIZE = 0.03 * WINDOW_WIDTH;
+	const float CHAR_SIZE = 0.03f * WINDOW_WIDTH;
 	// ----------------------------
 	// Physics
 	// ----------------------------

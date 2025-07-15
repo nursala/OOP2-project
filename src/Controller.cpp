@@ -20,6 +20,7 @@ Controller::Controller()
 	: m_window(sf::VideoMode(Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT), "Game Window")
 {
 	m_window.setFramerateLimit(Constants::FRAME_RATE);
+	m_window.setVerticalSyncEnabled(true);
 
 	if (!m_font.loadFromFile("myFont.otf")) {
 		throw std::runtime_error("Failed to load font");
