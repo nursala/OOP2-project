@@ -117,7 +117,7 @@ void Bullet::onCollideWith(Player& player)
     if (!shooter || shooter.get() == &player) return;
 
     if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-        player.takeDamage(m_damage);
+        /*player.takeDamage(m_damage);*/
         setDestroyed(true);
     }
 }
@@ -131,8 +131,8 @@ void Bullet::onCollideWith(Enemy& enemy)
     bool isShooterSpy = shooter->getEntityType() == Constants::EntityType::Spy;
 
     if ((isShooterPlayer || isShooterSpy) && !enemy.isSpy()) {
-        enemy.takeDamage(m_damage);
+        //enemy.takeDamage(m_damage);
         setDestroyed(true);
-        enemy.setTarget(shooter);
+        //enemy.setTarget(shooter);
     }
 }

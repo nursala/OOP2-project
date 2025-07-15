@@ -41,7 +41,7 @@ const std::unordered_map<Constants::TextureID, std::string> TextureFileMap = {
     {Constants::TextureID::PAUSESCREEN, "pauseScreen.png"},
     {Constants::TextureID::GAMEOVER, "game_over.png"},
     {Constants::TextureID::GAMEWIN, "game_win.png"},
-    {Constants::TextureID::LOADGAME, "Load_Game.jpg"}
+    {Constants::TextureID::LOADGAME, "Load_game.png"}
 };
 
 // Singleton texture manager that loads and provides textures

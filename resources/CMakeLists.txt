@@ -15,7 +15,7 @@ configure_file ("chooseMap.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("pauseScreen.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("game_over.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("game_win.png" ${CMAKE_BINARY_DIR} COPYONLY)
-configure_file ("Load_Game.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Load_game.png" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #fonts
 configure_file ("myFont.otf" ${CMAKE_BINARY_DIR} COPYONLY)

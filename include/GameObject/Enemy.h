@@ -31,9 +31,8 @@ public:
 	//==========================
 	// Spy Mechanism
 	//==========================
-	//void setSpy(const bool value);
 	bool isSpy() const;
-	//void setSpyTimer(const float seconds);
+	void setSpy(const bool value, const float seconds = 0);
 
 	//==========================
 	// Speed Control
@@ -41,7 +40,6 @@ public:
 	void speedDown();
 	void setSpeedDownTimer(const float seconds);
 
-	void setSpy(const bool value, const float seconds = 0);
 
 	//==========================
 	// Footstep Sound
