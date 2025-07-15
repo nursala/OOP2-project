@@ -69,7 +69,7 @@ Character* Enemy::getClosestTarget()
 		sf::Vector2f targetPos = currentTarget->getPosition();
 		float distSq = std::pow(targetPos.x - getPosition().x, 2) +
 			std::pow(targetPos.y - getPosition().y, 2);
-		float radius = currentTarget->getWeapon()->getWeaponLight()->getRange();
+		float radius = 50.f; // Assuming a fixed radius for simplicity, can be adjusted
 		if (distSq <= radius * radius)
 			return currentTarget.get();
 	}

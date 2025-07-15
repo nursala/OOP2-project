@@ -22,28 +22,56 @@ Weapon::Weapon(const Constants::WeaponType type, const float shootingRange,
 //-------------------------------------
 // Creates and returns bullets fired from the weapon
 //-------------------------------------
-std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const b2Vec2& position,
-					const sf::Vector2f& direction, std::shared_ptr<Character> owner)
+std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world, const b2Vec2& position,
+    const sf::Vector2f& direction,
+    std::shared_ptr<Character> owner)
 {
-	std::vector<std::unique_ptr<Bullet>> bullets;
-	if (m_fireTimer > 0.f)
-		return bullets;
+    std::vector<std::unique_ptr<Bullet>> bullets;
+    if (m_fireTimer > 0.f)
+        return bullets;
 
-	m_fireTimer = m_fireCooldown;
+    // Get weapon direction from rotation
+    float radians = m_weaponLight->getRotation() * b2_pi / 180.f;
+    sf::Vector2f weaponDirection = { std::cos(radians), std::sin(radians) };
 
-	auto bullet = Factory::instance().createAs<Bullet>(
-		Constants::EntityType::Bullet,
-		world,
-		position,
-		direction,
-		owner,
-		m_damage,
-		m_weaponLight->getRange()
-	);
+    // Normalize both vectors (important!)
+    sf::Vector2f dirNorm = direction;
+    float lenDir = std::sqrt(dirNorm.x * dirNorm.x + dirNorm.y * dirNorm.y);
+    if (lenDir != 0)
+        dirNorm /= lenDir;
 
-	bullets.push_back(std::move(bullet));
-	return bullets;
+    float lenWeapon = std::sqrt(weaponDirection.x * weaponDirection.x + weaponDirection.y * weaponDirection.y);
+    if (lenWeapon != 0)
+        weaponDirection /= lenWeapon;
+
+    // Compute angle between them via dot product
+    float dot = weaponDirection.x * dirNorm.x + weaponDirection.y * dirNorm.y;
+    dot = std::clamp(dot, -1.f, 1.f);
+    float angleDeg = std::acos(dot) * 180.f / b2_pi;
+
+    // Reduce angle by 10%
+    angleDeg *= 0.9f;
+
+    float maxAngle = m_weaponLight->getBeamAngle();
+    if (angleDeg > maxAngle * 0.5f)
+        return bullets;
+
+    // Fire bullet
+    m_fireTimer = m_fireCooldown;
+    auto bullet = Factory::instance().createAs<Bullet>(
+        Constants::EntityType::Bullet,
+        world,
+        position,
+        dirNorm, // use normalized direction
+        owner,
+        m_damage,
+        m_weaponLight->getRange()
+    );
+
+    bullets.push_back(std::move(bullet));
+    return bullets;
 }
+
 
 //-------------------------------------
 // Set the shooting range of the weapon

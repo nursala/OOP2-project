@@ -26,7 +26,7 @@ namespace {
 //---------------------------------------------
 Bullet::Bullet(World& world, const b2Vec2& positionB2, const sf::Vector2f& direction,
     const std::shared_ptr<Character>& owner, const float& damage, const float& range)
-    : Entity(world, positionB2), m_direction(direction), m_owner(owner)
+    : Entity(world, positionB2), m_direction(direction), m_owner(owner) 
 {
     m_entityType = Constants::EntityType::Bullet;
 
@@ -36,7 +36,7 @@ Bullet::Bullet(World& world, const b2Vec2& positionB2, const sf::Vector2f& direc
         TextureManager::instance().get(Constants::TextureID::BULLET)->getSize().y));
 
     m_damage = damage;
-    m_range = range + 10.f; // Small buffer
+    m_range = range - 50;
     init(b2_kinematicBody, 0.3f); // Radius of 0.3f
 }
 
@@ -85,7 +85,7 @@ void Bullet::update(float deltaTime)
     float dy = m_position.y - m_initialPosition.y;
     float distance = std::sqrt(dx * dx + dy * dy);
     if (distance > m_range)
-        m_destroyed = true;
+		setDestroyed(true);
 }
 
 //---------------------------------------------
