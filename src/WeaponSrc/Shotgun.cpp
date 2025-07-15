@@ -6,7 +6,7 @@
 //-------------------------------------
 // Shotgun Constructor : initializes the weapon with specific parameters
 //-------------------------------------
-Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 175.f, 12.f, 60.f)
+Shotgun::Shotgun() : Weapon(Constants::WeaponType::Shotgun, 175.f, 8.f, 60.f)
 {
 	m_fireCooldown = 1.f; // Set the cooldown for firing
 }

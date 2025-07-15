@@ -35,7 +35,7 @@ void IQChaseStrategy::move(Character& character, float deltaTime)
     auto e = dynamic_cast<Enemy*>(&character);
     float distToTarget = distance(enemyPos, targetPos);
     if (distToTarget < 350.f && m_iqLevel < 10) ++m_iqLevel;
-    if (distToTarget > 400.f && m_iqLevel > 1 && !e->isSpy()) --m_iqLevel;
+    if (distToTarget > 500 && m_iqLevel > 1 && !e->isSpy()) --m_iqLevel;
     if ( e && e->isSpy() && m_iqLevel < 10) ++m_iqLevel;
 
 
