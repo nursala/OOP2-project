@@ -15,21 +15,22 @@ class RenderLayers;
 class Weapon
 {
 public:
-    virtual std::vector<std::unique_ptr<Bullet>>fire(World& world, const b2Vec2& position,
-        const sf::Vector2f& direction, std::shared_ptr<Character> owner);
+    virtual ~Weapon() = default; // Add a virtual destructor
 
+    virtual std::vector<std::unique_ptr<Bullet>> fire(World& world, const b2Vec2& position,
+        const sf::Vector2f& direction, std::shared_ptr<Character> owner);
 
     void update(sf::Vector2f playerPos, float angle, float dt);
     void draw(RenderLayers& renderLayers);
     float getShootingRange() const;
-	void setShootingRange(float range) { m_shootingRange = range; }
-	Constants::WeaponType getType() const { return m_type; }
+    void setShootingRange(float range) { m_shootingRange = range; }
+    Constants::WeaponType getType() const { return m_type; }
 
     WeaponLight* getWeaponLight();
 
     float getFireTimer() const;
 
-	void setFireCooldown(float cooldown) { m_fireCooldown = cooldown; }
+    void setFireCooldown(float cooldown) { m_fireCooldown = cooldown; }
     void setBulletSpeed(float speed) { m_bulletSpeed = speed; };
 
 protected:

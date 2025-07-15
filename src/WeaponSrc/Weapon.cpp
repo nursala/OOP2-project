@@ -12,7 +12,7 @@
 // Weapon Constructor : initializes the weapon with specific parameters
 //-------------------------------------
 Weapon::Weapon(Constants::WeaponType type, float shootingRange, 
-			float damage, float angle): m_type(type), m_shootingRange(shootingRange), m_damage(damage)
+	float damage, float angle) : m_type(type), m_shootingRange(shootingRange), m_damage(damage), m_weaponLight(nullptr)
 {
 	m_weaponLight = std::make_unique<WeaponLight>(shootingRange, angle); // Correct type for m_weaponLight
 	m_weaponLight->setIntensity(1.f); // Set default intensity for the weapon light
