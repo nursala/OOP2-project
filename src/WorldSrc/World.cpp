@@ -161,7 +161,7 @@ void World::updateEnemies(const float deltaTime) {
 			SoundManager::instance().play(Constants::SoundID::ENEMYDEATH);
 		}
 		else {
-			//(*it)->update(deltaTime);
+			(*it)->update(deltaTime);
 			++it;
 		}
 	}

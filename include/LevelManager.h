@@ -8,7 +8,7 @@
 #include "Constants.h"
 #include "ResourseInc/BaseResourceManager.h"
 
-class LevelManager : public BaseResourceManager<std::string, Constants::LevelID>
+class LevelManager 
 {
 public:
 
