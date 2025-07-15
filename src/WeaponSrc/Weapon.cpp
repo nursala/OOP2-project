@@ -7,7 +7,6 @@
 #include "ResourseInc/SoundManager.h"
 #include "Factory.h"
 #include <iostream>
-#include <numbers>
 
 //-------------------------------------
 // Weapon Constructor : initializes the weapon with specific parameters
@@ -23,41 +22,56 @@ Weapon::Weapon(Constants::WeaponType type, float shootingRange,
 //-------------------------------------
 // Creates and returns bullets fired from the weapon
 //-------------------------------------
-std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world,	const b2Vec2& position,
-					const sf::Vector2f& direction, std::shared_ptr<Character> owner)
+std::vector<std::unique_ptr<Bullet>> Weapon::fire(World& world, const b2Vec2& position,
+    const sf::Vector2f& direction,
+    std::shared_ptr<Character> owner)
 {
-	std::vector<std::unique_ptr<Bullet>> bullets;
-	if (m_fireTimer > 0.f)
-		return bullets;
+    std::vector<std::unique_ptr<Bullet>> bullets;
+    if (m_fireTimer > 0.f)
+        return bullets;
 
-	float radians = m_weaponLight->getRotation() * std::numbers::pi / 180.f;
-	sf::Vector2f weaponDirection = { std::cos(radians), std::sin(radians) };
+    // Get weapon direction from rotation
+    float radians = m_weaponLight->getRotation() * b2_pi / 180.f;
+    sf::Vector2f weaponDirection = { std::cos(radians), std::sin(radians) };
 
-	// Compute angle between weapon direction and fire direction
-	float dot = weaponDirection.x * direction.x + weaponDirection.y * direction.y;
-	dot = std::clamp(dot, -1.f, 1.f);
-	float angleDeg = std::acos(dot) * 180.f / std::numbers::pi;
+    // Normalize both vectors (important!)
+    sf::Vector2f dirNorm = direction;
+    float lenDir = std::sqrt(dirNorm.x * dirNorm.x + dirNorm.y * dirNorm.y);
+    if (lenDir != 0)
+        dirNorm /= lenDir;
 
-	// Use weapon light's beam angle as shooting cone
-	float maxAngle = m_weaponLight->getBeamAngle();
-	if (angleDeg > maxAngle)
-		return bullets;
+    float lenWeapon = std::sqrt(weaponDirection.x * weaponDirection.x + weaponDirection.y * weaponDirection.y);
+    if (lenWeapon != 0)
+        weaponDirection /= lenWeapon;
 
-	m_fireTimer = m_fireCooldown;
+    // Compute angle between them via dot product
+    float dot = weaponDirection.x * dirNorm.x + weaponDirection.y * dirNorm.y;
+    dot = std::clamp(dot, -1.f, 1.f);
+    float angleDeg = std::acos(dot) * 180.f / b2_pi;
 
-	auto bullet = Factory::instance().createAs<Bullet>(
-		Constants::EntityType::Bullet,
-		world,
-		position,
-		direction,
-		owner,
-		m_damage,
-		m_weaponLight->getRange()
-	);
+    // Reduce angle by 10%
+    angleDeg *= 0.9f;
 
-	bullets.push_back(std::move(bullet));
-	return bullets;
+    float maxAngle = m_weaponLight->getBeamAngle();
+    if (angleDeg > maxAngle * 0.5f)
+        return bullets;
+
+    // Fire bullet
+    m_fireTimer = m_fireCooldown;
+    auto bullet = Factory::instance().createAs<Bullet>(
+        Constants::EntityType::Bullet,
+        world,
+        position,
+        dirNorm, // use normalized direction
+        owner,
+        m_damage,
+        m_weaponLight->getRange()
+    );
+
+    bullets.push_back(std::move(bullet));
+    return bullets;
 }
+
 
 //-------------------------------------
 // Set the shooting range of the weapon

@@ -27,7 +27,7 @@ std::vector<std::unique_ptr<Bullet>> Shotgun::fire(World& world, const b2Vec2& p
 
     for (float angleDeg : angles)
     {
-        float angleRad = angleDeg * 3.14159f / 180.f;
+        float angleRad = angleDeg * b2_pi / 180.f;
 
         sf::Vector2f dirRotated = {
             direction.x * std::cos(angleRad) - direction.y * std::sin(angleRad),

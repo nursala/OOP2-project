@@ -19,7 +19,7 @@
 Character::Character(World& world, const b2Vec2& positionB2)
     : Entity(world, positionB2)
 {
-    m_visionLight = std::make_unique<VisionLight>(500.f, 60.f); // Default range and beam angle
+    m_visionLight = std::make_unique<VisionLight>(300.f, 60.f); // Default range and beam angle
     m_visionLight->setIntensity(0.1f);                          // Light intensity
     m_visionLight->setScale(1.2f, 1.2f);
 
