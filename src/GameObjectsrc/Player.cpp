@@ -263,7 +263,6 @@ void Player::initGiftHandlers() {
 		for (auto enemy : m_world.getEnemies()) {
 			if (!enemy->isSpy()) {
 				enemy->setSpy(true,20);
-				//enemy->setSpyTimer(20.f);
 				SoundManager::instance().play(Constants::SoundID::SPY);
 				break;
 			}
