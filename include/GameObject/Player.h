@@ -64,7 +64,7 @@ public:
 
 private:
     // Returns the closest target visible to the player
-    Character* getClosestTarget() override;
+    void getClosestTarget() override;
 
 
     // Armor bar UI element

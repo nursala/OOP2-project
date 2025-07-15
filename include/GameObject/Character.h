@@ -40,7 +40,7 @@ public:
     //==========================
     virtual void shoot();
     virtual void takeDamage(const int amount) = 0;
-    virtual Character* getClosestTarget() = 0;
+    virtual void getClosestTarget() = 0;
 
     //==========================
     // Getters / Setters

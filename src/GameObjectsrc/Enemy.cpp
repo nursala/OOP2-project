@@ -57,12 +57,12 @@ Enemy::Enemy(World& world, const b2Vec2& position, const LoadMap& map,
 //=========================================================
 // Get closest visible character (based on vision/light)
 //=========================================================
-Character* Enemy::getClosestTarget()
+void Enemy::getClosestTarget()
 {
 	if (auto currentTarget = getTarget()) {
 		for (b2Fixture* fixture = currentTarget->getBody()->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
 			if (m_hitFixtures.find(fixture) != m_hitFixtures.end())
-				return currentTarget.get();
+				return;
 		}
 
 		// Check if within light radius
@@ -71,12 +71,12 @@ Character* Enemy::getClosestTarget()
 			std::pow(targetPos.y - getPosition().y, 2);
 		float radius = 50.f; // Assuming a fixed radius for simplicity, can be adjusted
 		if (distSq <= radius * radius)
-			return currentTarget.get();
+			return ;
 	}
 
 	if (m_hitFixtures.empty()) {
 		setTarget(nullptr);
-		return nullptr;
+		return;
 	}
 
 	Character* closest = nullptr;
@@ -108,7 +108,6 @@ Character* Enemy::getClosestTarget()
 	}
 
 	setTarget(closest ? closest->shared_from_this() : nullptr);
-	return closest;
 }
 
 //=========================================================
@@ -255,6 +254,5 @@ void Enemy::onCollideWith(Bullet& bullet) {
 
 	if ((isShooterPlayer || isShooterSpy) && !isSpy()) {
 		takeDamage(bullet.getDamage());
-		setTarget(shooter->shared_from_this());
 	}
 }

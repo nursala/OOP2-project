@@ -185,7 +185,7 @@ void Player::render(RenderLayers& layers)
 //---------------------------------------------
 // Finds the closest visible target in cone
 //---------------------------------------------
-Character* Player::getClosestTarget()
+void Player::getClosestTarget()
 {
 	for (auto* fixture : m_hitFixtures) {
 		b2Body* body = fixture->GetBody();
@@ -220,11 +220,10 @@ Character* Player::getClosestTarget()
 
 	if (!closestCharacter) {
 		setTarget(nullptr);
-		return nullptr;
+		return;
 	}
 
 	setTarget(closestCharacter->shared_from_this());
-	return closestCharacter;
 }
 
 
@@ -301,6 +300,6 @@ void Player::onCollideWith(Bullet& bullet) {
 		return;
 
 	if (shooter->getEntityType() == Constants::EntityType::Enemy) {
-		takeDamage(bullet.getDamage());
+		//takeDamage(bullet.getDamage());
 	}
 }
