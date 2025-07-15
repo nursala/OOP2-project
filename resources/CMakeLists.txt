@@ -78,8 +78,6 @@ configure_file ("Sounds/senario.ogg" ${CMAKE_BINARY_DIR} COPYONLY)
 
 
 
-#light
-configure_file ("light.frag" ${CMAKE_BINARY_DIR} COPYONLY)
 
 #buttons
 configure_file ("button.png" ${CMAKE_BINARY_DIR} COPYONLY)

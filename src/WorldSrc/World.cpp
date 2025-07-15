@@ -51,40 +51,11 @@ void World::createPlayer() {
 //-------------------------------------
 // Create gift entities at spawn positions
 void World::createGifts() {
-	const auto giftPositions = m_tileMap.getGiftSpawns();
+	const auto& giftPositions = m_tileMap.getGiftSpawns();
 
 	for (const auto& pos : giftPositions) {
-		Constants::GiftType type;
-
-		int chance = rand() % 100;
-		if (chance < 30) {
-			type = Constants::GiftType::ARMOR;
-		}
-		else if (chance < 60) {
-			type = Constants::GiftType::HEALTH;
-		}
-
-		else {
-			std::vector<Constants::GiftType> otherTypes;
-
-			const int giftTypeCount = static_cast<int>(Constants::GiftType::SIZE);
-			for (int i = 0; i < giftTypeCount; ++i) {
-				auto gift = static_cast<Constants::GiftType>(i);
-				if (gift != Constants::GiftType::ARMOR && gift != Constants::GiftType::HEALTH) {
-					otherTypes.push_back(gift);
-				}
-			}
-
-			if (!otherTypes.empty()) {
-				type = otherTypes[rand() % otherTypes.size()];
-			}
-			else {
-				type = Constants::GiftType::ARMOR;
-			}
-		}
-
 		const b2Vec2 posB2(pos.x, pos.y);
-		auto gift = Factory::instance().createAs<Gift>(Constants::EntityType::Gift, *this, pos,type);
+		auto gift = Factory::instance().createAs<Gift>(Constants::EntityType::Gift, *this, pos);
 		m_gifts.push_back(std::move(gift));
 	}
 }
@@ -97,21 +68,8 @@ void World::createEnemy() {
 	const int weaponsCount = static_cast<int>(Constants::WeaponType::Size);
 
 	for (const auto& pos : enemyPositions) {
-		Constants::WeaponType weaponType;
-		if (rand() % 100 < 70) {
-			// 70% chance to get a HandGun
-			weaponType = Constants::WeaponType::HandGun;
-		}
-		else {
-			// 30% chance to get a random weapon (excluding handgun)
-			int otherWeaponCount = weaponsCount - 1;
-			int randomIndex = rand() % otherWeaponCount;
-			weaponType = static_cast<Constants::WeaponType>(randomIndex >= static_cast<int>(Constants::WeaponType::HandGun)
-				? randomIndex + 1 : randomIndex);
-		}
-
 		const b2Vec2 posB2(pos.x, pos.y);
-		auto enemy = Factory::instance().createAs<Enemy>(Constants::EntityType::Enemy, *this, pos, m_tileMap, *m_player, weaponType);
+		auto enemy = Factory::instance().createAs<Enemy>(Constants::EntityType::Enemy, *this, pos, m_tileMap, *m_player);
 		m_enemies.push_back(std::move(enemy));
 	}
 
