@@ -1,3 +1,4 @@
+
 <h1 align="center">🔫 Bullet Echo – Tactical Vision-Based Shooter (C++)</h1>
 
 <p align="center">
@@ -117,7 +118,7 @@ Your goal: **Collect power-ups, eliminate threats, and adapt to survive**.
 
 ---
 
-## 📸 Demo & Screenshots
+## Preview
 
 🎥 **Video Preview:**  
 https://www.youtube.com/watch?v=JL1c-vySePA  
@@ -156,5 +157,3 @@ It's a **portfolio-grade project** that showcases deep understanding of:
 - 🔹 Data-driven development
 
 > 🎯 A complete tactical experience — designed, built, and optimized from the ground up.
-
----
