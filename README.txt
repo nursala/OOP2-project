@@ -1,124 +1,144 @@
+<h1 align="center">🔫 Bullet Echo – Tactical Vision-Based Shooter (C++)</h1>
 
-# 🔫 Bullet Echo – Tactical Vision-Based Shooter (C++)
+<p align="center">
+  A stealth-based top-down shooter built with C++, featuring dynamic cone vision, smart AI enemies, and modular game architecture.<br>
+  Powered by <strong>SFML + Box2D + Candle</strong>, built with <strong>OOP</strong> and modern <strong>Design Patterns</strong>.
+</p>
 
-
-## 🧠 General Overview
-
-**Bullet Echo** is a tactical top-down shooter developed in **C++**, featuring a unique **cone-based vision system**, stealth mechanics, and smart AI-driven enemies. The player navigates a dark arena, with limited visibility powered by advanced dynamic lighting. Your mission: **survive, collect power-ups, and eliminate all threats using smart strategy and sharp shooting**.
-
-The game includes:
-- Smart enemy behavior using **state machines** and **pathfinding**
-- Advanced **light & shadow system** using **Candle + Box2D**
-- A fully modular engine using **OOP principles** and **design patterns**
-- Multiple screens (menu, game, help, victory, defeat) using a **stacked screen manager**
-- Weapons, upgrades, visual feedback, and strategic depth
+<p align="center">
+  <img src="https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif" width="300" alt="Preview GIF">
+</p>
 
 ---
 
-## 🗂️ Key Files and Components
+## 🧠 General Overview
 
-> The project consists of over 70+ modular C++ header files, including:
+**Bullet Echo** is a fast-paced tactical shooter where the player navigates a dark map with limited vision. Enemies appear unexpectedly, react to your movement, and engage in strategic combat. The player must **survive, collect gifts, and eliminate enemies** using intelligent movement and auto-shooting.
 
-- `AStarPathfinder.h` – Implements A* pathfinding for enemy navigation
-- `Bullet.h`, `Weapon.h`, `Sniper.h`, `Shotgun.h` – Weapon & bullet logic
-- `Player.h`, `Enemy.h`, `Character.h` – Core game characters
-- `State.h`, `AttackingState.h`, `WalkingState.h` – AI state machine
-- `VisionLight.h`, `WeaponLight.h` – Cone-based lighting logic
-- `Factory.h`, `Gift.h`, `Spy.h` – Gift system with special mechanics
-- `Controller.h`, `Screen.h`, `PauseScreen.h`, `HomeScreen.h` – Scene management
-- `TextureManager.h`, `SoundManager.h` – Resource singletons
-- `SmartWeaponCommand.h`, `PushScreenCommand.h` – Command pattern actions
+> The project emphasizes:
+> - Dynamic **cone-based lighting** using raycasting
+> - Smart **AI behavior** with finite states and pathfinding
+> - Modular scene and resource management
+> - Clean, scalable architecture with modern C++ standards
+
+---
+
+## 🗂️ Key Components
+
+- 🎯 `AStarPathfinder.h` – A* pathfinding for AI navigation  
+- 🔫 `Weapon.h`, `Bullet.h`, `Sniper.h` – Weapons & projectiles  
+- 🧠 `State.h`, `AttackingState.h`, `WalkingState.h` – AI states  
+- 👁️ `VisionLight.h`, `WeaponLight.h` – Light cone system  
+- 🎁 `Gift.h`, `Spy.h` – Unique power-ups like the Spy mode  
+- 🧭 `Controller.h`, `Screen.h` – Scene management with stack logic  
+- 🎨 `TextureManager.h`, `SoundManager.h` – Singleton resource loaders  
+- 💡 Over **70 modular headers** for every game component
 
 ---
 
 ## 🧱 Data Structures & Patterns
 
-- `std::vector` – Stores bullets, enemies, and dynamic objects
-- `std::unordered_map` – Efficient key-based access to textures, sounds, and states
-- `std::set` – Maintains unique list of owned weapons
-- `std::stack` – Manages screen navigation (LIFO)
-- `std::shared_ptr` / `std::weak_ptr` – Smart memory management for all objects
+| Feature | Usage |
+|--------|-------|
+| `std::vector` | Dynamic object lists (enemies, bullets...) |
+| `std::unordered_map` | Fast access to textures/sounds/states |
+| `std::set` | Unique purchased weapons |
+| `std::stack` | Screen navigation (LIFO) |
+| `std::shared_ptr` / `std::weak_ptr` | Safe memory management |
 
-**Programming Concepts Used:**
-- Object-Oriented Programming (OOP)
-- Factory, State, Strategy, Singleton Patterns
-- Clean modular design with reusability in mind
+🔄 Uses major **Design Patterns**:
+- **Factory** for object creation
+- **Strategy** for AI movement
+- **State** for AI behavior
+- **Singleton** for shared resources
 
 ---
 
-## 🔍 Core Mechanics & Logic
+## 🔍 Core Mechanics
 
-### 🎯 Cone Vision
-Dynamic vision cone based on direction, raycasted from the player/enemy, blocked by walls. Drives:
-- Visibility
-- Auto-shooting
-- AI detection
+### 🔦 Cone Vision
+- Player/enemies have limited visibility using raycast-based cone lighting
+- Light blocked by walls
+- Drives auto-shooting and AI behavior
 
-### 🔫 Auto Shooting
-Player/enemies fire **automatically** if an enemy enters the visible cone and line of sight is clear.
-
-### 🧠 Smart Enemies
-Each enemy has AI states: patrol, chase, shoot. Behavior is triggered by visibility and distance. Uses A* for chasing.
+### 🎯 Auto Shooting
+- Enemies are automatically shot when inside the vision cone and visible
+- No need for manual fire
 
 ### 🎁 Gift System
-Collectible power-ups with real-time effects:
-- Shield, Speed, Ammo, and a special **Spy gift**
-- Spy temporarily converts an enemy to ally
+- Gifts grant speed, armor, ammo, or even convert an enemy into a **temporary ally** (Spy)
 
-### 💡 Lighting System
-Cone lights use Candle & SFML. Efficient raycasting prevents light from penetrating walls. Lights update only when needed.
-
-### 🧱 Wall Interactions
-Bullets and lights are blocked by walls. All characters respect collision boundaries via **Box2D**.
+### 🧠 Smart AI
+- Patrol → Detect → Chase → Attack logic
+- Uses A* for pathfinding around walls
 
 ---
 
-## 🤝 Object Interaction Map
+## 🤝 Interaction Summary
 
-| Object | Interaction |
-|--------|-------------|
-| Player | Moves, auto-shoots, collects gifts, takes damage |
-| Enemy | AI-driven, reacts to player, chases, shoots |
-| Spy | Ally unit created from enemy; supports auto-fire |
-| Bullet | Damages target on hit; disappears on collision |
-| Gift | Triggered on collection; one-time use |
-| Light | Determines visibility, vision cone direction |
-| Wall | Blocks movement, bullets, and light rays |
+| Object | Role |
+|--------|------|
+| **Player** | Moves, collects gifts, shoots automatically |
+| **Enemy** | State-based AI, chases and attacks |
+| **Spy** | Temporarily joins player team and shoots enemies |
+| **Bullet** | Deals damage on contact, removed on collision |
+| **Wall** | Blocks movement, bullets, and vision |
+| **Gift** | One-time pickup with immediate effect |
+| **Light** | Drives vision and auto-shoot system |
 
 ---
 
-## 🐞 Known Bugs
+## 🐞 Stability
 
-> No known bugs were encountered during testing. The game ran stably across all tested scenarios.
+✅ Game was tested thoroughly — no known bugs or crashes.  
+🧪 Physics and light interactions verified across edge cases.
 
 ---
 
 ## 🧩 Technical Highlights
 
-- 🔧 Built entirely in **C++** using **SFML**, **Box2D**, and **Candle**
-- 🎮 Fully **data-driven** via JSON map files (created in Tiled)
-- 🧠 Smart AI & reactive enemies
-- ⚔️ Four unique weapons with stats: Handgun, Shotgun, Rifle, Sniper
-- 🛠️ One-time-loaded textures & sounds using **singleton resource managers**
-- 📊 Built for performance, clarity, and expandability
+- 💻 Written entirely in **C++**
+- 🧱 Uses **SFML** for rendering and **Box2D** for physics
+- 💡 **Candle** for dynamic light rays and cone vision
+- 🧠 Modular enemy AI with strategy & state transitions
+- 📦 JSON level loading via **Tiled Map Editor**
+- 🛠️ Asset managers for textures & sounds (singleton pattern)
 
 ---
 
-## 🌍 Future Improvements (Optional)
+## 🚀 Future Enhancements
 
-- Multiplayer support
-- Scoreboards and XP system
-- Visual health bars on enemies
-- Map editor
+- Online multiplayer
+- Scoreboard and progression
+- Enemy health bars
+- Map editor integration
 
 ---
 
 ## 🏁 Summary
 
-**Bullet Echo** demonstrates a strong grasp of:
-- Advanced **C++ design**
-- **OOP** and modern **software architecture**
-- Real-time graphics, physics, and gameplay mechanics
+> Bullet Echo is more than a game – it's a **portfolio project** demonstrating mastery in:
+> - Modern **C++ architecture**
+> - Real-time rendering & physics
+> - AI and lighting systems
+> - Scalable, clean, and testable design
 
-> A complete, professional-grade game project built to impress and scale.
+---
+
+### 👥 Developers
+
+- 🎮 עאמר אבו סיר – 325535193  
+- 🎮 נור צלאח – 212427603  
+- 🎮 שאדי יונס – 325129385
+
+---
+
+## 📸 Screenshots / Demo
+
+> _(Add real gameplay screenshots or a video demo here to boost interest!)_
+
+---
+
+🧠 **Want to know more?**  
+Check the source code, open an issue, or contact us on LinkedIn!
 
