@@ -146,6 +146,12 @@ Click the video thumbnail above to see the gameplay.
 
 ---
 
+## Contributors
+
+Course project by Amer Abu Sair, Nour Salah, and Shadi Younis (as identified in the CMake project metadata).
+
+---
+
 ## 🏁 Conclusion
 
 **Bullet Echo** is a fully playable game built with production-level techniques and clean code practices.  
