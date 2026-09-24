@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif" width="300" alt="Preview GIF">
+  <a href="https://www.youtube.com/watch?v=JL1c-vySePA"><img src="https://img.youtube.com/vi/JL1c-vySePA/hqdefault.jpg" width="480" alt="Watch the project gameplay video"></a>
 </p>
 
 ---
@@ -122,7 +122,7 @@ Your goal: **Collect power-ups, eliminate threats, and adapt to survive**.
 
 🎥 **Video Preview:**  
 https://www.youtube.com/watch?v=JL1c-vySePA  
-_(Add GIFs or screenshots here for maximum visual appeal!)_
+Click the video thumbnail above to see the gameplay.
 
 ---
 
